@@ -1,0 +1,23 @@
+
+Showing logs for build [32mmlipper-geoclient-master-releas-9qrj5-10[0m stage [32mfrom-build-pack[0m and container [32mstep-credential-initializer-b79zz[0m
+{"level":"warn","ts":1589582452.3912406,"logger":"fallback-logger","caller":"logging/config.go:69","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/0.8.0-**-support-backwards-incompats\" is not a valid GitHub commit ID"}
+{"level":"info","ts":1589582452.3916318,"logger":"fallback-logger","caller":"creds-init/main.go:40","msg":"Credentials initialized."}
+
+Showing logs for build [32mmlipper-geoclient-master-releas-9qrj5-10[0m stage [32mfrom-build-pack[0m and container [32mstep-working-dir-initializer-9tk2v[0m
+{"level":"warn","ts":1589582483.9413717,"logger":"fallback-logger","caller":"logging/config.go:69","msg":"Fetch GitHub commit ID from kodata failed: open /var/run/ko/HEAD: no such file or directory"}
+{"level":"info","ts":1589582483.9421663,"logger":"fallback-logger","caller":"bash/main.go:64","msg":"Successfully executed command \"sh -c mkdir -p /workspace/source\"; output "}
+
+Showing logs for build [32mmlipper-geoclient-master-releas-9qrj5-10[0m stage [32mfrom-build-pack[0m and container [32mstep-place-tools[0m
+
+Showing logs for build [32mmlipper-geoclient-master-releas-9qrj5-10[0m stage [32mfrom-build-pack[0m and container [32mstep-git-source-mlipper-geoclient-master-releas-9qrj5-w2qj9[0m
+{"level":"warn","ts":1589582736.6227233,"logger":"fallback-logger","caller":"logging/config.go:69","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/0.8.0-**-support-backwards-incompats\" is not a valid GitHub commit ID"}
+{"level":"info","ts":1589582737.165305,"logger":"fallback-logger","caller":"git/git.go:103","msg":"Successfully cloned https://github.com/mlipper/geoclient.git @ v20160715.0.10 in path /workspace/source"}
+
+Showing logs for build [32mmlipper-geoclient-master-releas-9qrj5-10[0m stage [32mfrom-build-pack[0m and container [32mstep-git-merge[0m
+Using SHAs from PULL_REFS=master:cdcb91f6b811a8d8011c513aa3937eec736017bf
+WARNING: no SHAs to merge, falling back to initial cloned commit
+
+Showing logs for build [32mmlipper-geoclient-master-releas-9qrj5-10[0m stage [32mfrom-build-pack[0m and container [32mstep-setup-jx-git-credentials[0m
+/bin/sh: 1: **: not found
+[31m
+Pipeline failed on stage 'from-build-pack' : container 'step-setup-jx-git-credentials'. The execution of the pipeline has stopped.[0m
