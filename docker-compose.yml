@@ -1,26 +1,27 @@
 version: '3'
 services:
-  gcbuild:
+  geoclient:
+    #image: mlipper/geoclient:2.0.0-rc.7
     build:
       context: .
-      dockerfile: Dockerfile.build
-    volumes:
-      - .:/app
-      - vol-geosupport:/opt/geosupport
-    ports:
-      - "5005:5005"
-      - "8080:8080"
-  geoclient-boot:
-    depends_on:
-      - gcbuild
-    build:
-      context: .
+      # TODO Use specific build stage or break into individual Dockerfiles
       dockerfile: Dockerfile
-    volumes:
-      - vol-geosupport:/opt/geosupport
     ports:
-      - "8000:8000"
       - "8080:8080"
+    env_file: .env
+    volumes:
+      - "geosupport_home:${GEOSUPPORT_HOME}"
+      - ".:/app"
+    depends_on:
+      - geosupport
+  geosupport:
+    #image: mlipper/geosupport-docker:1.0.9
+    build:
+      context: ./geosupport
+      dockerfile: Dockerfile.geosupport
+    volumes:
+      - "geosupport_home:${GEOSUPPORT_HOME}"
+    env_file: .env
 volumes:
-  vol-geosupport:
-    external: true
+  geosupport_home:
+  #external: true
