@@ -2,6 +2,7 @@ plugins {
     id "gov.nyc.doitt.gis.geoclient.gradle.integration-test" apply false
     id "com.github.ben-manes.versions" version "0.27.0"
     id "com.diffplug.gradle.spotless" version "3.30.0"
+    id "org.springframework.boot" version "2.3.0.RELEASE" apply false
 }
 
 ext {
@@ -75,7 +76,7 @@ configure(moduleProjects){ project ->
 
     dependencies {
         // TODO switch back to new Gradle BOM support when spring-boot gradle-plugin can work correctly
-        implementation enforcedPlatform("org.springframework.boot:spring-boot-dependencies:2.2.2.RELEASE") // Must be in sync with rootProject plugin block above
+        implementation enforcedPlatform("org.springframework.boot:spring-boot-dependencies:2.3.0.RELEASE") // Must be in sync with rootProject plugin block above
                                                                                                            // and geoclient-service/build.gradle
         implementation "org.springframework.boot:spring-boot-starter-logging"
         testImplementation("org.springframework.boot:spring-boot-starter-test") {

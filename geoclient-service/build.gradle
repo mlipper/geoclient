@@ -1,6 +1,6 @@
 plugins {
-    id "war" // Required when building an executable war file
-    id "org.springframework.boot" version "2.2.2.RELEASE"
+//    id "war" // Required when building an executable war file
+    id "org.springframework.boot"// version "2.3.0.RELEASE"
 }
 
 dependencies {
@@ -16,7 +16,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework:spring-oxm") { exclude(module: "commons-lang") }
     implementation("com.thoughtworks.xstream:xstream:${xstreamVersion}")
-    implementation("joda-time:joda-time")
+    implementation("joda-time:joda-time:2.10.6") // TODO replace with jsr-30
     implementation("org.geotools:gt-referencing:${geotoolsVersion}") {
         exclude(group: "jgridshift", module: "jgridshift-core")
         exclude(group: "javax.media", module: "jai_core")
@@ -33,7 +33,7 @@ dependencies {
         exclude(group: "javax.media", module: "jai_core")
     }
     testImplementation("org.apache.httpcomponents:httpclient:${httpclient}")
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:2.2.2.RELEASE")
+    //providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:2.2.2.RELEASE")
 }
 
 sourceSets {
@@ -72,11 +72,11 @@ springBoot {
 
 // Uncomment to allow building "non-executable", traditional jar/war file
 // Also uncomment classifiers in bootJar/bootWar tasks below
-//jar { enabled = true }
+jar { enabled = true }
 //war { enabled = true }
 
 bootJar {
-    //classifier = "boot"
+    classifier = "boot"
     requiresUnpack "**/geoclient-jni-*.jar"
     manifest {
         from project.sharedManifest
@@ -86,20 +86,20 @@ bootJar {
 
 // Because the GeoclientBootApplication extends SpringBootServletInitializer,
 // the war file _can_also_be_run_in_a_servlet_container_
-bootWar {
-    //classifier = "boot"
-    requiresUnpack "**/geoclient-jni-*.jar"
-    manifest {
-        from project.sharedManifest
-    }
-    with(project.licenseFilesSpec)
-}
+//bootWar {
+//    classifier = "boot"
+//    requiresUnpack "**/geoclient-jni-*.jar"
+//    manifest {
+//        from project.sharedManifest
+//    }
+//    with(project.licenseFilesSpec)
+//}
 
 publishing {
     publications {
         bootJava(MavenPublication) {
             artifact bootJar
-            artifact bootWar
+            //artifact bootWar
         }
         //
         // Add source and javadoc jars to the publication.
@@ -120,4 +120,3 @@ signing {
     sign publishing.publications.bootJava
     sign publishing.publications.mavenJava // Sign source and javadoc jars
 }
-
