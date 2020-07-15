@@ -76,6 +76,7 @@ configure(moduleProjects){ project ->
 
     dependencies {
         // TODO switch back to new Gradle BOM support when spring-boot gradle-plugin can work correctly
+        //implementation enforcedPlatform(project(":platform"))
         implementation enforcedPlatform("org.springframework.boot:spring-boot-dependencies:2.3.0.RELEASE") // Must be in sync with rootProject plugin block above
                                                                                                            // and geoclient-service/build.gradle
         implementation "org.springframework.boot:spring-boot-starter-logging"

@@ -1,0 +1,13 @@
+plugins {
+    id 'java-platform'
+}
+
+javaPlatform {
+    allowDependencies()
+}
+
+dependencies {
+    api enforcedPlatform(
+        "org.springframework.boot:spring-boot-dependencies:2.3.0.RELEASE") // Must be in sync with rootProject plugin block above
+                                                                           // and geoclient-service/build.gradle
+}
