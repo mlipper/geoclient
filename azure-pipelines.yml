@@ -9,6 +9,14 @@ resources:
 - repo: self
 
 variables:
+- task: Bash@3
+  name: gcbash1
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      
+      echo 'Hello world'
   tag: '$(Build.BuildId)'
 
 stages:
