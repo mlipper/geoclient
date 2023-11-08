@@ -1,12 +1,13 @@
 plugins {
-    id 'geoclient.library-conventions'
-    id 'geoclient.test-conventions'
+    id 'gov.nyc.doitt.gis.geoclient.java-library'
 }
 
+group = "${group}.geoclient-parser"
+
 dependencies {
-    implementation("org.springframework:spring-context")
-    implementation("org.apache.commons:commons-lang3")
-    testImplementation("com.thoughtworks.xstream:xstream:${xstreamVersion}")
-    testImplementation("com.googlecode.java-diff-utils:diffutils:1.3.0")
+    implementation('org.springframework:spring-context')
+    implementation('org.apache.commons:commons-lang3')
+    testImplementation('com.thoughtworks.xstream:xstream')
+    testImplementation('com.googlecode.java-diff-utils:diffutils')
 }
 

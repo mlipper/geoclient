@@ -1,12 +1,13 @@
 plugins {
-    id 'geoclient.library-conventions'
-    id 'geoclient.test-conventions'
+    id 'gov.nyc.doitt.gis.geoclient.java-library'
 }
 
+group = "${group}.geoclient-core"
+
 dependencies {
-    implementation project(":geoclient-jni")
+    implementation("${group}:geoclient-jni")
     implementation("org.apache.commons:commons-lang3")
-    implementation("com.thoughtworks.xstream:xstream:${xstreamVersion}") {
+    implementation("com.thoughtworks.xstream:xstream") {
         exclude group: "xpp3", module: "xpp3_min"
         exclude group: "xmlpull", module: "xmlpull"
     }

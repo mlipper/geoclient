@@ -1,0 +1,12 @@
+plugins {
+    id('gov.nyc.doitt.gis.geoclient.report-aggregation')
+}
+
+dependencies {
+    // Transitively collect coverage data from all features and their dependencies
+    // TODO Adjust this if adding another level of directories to subprojects
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-jni')
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-core')
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-parser')
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-service')
+}

@@ -1,0 +1,12 @@
+dependencyResolutionManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+includeBuild('../platforms')
+
+rootProject.name = 'build-logic'
+include('commons')
+include('java-library')
+include('report-aggregation')
+include('spring-boot-application')

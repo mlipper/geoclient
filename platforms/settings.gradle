@@ -1,0 +1,5 @@
+rootProject.name = 'platforms'
+
+include('geoclient-platform')
+include('test-platform')
+include('plugins-platform')

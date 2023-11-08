@@ -1,0 +1,11 @@
+plugins {
+    id('java-platform')
+}
+
+group = 'gov.nyc.doitt.gis.geoclient.platform'
+
+dependencies {
+    constraints {
+        api('org.springframework.boot:org.springframework.boot.gradle.plugin:3.1.5')
+    }
+}

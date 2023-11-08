@@ -1,0 +1,4 @@
+plugins {
+    id('gov.nyc.doitt.gis.geoclient.commons')
+    id('java-library')
+}

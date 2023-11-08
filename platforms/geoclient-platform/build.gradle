@@ -1,0 +1,16 @@
+plugins {
+    id('java-platform')
+}
+
+group = 'gov.nyc.doitt.gis.geoclient.platform'
+
+javaPlatform.allowDependencies()
+
+dependencies {
+    api(platform('org.springframework.boot:spring-boot-dependencies:3.1.5'))
+
+    constraints {
+        api('org.apache.commons:commons-text:1.10.0')
+        api('com.thoughtworks.xstream:xstream:1.4.20')
+    }
+}

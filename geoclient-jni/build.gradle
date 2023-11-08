@@ -1,8 +1,9 @@
 plugins {
     id 'c'
-    id 'geoclient.library-conventions'
-    id 'geoclient.test-conventions'
+    id 'gov.nyc.doitt.gis.geoclient.java-library'
 }
+
+group = "${group}.geoclient-jni"
 
 Provider<Directory> buildDirectory = layout.buildDirectory.dir("generated-resources/main")
 File generatedResources = buildDirectory.get().asFile

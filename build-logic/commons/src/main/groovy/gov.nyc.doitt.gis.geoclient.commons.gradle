@@ -1,0 +1,70 @@
+plugins {
+    id 'java'
+    id 'gov.nyc.doitt.gis.geoclient.jacoco'
+    id 'checkstyle'
+    id 'com.diffplug.spotless'
+    id 'com.github.ben-manes.versions'
+}
+
+// This is used by subproject build.gradle files
+// to declare "${group}.subproject-name"
+group = 'gov.nyc.doitt.gis.geoclient'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    description = 'Generates project-level javadoc for use in -javadoc jar'
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.author = true
+    options.encoding = 'UTF-8'
+    options.header = project.name
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.noTimestamp = true
+    options.use = true
+    // Suppress warnings due to cross-module @see and @link references.
+    // Note that global "api" task does display all warnings.
+    logging.captureStandardError LogLevel.INFO
+    logging.captureStandardOutput LogLevel.INFO  // suppress "## warnings" message
+}
+
+spotless {
+    java {
+        // based on JUnit5 project's spotless config (commit 3a2f7a342747dd504d70daf89a0db53145e94608)
+        // eclipse().configFile rootProject.file('src/spotless/geoclient-eclipse-formatter-settings.xml')
+        // endWithNewline()
+        importOrderFile(rootProject.file('src/spotless/geoclient-eclipse.importorder'))
+        indentWithSpaces()
+        licenseHeaderFile(rootProject.file('src/spotless/apache-license-2.0.java'))
+        trimTrailingWhitespace()
+        toggleOffOn()
+    }
+    groovy {
+        target '**/*.groovy'
+        targetExclude '**/build/**'
+        licenseHeaderFile rootProject.file('src/spotless/apache-license-2.0.java')
+    }
+    groovyGradle {}
+}
+
+dependencies {
+    implementation(platform('gov.nyc.doitt.gis.geoclient.platform:geoclient-platform'))
+
+    testImplementation(platform('gov.nyc.doitt.gis.geoclient.platform:test-platform'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+    // Avoids log warning generated because of JUnit dependency on apiguardian:
+    // 'warning: unknown enum constant Status.STABLE'
+    // This was supposed to have been fixed in JUnit 5.1.x, but still happens,
+    // possibly because gradle platform or spring BOM.
+    testRuntimeOnly('org.apiguardian:apiguardian-api:1.1.2')
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
+}
