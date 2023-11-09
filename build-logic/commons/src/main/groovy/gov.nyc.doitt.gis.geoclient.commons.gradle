@@ -1,9 +1,9 @@
 plugins {
     id('java')
     id('gov.nyc.doitt.gis.geoclient.jacoco')
-    id('checkstyle')
-    id('com.diffplug.spotless')
-    id('com.github.ben-manes.versions')
+    id('gov.nyc.doitt.gis.geoclient.spotless')
+    //id('checkstyle')
+    //id('com.github.ben-manes.versions')
 }
 
 // This is used by subproject build.gradle files
@@ -31,25 +31,6 @@ javadoc {
     // Note that global "api" task does display all warnings.
     logging.captureStandardError LogLevel.INFO
     logging.captureStandardOutput LogLevel.INFO  // suppress "## warnings" message
-}
-
-spotless {
-    java {
-        // based on JUnit5 project's spotless config (commit 3a2f7a342747dd504d70daf89a0db53145e94608)
-        // eclipse().configFile rootProject.file('src/spotless/geoclient-eclipse-formatter-settings.xml')
-        // endWithNewline()
-        importOrderFile(rootProject.file('src/spotless/geoclient-eclipse.importorder'))
-        indentWithSpaces()
-        licenseHeaderFile(rootProject.file('src/spotless/apache-license-2.0.java'))
-        trimTrailingWhitespace()
-        toggleOffOn()
-    }
-    groovy {
-        target '**/*.groovy'
-        targetExclude '**/build/**'
-        licenseHeaderFile rootProject.file('src/spotless/apache-license-2.0.java')
-    }
-    groovyGradle {}
 }
 
 dependencies {
