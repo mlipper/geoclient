@@ -38,6 +38,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-logging')
 
     testImplementation(platform('gov.nyc.doitt.gis.geoclient.platform:test-platform'))
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.junit.jupiter:junit-jupiter')
     testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     // Avoids log warning generated because of JUnit dependency on apiguardian:

@@ -5,7 +5,7 @@ plugins {
 group = "${group}.geoclient-core"
 
 dependencies {
-    implementation('gov.nyc.doitt.gis.geoclient:geoclient-jni')
+    implementation('gov.nyc.doitt.gis.geoclient.geoclient-jni:native')
     implementation('org.apache.commons:commons-lang3')
     implementation('com.thoughtworks.xstream:xstream') {
         exclude group: 'xpp3', module: 'xpp3_min'
