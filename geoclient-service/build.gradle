@@ -5,9 +5,9 @@ plugins {
 group = "${group}.geoclient-service"
 
 dependencies {
-    implementation("${group}:geoclient-jni")
-    implementation("${group}:geoclient-core")
-    implementation("${group}:geoclient-parser")
+    implementation('gov.nyc.doitt.geoclient.geoclient-jni:native')
+    implementation('gov.nyc.doitt.geoclient.geoclient-core:api')
+    implementation('gov.nyc.doitt.geoclient.geoclient-parser:nlp')
     implementation('org.apache.commons:commons-text')
     implementation('com.thoughtworks.xstream:xstream')
 }

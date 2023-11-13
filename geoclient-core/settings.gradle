@@ -17,3 +17,4 @@ includeBuild('../geoclient-jni')
 
 // == Define the inner structure of this component ==
 rootProject.name = 'geoclient-core'
+include('api')
