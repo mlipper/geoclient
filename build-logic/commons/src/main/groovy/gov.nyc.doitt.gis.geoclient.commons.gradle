@@ -2,8 +2,8 @@ plugins {
     id('java')
     id('gov.nyc.doitt.gis.geoclient.jacoco')
     id('gov.nyc.doitt.gis.geoclient.spotless')
+    id('gov.nyc.doitt.gis.geoclient.versions')
     //id('checkstyle')
-    //id('com.github.ben-manes.versions')
 }
 
 // This is used by subproject build.gradle files
@@ -35,6 +35,7 @@ javadoc {
 
 dependencies {
     implementation(platform('gov.nyc.doitt.gis.geoclient.platform:geoclient-platform'))
+    implementation('org.springframework.boot:spring-boot-starter-logging')
 
     testImplementation(platform('gov.nyc.doitt.gis.geoclient.platform:test-platform'))
     testImplementation('org.junit.jupiter:junit-jupiter')
@@ -43,7 +44,7 @@ dependencies {
     // 'warning: unknown enum constant Status.STABLE'
     // This was supposed to have been fixed in JUnit 5.1.x, but still happens,
     // possibly because gradle platform or spring BOM.
-    testRuntimeOnly('org.apiguardian:apiguardian-api:1.1.2')
+    testRuntimeOnly('org.apiguardian:apiguardian-api')
 }
 
 tasks.named("test") {

@@ -1,3 +1,10 @@
 plugins {
     id('groovy-gradle-plugin')
 }
+
+dependencies {
+    implementation(platform('gov.nyc.doitt.gis.geoclient.platform:plugins-platform'))
+
+    implementation('com.diffplug.spotless:spotless-plugin-gradle')
+    implementation('com.github.ben-manes:gradle-versions-plugin')
+}

@@ -10,5 +10,6 @@ dependencies {
     api(platform('org.junit:junit-bom:5.9.3'))
     constraints {
         api("com.googlecode.java-diff-utils:diffutils:1.3.0")
+        runtime('org.apiguardian:apiguardian-api:1.1.2')
     }
 }
