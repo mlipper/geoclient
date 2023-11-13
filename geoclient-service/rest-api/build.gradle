@@ -5,9 +5,9 @@ plugins {
 group = "${group}.geoclient-service"
 
 dependencies {
-    implementation('gov.nyc.doitt.geoclient.geoclient-jni:native')
-    implementation('gov.nyc.doitt.geoclient.geoclient-core:api')
-    implementation('gov.nyc.doitt.geoclient.geoclient-parser:nlp')
+    implementation('gov.nyc.doitt.gis.geoclient.geoclient-jni:native')
+    implementation('gov.nyc.doitt.gis.geoclient.geoclient-core:api')
+    implementation('gov.nyc.doitt.gis.geoclient.geoclient-parser:nlp')
     implementation('org.apache.commons:commons-text')
     implementation('com.thoughtworks.xstream:xstream')
 }
@@ -34,11 +34,11 @@ springBoot {
 
 tasks.named('bootJar') {
     requiresUnpack "**/geoclient-jni-*.jar"
-    manifest {
-        from project.sharedManifest
-        attributes 'Start-Class': 'gov.nyc.doitt.gis.geoclient.service.GeoclientBootApplication'
-    }
-    with(project.licenseFilesSpec)
+    //manifest {
+    //    from project.sharedManifest
+    //    attributes 'Start-Class': 'gov.nyc.doitt.gis.geoclient.service.GeoclientBootApplication'
+    //}
+    //with(project.licenseFilesSpec)
 }
 
 bootRun {
