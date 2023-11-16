@@ -13,7 +13,8 @@ dependencyResolutionManagement {
     }
 }
 includeBuild('../platforms')
+includeBuild('../native')
 
 // == Define the inner structure of this component ==
-rootProject.name = 'geoclient-parser'
-include('nlp')
+rootProject.name = 'api'
+include('geoclient-core')

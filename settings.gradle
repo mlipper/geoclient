@@ -1,7 +1,7 @@
-includeBuild 'platforms'
-includeBuild 'build-logic'
-includeBuild 'aggregation'
-includeBuild 'geoclient-jni'
-includeBuild 'geoclient-core'
-includeBuild 'geoclient-parser'
-includeBuild 'geoclient-service'
+includeBuild('platforms')
+includeBuild('build-logic')
+includeBuild('aggregation')
+includeBuild('native')
+includeBuild('api')
+includeBuild('search')
+includeBuild('rest')

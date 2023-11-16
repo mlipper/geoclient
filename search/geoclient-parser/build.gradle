@@ -2,7 +2,7 @@ plugins {
     id 'gov.nyc.doitt.gis.geoclient.java-library'
 }
 
-group = "${group}.geoclient-parser"
+group = "${group}.parser"
 
 dependencies {
     implementation('org.springframework:spring-context')

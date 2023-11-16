@@ -3,7 +3,7 @@ plugins {
     id('gov.nyc.doitt.gis.geoclient.java-library')
 }
 
-group = "${group}.geoclient-jni"
+group = "${group}.jni"
 
 Provider<Directory> generatedResourcesDirectory = layout.buildDirectory.dir("generated-resources/main")
 File generatedResources = generatedResourcesDirectory.get().asFile
@@ -16,6 +16,18 @@ sourceSets {
   }
 }
 
+tasks.register('showMain') {
+    doLast() {
+        def soDir = project.file(new File(sourceSets.main.output.classesDirs[0], 'linux_x64'))
+        def destDir = java.nio.file.Files.createDirectories(soDir.toPath())
+        logger.quiet("destDir: ${destDir}")
+        //logger.quiet("sourceSets.main.output:")
+        //sourceSets.main.output.classesDirs.each { d ->
+        //    logger.quiet(d.absolutePath)
+        //}
+    }
+}
+
 spotless.java {
     // Exclude from spotless (gradle plugin) license header check because of custom header.
     targetExclude layout.projectDirectory.dir('src/main/java/gov/nyc/doitt/gis/geoclient/jni/util/NativeLibraryLocator.java')
@@ -25,16 +37,7 @@ spotless.java {
 // created dynamically by SharedLibraryBinarySpec
 task syncJniLib(type: Sync)
 
-tasks.register('showSourceSets') {
-    doLast {
-        plugins.pluginManager.withPlugin('c') { p ->
-            logger.lifecycle("Plugin: ${p.class.name}.")
-        }
-        //configurations.all { conf ->
-        //    logger.lifecycle("Found ${conf.name}.")
-        //}
-    }
-}
+//tasks.named('jar').get().dependsOn(syncJniLib)
 
 // High-level build definitions
 model {
@@ -145,9 +148,11 @@ model {
 
                 def variantName = targetPlatform.name.replace('_', '-')
                 def syncDir = project.file("${generatedResources}/gov/nyc/doitt/gis/geoclient/jni/${variantName}")
+                //def syncDir = project.file(new File("${sourceSets.main.output.classesDirs[0]}/gov/nyc/doitt/gis/geoclient/jni/${variantName}"))
+
                 binary.tasks.withType(LinkSharedLibrary) { builderTask ->
                     def jniLib = builderTask.linkedFile
-                    logger.info("Syncing JNI shared library file\n  from: ${jniLib?.getAsFile()?.get()}\n    to: ${syncDir}")
+                    logger.quiet("Syncing JNI shared library file\n  from: ${jniLib?.getAsFile()?.get()}\n    to: ${syncDir}")
                     syncTask.from(jniLib)
                     syncTask.destinationDir = syncDir
                 }

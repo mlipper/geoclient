@@ -13,9 +13,9 @@ dependencyResolutionManagement {
     }
 }
 includeBuild('../platforms')
-includeBuild('../geoclient-jni')
-includeBuild('../geoclient-core')
-includeBuild('../geoclient-parser')
+includeBuild('../native')
+includeBuild('../api')
+includeBuild('../search')
 
 
 // == Define the inner structure of this component ==

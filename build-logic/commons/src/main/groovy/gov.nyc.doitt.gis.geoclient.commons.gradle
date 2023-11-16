@@ -6,8 +6,14 @@ plugins {
     //id('checkstyle')
 }
 
-// This is used by subproject build.gradle files
-// to declare "${group}.subproject-name"
+// From <root>/gradle.properties
+version = "2.0.1"
+
+// Used by subproject build.gradle files
+// to declare their own group as:
+//   "${group}.<top-level-package>"
+// Consuming builds then use:
+//   "${group}.<top-level-package>:<subproject-name>"
 group = 'gov.nyc.doitt.gis.geoclient'
 
 java {
@@ -50,4 +56,44 @@ dependencies {
 
 tasks.named("test") {
     useJUnitPlatform()
+}
+
+tasks.register('printConfigurations') {
+    def allConfigurations = configurations.all
+    doLast {
+        println "Configurations:"
+        allConfigurations.each { c ->
+            println "${c.name}"
+            println '----------------------------'
+            //if (c.name == 'default') {
+            def allArtifacts = c.allArtifacts
+            if (allArtifacts) {
+                allArtifacts?.each { a ->
+                    String aType = a.getType()
+                    aType = aType ? " (${a.getType()})": ''
+                    println "  [artifact] ${a.getName()}${aType}: ${a.getFile()}"
+                }
+            } else {
+                println '  [artifact] none'
+            }
+            println()
+            //}
+        }
+    }
+}
+
+tasks.register('printSourceSets') {
+
+    doLast{
+        sourceSets.each { srcSet ->
+            println "["+srcSet.name+"]"
+            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
+            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
+            print "-->Compile classpath:\n"
+            srcSet.compileClasspath.files.each {
+                print "  "+it.path+"\n"
+            }
+            println ""
+        }
+    }
 }
