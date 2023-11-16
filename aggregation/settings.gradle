@@ -13,9 +13,7 @@ dependencyResolutionManagement {
     }
 }
 includeBuild('../platforms')
-includeBuild('../native')
-includeBuild('../api')
-includeBuild('../search')
+includeBuild('../subprojects')
 
 
 // == Define the inner structure of this component ==

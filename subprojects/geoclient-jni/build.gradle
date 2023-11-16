@@ -3,8 +3,6 @@ plugins {
     id('gov.nyc.doitt.gis.geoclient.java-library')
 }
 
-group = "${group}.jni"
-
 Provider<Directory> generatedResourcesDirectory = layout.buildDirectory.dir("generated-resources/main")
 File generatedResources = generatedResourcesDirectory.get().asFile
 //def libPath = geosupport.libraryPath.getOrNull()

@@ -13,8 +13,9 @@ dependencyResolutionManagement {
     }
 }
 includeBuild('../platforms')
-includeBuild('../native')
-
 // == Define the inner structure of this component ==
-rootProject.name = 'api'
+rootProject.name = 'geoclient'
+include('geoclient-jni')
 include('geoclient-core')
+include('geoclient-parser')
+include('geoclient-service')

@@ -2,8 +2,6 @@ plugins {
     id 'gov.nyc.doitt.gis.geoclient.java-library'
 }
 
-group = "${group}.parser"
-
 dependencies {
     implementation('org.springframework:spring-context')
     implementation('org.apache.commons:commons-lang3')

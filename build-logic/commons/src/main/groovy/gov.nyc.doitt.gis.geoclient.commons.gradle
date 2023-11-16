@@ -6,9 +6,6 @@ plugins {
     //id('checkstyle')
 }
 
-// From <root>/gradle.properties
-version = "2.0.1"
-
 // Used by subproject build.gradle files
 // to declare their own group as:
 //   "${group}.<top-level-package>"
