@@ -45,7 +45,7 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
         configureIntegrationTestOptionsAwareTasks(project, integrationTestOptions, logger);
 
         final GeosupportExtension geosupportExtension = geosupportApplication.getGeosupport();
-        logger.quiet("[ITEST] integrationTestOptions: {}.", integrationTestOptions);
+        logger.info("[ITEST] integrationTestOptions: {}.", integrationTestOptions);
 
         project.getPlugins().withType(JavaPlugin.class).configureEach(javaPlugin -> {
             SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
@@ -54,14 +54,22 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
             sourceSet.getResources().srcDir(integrationTestOptions.getResourcesSourceDir());
             sourceSet.getCompileClasspath().plus(sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).getOutput());
             sourceSet.getRuntimeClasspath().plus(sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).getOutput());
+
             Configuration implementation = project.getConfigurations().getByName(sourceSet.getImplementationConfigurationName());
             implementation.extendsFrom(project.getConfigurations().getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME));
-            //Configuration runtimeOnly = project.getConfigurations().getByName(sourceSet.getRuntimeOnlyConfigurationName());
+            logConfiguration(implementation);
+
+            Configuration runtimeOnly = project.getConfigurations().getByName(sourceSet.getRuntimeOnlyConfigurationName());
+            runtimeOnly.extendsFrom(project.getConfigurations().getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME));
+            logConfiguration(runtimeOnly);
+
             TaskProvider<GeosupportIntegrationTest> test = project.getTasks().register(integrationTestOptions.getTestName().get(), GeosupportIntegrationTest.class, new Action<GeosupportIntegrationTest>(){
                 public void execute(GeosupportIntegrationTest test){
                     test.setDescription("Runs tests which call Geosupport native code using JNI.");
                     test.setGroup(GeosupportPlugin.DEFAULT_TASK_GROUP);
+                    logger.quiet("Setting testClassesDirs({})", sourceSet.getOutput().getClassesDirs().getAsPath());
                     test.setTestClassesDirs(sourceSet.getOutput().getClassesDirs());
+                    logger.quiet("Setting classpath({})", sourceSet.getRuntimeClasspath().getAsPath());
                     test.setClasspath(sourceSet.getRuntimeClasspath());
                     test.shouldRunAfter(project.getTasks().named("test"));
                     test.environment("GEOFILES", geosupportExtension.getGeofiles().get());
@@ -79,7 +87,7 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
         project.getTasks().withType(IntegrationTestOptionsAware.class).configureEach(new Action<IntegrationTestOptionsAware>() {
             @Override
             public void execute(IntegrationTestOptionsAware task) {
-                logger.quiet("[ITEST] Configuring task {}'s integrationTestOptions conventions using {}.", task.getName(), integrationTestOptions);
+                logger.info("[ITEST] Configuring task {}'s integrationTestOptions conventions using {}.", task.getName(), integrationTestOptions);
                 task.getIntegrationTestOptions().getTestName().convention(integrationTestOptions.getTestName());
                 task.getIntegrationTestOptions().getSourceSetName().convention(integrationTestOptions.getSourceSetName());
                 task.getIntegrationTestOptions().getValidate().convention(integrationTestOptions.getValidate());
@@ -87,5 +95,16 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
                 task.getIntegrationTestOptions().getExportLdLibraryPath().convention(integrationTestOptions.getExportLdLibraryPath());
             }
         });
+    }
+
+    private void logConfiguration(Configuration configuration) {
+        logger.quiet("Configuration: {}", configuration.getName());
+        logger.quiet("                  {} dependencies", configuration.getAllDependencies().size());
+        logger.quiet("                  {} artifacts", configuration.getAllArtifacts().size());
+        configuration.getAllDependencies().forEach(
+            dependency -> logger.quiet(" - {}:{}:{}",
+            dependency.getGroup(),
+            dependency.getName(),
+            dependency.getVersion()));
     }
 }

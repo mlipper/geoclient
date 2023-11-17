@@ -37,7 +37,7 @@ public class GeosupportPlugin implements Plugin<Project> {
     @Override
     public void apply(final Project project) {
         final GeosupportApplication geosupportApplication = project.getExtensions().create(EXTENSION_NAME, GeosupportApplication.class, project.getObjects());
-        logger.quiet("[BASE] Created: geosupportApplication.getGeosupport(): {}.", geosupportApplication.getGeosupport());
+        logger.info("[BASE] Created: geosupportApplication.getGeosupport(): {}.", geosupportApplication.getGeosupport());
         configureGeosupportExtensionAwareTasks(project, geosupportApplication.getGeosupport(), logger);
         final GeoclientExtension geoclient = project.getExtensions().create("geoclient", GeoclientExtension.class);
         geoclient.getJniVersion().convention(new GeoclientConfigResolver().getJniVersion());
@@ -50,7 +50,7 @@ public class GeosupportPlugin implements Plugin<Project> {
         project.getTasks().withType(GeosupportExtensionAware.class).configureEach(new Action<GeosupportExtensionAware>() {
             @Override
             public void execute(GeosupportExtensionAware task) {
-                logger.quiet("[BASE] Configuring task {}'s geosupport conventions using {}.", task.getName(), geosupportExtension);
+                logger.info("[BASE] Configuring task {}'s geosupport conventions using {}.", task.getName(), geosupportExtension);
                 task.getGeosupport().getGeofiles().convention(geosupportExtension.getGeofiles());
                 task.getGeosupport().getHome().convention(geosupportExtension.getHome());
                 task.getGeosupport().getIncludePath().convention(geosupportExtension.getIncludePath());

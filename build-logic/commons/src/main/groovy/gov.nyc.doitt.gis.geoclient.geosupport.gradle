@@ -1,0 +1,20 @@
+plugins {
+    id('com.digitalclash.geoclient.gradle.geosupport-integration-test')
+}
+
+geosupportApplication {
+    integrationTestOptions {
+        testName = 'geosupportIntegrationTest'
+        sourceSetName = 'integrationTest'
+    }
+}
+
+geosupportIntegrationTest {
+    useJUnitPlatform()
+    testLogging {
+        info {
+            events "failed", "skipped", "passed"
+            showStandardStreams = true
+        }
+    }
+}
