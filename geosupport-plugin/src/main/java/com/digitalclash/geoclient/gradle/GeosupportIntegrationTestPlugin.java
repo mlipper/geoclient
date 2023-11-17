@@ -40,14 +40,16 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
     @Override
     public void apply(final Project project) {
         project.getPlugins().apply(GeosupportPlugin.class);
-        GeosupportApplication geosupportApplication = project.getExtensions().getByType(GeosupportApplication.class);
+        final GeosupportApplication geosupportApplication = project.getExtensions().getByType(GeosupportApplication.class);
         final IntegrationTestOptions integrationTestOptions = ((ExtensionAware)geosupportApplication).getExtensions().create(INTEGRATION_TEST_OPTIONS_EXTENSION_NAME, IntegrationTestOptions.class, project.getObjects());
+        logger.info("[ITEST] Created new IntegrationTestOptions instance with test name {} and sourceSet name {}.", integrationTestOptions.getTestName().get(), integrationTestOptions.getSourceSetName().get());
         configureIntegrationTestOptionsAwareTasks(project, integrationTestOptions, logger);
-
-        final GeosupportExtension geosupportExtension = geosupportApplication.getGeosupport();
-        logger.info("[ITEST] integrationTestOptions: {}.", integrationTestOptions);
+        logger.info("[ITEST] Configured tasks using IntegrationTestOptions instance with test name {} and sourceSet name {}.", integrationTestOptions.getTestName().get(), integrationTestOptions.getSourceSetName().get());
 
         project.getPlugins().withType(JavaPlugin.class).configureEach(javaPlugin -> {
+            // TODO This is happening before configureIntegrationTestOptionsAwareTasks() is called.
+            // TODO See https://github.com/bmuschko/gradle-docker-plugin/blob/master/src/main/java/com/bmuschko/gradle/docker/DockerConventionJvmApplicationPlugin.java
+            logger.quiet("[ITEST] Creating new SourceSet using IntegrationTestOptions instance with test name {} and sourceSet name {}.", integrationTestOptions.getTestName().get(), integrationTestOptions.getSourceSetName().get());
             SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
             SourceSet sourceSet = sourceSets.create(integrationTestOptions.getSourceSetName().get());
             sourceSet.getJava().srcDir(integrationTestOptions.getJavaSourceDir());
@@ -72,7 +74,7 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
                     logger.quiet("Setting classpath({})", sourceSet.getRuntimeClasspath().getAsPath());
                     test.setClasspath(sourceSet.getRuntimeClasspath());
                     test.shouldRunAfter(project.getTasks().named("test"));
-                    test.environment("GEOFILES", geosupportExtension.getGeofiles().get());
+                    test.environment("GEOFILES", geosupportApplication.getGeosupport().getGeofiles().get());
                 }
             });
             TaskProvider<Task> checkTask = project.getTasks().named("check");
@@ -87,7 +89,7 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
         project.getTasks().withType(IntegrationTestOptionsAware.class).configureEach(new Action<IntegrationTestOptionsAware>() {
             @Override
             public void execute(IntegrationTestOptionsAware task) {
-                logger.info("[ITEST] Configuring task {}'s integrationTestOptions conventions using {}.", task.getName(), integrationTestOptions);
+                logger.quiet("[ITEST] Configuring task {}'s integrationTestOptions conventions using {}.", task.getName(), integrationTestOptions);
                 task.getIntegrationTestOptions().getTestName().convention(integrationTestOptions.getTestName());
                 task.getIntegrationTestOptions().getSourceSetName().convention(integrationTestOptions.getSourceSetName());
                 task.getIntegrationTestOptions().getValidate().convention(integrationTestOptions.getValidate());

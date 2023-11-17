@@ -58,9 +58,8 @@ class GeosupportIntegrationTestPluginFunctionalTest extends Specification {
             }
 
             dependencies {
-                geosupportIntegrationTestImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
-                geosupportIntegrationTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+                testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+                testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
             }
         """
         println(buildFile)
@@ -141,8 +140,8 @@ class GeosupportIntegrationTestPluginFunctionalTest extends Specification {
             }
 
             dependencies {
-                geosupportIntegrationTestImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
-                geosupportIntegrationTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+                testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+                testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
             }
         """
