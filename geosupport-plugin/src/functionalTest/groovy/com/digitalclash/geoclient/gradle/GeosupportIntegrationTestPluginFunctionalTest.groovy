@@ -1,5 +1,7 @@
 package com.digitalclash.geoclient.gradle
 
+import java.nio.file.Files
+
 import org.gradle.testkit.runner.GradleRunner
 import static org.gradle.testkit.runner.TaskOutcome.*
 import spock.lang.TempDir
@@ -24,6 +26,15 @@ class GeosupportIntegrationTestPluginFunctionalTest extends Specification {
         }
     }
 
+    def printFile(File file) {
+        if(file.exists()) {
+            println("Contents of ${file}:")
+            println(Files.readString(file.toPath()))
+        } else {
+            println("File ${file} does not exist.")
+        }
+    }
+
 // TEST 1
     def "default geosupportIntegrationTest configures a passing JUnit test"() {
         given:
@@ -32,6 +43,17 @@ class GeosupportIntegrationTestPluginFunctionalTest extends Specification {
             plugins {
                 id 'java-library'
                 id 'com.digitalclash.geoclient.gradle.geosupport-integration-test'
+            }
+
+            // Must be declared before plugin DSL
+            repositories {
+                mavenCentral()
+            }
+
+            // Must be declared before plugin DSL
+            dependencies {
+                testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+                testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
             }
 
             geosupportApplication {
@@ -52,17 +74,8 @@ class GeosupportIntegrationTestPluginFunctionalTest extends Specification {
                     }
                 }
             }
-
-            repositories {
-                mavenCentral()
-            }
-
-            dependencies {
-                testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
-                testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-            }
         """
-        println(buildFile)
+        printFile(buildFile)
         File iTestJavaSrcDir = new File(testProjectDir, "src/geosupportIntegrationTest/java/com/example")
         iTestJavaSrcDir.mkdirs()
         File iTestResourcesDir = new File(testProjectDir, "src/geosupportIntegrationTest/resources")
@@ -104,6 +117,17 @@ class GeosupportIntegrationTestPluginFunctionalTest extends Specification {
                 id 'com.digitalclash.geoclient.gradle.geosupport-integration-test'
             }
 
+            // Must be declared before plugin DSL
+            repositories {
+                mavenCentral()
+            }
+
+            // Must be declared before plugin DSL
+            dependencies {
+                testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+                testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+            }
+
             geosupportApplication {
                 integrationTestOptions {
                     testName = 'geosupportIntegrationTest'
@@ -134,18 +158,8 @@ class GeosupportIntegrationTestPluginFunctionalTest extends Specification {
                     println("integrationTestOptions.exportLdLibraryPath=\${integrationTestOpts.exportLdLibraryPath.get()}")
                 }
             }
-
-            repositories {
-                mavenCentral()
-            }
-
-            dependencies {
-                testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
-                testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-            }
         """
-        println(buildFile)
+        printFile(buildFile)
         File iTestJavaSrcDir = new File(testProjectDir, "src/integrationTest/java/com/example")
         iTestJavaSrcDir.mkdirs()
         File iTestResourcesDir = new File(testProjectDir, "src/integrationTest/resources")

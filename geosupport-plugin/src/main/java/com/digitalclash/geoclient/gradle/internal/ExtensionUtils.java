@@ -20,6 +20,10 @@ import com.digitalclash.geoclient.gradle.GeosupportExtension;
 import com.digitalclash.geoclient.gradle.IntegrationTestOptions;
 
 import org.gradle.api.Action;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.Project;
+import org.gradle.api.tasks.SourceSet;
 
 public class ExtensionUtils {
 
@@ -59,4 +63,24 @@ public class ExtensionUtils {
                     }
         };
     }
+
+    public static Configuration getImplementationConfiguration(Project project, SourceSet sourceSet) {
+        return project.getConfigurations().getByName(sourceSet.getImplementationConfigurationName());
+    }
+
+    public static Configuration getRuntimeOnlyConfiguration(Project project, SourceSet sourceSet) {
+        return project.getConfigurations().getByName(sourceSet.getRuntimeOnlyConfigurationName());
+    }
+
+    public static void logConfiguration(Logger logger, Configuration configuration) {
+        logger.quiet("Configuration: {}", configuration.getName());
+        logger.quiet("                  {} dependencies", configuration.getAllDependencies().size());
+        logger.quiet("                  {} artifacts", configuration.getAllArtifacts().size());
+        configuration.getAllDependencies().forEach(
+            dependency -> logger.quiet(" - {}:{}:{}",
+            dependency.getGroup(),
+            dependency.getName(),
+            dependency.getVersion()));
+    }
+
 }

@@ -23,6 +23,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.ExtensionAware;
@@ -49,31 +50,36 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
         project.getPlugins().withType(JavaPlugin.class).configureEach(javaPlugin -> {
             // TODO This is happening before configureIntegrationTestOptionsAwareTasks() is called.
             // TODO See https://github.com/bmuschko/gradle-docker-plugin/blob/master/src/main/java/com/bmuschko/gradle/docker/DockerConventionJvmApplicationPlugin.java
-            logger.quiet("[ITEST] Creating new SourceSet using IntegrationTestOptions instance with test name {} and sourceSet name {}.", integrationTestOptions.getTestName().get(), integrationTestOptions.getSourceSetName().get());
+            // See https://docs.gradle.org/current/userguide/java_testing.html#sec:configuring_java_integration_tests
             SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
+            SourceSet mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+            //SourceSet testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME);
+            // Create new integration test SourceSet.
+            logger.quiet("[ITEST] Creating new SourceSet using IntegrationTestOptions instance with test name {} and sourceSet name {}.", integrationTestOptions.getTestName().get(), integrationTestOptions.getSourceSetName().get());
             SourceSet sourceSet = sourceSets.create(integrationTestOptions.getSourceSetName().get());
             sourceSet.getJava().srcDir(integrationTestOptions.getJavaSourceDir());
             sourceSet.getResources().srcDir(integrationTestOptions.getResourcesSourceDir());
-            sourceSet.getCompileClasspath().plus(sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).getOutput());
-            sourceSet.getRuntimeClasspath().plus(sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).getOutput());
-
+            sourceSet.getCompileClasspath().plus(mainSourceSet.getOutput());
+            sourceSet.getRuntimeClasspath().plus(mainSourceSet.getOutput());
+            // New SourceSet's implementation and runtimeOnly configurations extend from the corresponding configurations in the
+            // "main" SourceSet. Add dependencies from the testImplementation configuration for JUnit and other test dependencies.
             Configuration implementation = project.getConfigurations().getByName(sourceSet.getImplementationConfigurationName());
             implementation.extendsFrom(project.getConfigurations().getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME));
-            logConfiguration(implementation);
-
+            implementation.extendsFrom(project.getConfigurations().getByName(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME));
             Configuration runtimeOnly = project.getConfigurations().getByName(sourceSet.getRuntimeOnlyConfigurationName());
             runtimeOnly.extendsFrom(project.getConfigurations().getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME));
-            logConfiguration(runtimeOnly);
+            runtimeOnly.extendsFrom(project.getConfigurations().getByName(JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_NAME));
 
             TaskProvider<GeosupportIntegrationTest> test = project.getTasks().register(integrationTestOptions.getTestName().get(), GeosupportIntegrationTest.class, new Action<GeosupportIntegrationTest>(){
                 public void execute(GeosupportIntegrationTest test){
                     test.setDescription("Runs tests which call Geosupport native code using JNI.");
                     test.setGroup(GeosupportPlugin.DEFAULT_TASK_GROUP);
-                    logger.quiet("Setting testClassesDirs({})", sourceSet.getOutput().getClassesDirs().getAsPath());
+                    logger.info("Setting testClassesDirs({})", sourceSet.getOutput().getClassesDirs().getAsPath());
                     test.setTestClassesDirs(sourceSet.getOutput().getClassesDirs());
-                    logger.quiet("Setting classpath({})", sourceSet.getRuntimeClasspath().getAsPath());
+                    logger.info("Setting classpath({})", sourceSet.getRuntimeClasspath().getAsPath());
                     test.setClasspath(sourceSet.getRuntimeClasspath());
                     test.shouldRunAfter(project.getTasks().named("test"));
+                    // Set required GEOFILES environment variable using the value from the extension.
                     test.environment("GEOFILES", geosupportApplication.getGeosupport().getGeofiles().get());
                 }
             });
@@ -95,14 +101,16 @@ public class GeosupportIntegrationTestPlugin implements Plugin<Project> {
                 task.getIntegrationTestOptions().getValidate().convention(integrationTestOptions.getValidate());
                 task.getIntegrationTestOptions().getUseJavaLibraryPath().convention(integrationTestOptions.getUseJavaLibraryPath());
                 task.getIntegrationTestOptions().getExportLdLibraryPath().convention(integrationTestOptions.getExportLdLibraryPath());
+                //ConfigurationContainer configurationContainer = task.getProject().getConfigurations();
+                //configurationContainer.getNames().forEach(name -> logConfiguration(configurationContainer.getByName(name)));
             }
         });
     }
 
     private void logConfiguration(Configuration configuration) {
         logger.quiet("Configuration: {}", configuration.getName());
-        logger.quiet("                  {} dependencies", configuration.getAllDependencies().size());
-        logger.quiet("                  {} artifacts", configuration.getAllArtifacts().size());
+        logger.quiet("              {} dependencies", configuration.getAllDependencies().size());
+        logger.quiet("              {} artifacts", configuration.getAllArtifacts().size());
         configuration.getAllDependencies().forEach(
             dependency -> logger.quiet(" - {}:{}:{}",
             dependency.getGroup(),

@@ -1,4 +1,4 @@
 includeBuild('platforms')
 includeBuild('build-logic')
-//includeBuild('aggregation')
+includeBuild('aggregation')
 includeBuild('subprojects')
