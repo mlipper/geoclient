@@ -1,13 +1,13 @@
-pluginManagement {
-    includeBuild('../geosupport-plugin')
-}
+//pluginManagement {
+//    includeBuild('../geosupport-plugin')
+//}
 dependencyResolutionManagement {
     repositories {
         gradlePluginPortal()
     }
 }
 includeBuild('../platforms')
-includeBuild('../geosupport-plugin')
+//includeBuild('../geosupport-plugin')
 
 rootProject.name = 'build-logic'
 include('commons')

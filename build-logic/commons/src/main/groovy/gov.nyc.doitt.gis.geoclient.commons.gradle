@@ -3,7 +3,7 @@ plugins {
     id('gov.nyc.doitt.gis.geoclient.jacoco')
     id('gov.nyc.doitt.gis.geoclient.spotless')
     id('gov.nyc.doitt.gis.geoclient.versions')
-    id('gov.nyc.doitt.gis.geoclient.geosupport')
+    //id('gov.nyc.doitt.gis.geoclient.geosupport')
     //id('checkstyle')
 }
 
