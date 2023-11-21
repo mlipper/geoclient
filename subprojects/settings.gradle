@@ -4,6 +4,7 @@ pluginManagement {
         gradlePluginPortal() // if pluginManagement.repositories looks like this, it can be omitted as this is the default
     }
     includeBuild('../build-logic')
+    //includeBuild('../geosupport-plugin')
 }
 
 // == Define locations for components ==
