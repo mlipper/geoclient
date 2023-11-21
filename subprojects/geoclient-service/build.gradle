@@ -2,7 +2,7 @@ plugins {
     id('gov.nyc.doitt.gis.geoclient.spring-boot-application')
 }
 
-group = "${group}.geoclient-service"
+//group = "${group}.geoclient-service"
 
 dependencies {
     implementation(project(':geoclient-jni'))
