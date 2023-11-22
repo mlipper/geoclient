@@ -4,9 +4,8 @@ plugins {
 
 dependencies {
     // Transitively collect coverage data from all features and their dependencies
-    // TODO Adjust this if adding another level of directories to subprojects
-    aggregate(':subprojects:geoclient-core')
-    aggregate(':subprojects:geoclient-jni')
-    aggregate(':subprojects:geoclient-parser')
-    aggregate(':subprojects:geoclient-service')
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-jni')
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-core')
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-parser')
+    aggregate('gov.nyc.doitt.gis.geoclient:geoclient-service')
 }
