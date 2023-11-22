@@ -18,7 +18,7 @@ tasks.register('showMain') {
     doLast() {
         def soDir = project.file(new File(sourceSets.main.output.classesDirs[0], 'linux_x64'))
         def destDir = java.nio.file.Files.createDirectories(soDir.toPath())
-        logger.quiet("destDir: ${destDir}")
+        logger.info("destDir: ${destDir}")
         //logger.quiet("sourceSets.main.output:")
         //sourceSets.main.output.classesDirs.each { d ->
         //    logger.quiet(d.absolutePath)
@@ -150,7 +150,7 @@ model {
 
                 binary.tasks.withType(LinkSharedLibrary) { builderTask ->
                     def jniLib = builderTask.linkedFile
-                    logger.quiet("Syncing JNI shared library file\n  from: ${jniLib?.getAsFile()?.get()}\n    to: ${syncDir}")
+                    logger.info("Syncing JNI shared library file\n  from: ${jniLib?.getAsFile()?.get()}\n    to: ${syncDir}")
                     syncTask.from(jniLib)
                     syncTask.destinationDir = syncDir
                 }
