@@ -89,12 +89,14 @@ server:
       basedir: "build/bootrun"
       accesslog:
           enabled: true
+          pattern: "%t %a %r %s (%D microseconds)"
 
 logging:
     level:
         spring-all: "INFO"
         spring-web: "INFO"
         geoclient-service: "INFO"
+        tomcat: "INFO"
     file:
         name: "build/bootrun/logs/geoclient.log"
 
