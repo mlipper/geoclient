@@ -3,16 +3,12 @@ plugins {
     id('gov.nyc.doitt.gis.geoclient.jacoco')
     id('gov.nyc.doitt.gis.geoclient.spotless')
     id('gov.nyc.doitt.gis.geoclient.versions')
+    id('gov.nyc.doitt.gis.geoclient.jvm-test-suite')
     //id('gov.nyc.doitt.gis.geoclient.geosupport')
-    id('gov.nyc.doitt.gis.geoclient.integration-test')
+    //id('gov.nyc.doitt.gis.geoclient.integration-test')
     //id('checkstyle')
 }
 
-// Used by subproject build.gradle files
-// to declare their own group as:
-//   "${group}.<top-level-package>"
-// Consuming builds then use:
-//   "${group}.<top-level-package>:<subproject-name>"
 group = 'gov.nyc.doitt.gis.geoclient'
 
 java {
@@ -41,21 +37,20 @@ javadoc {
 dependencies {
     implementation(platform('gov.nyc.doitt.gis.geoclient.platform:geoclient-platform'))
     implementation('org.springframework.boot:spring-boot-starter-logging')
-
     testImplementation(platform('gov.nyc.doitt.gis.geoclient.platform:test-platform'))
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation('org.junit.jupiter:junit-jupiter')
-    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
-    // Avoids log warning generated because of JUnit dependency on apiguardian:
-    // 'warning: unknown enum constant Status.STABLE'
-    // This was supposed to have been fixed in JUnit 5.1.x, but still happens,
-    // possibly because gradle platform or spring BOM.
-    testRuntimeOnly('org.apiguardian:apiguardian-api')
+//    testImplementation('org.junit.jupiter:junit-jupiter')
+//    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+//    // Avoids log warning generated because of JUnit dependency on apiguardian:
+//    // 'warning: unknown enum constant Status.STABLE'
+//    // This was supposed to have been fixed in JUnit 5.1.x, but still happens,
+//    // possibly because gradle platform or spring BOM.
+//    testRuntimeOnly('org.apiguardian:apiguardian-api')
 }
 
-tasks.named("test") {
-    useJUnitPlatform()
-}
+//tasks.named("test") {
+//    useJUnitPlatform()
+//}
 
 tasks.register('printConfigurations') {
     def allConfigurations = configurations.all

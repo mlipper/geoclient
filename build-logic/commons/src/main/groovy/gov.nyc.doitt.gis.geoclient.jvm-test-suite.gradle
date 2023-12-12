@@ -1,0 +1,34 @@
+plugins {
+    id('java')
+    id('jvm-test-suite')
+}
+
+dependencies {
+    testImplementation(platform('gov.nyc.doitt.gis.geoclient.platform:test-platform'))
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+testing {
+    suites {
+       configureEach {
+            useJUnitJupiter()
+        }
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        environment("GEOFILES", '/opt/geosupport/current/fls/')
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn(testing.suites.integrationTest)
+}
