@@ -1,12 +1,20 @@
 plugins {
     id 'groovy-gradle-plugin'
+    id 'java-gradle-plugin'
 }
 
 repositories {
     gradlePluginPortal()
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs.addAll("-Werror", "-Xlint:unchecked", "-Xlint:deprecation", "-Xlint:rawtypes","-Xlint:varargs")
+}
+
 dependencies {
     implementation libs.spotless.plugin
     implementation libs.gradle.versions.plugin
+    implementation libs.httpclient
+    implementation libs.httpclient.fluent
 }
