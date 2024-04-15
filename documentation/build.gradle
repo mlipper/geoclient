@@ -11,6 +11,7 @@ plugins {
 configurations {
     internalServerClasspath {
         canBeConsumed = false
+        //canBeResolved = true
     }
 }
 dependencies {
@@ -18,6 +19,8 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-json')
     integrationTestImplementation(project(':geoclient-test'))
     internalServerClasspath(project(path: ':geoclient-service', configuration: 'internalServer'))
+    // For JUnit custom LauncherSessionListener, GlobalSetupTeardownListener
+    integrationTestImplementation('org.junit.platform:junit-platform-launcher')
 }
 
 tasks.named('asciidoctor') {
@@ -110,8 +113,12 @@ tasks.named('integrationTest', Test) {
     ext.defaultOutputDir = generatedSamplesDir
     environment('GENERATOR_BASEURL', System.getenv('GENERATOR_BASEURL') ?: ext.defaultBaseUrl)
     environment('GENERATOR_OUTPUTDIR', System.getenv('GENERATOR_OUTPUTDIR') ?: ext.defaultOutputDir)
-
+    systemProperty('http.server.host', 'localhost')
+    systemProperty('http.server.port', '8088')
     testLogging {
         showStandardStreams = true
+        info {
+            showStandardStreams = true
+        }
     }
 }
