@@ -1,3 +1,13 @@
 .gradle
+build
+
 .local
+
 .vscode
+.vscode_site
+
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
+Gemfile.lock
