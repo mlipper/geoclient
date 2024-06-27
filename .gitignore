@@ -1,18 +1,14 @@
-_site
-.sass-cache
-Gemfile.lock
+# Jekyll build
 *.gem
 .jekyll-cache
+.jekyll-metadata
+.sass-cache
+Gemfile.lock
+_site
+vendor
+# Development
 .gradle
-build
-
 .local
-
+build
 .vscode
 .vscode_site
-
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
-Gemfile.lock

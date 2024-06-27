@@ -2,7 +2,6 @@
 
 source "https://rubygems.org"
 
-gem "webrick"
 gem "github-pages", group: :jekyll_plugins
 
-gemspec
+gem "webrick", "~> 1.8"
