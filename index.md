@@ -7,7 +7,7 @@ layout: default
 * [User Guide](./docs/current/user-guide)
 * [JavaDoc](./docs/current/api)
 
-## Here's something random while we complete this section
+## Here's something totally random while we complete this section
 
 ```ascii
                        .|
