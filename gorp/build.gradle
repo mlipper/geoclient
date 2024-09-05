@@ -1,0 +1,15 @@
+plugins {
+    id 'java-library'
+    id 'geoclientbuild.build-parameters'
+}
+tasks.register("parameters") {
+    group = "help"
+    dependsOn(gradle.includedBuild("plugins").task(":build-parameters:parameters"))
+}
+
+tasks.register("sanityCheck") {
+    doLast {
+        println("ci=${buildParameters.ci}")
+        println("documentation.endpoint=${buildParameters.documentation.endpoint}")
+    }
+}

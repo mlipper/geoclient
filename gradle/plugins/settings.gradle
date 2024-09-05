@@ -1,0 +1,11 @@
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("../libs.versions.toml"))
+        }
+    }
+    //repositories.gradlePluginPortal()
+}
+
+include('build-parameters')
+include('generate-samples')

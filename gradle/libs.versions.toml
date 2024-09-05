@@ -2,6 +2,7 @@
 apiguardian-api = "1.1.2"
 asciidoctorj-pdf = "2.3.12"
 asciidoctor-plugins = "4.0.2"
+build-parameters-plugin = "1.4.4"
 commons-text = "1.12.0"
 diffutils = "1.3.0"
 httpclient = "5.2.3"
@@ -14,6 +15,7 @@ xstream = "1.4.20"
 
 [plugins]
 boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+buildParameters = { id = "org.gradlex.build-parameters", version.ref = "build-parameters-plugin" }
 asciidoctorConvert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor-plugins" }
 asciidoctorPdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor-plugins" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin" }

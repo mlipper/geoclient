@@ -1,0 +1,37 @@
+plugins {
+    //id 'org.gradlex.build-parameters' version '1.4.4'
+    alias(libs.plugins.buildParameters)
+}
+
+buildParameters {
+    pluginId('geoclientbuild.build-parameters')
+    bool('ci') {
+        fromEnvironment()
+        defaultValue = false
+    }
+    bool('javaUseSystemProxy') {
+        fromEnvironment('JAVA_USE_SYSTEM_PROXY')
+        defaultValue = true
+    }
+    group('documentation') {
+        description = 'Parameters needed for building documentation samples.'
+        string('key') {
+            fromEnvironment('DOCUMENTATION_KEY')
+        }
+        string('endpoint') {
+            fromEnvironment('DOCUMENTATION_ENDPOINT')
+            defaultValue = 'http://localhost:8080/geoclient/v2'
+        }
+    }
+    group('testing') {
+        description = 'Parameters needed for unit, functional and integration tests.'
+        string('key') {
+            fromEnvironment('TESTING_KEY')
+            defaultValue = 'UNSET'
+        }
+        string('endpoint') {
+            fromEnvironment('TESTING_ENDPOINT')
+            defaultValue = 'http://localhost:8080/geoclient/v2'
+        }
+    }
+}
