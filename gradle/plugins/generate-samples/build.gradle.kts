@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     implementation(project(":build-parameters"))
+    implementation(kotlin("gradle-plugin"))
     //implementation libs.spotless.plugin
     //implementation libs.gradle.versions.plugin
     // Platforms
