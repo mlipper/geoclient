@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'geoclientbuild.build-parameters'
+    id 'geoclientbuild.documentation'
 }
 tasks.register("parameters") {
     group = "help"

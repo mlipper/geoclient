@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     implementation(project(":build-parameters"))
-    implementation(kotlin("gradle-plugin"))
+//    implementation(kotlin("gradle-plugin"))
     //implementation libs.spotless.plugin
     //implementation libs.gradle.versions.plugin
     // Platforms
@@ -41,6 +41,9 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
     testLogging {
         showStandardStreams = true
+        info {
+            showStandardStreams = true
+        }
     }
     environment("TESTING_KEY"          , System.getenv("TESTING_KEY"))
     environment("TESTING_ENDPOINT"     , System.getenv("TESTING_ENDPOINT"))
@@ -50,7 +53,7 @@ tasks.named<Test>("test") {
 gradlePlugin {
     plugins {
         create("documentationPlugin") {
-            id = "geoclientbuild-documentation"
+            id = "geoclientbuild.documentation"
             implementationClass = "geoclientbuild.docs.DocumentationPlugin"
         }
     }

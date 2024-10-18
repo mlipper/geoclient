@@ -71,7 +71,7 @@ public class GenerateSamplesTaskTest {
 	void testGenerateSamplesTaskWorks() throws IOException {
 		try (PrintWriter out = new PrintWriter(new FileWriter(this.buildFile))) {
 			out.println("plugins {");
-			out.println("    id 'geoclientbuild-documentation'");
+			out.println("    id 'geoclientbuild.documentation'");
 			out.println("}");
 			out.println();
 			out.println("def headers = ['Cache-Control': 'no-cache', 'Ocp-Apim-Subscription-Key': '" + this.apiKey + "']");
