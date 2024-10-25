@@ -39,8 +39,9 @@ tasks.named('test', Test) {
     testLogging {
         showStandardStreams = true
     }
-    environment('GEOCLIENT_BASE_URI', 'https://maps.nyc.gov/geoclient/v2')
-    environment('JAVA_USE_SYSTEM_PROXY', 'true')
+    systemProperty("java.system.proxy", System.getProperty("java.system.proxy", "false"))
+    systemProperty("testing.key", System.getProperty("testing.key", "false"))
+    systemProperty("testing.endpoint", System.getProperty("testing.endpoint", "false"))
 }
 
 gradlePlugin {

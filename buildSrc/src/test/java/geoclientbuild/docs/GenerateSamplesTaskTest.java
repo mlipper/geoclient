@@ -19,6 +19,7 @@ import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static geoclientbuild.docs.DocumentationPlugin.GENERATE_SAMPLES_TASK_NAME;
 
 // See https://github.com/spring-projects/spring-boot/blob/main/buildSrc/src/test/java/org/springframework/boot/build/ConventionsPluginTests.java
+@EnabledIfSystemProperty(named = "testing.endpoint", matches = "true")
+@EnabledIfSystemProperty(named = "testing.key", matches = "true")
 public class GenerateSamplesTaskTest {
 
 	private static final String KEY_ENV_VARIABLE_NAME = "GENERATE_SAMPLES_KEY";
@@ -45,9 +48,9 @@ public class GenerateSamplesTaskTest {
     @BeforeEach
     void setup(@TempDir File projectDir) throws IOException {
         this.projectDir = projectDir;
-		this.apiKey = environmentVariable(KEY_ENV_VARIABLE_NAME);
-		this.baseUri = environmentVariable(ENDPOINT_ENV_VARIABLE_NAME);
-		this.javaSystemProxy = environmentVariable(JAVA_USE_SYSTEM_PROXY_VARIABLE_NAME);
+		this.apiKey = System.getProperty("testing.key");
+		this.baseUri = System.getProperty("testing.endpoint");
+		this.javaSystemProxy = System.getProperty("java.system.proxy");
         this.buildFile = new File(this.projectDir, "build.gradle");
 		this.requestsFile = new File(this.projectDir, "requests.json");
         File settingsFile = new File(this.projectDir, "settings.gradle");
