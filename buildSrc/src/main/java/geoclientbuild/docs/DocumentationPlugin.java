@@ -22,7 +22,7 @@ public class DocumentationPlugin implements Plugin<Project> {
             t.setDescription("Write JSON responses to geoclient REST calls files in an output folder.");
             t.getRequestsFile().convention(project.getLayout().getBuildDirectory().file("resources/main/requests.json"));
             t.getDestinationDirectory().convention(project.getLayout().getBuildDirectory().dir("generated/samples"));
-            t.dependsOn(ASSEMBLE_TASK_NAME);
+            //t.dependsOn(ASSEMBLE_TASK_NAME);
         });
     }
 }
