@@ -27,8 +27,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static geoclientbuild.docs.DocumentationPlugin.GENERATE_SAMPLES_TASK_NAME;
 
 // See https://github.com/spring-projects/spring-boot/blob/main/buildSrc/src/test/java/org/springframework/boot/build/ConventionsPluginTests.java
-@EnabledIfSystemProperty(named = "testing.endpoint", matches = "true")
-@EnabledIfSystemProperty(named = "testing.key", matches = "true")
+@EnabledIfSystemProperty(named = "testing.endpoint", matches = "^https?://.+")
+@EnabledIfSystemProperty(named = "testing.samples.test", matches = "true")
 public class GenerateSamplesTaskTest {
 
 	private static final String KEY_ENV_VARIABLE_NAME = "GENERATE_SAMPLES_KEY";
