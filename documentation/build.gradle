@@ -4,7 +4,7 @@ import java.net.URI
 plugins {
     id 'geoclient.library-conventions'
     id 'geoclient.test-conventions'
-    id 'geoclientbuild-docs'
+    id 'geoclientbuild.documentation'
 	alias(libs.plugins.asciidoctorConvert)
 	alias(libs.plugins.asciidoctorPdf)
 }

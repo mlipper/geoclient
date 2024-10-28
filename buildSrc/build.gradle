@@ -39,14 +39,18 @@ tasks.named('test', Test) {
     testLogging {
         showStandardStreams = true
     }
-    environment('GEOCLIENT_BASE_URI', 'https://maps.nyc.gov/geoclient/v2')
-    environment('JAVA_USE_SYSTEM_PROXY', 'true')
+    // Required for test to run
+    systemProperty("testing.endpoint", System.getProperty("testing.endpoint", "false"))
+    systemProperty("testing.samples.test", System.getProperty("testing.samples.test", "false"))
+    // Only if relevant
+    systemProperty("java.system.proxy", System.getProperty("java.system.proxy", "false"))
+    systemProperty("testing.key", System.getProperty("testing.key", "k3y1smissing"))
 }
 
 gradlePlugin {
     plugins {
         documentationPlugin {
-            id = 'geoclientbuild-docs'
+            id = 'geoclientbuild.documentation'
             implementationClass = 'geoclientbuild.docs.DocumentationPlugin'
         }
     }
