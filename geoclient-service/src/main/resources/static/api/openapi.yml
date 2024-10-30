@@ -6,16 +6,20 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 externalDocs:
-  url: https://maps.nyc.gov/geoclient/v2/doc
+  url: https://mlipper.github.io/geoclient/docs/current/user-guide/
 servers:
-  - url: https://maps.nyc.gov/geoclient/v2
-    description: Production server (legacy)
+  - url: https://api.nyc.gov/geoclient/v2
+    description: prod (apim)
+  - url: https://nonprod-api.nyc.gov/geoclient/v2
+    description: nonprod (apim)
   - url: https://geoclient.nyc.gov/geoclient/v2
-    description: Production (kubernetes)
+    description: prod (ingress)
   - url: https://geoclient-dev.nyc.gov/geoclient/v2
-    description: Non-production (kubernetes)
-  - url: http://localhost:8081/geoclient/v2
-    description: Development (local)
+    description: nonprod (ingress)
+  #- url: https://maps.nyc.gov/geoclient/v2
+  #  description: Production server (legacy)
+  #- url: http://localhost:8081/geoclient/v2
+  #  description: Development (local)
 paths:
   /address:
     get:
@@ -304,8 +308,20 @@ paths:
       responses:
         '200':
           description: Version information for this service
-#
-#components:
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Ocp-Apim-Subscription-Key
+#    appIdAuth:
+#      type: apiKey
+#      in: query
+#      name: app_id
+#    appKeyAuth:
+#      type: apiKey
+#      in: query
+#      name: app_key
 #  responses:
 #    '200':
 #      description: OK
@@ -319,3 +335,5 @@ paths:
 #      description: Not Found
 #    '5XX':
 #      description: Internal Server Error
+security:
+  - apiKeyAuth: []
