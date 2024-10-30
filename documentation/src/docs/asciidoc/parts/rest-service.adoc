@@ -40,7 +40,7 @@ The Geoclient service provides the following endpoints:
 |1B{empty}footnote:1B[]
 
 |Search
-|Provides parsing and search algorithm customization for several of the other endpoints listed in this section. Typically used for geocoding unstructured text to support "single-field" user searches. See link:#section-1.3[Section 1.3] for details.
+|Provides parsing and search algorithm customization for several of the other endpoints listed in this section. Typically used for geocoding unstructured text to support "single-field" user searches. See the <<Search>> section below for details.
 |Address, BBL, BIN, Blockface, Intersection, Place
 
 |Streetcode
@@ -48,7 +48,7 @@ The Geoclient service provides the following endpoints:
 |D,DG,DN{empty}footnote:D-DG-DN[See {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[D, DG, DN]]
 
 |Normalize
-|Normalizes a street name (but does *not* verify that it actually exists. {dcp-goat}/FunctionN[source])
+|Normalizes a street name but does *not* verify that it actually exists. ({dcp-goat}/FunctionN[source])
 |N{empty}footnote:N[See {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[N]]
 
 |Version
@@ -72,9 +72,9 @@ All requests are made as simple `HTTP GET` requests with input arguments specifi
 /search.xml?input=100%20centre%20street%20manhattan <3>
        ^^^^
 ----
-<1> Returns 'JSON' (default)
-<2> Returns 'JSON'
-<3> Returns 'XML'
+<1> Returns `application/json` (default)
+<2> Returns `application/json`
+<3> Returns `application/xml`
 
 WARNING: In the example above, (2) and (3) use file extensions as request (path) parameters. This functionality is deprecated and will eventually be removed from Geoclient. In future versions, use of the `Content-Type` header will be the way to request a non-default media type.
 
@@ -119,12 +119,128 @@ Contact your provider for signup and access instructions.
 
 The following request parameters are required for all operations (except where noted):
 
-* borough (required2,3,4) parameter - must be one of the following (case-insensitive):
-** Manhattan
-** Bronx
-** Brooklyn
-** Queens
-** Staten Island
+.Case sensitivity
+****
+
+The Geoclient base URI and query parameter names *_are case-sensitive_*!
+....
+# valid
+/geoclient/v2/address?houseNumber=2826&street=broadway&borough=manhattan
+....
+....
+# invalid
+/Geoclient/v2/address?houseNumber=2826&street=broadway&borough=manhattan
+ ^
+/geoclient/v2/address?houseNumber=2826&Street=broadway&borough=manhattan
+                                       ^
+....
+However, parameter _values_ are *not* case-sensitive.
+....
+# valid
+/geoclient/v2/address?houseNumber=2826&street=BROADWAY&borough=Manhattan
+                               These are ok:  ^^^^^^^^         ^
+....
+****
+
+==== Borough
+
+The `borough` parameter can either be a borough name or a borough number. Borough names are *not* case-sensitive.
+
+.Valid values
+[cols="2,2a,1"]
+|===
+|Borough |By name |By number
+|Manhattan
+| * `Manhattan`
+  * `MN`
+
+In addition to the above, the `/search` endpoint will accept the following:
+
+  * `NEW YORK`
+  * `NEW YORK CITY`
+  * `N.Y.C.`
+  * `NYC`
+  * `N.Y.`
+  * `NY`
+|`1`
+
+|Bronx
+| * `Bronx`
+  * `BX`
+  * `The Bronx`
+|`2`
+
+|Brooklyn
+| * `Brooklyn`
+  * `BK`
+  * `BKLYN`
+|`3`
+
+|Queens
+| * `Queens`
+  * `QN`
+  * `QS`
+
+For some parts of Queens, the `/search` endpoint will accept a USPS "city name" in place of a borough. See <<#queens-city-names>> details.
+|`4`
+
+|Staten Island
+| * `Staten Island`
+  * `SI`
+  * `STATENISLAND`
+  * `STATENIS`
+|`5`
+|===
+
+[#queens-city-names]
+==== Queens city names
+
+....
+ARVERNE
+ASTORIA
+BAYSIDE
+BELLEROSE
+BREEZY POINT
+CAMBRIA HEIGHTS
+COLLEGE POINT
+CORONA
+EAST ELMHURST
+ELMHURST
+FAR ROCKAWAY
+FLORAL PARK
+FLUSHING
+FOREST HILLS
+FRESH MEADOWS
+GLEN OAKS
+HOLLIS
+HOWARD BEACH
+INWOOD
+JACKSON HEIGHTS
+JAMAICA
+KEW GARDENS
+LITTLE NECK
+LONG ISLAND CITY
+MASPETH
+MIDDLE VILLAGE
+NEW HYDE PARK
+OAKLAND GARDENS
+OZONE PARK
+QUEENS VILLAGE
+REGO PARK
+RICHMOND HILL
+RIDGEWOOD
+ROCKAWAY PARK
+ROSEDALE
+SAINT ALBANS
+SOUTH OZONE PARK
+SOUTH RICHMOND HILL
+SPRINGFIELD GARDENS
+SUNNYSIDE
+WHITESTONE
+WOODHAVEN
+WOODSIDE
+....
+
 
 === Understanding Geoclient Return Codes
 
@@ -135,6 +251,32 @@ HTTP return codes vs. Geosupport (application-level) return codes.
 === Endpoints
 
 ==== Address
+
+*Path:* `/v2/address`
+
+*Parameters:*
+
+|===
+| Parameter Name | Required/Optional | Comments
+
+| `houseNumber`
+| required
+| House number of the address.
+
+| `street`
+| required
+| Street name or 7-digit street code.
+
+| `borough`
+| required if `zip` is not given
+| Valid values defined in <<Borough>>.
+
+| `zip`
+| required if `borough` is not given
+| Standard USPS 5-digit zip code or zip+4 (see {wikipedia-zip-code}[this article]).  Must be a valid zip code for an area within New York City limits.
+|===
+
+*Example Requests:*
 
 Request:
 
@@ -153,6 +295,12 @@ include::../samples/address-1.jsonc[tags=user_guide]
 
 ==== Address Point
 
+*Path:* `/v2/addresspoint`
+
+*Parameters:*
+
+Same as the <<Address>> endpoint.
+
 Request:
 
 ....
@@ -169,6 +317,11 @@ include::../samples/addresspoint-1.jsonc[tags=user_guide]
 ====
 
 ==== BBL
+
+*Path:* `/v2/bbl`
+
+*Parameters:*
+
 
 Request:
 

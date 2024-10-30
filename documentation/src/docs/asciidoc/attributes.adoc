@@ -7,3 +7,4 @@
 :dcp-upg-cows:                    {dcp-upg}/appendices/appendix13
 :geoclient-repo:                  https://github.com/mlipper/geoclient
 :geoclient-nyc-repo:              https://github.com/CityOfNewYork/geoclient
+:wikipedia-zip-code:              http://en.wikipedia.org/wiki/ZIP_code
