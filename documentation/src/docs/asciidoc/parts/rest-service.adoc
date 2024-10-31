@@ -146,22 +146,13 @@ However, parameter _values_ are *not* case-sensitive.
 
 The `borough` parameter can either be a borough name or a borough number. Borough names are *not* case-sensitive.
 
-.Valid values
+.Valid Values
 [cols="2,2a,1"]
 |===
 |Borough |By name |By number
 |Manhattan
 | * `Manhattan`
   * `MN`
-
-In addition to the above, the `/search` endpoint will accept the following:
-
-  * `NEW YORK`
-  * `NEW YORK CITY`
-  * `N.Y.C.`
-  * `NYC`
-  * `N.Y.`
-  * `NY`
 |`1`
 
 |Bronx
@@ -179,9 +170,6 @@ In addition to the above, the `/search` endpoint will accept the following:
 |Queens
 | * `Queens`
   * `QN`
-  * `QS`
-
-For some parts of Queens, the `/search` endpoint will accept a USPS "city name" in place of a borough. See <<#queens-city-names>> details.
 |`4`
 
 |Staten Island
@@ -192,61 +180,178 @@ For some parts of Queens, the `/search` endpoint will accept a USPS "city name" 
 |`5`
 |===
 
-[#queens-city-names]
-==== Queens city names
+The preceeding table describes borough values recognized by Geosupport. The Geoclient `/search` endpoint some additional aliases to improve the parsing of single-field searches.
+
+Recognized as `Manhattan`:
 
 ....
-ARVERNE
-ASTORIA
-BAYSIDE
-BELLEROSE
-BREEZY POINT
-CAMBRIA HEIGHTS
-COLLEGE POINT
-CORONA
-EAST ELMHURST
-ELMHURST
-FAR ROCKAWAY
-FLORAL PARK
-FLUSHING
-FOREST HILLS
-FRESH MEADOWS
-GLEN OAKS
-HOLLIS
-HOWARD BEACH
-INWOOD
-JACKSON HEIGHTS
-JAMAICA
-KEW GARDENS
-LITTLE NECK
-LONG ISLAND CITY
-MASPETH
-MIDDLE VILLAGE
-NEW HYDE PARK
-OAKLAND GARDENS
-OZONE PARK
-QUEENS VILLAGE
-REGO PARK
-RICHMOND HILL
-RIDGEWOOD
-ROCKAWAY PARK
-ROSEDALE
-SAINT ALBANS
-SOUTH OZONE PARK
-SOUTH RICHMOND HILL
-SPRINGFIELD GARDENS
-SUNNYSIDE
-WHITESTONE
-WOODHAVEN
-WOODSIDE
+`NEW YORK`
+`NEW YORK CITY`
+`N.Y.C.`
+`NYC`
+`N.Y.`
+`NY`
 ....
 
+Recognized as `Queens`:
 
-=== Understanding Geoclient Return Codes
+....
+Arverne
+Astoria
+Bayside
+Bellerose
+Breezy Point
+Cambria Heights
+College Point
+Corona
+East Elmhurst
+Elmhurst
+Far Rockaway
+Floral Park
+Flushing
+Forest Hills
+Fresh Meadows
+Glen Oaks
+Hollis
+Howard Beach
+Inwood
+Jackson Heights
+Jamaica
+Kew Gardens
+Little Neck
+Long Island City
+Maspeth
+Middle Village
+New Hyde Park
+Oakland Gardens
+Ozone Park
+Qs
+Queens Village
+Rego Park
+Richmond Hill
+Ridgewood
+Rockaway Park
+Rosedale
+Saint Albans
+South Ozone Park
+South Richmond Hill
+Springfield Gardens
+Sunnyside
+Whitestone
+Woodhaven
+Woodside
+....
 
-There are two ways in which the Geoclient service communicates call status information: HTTP status codes and Geosupport API return codes. The former will always be provided; the only time in which latter will not be available is when the service itself is down or system error prevents the application from returning data to the client.
+=== Understanding Geoclient Response Status
 
-HTTP return codes vs. Geosupport (application-level) return codes.
+There are two ways in which the Geoclient service communicates call status information: `HTTP` status codes and Geosupport return codes.
+
+==== HTTP Status Codes
+
+Clients calling the service will always receive an `HTTP` status code, either from the service or (e.g., if a connection cannot be made) from the `HTTP` protocol implementation itself.
+
+Full documentation of possible `HTTP` status codes are beyond the scope of this document, but {mozilla-http-status-codes}[Mozilla] provides an easy to understand reference site. For more detailed information, please see section 15 of {ietf-rfc-9110-status-codes}[RFC 9110].
+
+In brief, here are the most commonly returned `HTTP` status codes:
+
+.Common HTTP Status Codes
+[cols="1a,2a"]
+|===
+|HTTP Status Code
+|Meaning
+
+|`200`
+|The call successfully reached the Geoclient application (See <<geosupport-return-codes>> for the status of the actual geocoding attempt).
+
+|`400`
+|A required query parameter is missing. See for information on call parameters.
+
+|`401`
+|Unauthorized: indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+
+|`403`
+|Forbidden: The `HTTP` 403 Forbidden client error status response code indicates that the server understood the request but refuses to authorize it.
+
+|`404`
+|An incorrect URL has been used. There is no service mapped to it.
+
+|`500`
+|The Geoclient service could not process the request due to an internal server error.
+|===
+
+[#geosupport-return-codes]
+==== Geosupport Return Codes
+
+The Geosupport application uses return codes, reason codes, and messages to indicate the processing status of a given function call.
+
+NOTE: Return codes come directly from the Geosupport application; as mentioned above, the Geoclient service uses standard `HTTP` status codes to report on it's own request processing.
+
+These return codes are often highly specific to a given function or processing state and there are many of them. This section describes only a very high-level summary of their meaning.
+
+Please see DCP's official {dcp-upg}/appendices/appendix04/[return code documentation] for a complete explanation.
+
+The following table summarizes the meaning of the codes returned by
+
+.Geosupport Return Codes
+[cols="2a,2a,2"]
+|===
+|Return Code
+|Description
+|Response Fields
+
+|`00`
+|Success
+|`geosupportReturnCode`, (`reasonCode` and `message` will be *blank*)
+
+|`01`
+|Success with warnings
+|`geosupportReturnCode`, `reasonCode`, `message`
+
+|GRC greater than `01`
+|Reject or error
+|`geosupportReturnCode`, `reasonCode`, `message`
+|===
+
+Some Geosupport functions are actually just the combined results of two "sub-function" calls.
+At this time, function `1B` (exposed by the Geoclient `/address` endpoint) is the only case where this applies.
+
+Results returned by function `1B` are composed of calls to functions `1EX`(theoretical address that may or may not exist in reality computed using the house number range based off of segment information from the street's centerline) and `1AX` (real address and associated property-level information based on tax lot information).
+
+*Function 1B*
+
+Although it is uncommon, there are a significant number of locations where data is valid and/or available for only one of these two sub-function calls. Therefore, please check the following fields when calling Geoclient's `address` endpoint:
+
+.Function B Sub-functions
+[cols="2a,2a,1a"]
+|===
+|1B Sub-function
+|Field
+|Alias
+
+|`1EX`
+|`geosupportReturnCode`
+|`returnCode1e`
+
+|`1EX`
+|`reasonCode`
+|`reasonCode1e`
+
+|`1EX`
+|`message`
+|
+
+|`1AX`
+|`geosupportReturnCode2`
+|`returnCode1a`
+
+|`1AX`
+|`reasonCode2`
+|`reasonCode1a`
+
+|`1AX`
+|`message2`
+|
+|===
 
 === Endpoints
 
