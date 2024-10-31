@@ -1,6 +1,7 @@
 openapi: 3.0.3
 info:
   title: Geoclient API
+  description: Geoclient provides developer-friendly APIs for geocoding New York City locations.
   version: 2.0.1
   license:
     name: Apache 2.0
@@ -13,7 +14,9 @@ servers:
 paths:
   /address:
     get:
-      description: Returns street centerline-based and/or property-level data about an address
+      description: >
+        Returns street centerline-based and/or property-level data about an address.
+        Either a borough or a zip parameter must be given otherwise the location cannot be geocoded.
       responses:
         '200':
           description: OK
@@ -29,12 +32,7 @@ paths:
           schema:
             type: string
         - name: borough
-          description: Borough of NYC (either this or 'zip' parameter is required)
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParam"
         - name: zip
           description: USPS zip code (either this or 'borough' parameter is required)
           in: query
@@ -43,7 +41,9 @@ paths:
             type: string
   /addresspoint:
     get:
-      description: Returns address point data
+      description: >
+        Returns saddress point data.
+        Either a borough or a zip parameter must be given otherwise the location cannot be geocoded.
       responses:
         '200':
           description: OK
@@ -59,12 +59,7 @@ paths:
           schema:
             type: string
         - name: borough
-          description: Borough of NYC (either this or 'zip' parameter is required)
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParam"
         - name: zip
           description: USPS zip code (either this or 'borough' parameter is required)
           in: query
@@ -79,12 +74,7 @@ paths:
           description: OK
       parameters:
         - name: borough
-          description: Borough of NYC
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParamRequired"
         - name: block
           in: query
           description: Tax block
@@ -112,7 +102,10 @@ paths:
             type: string
   /blockface:
     get:
-      description: Returns information about a street segment
+      description: >
+        Returns information about a street segment.
+        Borough of cross street one is required if different borough than 'onStreet' or if parameter 'boroughCrossStreetTwo' is used.
+        Borough of cross street two is required if different borough than 'onStreet' or if parameter 'boroughCrossStreetOne' is used.
       responses:
         '200':
           description: OK
@@ -136,26 +129,16 @@ paths:
           schema:
             type: string
         - name: borough
-          description: Borough of NYC (applies to onStreet or all street parameters if they are in the same borough)
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParamRequired"
         - name: boroughCrossStreetOne
-          description: Borough of cross street one (if different borough than 'onStreet' or if parameter 'boroughCrossStreetTwo' is used)
+          $ref: "#/components/parameters/boroughParam"
           in: query
           required: false
           schema:
             type: string
             enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
         - name: boroughCrossStreetTwo
-          description: Borough of cross street two (if different borough than 'onStreet' or if parameter 'boroughCrossStreetOne' is used)
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParam"
         - name: compassDirection
           description: Compass direction (only required when the three street parameters describe more than one segment)
           in: query
@@ -171,7 +154,9 @@ paths:
           description: OK
   /intersection:
     get:
-      description: Returns information about an intersection
+      description: >
+        Returns information about an intersection
+        Borough of cross street two is only required if different than borough for 'crossStreetOne'.
       responses:
         '200':
           description: OK
@@ -189,19 +174,9 @@ paths:
           schema:
             type: string
         - name: borough
-          description: Borough of NYC
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParamRequired"
         - name: boroughCrossStreetTwo
-          description: Borough of cross street two (only required if different than borough for 'crossStreetOne')
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParam"
         - name: compassDirection
           description: Compass direction (only required when street parameters more than once)
           in: query
@@ -224,7 +199,9 @@ paths:
             type: string
   /place:
     get:
-      description: Returns street centerline-based and/or property-level data about a well-known place name
+      description: >
+        Returns street centerline-based and/or property-level data about a well-known place name.
+        Either a borough or a zip parameter must be given otherwise the location cannot be geocoded.
       responses:
         '200':
           description: OK
@@ -236,12 +213,7 @@ paths:
           schema:
             type: string
         - name: borough
-          description: Borough of NYC (either this or 'zip' parameter is required)
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+          $ref: "#/components/parameters/boroughParam"
         - name: zip
           description: USPS zip code (either this or 'borough' parameter is required)
           in: query
@@ -259,6 +231,48 @@ paths:
           in: query
           description: Location to geocode
           required: true
+          schema:
+            type: string
+        - name: exactMatchForSingleSuccess
+          in: query
+          description: Whether a search returning only one possible successfully geocoded location is considered an exact match.
+          required: false
+          schema:
+            type: string
+        - name: exactMatchMaxLevel
+          in: query
+          description: The maximum number of sub-search levels to perform if Geosupport rejects the input but suggests alternative street names, etc. Defaults to 3. Maximum is allowable value is 6.
+          required: false
+          schema:
+            type: string
+        - name: returnPolicy
+          in: query
+          description: Whether to return information on the search policy used to perform the search.
+          required: false
+          schema:
+            type: string
+        - name: returnPossiblesWithExact
+          in: query
+          description: Whether to also return successfully geocoded possible matches when available in addition to the exact match.
+          required: false
+          schema:
+            type: string
+        - name: returnRejections
+          in: query
+          description: Whether to return rejected response data from Geosupport.
+          required: false
+          schema:
+            type: string
+        - name: returnTokens
+          in: query
+          description: Whether to return the parsed input tokens recognized by the parser.
+          required: false
+          schema:
+            type: string
+        - name: similarNamesDistance
+          in: query
+          description: Maximum allowable Levenshtein distance between user input and a similar name suggestion from Geosupport. Defaults to 8. A higher number will allow more "guesses" to be made about an unrecognized street name.
+          required: false
           schema:
             type: string
   /streetcode:
@@ -299,6 +313,54 @@ paths:
         '200':
           description: Version information for this service
 components:
+  parameters:
+    boroughParam:
+      name: borough
+      description: Borough of NYC
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - 'Manhattan'
+          - 'Bronx'
+          - 'Brooklyn'
+          - 'Queens'
+          - 'Staten Island'
+          - 'MN'
+          - 'BX'
+          - 'QN'
+          - 'BK'
+          - 'SI'
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+    boroughParamRequired:
+      name: borough
+      description: Borough of NYC
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - 'Manhattan'
+          - 'Bronx'
+          - 'Brooklyn'
+          - 'Queens'
+          - 'Staten Island'
+          - 'MN'
+          - 'BX'
+          - 'QN'
+          - 'BK'
+          - 'SI'
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+
   securitySchemes:
     apiKeyAuth:
       type: apiKey
