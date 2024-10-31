@@ -9,17 +9,7 @@ externalDocs:
   url: https://mlipper.github.io/geoclient/docs/current/user-guide/
 servers:
   - url: https://api.nyc.gov/geoclient/v2
-    description: prod (apim)
-  - url: https://nonprod-api.nyc.gov/geoclient/v2
-    description: nonprod (apim)
-  - url: https://geoclient.nyc.gov/geoclient/v2
-    description: prod (ingress)
-  - url: https://geoclient-dev.nyc.gov/geoclient/v2
-    description: nonprod (ingress)
-  #- url: https://maps.nyc.gov/geoclient/v2
-  #  description: Production server (legacy)
-  #- url: http://localhost:8081/geoclient/v2
-  #  description: Development (local)
+    description: NYC API Developers Portal
 paths:
   /address:
     get:
