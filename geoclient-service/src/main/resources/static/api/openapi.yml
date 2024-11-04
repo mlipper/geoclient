@@ -104,8 +104,6 @@ paths:
     get:
       description: >
         Returns information about a street segment.
-        Borough of cross street one is required if different borough than 'onStreet' or if parameter 'boroughCrossStreetTwo' is used.
-        Borough of cross street two is required if different borough than 'onStreet' or if parameter 'boroughCrossStreetOne' is used.
       responses:
         '200':
           description: OK
@@ -131,14 +129,49 @@ paths:
         - name: borough
           $ref: "#/components/parameters/boroughParamRequired"
         - name: boroughCrossStreetOne
-          $ref: "#/components/parameters/boroughParam"
+          description: Only required if different borough than 'onStreet' or if parameter 'boroughCrossStreetTwo' is used.
           in: query
           required: false
           schema:
             type: string
-            enum: ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island']
+            enum:
+              - 'Manhattan'
+              - 'Bronx'
+              - 'Brooklyn'
+              - 'Queens'
+              - 'Staten Island'
+              - 'MN'
+              - 'BX'
+              - 'QN'
+              - 'BK'
+              - 'SI'
+              - '1'
+              - '2'
+              - '3'
+              - '4'
+              - '5'
         - name: boroughCrossStreetTwo
-          $ref: "#/components/parameters/boroughParam"
+          description: Only required if different borough than 'onStreet' or if parameter 'boroughCrossStreetOne' is used.
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - 'Manhattan'
+              - 'Bronx'
+              - 'Brooklyn'
+              - 'Queens'
+              - 'Staten Island'
+              - 'MN'
+              - 'BX'
+              - 'QN'
+              - 'BK'
+              - 'SI'
+              - '1'
+              - '2'
+              - '3'
+              - '4'
+              - '5'
         - name: compassDirection
           description: Compass direction (only required when the three street parameters describe more than one segment)
           in: query
@@ -155,8 +188,7 @@ paths:
   /intersection:
     get:
       description: >
-        Returns information about an intersection
-        Borough of cross street two is only required if different than borough for 'crossStreetOne'.
+        Returns information about an intersection.
       responses:
         '200':
           description: OK
@@ -176,9 +208,29 @@ paths:
         - name: borough
           $ref: "#/components/parameters/boroughParamRequired"
         - name: boroughCrossStreetTwo
-          $ref: "#/components/parameters/boroughParam"
+          description: Borough of cross street two is only required if different than borough for 'crossStreetOne'.
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - 'Manhattan'
+              - 'Bronx'
+              - 'Brooklyn'
+              - 'Queens'
+              - 'Staten Island'
+              - 'MN'
+              - 'BX'
+              - 'QN'
+              - 'BK'
+              - 'SI'
+              - '1'
+              - '2'
+              - '3'
+              - '4'
+              - '5'
         - name: compassDirection
-          description: Compass direction (only required when street parameters more than once)
+          description: Only required when streets intersect more than once.
           in: query
           required: false
           schema:
@@ -239,6 +291,9 @@ paths:
           required: false
           schema:
             type: string
+            enum:
+              - true
+              - false
         - name: exactMatchMaxLevel
           in: query
           description: The maximum number of sub-search levels to perform if Geosupport rejects the input but suggests alternative street names, etc. Defaults to 3. Maximum is allowable value is 6.
@@ -251,24 +306,36 @@ paths:
           required: false
           schema:
             type: string
+            enum:
+              - true
+              - false
         - name: returnPossiblesWithExact
           in: query
           description: Whether to also return successfully geocoded possible matches when available in addition to the exact match.
           required: false
           schema:
             type: string
+            enum:
+              - true
+              - false
         - name: returnRejections
           in: query
           description: Whether to return rejected response data from Geosupport.
           required: false
           schema:
             type: string
+            enum:
+              - true
+              - false
         - name: returnTokens
           in: query
           description: Whether to return the parsed input tokens recognized by the parser.
           required: false
           schema:
             type: string
+            enum:
+              - true
+              - false
         - name: similarNamesDistance
           in: query
           description: Maximum allowable Levenshtein distance between user input and a similar name suggestion from Geosupport. Defaults to 8. A higher number will allow more "guesses" to be made about an unrecognized street name.
