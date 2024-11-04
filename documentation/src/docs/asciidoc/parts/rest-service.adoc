@@ -9,7 +9,7 @@ The Geoclient service provides the following endpoints:
 .Endpoints
 [cols="1,2,1"]
 |===
-|Type | Description | Geosupport Function
+|Type |Description |Geosupport Function
 
 |Address
 |Given a valid address, provides blockface-level, property-level, and political information ({dcp-goat}/Function1B[source]).
@@ -361,24 +361,26 @@ Although it is uncommon, there are a significant number of locations where data 
 
 *Parameters:*
 
+.`/address` arguments
+[cols="1a,1a,2a"]
 |===
-| Parameter Name | Required/Optional | Comments
+|Parameter Name |Required/Optional |Comments
 
-| `houseNumber`
-| required
-| House number of the address.
+|`houseNumber`
+|required
+|House number of the address.
 
-| `street`
-| required
-| Street name or 7-digit street code.
+|`street`
+|required
+|Street name or 7-digit street code.
 
-| `borough`
-| required if `zip` is not given
-| Valid values defined in <<Borough>>.
+|`borough`
+|required if `zip` is not given
+|Valid values defined in <<Borough>>.
 
-| `zip`
-| required if `borough` is not given
-| Standard USPS 5-digit zip code or zip+4 (see {wikipedia-zip-code}[this article]).  Must be a valid zip code for an area within New York City limits.
+|`zip`
+|required if `borough` is not given
+|Standard USPS 5-digit zip code or zip+4 (see {wikipedia-zip-code}[this article]).  Must be a valid zip code for an area within New York City limits.
 |===
 
 *Example Requests:*
@@ -406,6 +408,8 @@ include::../samples/address-1.jsonc[tags=user_guide]
 
 Same as the <<Address>> endpoint.
 
+*Example Requests:*
+
 Request:
 
 ....
@@ -427,6 +431,24 @@ include::../samples/addresspoint-1.jsonc[tags=user_guide]
 
 *Parameters:*
 
+.`/bbl` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+|`borough`
+|required
+|Valid values defined in <<Borough>>.
+
+|`block`
+|required
+|Tax block. Zero padding is not required.
+
+|`lot`
+|required
+|Tax lot. Zero padding is not required.
+|===
+
+*Example Requests:*
 
 Request:
 
@@ -445,6 +467,22 @@ include::../samples/bbl-1.jsonc[tags=user_guide]
 
 ==== BIN
 
+*Path:* `/v2/bin`
+
+*Parameters:*
+
+.`/bin` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+
+|`bin`
+|required
+|Building identification number.
+|===
+
+*Example Requests:*
+
 Request:
 
 ....
@@ -461,6 +499,46 @@ include::../samples/bin-1.jsonc[tags=user_guide]
 ====
 
 ==== Blockface
+
+*Path:* `/v2/blockface`
+
+*Parameters:*
+
+.`/blockface` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+
+|`onStreet`
+|required
+|Name of the street between the two cross streets.
+
+|`crossStreetOne`
+|required
+|First cross street of blockface.
+
+|`crossStreetTwo`
+|required
+|Second cross street of blockface.
+
+|`borough`
+|required
+|Borough of `onStreet`. Valid values defined in <<Borough>>.
+
+|`boroughCrossStreetOne`
+|optional
+|Borough of first cross street. Defaults to value of `borough` parameter if not supplied.
+
+|`boroughCrossStreetTwo`
+|optional
+|Borough of second cross street. Defaults to value of `borough` parameter if not supplied.
+
+|`compassDirection`
+|optional
+|Used to request information about only one side of the street. Valid values are: `N`, `S`, `E`, or `W`.
+|===
+
+*Example Requests:*
 
 Request:
 
@@ -479,6 +557,38 @@ include::../samples/blockface-1.jsonc[tags=user_guide]
 
 ==== Intersection
 
+*Path:* `/v2/blockface`
+
+*Parameters:*
+
+.`/intersection` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+
+|`crossStreetOne`
+|required
+|First cross street of the intersection.
+
+|`crossStreetTwo`
+|required
+|Second cross street of the intersection.
+
+|`borough`
+|required
+|Borough of first cross street or of both cross streets if no other borough parameter is supplied. Valid values defined in <<Borough>>.
+
+|`boroughCrossStreetTwo`
+|optional
+|Borough of second cross street. If not supplied, assumed to be same as `borough` parameter.
+
+|`compassDirection`
+|optional
+|Optional for most requests.	Required only if the cross streets intersect more than once. Valid values are: `N`, `S`, `E` or `W`.
+|===
+
+*Example Requests:*
+
 Request:
 
 ....
@@ -494,7 +604,197 @@ include::../samples/intersection-1.jsonc[tags=user_guide]
 ----
 ====
 
+==== Normalize
+
+*Path:* `/v2/normalize`
+
+*Parameters:*
+
+.`/normalize` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+
+|`name`
+|required
+|Street name to normalize. Note that no validation is done to verify if this is a valid NYC street.
+
+|`length`
+|optional
+|If not given, defaults to `32`.
+
+|`format`
+|optional
+|If not given, defaults to `S`.
+|===
+
+*Example Requests:*
+
+Request:
+
+....
+/geoclient/v2/name?name=east%20158th%20Street
+....
+
+.Show JSON
+[%collapsible]
+====
+[source,json,indent=0]
+----
+include::../samples/normalize-1.jsonc[tags=user_guide]
+----
+====
+
+==== Place
+
+*Path:* `/v2/place`
+
+*Parameters:*
+
+.`/place` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+
+|`name`
+|required
+|Well-known place name.
+
+|`borough`
+|required if `zip` is not given
+|Valid values defined in <<Borough>>.
+
+|`zip`
+|required if `borough` is not given
+|Standard USPS 5-digit zip code or zip+4 (see {wikipedia-zip-code}[this article]).  Must be a valid zip code for an area within New York City limits.
+|===
+
+*Example Requests:*
+
+Request:
+
+....
+/geoclient/v2/address?houseNumber=314&street=w%20100%20st&borough=manhattan
+....
+
+.Show JSON
+[%collapsible]
+====
+[source,json,indent=0]
+----
+include::../samples/address-1.jsonc[tags=user_guide]
+----
+====
+
+.`/place` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+|===
+
 ==== Search
+
+The `/search` endpoint provides a way to search for an address, BBL, BIN, blockface, or place using a single unparsed location string. Assuming that the Geoclient parser can guess the location type requested and the given single-field input parameter contains contains enough information to generate a successful Geosupport call, the service will return one or more sets of geocodes corresponding to the type of request that was made.
+
+The single-field search will attempt to recognize the type of request being made using the following (simplified) parsing strategies which are listed in the order they are executed:
+
+. A ten-digit number where the first digit is `1`, `2`, `3`, `4` or `5` is recognized as a BBL request:
+
+  1000670001
+
+. A seven-digit number where the first digit is `1`, `2`, `3`, `4` or `5` is recognized as a BIN request:
+
+  1079043
+
+. If the input string ends with a United States-related country identifier it is recognized and removed and discarded:
+
+  314 W 100 ST, NY, NY 10025 [USA]
+
+. If the input string ends with a five or seven-digit zipcode it is removed and kept as a `<ZIP>` token:
+
+  314 W 100 ST, NY, NY [10025]
+
+. If the input string ends with a valid two-character U.S. state abreviation it is recognized and removed:
+
+  314 W 100 ST, NY, [NY]
+
+NOTE: Input ending in only a single instance of `NY` or `New York` (case-insensitive) is treated as a city name alias for Manhattan and not the state of New York.
+
+. If the input string ends with a known NYC city name it is removed and kept as a `<CITY_NAME>` token:
+
+  93-02 69th Ave, [Forest Hills]
+
+. If the input string ends with a known borough name or abreviation it is removed and kept as a `<BOROUGH_NAME>` token:
+
+  80 Monroe Ave [SI]
+
+. A BLOCKFACE request is identified using the pattern `<ON_STREET>` `between` `<CROSS_STREET_ONE>` `and` `<CROSS_STREET_TWO>`:
+
+  [Broadway] between [W 100 St] and [W 101 St]
+
+. An INTERSECTION request is identified using the pattern `<CROSS_STREET_ONE>` `and` `<CROSS_STREET_TWO>`:
+
+  [Broadway] and [W 100 St]
+
+. If the input string starts with a known house number format, it is recognized and kept as `<BASIC_HOUSE_NUMBER>` and (optionally) `<HOUSE_NUMBER_SUFFIX>` token(s):
+
+  [93-02] 69th Ave
+
+. Any remaining input is treated as an input street. If a `<BASIC_HOUSE_NUMBER>` token has been parsed, the input is recognized as an ADDRESS request, otherwise it is defaulted to a PLACE request
+
+All matching is case-insensitive. Leading/trailing whitespace and any punctuation characters are ignored.
+
+After the input has been parsed into tokens and the request type has been determined, the service resolves the BOROUGH_NAME and/or CITY_NAME token(s) into a New York City borough code (`1`=`Manhattan`, `2`=`Bronx`, `3`=`Brooklyn`, `4`=`Queens`, `5`=`Staten` Island).
+
+If a valid borough code has been resolved, a single request is made to Geosupport using the specified borough code. The request is assigned a "level" of zero.
+
+If a valid borough code cannot be derived (either because no borough was provided or the provided borough/city name is not recognized), five requests are automatically submitted - one for each borough. Each request is assigned a "level" of one.
+
+The Geoclient service uses the concept of search levels to classify the degree to which any user input has been modified by the program before making the request to Geosupport. Roughly speaking, each additional level indicates a round of sub-searches undertaken when the service does not find an exact match.
+
+*Path:* `/v2/search`
+
+*Parameters:*
+
+.`/search` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+
+|`input`
+|required
+|Unparsed location input.
+
+|`exactMatchForSingleSuccess`
+|optional
+|Whether a search returning only one possible successfully geocoded location is considered an exact match. Defaults to false.
+
+|`exactMatchMaxLevel`
+|optional
+|The maximum number of sub-search levels to perform if Geosupport rejects the input but suggests alternative street names, etc. Defaults to 3. Maximum is allowable value is 6.
+
+|`returnPolicy`
+|optional
+|Whether to return information on the search policy used to perform the search. Defaults to false.
+
+|`returnPossiblesWithExact`
+|optional
+|Whether to also return successfully geocoded possible matches when available in addition to the exact match. Defaults to false.
+
+|`returnRejections`
+|optional
+|Whether to return rejected response data from Geosupport. Defaults to false.
+
+|`returnTokens`
+|optional
+|Whether to return the parsed input tokens recognized by the parser. Defaults to false.
+
+|`similarNamesDistance`
+|optional
+|Maximum allowable Levenshtein distance between user input and a similar name suggestion from Geosupport. Defaults to 8. A higher number will allow more "guesses" to be made about an unrecognized street name.
+|===
+
+*Example Requests:*
 
 Request:
 
@@ -511,7 +811,23 @@ include::../samples/search-1.jsonc[tags=user_guide]
 ----
 ====
 
+==== Street Code
+
+*Path:* `/v2/streetcode`
+
+*Parameters:*
+
+
+
 ==== Version
+
+*Path:* `/v2/version`
+
+*Parameters:*
+
+The `/version` endpoint does not accept any parameters.
+
+*Example Requests:*
 
 Request:
 
