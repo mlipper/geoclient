@@ -44,12 +44,12 @@ The Geoclient service provides the following endpoints:
 |Address, BBL, BIN, Blockface, Intersection, Place
 
 |Streetcode
-|Translates a Geosupport street code (`B5SC`, `B7SC`, or `B10SC`) to a street name and `B10SC`. ({dcp-goat}/FunctionD[source])
-|D,DG,DN{empty}footnote:D-DG-DN[See {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[D, DG, DN]]
+|Translates a Geosupport street code (`B5SC`, `B7SC`, or `B10SC`) to a street name with the corresponding `B10SC`. ({dcp-goat}/FunctionD[source])
+|See <<Geosupport Street Name Functions>>.
 
 |Normalize
 |Normalizes a street name but does *not* verify that it actually exists. ({dcp-goat}/FunctionN[source])
-|N{empty}footnote:N[See {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[N]]
+|See <<Geosupport Street Name Functions>>.
 
 |Version
 |Provides software version information about the Geoclient endpoint itself and Geosupport version/release info directly from the Geosupport instance this endpoint is currently using.
@@ -147,7 +147,7 @@ However, parameter _values_ are *not* case-sensitive.
 The `borough` parameter can either be a borough name or a borough number. Borough names are *not* case-sensitive.
 
 .Valid Values
-[cols="2,2a,1"]
+[cols="2,2a,1a"]
 |===
 |Borough |By name |By number
 |Manhattan
@@ -621,11 +621,11 @@ include::../samples/intersection-1.jsonc[tags=user_guide]
 
 |`length`
 |optional
-|If not given, defaults to `32`.
+|The length of the normalized street name that is returned. Valid values are from 4 through 32. If no parameter is given, defaults to 32. 
 
 |`format`
 |optional
-|If not given, defaults to `S`.
+|`S` for sort format or `C` for compact format. Defaults to sort format.
 |===
 
 *Example Requests:*
@@ -674,7 +674,7 @@ include::../samples/normalize-1.jsonc[tags=user_guide]
 Request:
 
 ....
-/geoclient/v2/address?houseNumber=314&street=w%20100%20st&borough=manhattan
+/geoclient/v2/place?name=george%20washington%20bridge&borough=manhattan
 ....
 
 .Show JSON
@@ -682,7 +682,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/address-1.jsonc[tags=user_guide]
+include::../samples/place-1.jsonc[tags=user_guide]
 ----
 ====
 
@@ -817,7 +817,50 @@ include::../samples/search-1.jsonc[tags=user_guide]
 
 *Parameters:*
 
+.`/streetcode` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
 
+|`streetCode`
+|required
+|`B5SC`, `B7SC`, or `B10SC` street code.
+
+|`streetCodeTwo`
+|optional
+|`B5SC`, `B7SC`, or `B10SC` street code.
+
+|`streetCodeThree`
+|optional
+|`B5SC`, `B7SC`, or `B10SC` street code.
+
+|`length`
+|optional
+|The length of the normalized street name that is returned. Valid values are from 4 through 32. If no parameter is given, defaults to 32. 
+
+|`format`
+|optional
+|`S` for sort format or `C` for compact format. Defaults to sort format.
+|===
+
+*Example Requests:*
+
+Request:
+
+....
+/geoclient/v2/streetcode?streetCode=11061004010
+....
+
+Response:
+
+.Show JSON
+[%collapsible]
+====
+[source,json,indent=0]
+----
+include::../samples/streetcode-1.jsonc[tags=user_guide]
+----
+====
 
 ==== Version
 
@@ -832,7 +875,7 @@ The `/version` endpoint does not accept any parameters.
 Request:
 
 ....
-/geoclient/v2/version.json
+/geoclient/v2/version
 ....
 
 Response:
@@ -845,3 +888,20 @@ Response:
 include::../samples/version-1.jsonc[tags=user_guide]
 ----
 ====
+
+=== Geosupport Street Name Functions
+
+Geosupport has a rich model for streets and provides many functions and flags to support street processing. Geoclient supports calls to functions `D`, `DG`, and `DN` with the `/streetcode` endpoint and function `N` with the `/normalize` function.
+
+This document describes the Geoclient API for calling these functions but not a description of what they do and how to use them. For that, DCP provides the (_drum roll please..._) {dcp-upg}[*Geosupport System User Programming Guide*]. For working with the `/normalize` endpoint, the reading following sections is probably enough to get you started: 
+
+* {dcp-upg}/chapters/chapterIII/section01/[Section 3.1]
+* {dcp-upg}/chapters/chapterIII/section02/[Section 3.2]
+* {dcp-upg}/chapters/chapterIII/section03/[Section 3.3]
+
+To work effectively with the `streetcode` endpoint (i.e., functions `D`, `DG`, `DN`), you'll probably want to look through the following chapters:
+
+* {dcp-upg}/chapters/chapterIII/chapterIII/[Chapter III: Street Name Processing]
+* {dcp-upg}/chapters/chapterIV/chapterIV/[Chapter IV: Street Codes]
+
+Finally, the Geosupport input API used by the Geoclient `/normalize` and `/streetcode` endpoints is documented {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[here]. 
