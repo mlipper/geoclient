@@ -238,7 +238,7 @@ paths:
             enum: ['N', 'S', 'E', 'W']
   /normalize:
     get:
-      description: Normalizes a street name
+      description: Normalizes a street name using Geosupport conventions.
       responses:
         '200':
           description: OK
@@ -249,6 +249,21 @@ paths:
           required: true
           schema:
             type: string
+        - name: length
+          description: The length of the normalized street name that is returned. Valid values are from 4 through 32. If no parameter is given, defaults to 32. 
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 4
+            maximum: 32
+        - name: format
+          description: (S)ort format or (C)ompact format. Defaults to sort format.
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: ['S', 'C']
   /place:
     get:
       description: >
@@ -369,10 +384,20 @@ paths:
             type: string
         - name: length
           in: query
-          description: target output length
+          description: The length of the normalized street name that is returned. Valid values are from 4 through 32. If no parameter is given, defaults to 32.
+          required: false
+          schema:
+            type: integer
+            enum:
+              - minimum: 4
+              - maximum: 32
+        - name: format
+          description: (S)ort format or (C)ompact format. Defaults to sort format.
+          in: query
           required: false
           schema:
             type: string
+            enum: ['S', 'C']
   /version:
     get:
       description: Geoclient and Geosupport version information
