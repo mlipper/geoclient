@@ -1,0 +1,19 @@
+The Geoclient API is a RESTful web service interface for geocoding locations
+in New York City.
+
+Geoclient uses the Department of City Planning’s Geosupport system as its
+primary geocoder and exposes the most commonly used Geosupport functions
+through simple and easy to use REST endpoints.
+
+In addition to Geosupport geocoding, Geoclient provides single-field
+searching, NYC-specific parsing of location text, stand-alone Java
+libraries and more.
+
+The Geoclient User Guide can be found here: https://mlipper.github.io/geoclient/docs/current/user-guide/
+
+Geoclient is an actively maintained Open Source project.
+The source code is available under the Apache 2.0 License here: https://github.com/mlipper/geoclient 
+
+For technical questions about using, installing, or contributing to the
+Geoclient project, please use our GitHub Issues page: https://github.com/mlipper/geoclient/issues
+
