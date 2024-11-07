@@ -1,0 +1,3 @@
+id, endpoint, description, name, borough, zip
+1, place, with borough, empire state building, manhattan, ""
+2, place, with zip, empire state building, "", 10001

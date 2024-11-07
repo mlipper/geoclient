@@ -32,10 +32,10 @@ public enum PathVariable {
     BIN("bin"),
     BLOCKFACE("blockface"),
     INTERSECTION("intersection"),
+    NORMALIZE("normalize"),
     PLACE("place"),
     SEARCH("search"),
     STREETCODE("streetcode"),
-    NORMALIZE("normalize"),
     VERSION("version");
 
     private static final Map<String, PathVariable> BY_PATH_STRING = new HashMap<>();
