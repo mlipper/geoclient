@@ -1,7 +1,7 @@
 [versions]
 apiguardian-api = "1.1.2"
 asciidoctorj-pdf = "2.3.12"
-asciidoctor-plugins = "4.0.2"
+asciidoctor-plugins = "4.0.3"
 commons-text = "1.12.0"
 diffutils = "1.3.0"
 httpclient = "5.2.3"
