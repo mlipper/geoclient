@@ -10,7 +10,7 @@ junit-bom = "5.10.3"
 spotless-plugin = "6.25.0"
 spring-boot = "3.3.5"
 versions-plugin = "0.51.0"
-xstream = "1.4.20"
+xstream = "1.4.21"
 
 [plugins]
 boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
