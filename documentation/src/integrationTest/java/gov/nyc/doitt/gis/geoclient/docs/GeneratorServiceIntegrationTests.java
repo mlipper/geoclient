@@ -118,6 +118,32 @@ public class GeneratorServiceIntegrationTests {
         this.service.generate(sample);
     }
 
+    @DisplayName("Generate normalize samples")
+    @ParameterizedTest(name = "{index} ==> ''{0}''")
+    @CsvFileSource(resources = "/normalize.csv", useHeadersInDisplayName = true)
+    void normalizeExamples(@AggregateWith(SampleAggregator.class) Sample sample) {
+        logger.info("{}", sample);
+        assertNotNull(sample.getId());
+        assertEquals(PathVariable.NORMALIZE.toString(), sample.getPathVariable());
+        assertNotNull(sample.getDescription());
+        assertFalse(sample.getQueryString().isEmpty());
+        logger.info("{}", sample.getQueryString());
+        this.service.generate(sample);
+    }
+
+    @DisplayName("Generate place samples")
+    @ParameterizedTest(name = "{index} ==> ''{0}''")
+    @CsvFileSource(resources = "/place.csv", useHeadersInDisplayName = true)
+    void placeExamples(@AggregateWith(SampleAggregator.class) Sample sample) {
+        logger.info("{}", sample);
+        assertNotNull(sample.getId());
+        assertEquals(PathVariable.PLACE.toString(), sample.getPathVariable());
+        assertNotNull(sample.getDescription());
+        assertFalse(sample.getQueryString().isEmpty());
+        logger.info("{}", sample.getQueryString());
+        this.service.generate(sample);
+    }
+
     @DisplayName("Generate search samples")
     @ParameterizedTest(name = "{index} ==> ''{0}''")
     @CsvFileSource(resources = "/search.csv", useHeadersInDisplayName = true)
@@ -125,6 +151,19 @@ public class GeneratorServiceIntegrationTests {
         logger.info("{}", sample);
         assertNotNull(sample.getId());
         assertEquals(PathVariable.SEARCH.toString(), sample.getPathVariable());
+        assertNotNull(sample.getDescription());
+        assertFalse(sample.getQueryString().isEmpty());
+        logger.info("{}", sample.getQueryString());
+        this.service.generate(sample);
+    }
+
+    @DisplayName("Generate streetcode samples")
+    @ParameterizedTest(name = "{index} ==> ''{0}''")
+    @CsvFileSource(resources = "/streetcode.csv", useHeadersInDisplayName = true)
+    void streetcodeExamples(@AggregateWith(SampleAggregator.class) Sample sample) {
+        logger.info("{}", sample);
+        assertNotNull(sample.getId());
+        assertEquals(PathVariable.STREETCODE.toString(), sample.getPathVariable());
         assertNotNull(sample.getDescription());
         assertFalse(sample.getQueryString().isEmpty());
         logger.info("{}", sample.getQueryString());

@@ -10,6 +10,8 @@ include::parts/concepts.adoc[]
 
 include::parts/rest-service.adoc[]
 
+include::parts/endpoints.adoc[]
+
 include::parts/geosupport-docs.adoc[]
 
 include::parts/development.adoc[]

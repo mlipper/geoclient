@@ -9,7 +9,7 @@ The Geoclient service provides the following endpoints:
 .Endpoints
 [cols="1,2,1"]
 |===
-|Type | Description | Geosupport Function
+|Type |Description |Geosupport Function
 
 |Address
 |Given a valid address, provides blockface-level, property-level, and political information ({dcp-goat}/Function1B[source]).
@@ -40,16 +40,16 @@ The Geoclient service provides the following endpoints:
 |1B{empty}footnote:1B[]
 
 |Search
-|Provides parsing and search algorithm customization for several of the other endpoints listed in this section. Typically used for geocoding unstructured text to support "single-field" user searches. See link:#section-1.3[Section 1.3] for details.
+|Provides parsing and search algorithm customization for several of the other endpoints listed in this section. Typically used for geocoding unstructured text to support "single-field" user searches. See the <<Search>> section below for details.
 |Address, BBL, BIN, Blockface, Intersection, Place
 
 |Streetcode
-|Translates a Geosupport street code (`B5SC`, `B7SC`, or `B10SC`) to a street name and `B10SC`. ({dcp-goat}/FunctionD[source])
-|D,DG,DN{empty}footnote:D-DG-DN[See {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[D, DG, DN]]
+|Translates a Geosupport street code (`B5SC`, `B7SC`, or `B10SC`) to a street name with the corresponding `B10SC`.
+|See <<Geosupport Street Name Functions>>.
 
 |Normalize
-|Normalizes a street name (but does *not* verify that it actually exists. {dcp-goat}/FunctionN[source])
-|N{empty}footnote:N[See {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[N]]
+|Normalizes a street name but does *not* verify that it actually exists. ({dcp-goat}/FunctionN[source])
+|See <<Geosupport Street Name Functions>>.
 
 |Version
 |Provides software version information about the Geoclient endpoint itself and Geosupport version/release info directly from the Geosupport instance this endpoint is currently using.
@@ -72,9 +72,9 @@ All requests are made as simple `HTTP GET` requests with input arguments specifi
 /search.xml?input=100%20centre%20street%20manhattan <3>
        ^^^^
 ----
-<1> Returns 'JSON' (default)
-<2> Returns 'JSON'
-<3> Returns 'XML'
+<1> Returns `application/json` (default)
+<2> Returns `application/json`
+<3> Returns `application/xml`
 
 WARNING: In the example above, (2) and (3) use file extensions as request (path) parameters. This functionality is deprecated and will eventually be removed from Geoclient. In future versions, use of the `Content-Type` header will be the way to request a non-default media type.
 
@@ -119,155 +119,273 @@ Contact your provider for signup and access instructions.
 
 The following request parameters are required for all operations (except where noted):
 
-* borough (required2,3,4) parameter - must be one of the following (case-insensitive):
-** Manhattan
-** Bronx
-** Brooklyn
-** Queens
-** Staten Island
+.Case sensitivity
+****
 
-=== Understanding Geoclient Return Codes
+The Geoclient base URI and query parameter names *_are case-sensitive_*!
+....
+# valid
+/geoclient/v2/address?houseNumber=2826&street=broadway&borough=manhattan
+....
+....
+# invalid
+/Geoclient/v2/address?houseNumber=2826&street=broadway&borough=manhattan
+ ^
+/geoclient/v2/address?houseNumber=2826&Street=broadway&borough=manhattan
+                                       ^
+....
+However, parameter _values_ are *not* case-sensitive.
+....
+# valid
+/geoclient/v2/address?houseNumber=2826&street=BROADWAY&borough=Manhattan
+                               These are ok:  ^^^^^^^^         ^
+....
+****
 
-There are two ways in which the Geoclient service communicates call status information: HTTP status codes and Geosupport API return codes. The former will always be provided; the only time in which latter will not be available is when the service itself is down or system error prevents the application from returning data to the client.
+==== Borough
 
-HTTP return codes vs. Geosupport (application-level) return codes.
+The `borough` parameter can either be a borough name or a borough number. Borough names are *not* case-sensitive.
 
-=== Endpoints
+.Valid Values
+[cols="2,2a,1a"]
+|===
+|Borough |By name |By number
+|Manhattan
+| * `Manhattan`
+  * `MN`
+|`1`
 
-==== Address
+|Bronx
+| * `Bronx`
+  * `BX`
+  * `The Bronx`
+|`2`
 
-Request:
+|Brooklyn
+| * `Brooklyn`
+  * `BK`
+  * `BKLYN`
+|`3`
+
+|Queens
+| * `Queens`
+  * `QN`
+|`4`
+
+|Staten Island
+| * `Staten Island`
+  * `SI`
+  * `STATENISLAND`
+  * `STATENIS`
+|`5`
+|===
+
+The preceeding table describes borough values recognized by Geosupport. The Geoclient `/search` endpoint some additional aliases to improve the parsing of single-field searches.
+
+Recognized as `Manhattan`:
 
 ....
-/geoclient/v2/address?houseNumber=314&street=w%20100%20st&borough=manhattan
+`NEW YORK`
+`NEW YORK CITY`
+`N.Y.C.`
+`NYC`
+`N.Y.`
+`NY`
 ....
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/address-1.jsonc[tags=user_guide]
-----
-====
-
-==== Address Point
-
-Request:
+Recognized as `Queens`:
 
 ....
-/geoclient/v2/addresspoint?houseNumber=314&street=w%20100%20st&borough=manhattan
+Arverne
+Astoria
+Bayside
+Bellerose
+Breezy Point
+Cambria Heights
+College Point
+Corona
+East Elmhurst
+Elmhurst
+Far Rockaway
+Floral Park
+Flushing
+Forest Hills
+Fresh Meadows
+Glen Oaks
+Hollis
+Howard Beach
+Inwood
+Jackson Heights
+Jamaica
+Kew Gardens
+Little Neck
+Long Island City
+Maspeth
+Middle Village
+New Hyde Park
+Oakland Gardens
+Ozone Park
+Qs
+Queens Village
+Rego Park
+Richmond Hill
+Ridgewood
+Rockaway Park
+Rosedale
+Saint Albans
+South Ozone Park
+South Richmond Hill
+Springfield Gardens
+Sunnyside
+Whitestone
+Woodhaven
+Woodside
 ....
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/addresspoint-1.jsonc[tags=user_guide]
-----
-====
+=== Understanding Geoclient Response Status
 
-==== BBL
+There are two ways in which the Geoclient service communicates call status information: `HTTP` status codes and Geosupport return codes.
 
-Request:
+==== HTTP Status Codes
 
-....
-/geoclient/v2/bbl?borough=manhattan&block=67&lot=1
-....
+Clients calling the service will always receive an `HTTP` status code, either from the service or (e.g., if a connection cannot be made) from the `HTTP` protocol implementation itself.
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/bbl-1.jsonc[tags=user_guide]
-----
-====
+Full documentation of possible `HTTP` status codes are beyond the scope of this document, but {mozilla-http-status-codes}[Mozilla] provides an easy to understand reference site. For more detailed information, please see section 15 of {ietf-rfc-9110-status-codes}[RFC 9110].
 
-==== BIN
+In brief, here are the most commonly returned `HTTP` status codes:
 
-Request:
+.Common HTTP Status Codes
+[cols="1a,2a"]
+|===
+|HTTP Status Code
+|Meaning
 
-....
-/geoclient/v2/bin?bin=1079043
-....
+|`200`
+|The call successfully reached the Geoclient application (See <<geosupport-return-codes>> for the status of the actual geocoding attempt).
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/bin-1.jsonc[tags=user_guide]
-----
-====
+|`400`
+|A required query parameter is missing. See for information on call parameters.
 
-==== Blockface
+|`401`
+|Unauthorized: indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
 
-Request:
+|`403`
+|Forbidden: The `HTTP` 403 Forbidden client error status response code indicates that the server understood the request but refuses to authorize it.
 
-....
-/geoclient/v2/blockface?onStreet=broadway&crossStreetOne=w%20100%20st&crossStreetTwo=w%20101%st&borough=manhattan
-....
+|`404`
+|An incorrect URL has been used. There is no service mapped to it.
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/blockface-1.jsonc[tags=user_guide]
-----
-====
+|`500`
+|The Geoclient service could not process the request due to an internal server error.
+|===
 
-==== Intersection
+[#geosupport-return-codes]
+==== Geosupport Return Codes
 
-Request:
+The Geosupport application uses return codes, reason codes, and messages to indicate the processing status of a given function call.
 
-....
-/geoclient/v2/intersection?crossStreetOne=broadway&crossStreetOne=w%20100%20st&borough=manhattan
-....
+NOTE: Return codes come directly from the Geosupport application; as mentioned above, the Geoclient service uses standard `HTTP` status codes to report on it's own request processing.
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/intersection-1.jsonc[tags=user_guide]
-----
-====
+These return codes are often highly specific to a given function or processing state and there are many of them. This section describes only a very high-level summary of their meaning.
 
-==== Search
+Please see DCP's official {dcp-upg}/appendices/appendix04/[return code documentation] for a complete explanation.
 
-Request:
+The following table summarizes the meaning of the codes returned by
 
-....
-/geoclient/v2/search?input=314%20w%20100%20st%20manhattan
-....
+.Geosupport Return Codes
+[cols="2a,2a,2"]
+|===
+|Return Code
+|Description
+|Response Fields
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/search-1.jsonc[tags=user_guide]
-----
-====
+|`00`
+|Success
+|`geosupportReturnCode`, (`reasonCode` and `message` will be *blank*)
 
-==== Version
+|`01`
+|Success with warnings
+|`geosupportReturnCode`, `reasonCode`, `message`
 
-Request:
+|GRC greater than `01`
+|Reject or error
+|`geosupportReturnCode`, `reasonCode`, `message`
+|===
 
-....
-/geoclient/v2/version.json
-....
+Some Geosupport functions are actually just the combined results of two "sub-function" calls.
+At this time, function `1B` (exposed by the Geoclient `/address` endpoint) is the only case where this applies.
 
-Response:
+Results returned by function `1B` are composed of calls to functions `1EX`(theoretical address that may or may not exist in reality computed using the house number range based off of segment information from the street's centerline) and `1AX` (real address and associated property-level information based on tax lot information).
 
-.Show JSON
-[%collapsible]
-====
-[source,json,indent=0]
-----
-include::../samples/version-1.jsonc[tags=user_guide]
-----
-====
+*Function 1B*
+
+Although it is uncommon, there are a significant number of locations where data is valid and/or available for only one of these two sub-function calls. Therefore, please check the following fields when calling Geoclient's `address` endpoint:
+
+.Function B Sub-functions
+[cols="2a,2a,1a"]
+|===
+|1B Sub-function
+|Field
+|Alias
+
+|`1EX`
+|`geosupportReturnCode`
+|`returnCode1e`
+
+|`1EX`
+|`reasonCode`
+|`reasonCode1e`
+
+|`1EX`
+|`message`
+|
+
+|`1AX`
+|`geosupportReturnCode2`
+|`returnCode1a`
+
+|`1AX`
+|`reasonCode2`
+|`reasonCode1a`
+
+|`1AX`
+|`message2`
+|
+|===
+
+=== Geosupport Street Name Functions
+
+Geosupport has a rich model for streets and provides many functions and flags to support street processing. Geoclient supports calls to functions `D`, `DG`, and `DN` with the `/streetcode` endpoint and function `N` with the `/normalize` function.
+
+The `/streetcode` endpoint calls different Geosupport functions depending on the type of street code given for the `streetCode`, `streetCodeTwo`, `streetCodeThree` parameters:
+
+.`/streetcode` endpoint's use of Geosupport functions
+[cols="1a,2a"]
+|===
+|Street Code Type
+|Geosupport Function
+
+|`B5SC`
+|Function `D`
+
+|`B7SC`
+|Function `DG`
+
+|`B10SC`
+|Function `DN`
+|===
+
+For a high-level overview of street code handling in Geosupport see the `Street (Name / Code)` section on this {dcp-goat}/UserGuide[page].
+
+This document describes the Geoclient API for calling these functions but not a description of what they do and how to use them. For that, DCP provides the (_drum roll please..._) {dcp-upg}[*Geosupport System User Programming Guide*]. For working with the `/normalize` endpoint, the reading following sections is probably enough to get you started:
+
+* {dcp-upg}/chapters/chapterIII/section01/[Section 3.1]
+* {dcp-upg}/chapters/chapterIII/section02/[Section 3.2]
+* {dcp-upg}/chapters/chapterIII/section03/[Section 3.3]
+
+To work effectively with the `streetcode` endpoint (i.e., functions `D`, `DG`, `DN`), you'll probably want to look through the following chapters:
+
+* {dcp-upg}/chapters/chapterIII/chapterIII/[Chapter III: Street Name Processing]
+* {dcp-upg}/chapters/chapterIV/chapterIV/[Chapter IV: Street Codes]
+
+Finally, the Geosupport input API used by the Geoclient `/normalize` and `/streetcode` endpoints is documented {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[here].

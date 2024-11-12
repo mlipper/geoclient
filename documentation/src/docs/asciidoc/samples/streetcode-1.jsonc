@@ -1,0 +1,15 @@
+// tag::user_guide[]
+{
+    "streetcode": {
+        "boroughCode1In": "1",
+        "firstStreetCode": "11061004010",
+        "firstStreetNameNormalized": "7 AVENUE",
+        "geosupportFunctionCode": "DG",
+        "geosupportReturnCode": "00",
+        "streetCode1In": "1061004",
+        "streetNameNormalizationFormatFlagIn": "S",
+        "streetNameNormalizationLengthLimitIn": "32",
+        "workAreaFormatIndicatorIn": "C"
+    }
+}
+// end::user_guide[]

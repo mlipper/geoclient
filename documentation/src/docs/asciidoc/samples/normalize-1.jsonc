@@ -1,0 +1,13 @@
+// tag::user_guide[]
+{
+    "normalize": {
+        "firstStreetNameNormalized": "EAST  158 STREET",
+        "geosupportFunctionCode": "N*",
+        "geosupportReturnCode": "00",
+        "streetName1In": "EAST 158TH STREET",
+        "streetNameNormalizationFormatFlagIn": "S",
+        "streetNameNormalizationLengthLimitIn": "32",
+        "workAreaFormatIndicatorIn": "C"
+    }
+}
+// end::user_guide[]

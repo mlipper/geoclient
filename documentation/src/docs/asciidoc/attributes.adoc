@@ -7,3 +7,6 @@
 :dcp-upg-cows:                    {dcp-upg}/appendices/appendix13
 :geoclient-repo:                  https://github.com/mlipper/geoclient
 :geoclient-nyc-repo:              https://github.com/CityOfNewYork/geoclient
+:ietf-rfc-9110-status-codes:      https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes
+:mozilla-http-status-codes:       https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+:wikipedia-zip-code:              http://en.wikipedia.org/wiki/ZIP_code

@@ -1,0 +1,3 @@
+id, endpoint, description, streetCode, streetCodeTwo, streetCodeThree, length, format
+1, streetcode, B7SC, 12969001, "", "","", ""
+2, streetcode, B5SC, 129690, "", "","", ""

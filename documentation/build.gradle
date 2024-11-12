@@ -21,9 +21,9 @@ dependencies {
     internalServerClasspath(project(path: ':geoclient-service', configuration: 'internalServer'))
 }
 
-//tasks.named('generateSamples') {
-//    serviceUrl = System.getenv('GEOCLIENT_SERVICE_URL')
-//}
+tasks.named('generateSamples') {
+    serviceUrl = System.getenv('GEOCLIENT_SERVICE_URL')
+}
 
 tasks.named('asciidoctor') {
     group 'documentation'
