@@ -32,7 +32,7 @@ Finally, always use 64-bit versions of all software. 32-bit versions are *not* s
 ==== Gradle Build
 
 .Gradle build from bash
-[source,sh]
+[source,sh,subs="attributes+,macros+"]
 ----
 git clone {geoclient-repo}
 cd geoclient
