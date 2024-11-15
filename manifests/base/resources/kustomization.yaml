@@ -18,9 +18,9 @@ configMapGenerator:
 
 images:
 - name: docker.io/mlipper/geosupport-docker
-  newTag: 2.0.21
+  newTag: 2.0.22
 - name: docker.io/mlipper/geoclient
-  newTag: 2.0.1-rc.2
+  newTag: 2.0.1-rc.3
 
 namespace: gis-apps
 
@@ -29,7 +29,7 @@ labels:
       app: geoclient-v2
       # The value of col label must match value of COLOR
       # in base/properties/pipeline.env
-      col: green
+      col: blue
     includeSelectors: true
     includeTemplates: true
 
