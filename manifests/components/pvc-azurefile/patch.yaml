@@ -3,5 +3,5 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     environment: foo
-  name: geoclient-v2
+  name: pvc-geosupport-00
   namespace: gis-apps
