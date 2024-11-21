@@ -6,6 +6,11 @@ FROM eclipse-temurin:17-jre AS builder
 ARG JARFILE
 ENV JARFILE="${JARFILE:-./geoclient-service/build/libs/geoclient.jar}"
 
+RUN set -ex \
+  && apt-get update \
+  && apt-get install --yes --no-install-recommends jq \
+  && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY "${JARFILE}" .
 COPY --chmod=755 images/run.sh .
