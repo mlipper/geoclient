@@ -8,8 +8,8 @@ resources:
 namespace: gis-apps
 
 #components:
-#  - ../../components/development
-# - ../../components/production
+#  - ../../components/nonprod
+# - ../../components/prod
 #
 #replacements:
 #  - path: replacement.yaml

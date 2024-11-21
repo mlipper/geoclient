@@ -4,7 +4,7 @@ metadata:
   annotations:
     release-scope: component
   labels:
-    app: geoclient-v2
+    app: geosupport
     # Do not use col since claim may be used in blue and green releases.
     # col: COLOR
     environment: all

@@ -5,5 +5,4 @@ resources:
   - ../../../../base/resources
 
 components:
-  - ../../../../components/production
-  - ../../../../components/pvc-azurefile
+  - ../../../../components/prod
