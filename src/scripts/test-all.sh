@@ -5,11 +5,13 @@ set -Eeuo pipefail
 this_dir="$(dirname "$(readlink -vf "$BASH_SOURCE")")"
 this_file="$(basename "$0")"
 
-# Run from project root directory
-cd "${this_dir}/../../"
+source "${this_dir}/configure-env.sh"
 
-VERSION=2.0.1-rc.2
-SVCJAR=geoclient-service/build/libs/geoclient-service-${VERSION}.jar
+cd "${PROJECT_DIR}"
+
+SVCJAR="${PROJECT_DIR}/geoclient-service/build/libs/geoclient-service-${VERSION}.jar"
+
+printf 'Environment:\nPROJECT_DIR=%s\nVERSION=%s\nSVCJAR=%s\n' "${PROJECT_DIR}" "${VERSION}" "${SVCJAR}"
 
 _die() {
     echo "$@"
@@ -17,16 +19,17 @@ _die() {
 }
 
 _gradle() {
-    "${this_dir}"/gradlew \
+    "${PROJECT_DIR}"/gradlew \
             -Dgeoclient.service.status=running \
             -Dtesting.endpoint=http://localhost:8080/geoclient/v2 \
             -Dtesting.samples.test=true $@
     _stop
+    echo
 }
 
 _start() {
     export GEOCLIENT_SERVICE_STATUS=running
-    java -jar "${this_dir}/${SVCJAR}" --spring.profiles.active=docsamples &
+    java -jar "${SVCJAR}" --spring.profiles.active=docsamples &
     sleep 8
     _gradle $@
 }
