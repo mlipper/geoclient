@@ -18,6 +18,10 @@ _die() {
     exit 1
 }
 
+_assemble() {
+    "${PROJECT_DIR}"/gradlew clean assemble
+}
+
 _gradle() {
     "${PROJECT_DIR}"/gradlew \
             -Dgeoclient.service.status=running \
@@ -46,6 +50,7 @@ _main() {
     fi
     local action=
     local args=()
+    local assemble=
     while [ $# -gt 0 ]; do
         case "$1" in
             help)
@@ -57,6 +62,11 @@ _main() {
             stop)
                 action=_stop; shift
                 ;;
+            -a)
+                [[ "$action" != "_start" ]] \
+                  && _die "The -a option can only be used with the start argument."
+                assemble="true"; shift
+                ;;
             *)
                 args+=($@); break
                 ;;
@@ -64,6 +74,9 @@ _main() {
     done
     [[ ! -z $action ]] || _die "Missing required argument <help>|<start>|<stop>."
     if [[ $action == "_start" ]]; then
+        if [[ ! -z $assemble ]]; then
+            _assemble
+        fi
         if [[ "${#args[@]}" == 0 ]]; then
             _start check
         else
@@ -79,7 +92,7 @@ _usage() {
     this_file="$(basename "${BASH_SOURCE[0]}")"
 cat <<- EOF
 
-Usage: ${this_file} <help>|<start>|<stop> [gradle args ...]
+Usage: ${this_file} <help>|<start> [-a]|<stop> [gradle args ...]
 
 help   Show this message.
 
@@ -90,6 +103,9 @@ start  Sets up environment with variables for integration testing,
 
        If no additional gradle arguments are given, passes gradle
        "check".
+
+       If the -a option is given, runs clean and assemble tasks
+       before starting geoclient-service.
 
 stop   Stops the running geoclient-service.
 
