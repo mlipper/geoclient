@@ -11,6 +11,7 @@ ENV GEOSUPPORT_BASEDIR=/opt/geosupport
 RUN set -ex \
   && apt-get update \
   && apt-get install --yes --no-install-recommends \
+     jq \
      gcc \
      g++ \
      libc6-dev \
@@ -53,7 +54,7 @@ rm -rf "${tmp_dir}"
 EOF
 
 ### Run
-FROM eclipse-temurin:17-jre-jammy AS runner
+FROM eclipse-temurin:17-jre AS runner
 
 ENV GEOSUPPORT_BASEDIR=/opt/geosupport
 ENV GEOSUPPORT_HOME="${GEOSUPPORT_BASEDIR}/current"

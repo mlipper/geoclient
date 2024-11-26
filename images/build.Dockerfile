@@ -13,6 +13,7 @@ RUN set -ex \
   && apt-get install --yes --no-install-recommends \
      gcc \
      g++ \
+     jq \
      libc6-dev \
   && rm -rf /var/lib/apt/lists/*
 

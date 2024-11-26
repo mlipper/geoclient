@@ -8,7 +8,8 @@ ENV JARFILE="${JARFILE:-./geoclient-service/build/libs/geoclient.jar}"
 
 RUN set -ex \
   && apt-get update \
-  && apt-get install --yes --no-install-recommends jq \
+  && apt-get install --yes --no-install-recommends \
+     jq \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
