@@ -71,12 +71,20 @@ tasks.named('asciidoctor') {
 }
 
 // java.io.File
-def bootJarFile = project.configurations.internalServerClasspath.resolvedConfiguration.getFiles().toArray()[0]
+def bootJarFile = project.configurations.internalServerClasspath.getFiles().toArray()[0]
 
+// Does not work with ampersand. Removing it creates foreground process until blocks until SIGINT.
 //tasks.register('startService', Exec) {
 //    commandLine '/bin/bash', '-c', "java -jar ${bootJarFile} --spring.profiles.active=docsamples &"
 //}
 
+tasks.register('showBootJarFile') {
+    Directory projectDirectory = layout.projectDirectory
+    doLast {
+        def theFiles = files(bootJarFile)
+        theFiles.collect { projectDirectory.asFile.relativePath(it) }.sort().each { println it }
+    }
+}
 tasks.register('startService', JavaExec) {
    classpath = files(bootJarFile)
    args '--spring.profiles.active=docsamples'
@@ -89,7 +97,6 @@ tasks.register('stopService', Exec) {
 def generatedSamplesDir = Paths.get(layout.buildDirectory.dir('samples').get().getAsFile().getPath())
 
 tasks.register('ensureSamplesDir') {
-    //def generatedSamplesDir = Paths.get(tasks.named('asciidoctor').get().getOutputs().getFiles().getAsPath(),'samples')
     doLast {
         Files.createDirectories(generatedSamplesDir)
     }
