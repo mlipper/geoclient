@@ -12,8 +12,8 @@ publishing {
     }
     repositories {
         maven {
-            name "localRepo"
-            url layout.buildDirectory.dir("repo")
+            name = "localRepo"
+            url = layout.buildDirectory.dir("repo")
         }
     }
 }
