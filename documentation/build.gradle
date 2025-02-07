@@ -26,8 +26,8 @@ tasks.named('generateSamples') {
 }
 
 tasks.named('asciidoctor') {
-    group 'documentation'
-    description 'Build Asciidoctor documentation'
+    group = 'documentation'
+    description = 'Build Asciidoctor documentation'
 
     baseDirFollowsSourceDir()
 
@@ -131,7 +131,7 @@ tasks.named('integrationTest', Test) {
         showStandardStreams = true
         debug {
             events "failed", "skipped"
-            exceptionFormat "full"
+            exceptionFormat = "full"
             showStandardStreams = true
         }
 
