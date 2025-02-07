@@ -96,22 +96,18 @@ The responses shown below are for example purposes only and do not include all p
 [#auth]
 === Authentication/Authorization
 
-Geoclient does not perform any kind of authentication or authorization. However, most hosted instances of the service run behind some kind API gateway that requires access credentials.
+Geoclient does not perform any kind of authentication or authorization. However, the endpoint that is available to the public (after signing up for access) does sit behind an API gateway. This endpoint requires that an API key be included with every `HTTP` request.
+
+.Getting Access the Geoclient Public Endpoint  
+****
+Sponsored by NYC's Office of Technology and Innovation, Geoclient is freely available to the public after creating an account on the https://api-portal.nyc.gov/[NYC API Developers Portal]. After logging in, visit the "Products" section and follow the https://api-portal.nyc.gov/product#product=geoclient-user[Geoclient User] link. Make sure to choose the subscription to "Geoclient - v2" as v1 is deprecated and scheduled for deactivation.
+****
+
+Although detailed instructions are beyond the scope of this document, your assigned API key (A.K.A. "subscription key") should be sent with call as an `HTTP` header named `Ocp-Apim-Subscription-Key`. See `TODO`.
 
 .Historical documentation of access API's
 ****
-Previous versions of this document described accessing protected Geoclient servers that were hosted by the City of New York. However, since that time, more hosted endpoints using different authentication schemes have become available.
-
-Although it is beyond the scope of this document, here's a brief summary of access methods still in use at this time:
-
-* API authorization provided as:
-** `HTTP` header:
-*** `Ocp-Apim-Subscription-Key`
-** `HTTP` query string parameters:
-*** `app_id`
-*** `app_key`
-
-Contact your provider for signup and access instructions.
+Previous versions of this document described accessing Geoclient by submitting credentials on the `HTTP` query string. This method has been replaced by one described above.
 ****
 
 [#common-request]
