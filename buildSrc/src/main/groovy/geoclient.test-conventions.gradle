@@ -28,7 +28,7 @@ tasks.named('test', Test) {
     useJUnitPlatform()
     testLogging {
         events "failed", "skipped"
-        exceptionFormat "short"
+        exceptionFormat = "short"
     }
 }
 
@@ -47,11 +47,11 @@ tasks.register('integrationTest', Test) {
     testLogging {
         // options for log level LIFECYCLE
         events "failed", "skipped"
-        exceptionFormat "short"
+        exceptionFormat = "short"
 
         debug {
             events "failed", "skipped", "passed"
-            exceptionFormat "full"
+            exceptionFormat = "full"
             showStandardStreams = true
         }
 
