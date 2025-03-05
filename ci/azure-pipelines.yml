@@ -1,18 +1,17 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
-- pipeline
-
+  branches:
+    include:
+    - pipeline
 resources:
-- repo: self
-
+  repositories:
+  - repository: self
 variables:
-  srcdir: '$(Build.SourcesDirectory)'
-  tag: '$(Build.BuildId)'
-  group: geosupport-environment
-
+- name: srcdir
+  value: '$(Build.SourcesDirectory)'
+- name: tag
+  value: '$(Build.BuildId)'
+- name: group
+  value: geosupport-environment
 stages:
 - stage: Build
   displayName: Build image
@@ -22,24 +21,26 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - script: |
+    - task: CmdLine@2
+      inputs:
+        script: |
           docker build -f ./ci/Dockerfile -t mlipper/geoclient:$(tag) .
           docker run --name geoclient --rm -d mlipper/geoclient:$(tag)
           docker cp geoclient:/app/ci $(System.DefaultWorkingDirectory)
           docker cp geoclient:/app/geoclient.jar $(System.DefaultWorkingDirectory)
           docker stop geoclient
-      - task: PublishTestResults@2
-        inputs:
-          mergeTestResults: true
-          testRunner: JUnit
-          testResultsFiles: $(System.DefaultWorkingDirectory)/ci/test-results/TEST-*.xml
-          failTaskOnFailedTests: true
-      - task: PublishCodeCoverageResults@2
-        inputs:
-          summaryFileLocation: $(System.DefaultWorkingDirectory)/ci/coverage/*-coverage.xml
-          pathToSources: $(System.DefaultWorkingDirectory)/ci/src
-          failIfCoverageEmpty: false
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(System.DefaultWorkingDirectory)/geoclient.jar
-          publishLocation: pipeline
+    - task: PublishTestResults@2
+      inputs:
+        mergeTestResults: true
+        testRunner: JUnit
+        testResultsFiles: $(System.DefaultWorkingDirectory)/ci/test-results/TEST-*.xml
+        failTaskOnFailedTests: true
+    - task: PublishCodeCoverageResults@2
+      inputs:
+        summaryFileLocation: $(System.DefaultWorkingDirectory)/ci/coverage/*-coverage.xml
+        pathToSources: $(System.DefaultWorkingDirectory)/ci/src
+        failIfCoverageEmpty: false
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(System.DefaultWorkingDirectory)/geoclient.jar
+        publishLocation: pipeline
