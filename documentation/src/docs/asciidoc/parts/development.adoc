@@ -4,6 +4,25 @@ This section documents building Geoclient from source, the project's core archit
 
 '''
 
+=== Core design
+
+The `geoclient-core` subproject defines the API and implementation of the Java classes responsible for transforming the output of a Geosupport function call into runtime objects contains a structured representation of the data.
+Geosupport responses are either one or two large character buffers containing position-delimited values defined by the Geosupport API.
+In Java land, courtesy of the `geoclient-jni` subproject, these buffers are contained in `java.nio.ByteBuffer` instances.
+
+It is the responsibility of the classes in the `gov.nyc.doitt.gis.geoclient.function` package to pluck out each attribute and place it in a `java.util.Map<String, Object>`.
+The `geoclient.xml` configuration file provides the name of the attribute used as the `Map` key and the start and end positions of the attribute's location in the `ByteBuffer`.
+
+This class diagram shows the composition of the core classes responsibile for this process:
+
+.The Function API core classes
+image::function-api.png[Function API class diagram]
+
+This sequence diagram shows the call graph of these objects at runtime:
+
+.The call sequence for the Function API
+image::function-call-sequence.png[Function API sequence diagram]
+
 === Platforms
 
 Linux x86_64:: Runs on recent kernel versions with `libc6`. Lots of successful production experience with `debian` and `RHEL`-based distros.
