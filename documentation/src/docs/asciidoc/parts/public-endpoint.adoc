@@ -1,0 +1,21 @@
+== Public Endpoint
+
+This section documents the publicly hosted (and free) Geoclient endpoint.
+
+'''
+
+.Getting Access the Geoclient Public Endpoint  
+****
+Sponsored by NYC's Office of Technology and Innovation, Geoclient is freely available to the public after creating an account on the {api-portal}[NYC API Developers Portal]. After logging in, visit the "Products" section and follow the https://api-portal.nyc.gov/product#product=geoclient-user[Geoclient User] link. Make sure to choose the subscription to "Geoclient - v2" as v1 is deprecated and scheduled for deactivation.
+****
+
+=== Authentication/Authorization
+
+Geoclient does not perform any kind of authentication or authorization. However, the endpoint that is available to the public (after signing up for access) does sit behind an API gateway. This endpoint requires that an API key be included with every `HTTP` request.
+
+Although detailed instructions are beyond the scope of this document to provide detailed instructions, each call to the Geoclient public endpoint requires your assigned API key (A.K.A. "subscription key").
+
+* The recommended way to do this is with an `HTTP` header named `Ocp-Apim-Subscription-Key` whose value is your key.
+* At this time, it is possible to submit your key on the `HTTP` query string using a query string parameter named `key` (i.e., `key=<your_key_goes_here>`). However, this method isn't officially documented by the {api-portal}[NYC API Developers Portal] so, if possible, prefer the `HTTP` header method. 
+
+See the {geoclient-examples-repo}[geoclient-examples] repository on GitHub for examples in different programming languages.

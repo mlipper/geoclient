@@ -93,23 +93,6 @@ The responses shown below are for example purposes only and do not include all p
 * _However_, the field values returned by Geosupport **__sometimes do contain significant whitespace or formatting__** which Geoclient _intentionally_ leaves unchanged.
 * Occasionally, Geosupport fails to recognize a valid location or there is a bug in the Geoclient code. See Section FIXME for information on when and how to contact the appropriate team.
 
-[#auth]
-=== Authentication/Authorization
-
-Geoclient does not perform any kind of authentication or authorization. However, the endpoint that is available to the public (after signing up for access) does sit behind an API gateway. This endpoint requires that an API key be included with every `HTTP` request.
-
-.Getting Access the Geoclient Public Endpoint  
-****
-Sponsored by NYC's Office of Technology and Innovation, Geoclient is freely available to the public after creating an account on the https://api-portal.nyc.gov/[NYC API Developers Portal]. After logging in, visit the "Products" section and follow the https://api-portal.nyc.gov/product#product=geoclient-user[Geoclient User] link. Make sure to choose the subscription to "Geoclient - v2" as v1 is deprecated and scheduled for deactivation.
-****
-
-Although detailed instructions are beyond the scope of this document, your assigned API key (A.K.A. "subscription key") should be sent with call as an `HTTP` header named `Ocp-Apim-Subscription-Key`. See `TODO`.
-
-.Historical documentation of access API's
-****
-Previous versions of this document described accessing Geoclient by submitting credentials on the `HTTP` query string. This method has been replaced by one described above.
-****
-
 [#common-request]
 === Common query string and request parameters
 
@@ -384,4 +367,8 @@ To work effectively with the `streetcode` endpoint (i.e., functions `D`, `DG`, `
 * {dcp-upg}/chapters/chapterIII/chapterIII/[Chapter III: Street Name Processing]
 * {dcp-upg}/chapters/chapterIV/chapterIV/[Chapter IV: Street Codes]
 
-Finally, the Geosupport input API used by the Geoclient `/normalize` and `/streetcode` endpoints is documented {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[here].
+The Geosupport input API used by the Geoclient `/normalize` and `/streetcode` endpoints is documented {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[here].
+
+=== Examples
+
+For examples of calling Geoclient programmatically, see the {geoclient-examples-repo}[geoclient-examples] repository on GitHub.

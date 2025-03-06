@@ -16,14 +16,8 @@ include::parts/geosupport-docs.adoc[]
 
 include::parts/development.adoc[]
 
-include::parts/code-samples.adoc[]
+include::parts/public-endpoint.adoc[]
 
 == Contact Us
 
-With questions, comments, feature requests, bug reports, threats, etc.
-
-'''
-
-* Feature requests
-* Bug reports
-* Development questions
+On {geoclient-issues}[GitHub] with questions, comments, feature requests, bug reports, threats, etc.
