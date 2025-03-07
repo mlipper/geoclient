@@ -10,36 +10,37 @@ Sponsored by NYC's Office of Technology and Innovation, the Geoclient REST servi
 ****
 
 . Go to the {api-portal}[NYC API Developers Portal] site.
-
++
 image:api-portal/index-not-signed-in.png[Home page]
-
++
 . If you don’t already have an account, {api-portal}/signup[sign up] for one by clicking the large green “Sign up” button.
-
++
 image:api-portal/index-click-sign-up.png[Signup button]
-
++
 . If you are not already logged in, {api-portal}/signin[sign in to your account].
++
 . Go to the {api-portal}/product[Products page] by clicking the “Products” button:
-
++
 image:api-portal/products-page.png[Products page]
-
++
 . Click the {api-portal}/product#product=geoclient-user[Geoclient User] link. Make sure to choose the subscription to "*Geoclient - v2*" as __v1 is deprecated and scheduled for deactivation__.
-
++
 image:api-portal/index-signed-in-products.png[Products button]
-
++
 . In the “Your Subscriptions” section of the page, enter the name of the “product” to associate with this Geoclient v2 subscription key and click the “Subscribe” button.
-
++
 image:api-portal/subscribe.png[Subscribe to v2]
-
++
 ****
 Your account can register multiple “products” with different subscription keys for accessing the same API. You can think of a “product” as an application, a project, or a functional use case like “testing”.
 ****
-
++
 . You should receive an email notifying you that your subscription has been created.
-
++
 image:api-portal/subscription-email.png[Subscription email]
-
++
 . {api-portal}/signin[Sign in to your account] again (if necessary) and follow the “Profile” link in the top right of the page. This page allows you to manage many of your account settings. Go to the “Subscriptions” section and click on “Show” to view your subscription key.
-
++
 image:api-portal/user-profile.png[User profile]
 
 === Authentication/Authorization
