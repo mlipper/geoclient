@@ -4,15 +4,14 @@ metadata:
   annotations:
     release-scope: pvc-only
   labels:
-    app: geoclient-v2
-    # Do not use col since claim may be used in blue and green releases.
-    # col: COLOR
-    environment: all
-  name: PVC_NAME
+    app: geosupport
+    current: 25a_25.1
+  name: pvc-geosupport
+  namespace: gis-apps
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 4Gi
-  storageClassName: csi-hostpath-sc
+  storageClassName: standard

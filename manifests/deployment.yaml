@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: geoclient-v2
+    ver: 2.0.1
+  name: geoclient-v2
+  namespace: gis-apps
+spec:
+  selector:
+    matchLabels:
+      app: geoclient-v2
+      ver: 2.0.1
+  template:
+    metadata:
+      labels:
+        app: geoclient-v2
+        ver: 2.0.1
+    spec:
+      containers:
+      - env:
+        - name: GEOFILES
+          value: /opt/geosupport/current/fls/
+        - name: GEOSUPPORT_FULLVERSION
+          value: 25a_25.1
+        - name: GEOSUPPORT_HOME
+          value: /opt/geosupport/current
+        image: docker.io/mlipper/geoclient:2.0.1
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - sh
+              - -c
+              - sleep 5
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /geoclient/v2/version.json?app_id=liveness_probe
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 2
+        name: geoclient-v2
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /geoclient/v2/search.json?input=150%20broadway&app_id=readiness_probe
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: "3"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 2Gi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /geoclient/v2/version.json
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /opt/geosupport
+          name: geosupport-volume
+      initContainers:
+      - command: ['sh', '-c', 'sleep 10 && cp -v -r /opt/geosupport/* /mnt/repo && /mnt/repo/version-*/checklist || exit 1']
+        image: mlipper/geosupport-docker:2.0.25
+        imagePullPolicy: IfNotPresent
+        name: init-geosupport-volume
+        resources:
+          limits:
+            cpu: "1"
+            memory: 500Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /mnt/repo
+          name: geosupport-volume
+      volumes:
+      - name: geosupport-volume
+        persistentVolumeClaim:
+          claimName: pvc-geosupport
