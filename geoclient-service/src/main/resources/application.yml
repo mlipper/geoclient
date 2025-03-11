@@ -53,8 +53,9 @@ logging:
         spring-all: "WARN"
 
 management:
-    endpoints:
-        enabled-by-default: false
+  endpoints:
+    access:
+      default: none
 ---
 spring:
     config:
@@ -97,10 +98,11 @@ logging:
         name: "build/bootrun/logs/geoclient.log"
 management:
   endpoints:
-    enabled-by-default: true
     web:
       exposure:
         include: "*"
+    access:
+      default: unrestricted
 ---
 spring:
     config:
@@ -120,9 +122,10 @@ logging:
 management:
   endpoint:
     shutdown:
-        enabled: true
+        access: unrestricted
   endpoints:
-    enabled-by-default: true
     web:
       exposure:
         include: "*"
+    access:
+      default: unrestricted
