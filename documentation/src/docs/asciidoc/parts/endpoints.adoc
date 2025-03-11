@@ -402,7 +402,7 @@ The Geoclient service uses the concept of search levels to classify the degree t
 *Parameters:*
 
 .`/search` arguments
-[cols="1a,1a,2a"]
+[cols="2a,1a,2a"]
 |===
 |Parameter Name |Required/Optional |Comments
 
