@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: gis-apps
+
+labels:
+  - pairs:
+      app: geoclient-v2
+    includeSelectors: true
+    includeTemplates: true
+
+resources:
+  - deployment.yaml
+  - hpa.yaml
+  - service.yaml
+
+configMapGenerator:
+- name: geosupport-env
+  literals:
+    - GEOFILES=/opt/geosupport/current/fls/
+    - GEOSUPPORT_FULLVERSION=25a_25.1
+    - GEOSUPPORT_HOME=/opt/geosupport/current
+
+images:
+- name: docker.io/mlipper/geosupport-docker
+  newTag: 2.0.25
+- name: docker.io/mlipper/geoclient
+  newTag: 2.0.1

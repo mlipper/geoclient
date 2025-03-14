@@ -3,11 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   annotations:
     release-scope: pvc-only
-  labels:
-    app: geosupport
-    current: 25a_25.1
   name: pvc-geosupport
-  namespace: gis-apps
 spec:
   accessModes:
   - ReadWriteOnce

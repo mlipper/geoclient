@@ -1,31 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: geoclient-v2
-    ver: 2.0.1
   name: geoclient-v2
-  namespace: gis-apps
 spec:
   selector:
     matchLabels:
       app: geoclient-v2
-      ver: 2.0.1
   template:
     metadata:
       labels:
         app: geoclient-v2
-        ver: 2.0.1
     spec:
       containers:
-      - env:
-        - name: GEOFILES
-          value: /opt/geosupport/current/fls/
-        - name: GEOSUPPORT_FULLVERSION
-          value: 25a_25.1
-        - name: GEOSUPPORT_HOME
-          value: /opt/geosupport/current
-        image: docker.io/mlipper/geoclient:2.0.1
+      - envFrom:
+        - configMapRef:
+            name: geosupport-env
+        image: docker.io/mlipper/geoclient
         imagePullPolicy: Always
         lifecycle:
           preStop:
@@ -81,7 +71,7 @@ spec:
           name: geosupport-volume
       initContainers:
       - command: ['sh', '-c', 'sleep 10 && cp -v -r /opt/geosupport/* /mnt/repo && /mnt/repo/version-*/checklist || exit 1']
-        image: mlipper/geosupport-docker:2.0.25
+        image: docker.io/mlipper/geosupport-docker
         imagePullPolicy: IfNotPresent
         name: init-geosupport-volume
         resources:

@@ -1,16 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: geoclient-v2
-    ver: 2.0.1
   name: geoclient-v2
-  namespace: gis-apps
 spec:
   ports:
   - port: 8080
     targetPort: 8080
-  selector:
-    app: geoclient-v2
-    ver: 2.0.1
   type: NodePort

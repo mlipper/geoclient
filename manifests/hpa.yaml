@@ -1,11 +1,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  labels:
-    app: geoclient-v2
-    ver: 2.0.1
   name: geoclient-v2
-  namespace: gis-apps
 spec:
   maxReplicas: 4
   metrics:
