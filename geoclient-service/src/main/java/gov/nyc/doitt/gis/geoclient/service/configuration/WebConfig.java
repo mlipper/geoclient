@@ -49,7 +49,6 @@ import gov.nyc.doitt.gis.geoclient.service.domain.BadRequest;
 import gov.nyc.doitt.gis.geoclient.service.domain.FileInfo;
 import gov.nyc.doitt.gis.geoclient.service.domain.Version;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResultConverter;
-import gov.nyc.doitt.gis.geoclient.service.web.ViewHelper;
 import gov.nyc.doitt.gis.geoclient.service.xstream.MapConverter;
 
 /**
@@ -162,11 +161,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public SearchResultConverter searchResultConverter() {
         return new SearchResultConverter();
-    }
-
-    @Bean(name = "viewHelper")
-    public ViewHelper viewHelper() {
-        return new ViewHelper();
     }
 
     @Bean

@@ -10,7 +10,6 @@ dependencies {
     implementation project(':geoclient-parser')
     implementation(libs.commons.text)
     implementation('org.springframework.boot:spring-boot-starter-web')
-    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
     implementation('org.springframework.boot:spring-boot-starter-validation')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework:spring-oxm') { exclude(module: 'commons-lang') }
@@ -22,15 +21,8 @@ tasks.register('writeVersionProperties', WriteProperties) {
     destinationFile = file(new File(sourceSets.main.output.resourcesDir, 'version.properties'))
 }
 
-tasks.register('copyRuntimeDiagram', Copy) {
-    from("${project.rootDir}/src/doc") {
-        include 'geoclient-runtime.png'
-    }
-    into "${sourceSets.main.output.resourcesDir}/static/images"
-}
-
 processResources {
-    dependsOn('writeVersionProperties', 'copyRuntimeDiagram')
+    dependsOn('writeVersionProperties')
 }
 
 springBoot {
@@ -74,7 +66,6 @@ tasks.named('build') {
 
 tasks.named('bootRun') {
     args '--spring.profiles.active=bootRun'
-    systemProperties = [ 'gc.jni.version': 'geoclient-jni-2-bootrun' ]
 }
 
 // Uses simple sharing strategy. See:

@@ -3,8 +3,6 @@ spring:
     mvc:
         pathmatch:
             matching-strategy: ant-path-matcher
-    thymeleaf:
-        enable-spring-el-compiler: true
 
 server:
     servlet:
@@ -34,12 +32,6 @@ logging:
             - "org.springframework.boot"
         spring-web:
             - "org.springframework.web"
-        thymeleaf:
-            - "org.thymeleaf"
-        thymeleaf-trace:
-            - "org.thymeleaf.TemplateEngine.CONFIG"
-            - "org.thymeleaf.TemplateEngine.TIMER"
-            - "org.thymeleaf.TemplateEngine.cache.TEMPLATE_CACHE"
         tomcat-access:
             - "java.util.logging.ConsoleHandler.level"
             - "org.apache.catalina.session.level"
