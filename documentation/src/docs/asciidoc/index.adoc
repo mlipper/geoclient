@@ -1,5 +1,6 @@
 [[user-guide]]
 = Geoclient User Guide
+:toc:
 :last-update-label!:
 
 include::attributes.adoc[]

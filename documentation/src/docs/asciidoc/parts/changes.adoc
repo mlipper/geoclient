@@ -1,0 +1,479 @@
+== Table of Contents
+
+Introduction	1
+
+Motivation	1
+
+Geoclient v2 - the current API	1
+
+Benefits	1
+
+Summary of Changes	2
+
+Using Geoclient v2 in the Cloud	2
+
+Geoclient API -- Upgrading from v1 to v2	2
+
+Enhancements	2
+
+Potential Breaking Changes	2
+
+Creating a Subscription Key for Geoclient v2	2
+
+Authentication Methods for Calling Geoclient v2	3
+
+Old Authentication Method	3
+
+Current Authentication Methods	3
+
+Endpoint Changes	5
+
+Active Endpoint	5
+
+Scheduled for Deactivation	5
+
+Deactivation Targets by Hostname	5
+
+Deactivation Targets by URI Endpoint	6
+
+Deactivation Timelines	6
+
+Contact Us	6
+
+Technical	6
+
+Agency	6
+
+Appendix A	7
+
+Endpoint Information	7
+
+Current Endpoints (not being deactivated)	7
+
+Endpoints Scheduled for Deactivation	7
+
+Appendix B	8
+
+URL Format	8
+
+Example 1	8
+
+Example 2	8
+
+Appendix C	9
+
+NYC API Developers Portal	9
+
+Provision Access to Geoclient v2	9
+
+== Introduction
+
+Geoclient is one of the City's most popular REST service APIs and is heavily used by agencies, the public, commercial, non-profit, and educational organizations. As part of OTI's modernization effort, Geoclient is moving all its OTI datacenter-hosted service endpoints to the Azure cloud and deactivating all legacy, unsupported API versions.
+
+=== Motivation
+
+When Geoclient was first released in 2013, most mission critical agency applications were run from City-managed datacenters. While this was and, for certain uses, sometimes still is the best option, these platforms made it difficult or expensive to provision, scale, and maintain applications like Geoclient with an active release cycle and large volume, 24/7 usage.
+
+The old, original version of Geoclient (v1) is being deactivated because the technologies it was built with and for are no longer easily available or supported. Geoclient v2, on the other hand, is actively maintained, optimized for cloud computing and is built with current, supported and secure libraries and platform components.
+
+=== Geoclient v2 - the current API
+
+The v2 API is 100% backwards compatible with older versions and returns all the same attributes with the addition of new data that has become available since 2017 when v1 was last updated.
+
+The only differences between v1 and v2 from a client perspective are two protocol-level changes made to patch critical security risks.
+
+See the Using Geoclient v2 in the Cloud section below for a detailed information.
+
+=== Benefits
+
+Consolidating the multiple hosting environments from which Geoclient is currently available to a single, reliable, scalable and secure cloud platform provides many benefits, including:
+
+* Platform reliability
+* Application resiliency
+* Faster build, test and release cycles results in quicker pace of new feature availability and bug fixes
+* Self-service sign-up and maintenance for access to Geoclient
+
+This consolidated Geoclient service offering is hosted Azure Kubernetes Service Kubernetes (AKS), a managed Platform as a Service (PaaS) implementation of Kubernetes.
+
+=== Summary of Changes
+
+* Geoclient v2 or greater will be the only hosted version(s) of the service.
+* Geoclient v2 or greater will only be available from a single, cloud-hosted platform.
+* Geoclient v1 has reached end-of-life status and will be deactivated.
+* All Geoclient endpoints served from the OTI datacenter will be deactivated.
+
+== Using Geoclient v2 in the Cloud
+
+=== Geoclient API -- Upgrading from v1 to v2
+
+==== Enhancements
+
+* 2020 census data returned for address, intersection, and blockface locations
+
+==== Potential Breaking Changes
+
+* JSONP is no longer supported for JavaScript cross-origin requests due to serious security risks. Please use cross-origin sharing (CORS) which has been the industry standard since 2009. See CORS vs JSONP for a summarized comparison.
+* The use of app_id and app_key authentication credentials, submitted via the HTTP query string, has been deprecated. Instead, there are two options for submitting credentials with each request. See Current Authentication Methods below.
+
+Notes:
+
+Change 1. It is unlikely that your application uses JSONP to call Geoclient. Modern JavaScript frameworks don't support JSONP and usually use CORS as the default for cross-origin resource requests.
+
+Change 2. This is only relevant if you currently call Geoclient with from an on-premises endpoint URL as described in Endpoint Changes and Appendix A.
+
+=== Creating a Subscription Key for Geoclient v2
+
+Geoclient v2 requires that a valid subscription key be included with each call to the service. To obtain a key, visit the NYC API Developers Portal and take the following steps:
+
+* Sign up for an account if you don't already have one.
+* Sign in to your account if you are not already logged in.
+* Go to the Products page and click the Geoclient User link.
+* In the "`Your Subscriptions`" section of the page, enter the name of the "`product`" to associate with this Geoclient v2 subscription key and click the "`Subscribe`" button.
+* You should receive an email notifying you that your subscription has been created.
+* Sign in to your account again (if necessary) and follow the "`Profile`" link in the top right of the page. This page allows you to manage many of your account settings. Go to the "`Subscriptions`" section and click on "`Show`" to view your subscription key.
+
+Notes:
+
+Step 4. Your account can register multiple "`products`" with different subscription keys for accessing the same API. You can think of a "`product`" as an application, a project, or a functional use case like "`testing`".
+
+Step 5. If you don't receive an email and have checked that it hasn't been mistakenly identified as spam, log into the site and check the Profile page where you can view and manage your account's subscription keys.
+
+See xref:public-endpoint.adoc#getting-access-the-geoclient-public-endpoint[Getting Access the Geoclient Public Endpoint] for a more detailed version of this section.
+
+=== Authentication Methods for Calling Geoclient v2
+
+If you have been using Geoclient endpoints that are hosted in OTI's datacenters, then you will need to change the way your application submits authentication credentials.
+
+To determine whether your application depends on Geoclient endpoints hosted by OTI, see the Deactivation Targets by Hostname section below.
+
+==== Old Authentication Method
+
+Geoclient instances hosted by OTI required that authentication credentials be provided using app_id and app_key HTTP query string parameters. All on-premises Geoclient endpoint are being retired, and this method will not work with Geoclient on the new cloud platform.
+
+==== Current Authentication Methods
+
+There are two options for submitting the subscription key which is required for every request made to the service.
+
+===== The Preferred Authentication Method
+
+When calling the current, active Geoclient endpoint, authentication credentials are provided with a request header named Ocp-Apim-Subscription-Key whose value is your Geoclient v2 subscription key.
+
+Here's an example of using the HTTP header method using curl from a bash command line:
+
+.Call with HTTP headers
+[source,bash]
+----
+curl --silent --get \
+    --data-urlencode 'input=948 Jamaica Avenue, Brooklyn' \
+    -H 'Cache-Control: no-cache' \
+    -H 'Ocp-Apim-Subscription-Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' \
+    'https://api.nyc.gov/geoclient/v2/search'
+----
+
+The is the best way to provide your application's subscription key because it avoids the use of easy to read, plain-text HTTP query parameters. Query string parameters are part of the URL which is more of a security risk since it easier to share accidently.
+
+===== The Alternate Authentication Method
+
+It is still possible to submit your subscription key as an HTTP query parameter. The current Geoclient v2 endpoint will accept a query parameter named key whose value is your subscription key.
+
+Here's another example using the query string parameter method using curl from a bash command line:
+
+.Call with HTTP query parameters
+[source,bash]
+----
+curl --silent --get \
+    --data-urlencode 'input=948 Jamaica Avenue, Brooklyn' \
+    --data-urlencode 'key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' \
+    'https://api.nyc.gov/geoclient/v2/search'
+----
+
+Although this is the exact same method described in Old Authentication Method above, it may be an easier transition for applications using on-premises endpoints. This option requires little or no code changes and may be important in cases where the application owner does not have access to developers.
+
+See the geoclient-examples repository on GitHub for examples of both authentication methods. This project also provides examples of calling Geoclient in several different programming languages.
+
+See Appendix C for instructions on how to get a subscription key for Geoclient v2 by signing up for access on the NYC API Developers Portal.
+
+Mozilla's MDN website is a highly recommended resource for web development and standards reference.
+
+== Endpoint Changes
+
+=== Active Endpoint
+
+The following URL and the URI endpoints it contains is not scheduled for deactivation.
+
+* Endpoint URL: `https://api.nyc.gov/geoclient/v2`
+* URI endpoint: `/geoclient/v2`
+
+Appendix B provides a guide to identifying the "`base URL`" and "`URI endpoint`" portions of the URL your application uses for calling Geoclient.
+
+=== Scheduled for Deactivation
+
+The following Geoclient service endpoints scheduled for deactivation:
+
+==== Deactivation Targets by Hostname
+
+If the URL uses hostname:
+
+* `maps.nyc.gov`
+* `csgis-stg-prx.csc.nycnet`
+* `csgis-dev-web.csc.nycnet`
+* `geo.csc.nycnet`
+* `csgeo-stg-web.csc.nycnet`
+* `csgeo-dev-web.csc.nycnet`
+
+These hostnames resolve to servers hosted in OTI's on-premises datacenters. All applications and services maintained by the OTI Citywide GIS team are moving to the Azure cloud.
+
+NOTE: any Geoclient URL, v1 or v2, which includes one of the listed hostnames is slated for deactivation.
+
+==== Deactivation Targets by URI Endpoint
+
+If the URI endpoint is:
+
+* `/geoclient/v1`
+
+NOTE: any Geoclient URL which includes the listed URI endpoint is slated for deactivation. This includes `https://api.nyc.gov/geoclient/v1` even though the hostname is not on the list above.
+
+Appendix A has the complete list of endpoint URLs which will be deactivated.
+
+== Deactivation Timelines
+
+== Contact Us
+
+=== Technical
+
+Citywide GIS -- Production support during normal business hours.
+
+GitHub for questions, feature requests, and bug reports
+
+=== Agency
+
+API management team for resource policy
+
+Help Desk
+
+== Appendix A
+
+=== Endpoint Information
+
+==== Current Endpoints (not being deactivated)
+
+|===
+|  | API Version | Network | URL Endpoint
+
+| Cloud
+| 
+| 
+| 
+
+|
+| v1
+| Internet
+| https://api.nyc.gov/geoclient/v2
+|===
+
+==== Endpoints Scheduled for Deactivation
+
+|===
+|  | API Version | Network | URL Endpoint
+
+| Production (on-premises)
+|
+|
+|
+
+|
+| v2
+| Internet
+| https://maps.nyc.gov/geoclient/v2
+
+|
+| v1
+| Internet
+| https://maps.nyc.gov/geoclient/v1
+
+|
+| v1
+| Citynet
+| http://geo.csc.nycnet/geoclient/v1
+
+| Staging (on-premises)
+|
+|
+|
+
+|
+| v2
+| Citynet
+| https://csgis-stg-prx.csc.nycnet/geoclient/v2
+
+|
+| v1
+| Citynet
+| https://csgis-stg-prx.csc.nycnet/geoclient/v1
+
+|
+| v1
+| Citynet
+| https://csgeo-stg-web.csc.nycnet/geoclient/v1
+
+| Development (on-premises)
+|
+|
+|
+
+|
+| v2
+| Citynet
+| https://csgis-dev-web.csc.nycnet:81/geoclient/v2
+
+|
+| v1
+| Citynet
+| http://csgis-dev-web.csc.nycnet:84/geoclient/v1
+
+|
+| v1
+| Citynet
+| http://csgeo-dev-web.csc.nycnet/geoclient/v1
+
+| Cloud
+|
+|
+|
+
+|
+| v1
+| Internet
+| https://api.nyc.gov/geo/geoclient/v1
+|===
+
+== Appendix B
+
+=== URL Format
+
+....
+
+                                       URL
+/-----------------------------------------------------------------------------------\
+
+          Base URL                      URI
+/----------------------------\/---------------------\
+
+<protocol>://<hostname>:<port>/<endpoint>/<resource>?param_one=value&param_two=value
+
+\---------------------------------------/           \-------------------------------/
+             URL endpoint                                    Query string
+
+....
+
+==== Example 1
+
+|===
+|  | Protocol | Hostname | Port | URI endpoint | Resource
+
+| URL
+| https://api.nyc.gov/geoclient/v2/search
+|
+|
+|
+|
+
+|
+| https
+| api.nyc.gov
+|
+| /geoclient/v2
+| search
+
+| URL
+| https://maps.nyc.gov/geoclient/v1/address.json
+|
+|
+|
+|
+
+|
+| https
+| maps.nyc.gov
+|
+| /geoclient/v1
+| address
+
+| URL
+| https://maps.nyc.gov/geoclient/v2/bbl
+|
+|
+|
+|
+
+|
+| https
+| maps.nyc.gov
+|
+| /geoclient/v2
+| bbl
+
+| URL
+| https://csgis-dev-web.csc.nycnet:81/geoclient/v2/search
+|
+|
+|
+|
+
+|
+| https
+| csgis-dev-web.csc.nycnet
+| 81
+| /geoclient/2
+| search
+
+| URL
+| http://csgis-dev-web.csc.nycnet:84/geoclient/v1/intersection.xml
+|
+|
+|
+|
+
+|
+| http
+| csgis-dev-web.csc.nycnet
+| 84
+| /geoclient/v1
+| intersection
+|===
+
+==== Example 2
+
+|===
+| Type | Example
+
+| URL
+| https://api.nyc.gov/geoclient/v2/search
+
+| URL endpoint
+| https://api.nyc.gov/geoclient/v2
+
+| URL
+| https://maps.nyc.gov/geoclient/v1/address.json
+
+| URL endpoint
+| https://maps.nyc.gov/geoclient/v1
+
+| URL
+| https://maps.nyc.gov/geoclient/v2/bbl
+
+| URL endpoint
+| https://maps.nyc.gov/geoclient/v2
+
+| URL
+| https://csgis-dev-web.csc.nycnet:81/geoclient/v2/search
+
+| URL endpoint
+| https://csgis-dev-web.csc.nycnet:81/geoclient/v2
+
+| URL
+| http://csgis-dev-web.csc.nycnet:84/geoclient/v1/place.xml
+
+| URL endpoint
+| http://csgis-dev-web.csc.nycnet:84/geoclient/v1
+|===
