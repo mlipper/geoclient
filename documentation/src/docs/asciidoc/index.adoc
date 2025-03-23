@@ -1,6 +1,5 @@
 [[user-guide]]
 = Geoclient User Guide
-:toc:
 :last-update-label!:
 
 include::attributes.adoc[]
@@ -18,6 +17,8 @@ include::parts/geosupport-docs.adoc[]
 include::parts/development.adoc[]
 
 include::parts/public-endpoint.adoc[]
+
+include::parts/changes.adoc[]
 
 == Contact Us
 

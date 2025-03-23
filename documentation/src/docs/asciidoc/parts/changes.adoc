@@ -1,72 +1,6 @@
-== Table of Contents
+== NEWS: Upcoming Changes to Hosted Geoclient Endpoints
 
-Introduction	1
-
-Motivation	1
-
-Geoclient v2 - the current API	1
-
-Benefits	1
-
-Summary of Changes	2
-
-Using Geoclient v2 in the Cloud	2
-
-Geoclient API -- Upgrading from v1 to v2	2
-
-Enhancements	2
-
-Potential Breaking Changes	2
-
-Creating a Subscription Key for Geoclient v2	2
-
-Authentication Methods for Calling Geoclient v2	3
-
-Old Authentication Method	3
-
-Current Authentication Methods	3
-
-Endpoint Changes	5
-
-Active Endpoint	5
-
-Scheduled for Deactivation	5
-
-Deactivation Targets by Hostname	5
-
-Deactivation Targets by URI Endpoint	6
-
-Deactivation Timelines	6
-
-Contact Us	6
-
-Technical	6
-
-Agency	6
-
-Appendix A	7
-
-Endpoint Information	7
-
-Current Endpoints (not being deactivated)	7
-
-Endpoints Scheduled for Deactivation	7
-
-Appendix B	8
-
-URL Format	8
-
-Example 1	8
-
-Example 2	8
-
-Appendix C	9
-
-NYC API Developers Portal	9
-
-Provision Access to Geoclient v2	9
-
-== Introduction
+=== Background
 
 Geoclient is one of the City's most popular REST service APIs and is heavily used by agencies, the public, commercial, non-profit, and educational organizations. As part of OTI's modernization effort, Geoclient is moving all its OTI datacenter-hosted service endpoints to the Azure cloud and deactivating all legacy, unsupported API versions.
 
@@ -257,29 +191,26 @@ Help Desk
 
 ==== Current Endpoints (not being deactivated)
 
+[cols="1h,1,1,1"]
 |===
 |  | API Version | Network | URL Endpoint
 
-| Cloud
-| 
-| 
-| 
+4+<| Cloud
+
 
 |
-| v1
+| v2
 | Internet
 | https://api.nyc.gov/geoclient/v2
 |===
 
 ==== Endpoints Scheduled for Deactivation
 
+[cols="1h,1,1,1"]
 |===
 |  | API Version | Network | URL Endpoint
 
-| Production (on-premises)
-|
-|
-|
+4+<| Production (on-premises)
 
 |
 | v2
@@ -296,10 +227,7 @@ Help Desk
 | Citynet
 | http://geo.csc.nycnet/geoclient/v1
 
-| Staging (on-premises)
-|
-|
-|
+4+<| Staging (on-premises)
 
 |
 | v2
@@ -316,10 +244,7 @@ Help Desk
 | Citynet
 | https://csgeo-stg-web.csc.nycnet/geoclient/v1
 
-| Development (on-premises)
-|
-|
-|
+4+<| Development (on-premises)
 
 |
 | v2
@@ -336,10 +261,7 @@ Help Desk
 | Citynet
 | http://csgeo-dev-web.csc.nycnet/geoclient/v1
 
-| Cloud
-|
-|
-|
+4+<| Cloud
 
 |
 | v1
@@ -368,15 +290,12 @@ Help Desk
 
 ==== Example 1
 
+[cols="1h,1,1,1,1,1"]
 |===
 |  | Protocol | Hostname | Port | URI endpoint | Resource
 
 | URL
-| https://api.nyc.gov/geoclient/v2/search
-|
-|
-|
-|
+5+<| https://api.nyc.gov/geoclient/v2/search
 
 |
 | https
@@ -386,11 +305,7 @@ Help Desk
 | search
 
 | URL
-| https://maps.nyc.gov/geoclient/v1/address.json
-|
-|
-|
-|
+5+<| https://maps.nyc.gov/geoclient/v1/address.json
 
 |
 | https
@@ -400,11 +315,7 @@ Help Desk
 | address
 
 | URL
-| https://maps.nyc.gov/geoclient/v2/bbl
-|
-|
-|
-|
+5+<| https://maps.nyc.gov/geoclient/v2/bbl
 
 |
 | https
@@ -414,11 +325,7 @@ Help Desk
 | bbl
 
 | URL
-| https://csgis-dev-web.csc.nycnet:81/geoclient/v2/search
-|
-|
-|
-|
+5+<| https://csgis-dev-web.csc.nycnet:81/geoclient/v2/search
 
 |
 | https
@@ -428,11 +335,7 @@ Help Desk
 | search
 
 | URL
-| http://csgis-dev-web.csc.nycnet:84/geoclient/v1/intersection.xml
-|
-|
-|
-|
+5+<| http://csgis-dev-web.csc.nycnet:84/geoclient/v1/intersection.xml
 
 |
 | http
@@ -444,6 +347,7 @@ Help Desk
 
 ==== Example 2
 
+[cols="1,1"]
 |===
 | Type | Example
 
