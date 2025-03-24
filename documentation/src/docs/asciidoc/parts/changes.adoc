@@ -1,4 +1,4 @@
-== NEWS: Upcoming Changes to Hosted Geoclient Endpoints
+== Upcoming Changes to Hosted Geoclient Services
 
 === Background
 
@@ -53,7 +53,7 @@ Notes:
 
 Change 1. It is unlikely that your application uses JSONP to call Geoclient. Modern JavaScript frameworks don't support JSONP and usually use CORS as the default for cross-origin resource requests.
 
-Change 2. This is only relevant if you currently call Geoclient with from an on-premises endpoint URL as described in Endpoint Changes and Appendix A.
+Change 2. This is only relevant if you are using a Geoclient instance hosted in a NYC/OTI data center. This is determined by the URL you call and is described in <<Endpoint Changes>> and <<Appendix A>>.
 
 === Creating a Subscription Key for Geoclient v2
 
@@ -78,7 +78,7 @@ See xref:public-endpoint.adoc#getting-access-the-geoclient-public-endpoint[Getti
 
 If you have been using Geoclient endpoints that are hosted in OTI's datacenters, then you will need to change the way your application submits authentication credentials.
 
-To determine whether your application depends on Geoclient endpoints hosted by OTI, see the Deactivation Targets by Hostname section below.
+To determine whether your application depends on Geoclient endpoints hosted by OTI, see the <<Deactivation Targets by Domain Name>> section below.
 
 ==== Old Authentication Method
 
@@ -104,7 +104,7 @@ curl --silent --get \
     'https://api.nyc.gov/geoclient/v2/search'
 ----
 
-The is the best way to provide your application's subscription key because it avoids the use of easy to read, plain-text HTTP query parameters. Query string parameters are part of the URL which is more of a security risk since it easier to share accidently.
+The is the best way to provide your application's subscription key because it avoids the use of easy to read, plain-text HTTP query parameters. Query string parameters are a "visible" part of the URL (e.g., when using a browser). Having your subscription key as part of the URL is slightly more of a security risk: it easier to share accidently, in some cases it's easier for less skilled hackers to intercept, etc.
 
 ===== The Alternate Authentication Method
 
@@ -133,20 +133,20 @@ Mozilla's MDN website is a highly recommended resource for web development and s
 
 === Active Endpoint
 
-The following URL and the URI endpoints it contains is not scheduled for deactivation.
+The following base URL and the path it contains is *not* scheduled for deactivation.
 
-* Endpoint URL: `https://api.nyc.gov/geoclient/v2`
-* URI endpoint: `/geoclient/v2`
+* Base URL: `https://api.nyc.gov/geoclient/v2`
+* Path: `/geoclient/v2`
 
-Appendix B provides a guide to identifying the "`base URL`" and "`URI endpoint`" portions of the URL your application uses for calling Geoclient.
+Appendix B provides a guide to identifying the "`base URL`" and "`path`" portions of the URL your application uses for calling Geoclient.
 
 === Scheduled for Deactivation
 
 The following Geoclient service endpoints scheduled for deactivation:
 
-==== Deactivation Targets by Hostname
+==== Deactivation Targets by Domain Name
 
-If the URL uses hostname:
+If the URL uses one of the following domain names:
 
 * `maps.nyc.gov`
 * `csgis-stg-prx.csc.nycnet`
@@ -155,17 +155,17 @@ If the URL uses hostname:
 * `csgeo-stg-web.csc.nycnet`
 * `csgeo-dev-web.csc.nycnet`
 
-These hostnames resolve to servers hosted in OTI's on-premises datacenters. All applications and services maintained by the OTI Citywide GIS team are moving to the Azure cloud.
+These domain names resolve to servers hosted in OTI's on-premises datacenters. All applications and services maintained by the OTI Citywide GIS team are moving to the Azure cloud.
 
-NOTE: any Geoclient URL, v1 or v2, which includes one of the listed hostnames is slated for deactivation.
+NOTE: any Geoclient URL, v1 or v2, which includes one of the listed domain names is slated for deactivation.
 
-==== Deactivation Targets by URI Endpoint
+==== Deactivation Targets by Path
 
-If the URI endpoint is:
+If the path is:
 
 * `/geoclient/v1`
 
-NOTE: any Geoclient URL which includes the listed URI endpoint is slated for deactivation. This includes `https://api.nyc.gov/geoclient/v1` even though the hostname is not on the list above.
+NOTE: any Geoclient URL which includes this path is slated for deactivation. This includes `https://api.nyc.gov/geoclient/v1` even though the domain name is not on the list above.
 
 Appendix A has the complete list of endpoint URLs which will be deactivated.
 
@@ -191,7 +191,7 @@ Help Desk
 
 ==== Current Endpoints (not being deactivated)
 
-[cols="1h,1,1,1"]
+[cols="1h,1,1,2"]
 |===
 |  | API Version | Network | URL Endpoint
 
@@ -206,7 +206,7 @@ Help Desk
 
 ==== Endpoints Scheduled for Deactivation
 
-[cols="1h,1,1,1"]
+[cols="1h,1,1,2"]
 |===
 |  | API Version | Network | URL Endpoint
 
@@ -271,113 +271,88 @@ Help Desk
 
 == Appendix B
 
+This section describes URL-related terminology as it is used in this document and conforms to a more general definition found on MDN's https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_URL[What is a URL?].
+
 === URL Format
 
 ....
 
                                        URL
-/-----------------------------------------------------------------------------------\
+/--------------------------------------------------------------------------------------\
 
-          Base URL                      URI
-/----------------------------\/---------------------\
+                  Base URL
+/----------------------------------------------\
 
-<protocol>://<hostname>:<port>/<endpoint>/<resource>?param_one=value&param_two=value
+<scheme>://<domain name>:<port>/<path1>/<path2>/<path3>?param_one=value&param_two=value
 
-\---------------------------------------/           \-------------------------------/
-             URL endpoint                                    Query string
+                                         Path                  Query string
+                               \----------------------/\------------------------------/
 
 ....
 
+.Notes on unconventional use of terminology
+* Path
+** `path1` - will always be `/geoclient` in this document
+** `path2` - will always be `/v1` or `/v2` in this document
+** `path3` - will be one of the supported Geoclient endpoints (`address`, `search`, etc...). Commonly referred to as a "REST resource" or "API function". 
+* Base URL - one of the following:
+** `<scheme>://<domain name>:<port>/geoclient/v1`
+** `<scheme>://<domain name>:<port>/geoclient/v2`
+
 ==== Example 1
 
-[cols="1h,1,1,1,1,1"]
+// [%autowidth]
+[cols="1h,1,3,1,1,2"]
 |===
-|  | Protocol | Hostname | Port | URI endpoint | Resource
+|  | Scheme | Domain name | Port | Path | Query string
 
 | URL
-5+<| https://api.nyc.gov/geoclient/v2/search
+5+<| https://api.nyc.gov/geoclient/v2/search?input=150%20broadway
 
 |
 | https
 | api.nyc.gov
 |
-| /geoclient/v2
-| search
+| /geoclient/v2/search
+| ?input=150%20broadway
 
 | URL
-5+<| https://maps.nyc.gov/geoclient/v1/address.json
+5+<| https://maps.nyc.gov/geoclient/v1/address.json?houseNumber=948&street=jamaica%20ave&borough=brooklyn
 
 |
 | https
 | maps.nyc.gov
 |
-| /geoclient/v1
-| address
+| /geoclient/v1/address.json
+| ?houseNumber=948&street=jamaica%20ave&borough=brooklyn
 
 | URL
-5+<| https://maps.nyc.gov/geoclient/v2/bbl
+5+<| https://maps.nyc.gov/geoclient/v2/bin?bin=1234567
 
 |
 | https
 | maps.nyc.gov
 |
-| /geoclient/v2
-| bbl
+| /geoclient/v2/bin
+| ?bin=1234567
 
 | URL
-5+<| https://csgis-dev-web.csc.nycnet:81/geoclient/v2/search
+5+<| https://csgis-dev-web.csc.nycnet:81/geoclient/v2/search?input=150%20broadway
 
 |
 | https
 | csgis-dev-web.csc.nycnet
 | 81
-| /geoclient/2
-| search
+| /geoclient/v2/search
+| ?input=150%20broadway
 
 | URL
-5+<| http://csgis-dev-web.csc.nycnet:84/geoclient/v1/intersection.xml
+5+<| http://csgis-dev-web.csc.nycnet:84/geoclient/v1/version.xml
 
 |
 | http
 | csgis-dev-web.csc.nycnet
 | 84
-| /geoclient/v1
-| intersection
-|===
-
-==== Example 2
-
-[cols="1,1"]
-|===
-| Type | Example
-
-| URL
-| https://api.nyc.gov/geoclient/v2/search
-
-| URL endpoint
-| https://api.nyc.gov/geoclient/v2
-
-| URL
-| https://maps.nyc.gov/geoclient/v1/address.json
-
-| URL endpoint
-| https://maps.nyc.gov/geoclient/v1
-
-| URL
-| https://maps.nyc.gov/geoclient/v2/bbl
-
-| URL endpoint
-| https://maps.nyc.gov/geoclient/v2
-
-| URL
-| https://csgis-dev-web.csc.nycnet:81/geoclient/v2/search
-
-| URL endpoint
-| https://csgis-dev-web.csc.nycnet:81/geoclient/v2
-
-| URL
-| http://csgis-dev-web.csc.nycnet:84/geoclient/v1/place.xml
-
-| URL endpoint
-| http://csgis-dev-web.csc.nycnet:84/geoclient/v1
+| /geoclient/v1/version.xml
+|
 |===

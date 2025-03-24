@@ -35,6 +35,7 @@ tasks.named('asciidoctor') {
 
     sources {
         include 'index.adoc'
+        include 'changes.adoc'
     }
 
     resources {
