@@ -325,83 +325,140 @@ The https://github.com/mlipper/geosupport-docker[geosupport-docker] provides an 
 
 Although the `geoclient` runtime only requires that Geosupport's shared libraries are accessible to the `JVM` (via `ldconfig`, `java.library.path`, `LD_LIBRARY_PATH`, etc.) and that the `GEOFILES` environment variable is set to the absolute path (_with an appended '/' character_) of Geosupport's data files, use of `geosupport-docker`, greatly simplifies the effort of installing and managing Geosupport.
 
-
 === Kubernetes
 
-==== Kustomize
+This section provides a very basic example of deploying Geoclient to {kubernetes}[Kubernetes] using {minikube}/docs/start/[Minikube]. The configuration files are part of the project's source, located in the `<project root>/manifests` directory.
 
-* `build.sh`: runs kustomize and optionally parses out individual object manifests.
-* `cluster-state.sh`: generates backup of existing object YAML definitions.
+This example uses existing Geoclient and Geosupport Docker images that are publicly available on Docker Hub rather than from a local Docker container registry (e.g., Docker Desktop). Although Minikube supports the use of local registries, this requires extra configuration which is beyond the scope of this tutorial.
 
-==== Overlays
+These are the public Docker Hub registries configured in the `kustomization.yaml` file:
 
-===== Main Overlays
+* {geoclient-registry}[`mlipper/geoclient`] 
+* {geosupport-docker-registry}[`mlipper/geosupport-docker`] 
 
-|===
-| Path | Component | Generated Objects
+For information on configuring Minikube to use a local registry, see Minikube's documentation on {minikube}/docs/handbook/registry/[configuring registries] and {minikube}/docs/handbook/pushing/[pushing images].
 
-| overlays/app/dev/no-pvc
-| development
-| deployment, hpa, service
+==== Asumptions
 
-| overlays/app/dev/pvc
-| development
-| deployment, hpa, service, pvc
+This section assumes:
 
-| overlays/app/prd/no-pvc
-| production
-| deployment, hpa, service
+* Working installation of {minikube}/docs/start/[Minikube].
+* Working installation of {kubectl}[`kubectl`].
++
+This should be a recent version of `kubectl` that has built-in support for {kustomize}/[`kustomize`].
++
+NOTE: Minikube includes `kubectl` and it is run using `+minikube kubectl+`. This section assumes you've either got `kubectl` installed separately or are using Minikube's built-in but have aliased `minikube kubectl` to `kubectl`.
+* Minikube is using the default, out-of-the-box support for `PersistentVolume` of type {minikube}/docs/handbook/persistent_volumes/[`hostPath`].
+* Minikube can connect to the Internet to download images from the public `geoclient` and `geosupport-docker` registries mentioned above.
 
-| overlays/app/prd/pvc
-| production
-| deployment, hpa, service, pvc
-|===
-
-===== Ingress Overlays
-
-|===
-| Path | Component | Generated Objects
-
-| overlays/ingress-nginx/dev
-| development
-| ingress
-
-| overlays/ingress-nginx/prd
-| production
-| ingress
-|===
-
-===== PVC Overlays
-
-|===
-| Path | Component | Generated Objects
-
-| overlays/pvc-azurefile/dev
-| development
-| pvc
-
-| overlays/pvc-azurefile/prd
-| production
-| pvc
-|===
+==== Start Minikube
 
 [,sh]
 ----
-overlays/
-├── app
-│   ├── dev
-│   │   ├── no-pvc
-│   │   └── pvc
-│   └── prd
-│       ├── no-pvc
-│       └── pvc
-├── ingress-nginx
-│   ├── base
-│   ├── dev
-│   └── prd
-├── minikube
-└── pvc-azurefile
-    ├── base
-    ├── dev
-    └── prd
+minikube start
 ----
+
+==== Configure `kubectl`
+
+Configure `kubectl` to use Minikube. The following assumes you're using the default context name `minikube`:
+
+[,sh]
+----
+kubectl config use-context minikube
+----
+
+==== Use `kubectl` and `kustomize` to deploy to Minikube
+
+This tutorial uses https://kustomize.io/[`kustomize`] to provide a simple templating mechanism which simplifies configuring Geoclient and Geosupport versions and environment variables in a single `kustomization.yaml`. To run `kustomize` commands with `kubectl`, add the `-k` switch.
+
+From your shell, `cd` into the `<project root>/manifests` directory.
+
+If this is the first time you're deploying Geoclient to this Minikube cluster, some one-time setup is required:
+
+[,sh]
+----
+# Create the  gis-apps Namespace
+kubectl create -f namespace.yaml
+
+# Create the PersistentVolumeClaim used to mount a Geosupport installation into the Pods' filesystem.
+kubectl apply -f pvc-geosupport.yaml
+----
+
+Now use `kustomize` to template the manifest files (`deployment.yaml`, `hpa.yaml`, `service.yaml`) and apply them with `kubectl`:
+
+[,sh]
+----
+kubectl apply -k .
+----
+
+This will create the `geoclient-v2` Service, Deployment, andf HorizontalPodAutoscaling objects. This take a minute or two (depending on your hardware, network connection, Minikube configuration, etc.). The next step requires that all pods be up and running. To see the progress of pod initializations, add the watch switch, `-w`, to the `get pods` command:
+
+[,sh]
+----
+kubectl get pods -w
+
+NAME                            READY   STATUS     RESTARTS   AGE
+geoclient-v2-75899fdc94-drtnn   0/1     Init:0/1   0          16s
+geoclient-v2-75899fdc94-p2v5l   0/1     Running    0          31s
+----
+
+In the example above, you can see that one pod is up and running but the other is still initializing.
+
+[,sh]
+----
+NAME                            READY   STATUS    RESTARTS      AGE
+geoclient-v2-75899fdc94-drtnn   1/1     Running   0             58m
+geoclient-v2-75899fdc94-p2v5l   1/1     Running   1 (58m ago)   59m
+----
+
+Once both are running, you need to make the `geoclient-v2` service visible to your host machine. To do this, use the `kubectl port-forward` command. The syntax for this command is `kubectl port-forward service/<service name> <host port>:<service port>`.
+
+Run:
+
+[,sh]
+----
+kubectl port-forward service/geoclient-v2 8081:8080
+----
+
+Note that the `+kubectl port-forward ...+` command above will block your terminal (unless you run it in the background by appending a `&` to the end of the line).
+
+==== Using different versions of Geoclient or Geosupport
+
+Both `geoclient` and `geosupport-docker` are actively developed projects and new versions are being released regularly. `kustomize` is very useful for "externalizing" the configuration of image tags or environment variables.
+
+Snippet from the `kustomization.yaml` file:
+
+[,yaml]
+----
+configMapGenerator:
+- name: geosupport-env
+  literals:
+    - GEOFILES=/opt/geosupport/current/fls/
+    - GEOSUPPORT_FULLVERSION=25a1_25.11       # A
+    - GEOSUPPORT_HOME=/opt/geosupport/current
+
+images:
+- name: docker.io/mlipper/geosupport-docker
+  newTag: 2.0.26                              # B
+- name: docker.io/mlipper/geoclient
+  newTag: 2.0.1                               # C
+----
+
+In the configuration above, `A` will almost always need to change when `B` is changed because almost every new `geosupport-docker` release implies a new version of Geosupport.
+
+`C` is where the version of the `geoclient` image is configured. This can change independently of the Geosupport version.
+
+==== Bask in the glory of your handiwork
+
+Now, geoclient-v2 is available on `<host port>` (your workstation) `8081`. The base endpoint URL will be `+http://localhost:8081/geoclient/v2+`. However, to do anything useful you need to call a geoclient function (or "operation"). Try, for example:
+
+The http://localhost:8081/geoclient/v2/version[`/version` endpoint] in your browser.
+
+Or with curl:
+
+[,sh]
+----
+curl -s --get http://localhost:8081/geoclient/v2/version
+----
+
+NOTE: If you're making Geoclient requests in a browser, the service is exposed with `http` and not `https`. Many browsers automatically convert `http` to `https` if you're cutting and pasting or double-clicking a link. Make sure the browser is using the correct scheme if you are having problems.
