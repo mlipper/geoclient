@@ -76,7 +76,7 @@ All requests are made as simple `HTTP GET` requests with input arguments specifi
 <2> Returns `application/json`
 <3> Returns `application/xml`
 
-WARNING: In the example above, (2) and (3) use file extensions as request (path) parameters. This functionality is deprecated and will eventually be removed from Geoclient. In future versions, use of the `Content-Type` header will be the way to request a non-default media type.
+WARNING: In the example above, (2) and (3) use file extensions as request (path) parameters. This functionality is deprecated and will eventually be removed from Geoclient. In future versions, adding a `Content-Type` header or an `HTTP` query string parameter will be the way to request a non-default media type.
 
 ==== Responses
 
