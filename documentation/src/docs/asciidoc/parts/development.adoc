@@ -177,10 +177,10 @@ management:
 
 === Docker
 
-This section explains the two most common ways to build and run `geoclient` using Docker:
+This section explains two common ways to build and run `geoclient` using Docker. It is based on `Dockerfile` files in the `<project root>/images` directory:
 
-* <<the-build-image,latest-build>>: builds the project from and then runs `geoclient-service`.
-* <<the-run-image,latest-run>>: runs `geoclient-service` using the `geoclient.jar` built by the `geoclient-service` subproject and a local, named Docker `Volume` pre-populated with a recent Geosupport installation.
+* <<the-build-image,build.Dockerfile>> which installs Geosupport, builds this project from source, and then runs `geoclient-service`.
+* <<the-run-image,run.Dockerfile>> which runs `geoclient-service` using an externally specified `geoclient-service` Jar file in the container where a configured Geosupport installation has been mounted on the file system using a Docker `Volume`.
 
 ==== Assumptions
 
@@ -196,29 +196,33 @@ See <<building-a-docker-image-from-source,Building Docker Images>> below for det
 * The `geoclient` REST service (`geoclient-service`) *requires* a Geosupport installation to work.
 * The examples here require the Geosupport distribution packaged by the https://github.com/mlipper/geosupport-docker[geosupport-docker] project:
  ** Compiling the `geoclient-jni` C code requires patched header files.
- ** The example ``Dockerfile``s rely on the additional management and installation features that `geosupport-docker` provides.
+ ** The `Dockerfile` examples rely on the additional management and installation features that `geosupport-docker` provides.
  ** See <<about-geosupport-docker,below>> for more details about `geosupport-docker`.
 
 _NOTE: geoclient can use the official Linux distribution of Geosupport available from New York City's https://www.nyc.gov/site/planning/index.page[Department of City Planning]. However, additional installation and configuration steps are required._
 
 ==== Building a Docker image from source
 
-Clone the `geoclient` from GitHub and change to the project's *root* directory.
+The purpose of this example is to demonstrate how to build and run Geoclient in a Docker container as might be done as part of a Continuous Integration pipeline.
 
-[,sh]
+NOTE: See the `<project root>/ci/Dockerfile` file which this project uses for CI. It similar `build.Dockerfile` but adds some extra commands to aggregate test and coverage reports.
+
+Start by cloning `geoclient` from GitHub and changing to the project's *root* directory.
+
+[source,sh,subs="attributes+,macros+"]
 ----
-  git clone https://github.com/mlipper/geoclient.git
+git clone {geoclient-repo}
 
-  Cloning into 'geoclient'...
-  remote: Enumerating objects: 11580, done.
-  remote: Counting objects: 100% (2578/2578), done.
-  remote: Compressing objects: 100% (904/904), done.
-  remote: Total 11580 (delta 1020), reused 2463 (delta 972), pack-reused 9002
-  Receiving objects: 100% (11580/11580), 10.27 MiB | 13.71 MiB/s, done.
-  Resolving deltas: 100% (4942/4942), done.
+Cloning into 'geoclient'...
+remote: Enumerating objects: 11580, done.
+remote: Counting objects: 100% (2578/2578), done.
+remote: Compressing objects: 100% (904/904), done.
+remote: Total 11580 (delta 1020), reused 2463 (delta 972), pack-reused 9002
+Receiving objects: 100% (11580/11580), 10.27 MiB | 13.71 MiB/s, done.
+Resolving deltas: 100% (4942/4942), done.
 
-  # Change to the root project directory.
-  cd geoclient
+# Change to the root project directory.
+cd ./geoclient
 ----
 
 ==== The `build` image
@@ -308,16 +312,18 @@ docker compose -f images/compose.yaml down
 
 ==== Testing the container
 
-Using the tool of your choice, geocode a NYC intersection. E.g., "east 53 street and 3rd avenue".
+This section assumes you are running Geoclient on your workstation, mapped to local port `8080`; e.g., by running a container built using `build.Dockerfile`, `run.Dockerfile`, or `compose.yaml` described above.
+
+Geocode a NYC intersection. E.g., "east 53 street and 3rd avenue".
 
 * Use `curl` from the command line
 +
 [,sh]
 ----
-  curl 'http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue'
+curl 'http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue'
 ----
 
-* Or use a browser to open http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue[this URL].
+* Or use a browser to open http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue[the same URL].
 
 ==== About geosupport-docker
 
@@ -434,14 +440,14 @@ configMapGenerator:
 - name: geosupport-env
   literals:
     - GEOFILES=/opt/geosupport/current/fls/
-    - GEOSUPPORT_FULLVERSION=25a1_25.11       # A
+    - GEOSUPPORT_FULLVERSION=25a1_25.11       # A #
     - GEOSUPPORT_HOME=/opt/geosupport/current
 
 images:
 - name: docker.io/mlipper/geosupport-docker
-  newTag: 2.0.26                              # B
+  newTag: 2.0.26                              # B #
 - name: docker.io/mlipper/geoclient
-  newTag: 2.0.1                               # C
+  newTag: 2.0.1                               # C #
 ----
 
 In the configuration above, `A` will almost always need to change when `B` is changed because almost every new `geosupport-docker` release implies a new version of Geosupport.
@@ -450,11 +456,13 @@ In the configuration above, `A` will almost always need to change when `B` is ch
 
 ==== Bask in the glory of your handiwork
 
-Now, geoclient-v2 is available on `<host port>` (your workstation) `8081`. The base endpoint URL will be `+http://localhost:8081/geoclient/v2+`. However, to do anything useful you need to call a geoclient function (or "operation"). Try, for example:
+Now, geoclient-v2 is running locally, listening on port (`<host port>`) `8081`. By default, geoclient-v2's base endpoint URL is `+http://localhost:8081/geoclient/v2+`. 
 
-The http://localhost:8081/geoclient/v2/version[`/version` endpoint] in your browser.
+However, to do anything useful you need to call one of Geoclient's service <<endpoints,endpoints>>, adding any relevant arguments to the query string.
 
-Or with curl:
+Try, for example, `/version` endpoint by opening http://localhost:8081/geoclient/v2/version[http://localhost:8081/geoclient/v2/version] in your browser.
+
+Try calling the same endpoint from the command line with `curl`:
 
 [,sh]
 ----
