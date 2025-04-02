@@ -13,7 +13,6 @@ RUN set -ex \
   && apt-get install --yes --no-install-recommends \
      gcc \
      g++ \
-     jq \
      libc6-dev \
   && rm -rf /var/lib/apt/lists/*
 
@@ -48,6 +47,11 @@ RUN set -ex \
 
 ### Run
 FROM eclipse-temurin:17-jre AS runner
+
+RUN set -ex \
+  && apt-get update \
+  && apt-get install --yes --no-install-recommends jq \
+  && rm -rf /var/lib/apt/lists/*
 
 ENV GEOSUPPORT_BASEDIR=/opt/geosupport
 ENV GEOSUPPORT_HOME="${GEOSUPPORT_BASEDIR}/current"
