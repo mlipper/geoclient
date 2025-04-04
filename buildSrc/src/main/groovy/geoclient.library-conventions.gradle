@@ -18,17 +18,6 @@ publishing {
     }
 }
 
-def jarTaskCollection = tasks.withType(Jar).matching {
-    it.name in ['jar', 'javadocJar', 'sourcesJar']
-}
-
-jarTaskCollection.all {
-    manifest = java.manifest {
-        from project.sharedManifest
-    }
-    with(project.licenseFilesSpec)
-}
-
 //signing {
 //    sign publishing.publications.mavenJava
 //}

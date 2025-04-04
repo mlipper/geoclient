@@ -48,7 +48,7 @@ tasks.named('bootJar') {
             }
         }
     }
-    with(project.licenseFilesSpec)
+    with(project.jarLicenseFilesSpec)
 }
 
 def jarArchiveFileProvider = tasks.named('bootJar') { it.archiveFile }

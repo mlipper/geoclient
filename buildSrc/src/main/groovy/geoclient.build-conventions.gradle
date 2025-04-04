@@ -1,0 +1,14 @@
+plugins {
+    id 'base'
+}
+
+
+ext {
+    licenseFilesSpec = copySpec {
+        from("${project.rootDir}/src/dist") {
+            include 'license.txt'
+            include 'notice.txt'
+            expand(copyright: new Date().format('yyyy'), version: project.version)
+        }
+    }
+}

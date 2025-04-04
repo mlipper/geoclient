@@ -21,6 +21,16 @@ dependencies {
     internalServerClasspath(project(path: ':geoclient-service', configuration: 'internalServer'))
 }
 
+tasks.register('updateLicenseFiles', Copy) {
+    description = 'Updates license files in the project root.'
+    group = 'Build'
+    into(layout.buildDirectory)
+    with(licenseFilesSpec)
+    rename { String name ->
+        (name[0..-5]).toUpperCase()
+    }
+}
+
 tasks.named('generateSamples') {
     serviceUrl = System.getenv('GEOCLIENT_SERVICE_URL')
 }

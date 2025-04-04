@@ -6,6 +6,7 @@ plugins {
     // Note: usage of versions plugin dependencyUpdates task emits
     // deprecation warnings.
     id 'com.github.ben-manes.versions'
+    id 'geoclient.build-conventions'
 }
 
 
@@ -28,18 +29,26 @@ ext {
                'Built-Gradle': gradle.gradleVersion,
                'Include-Resource': 'META-INF/notice.txt=notice.txt,META-INF/license.txt=license.txt')
     }
+
     // License for published artifacts.
     // Note:
     // The spotless plugin is responsible for adding the license as a
     // comment to java source files.
-    licenseFilesSpec = copySpec {
-        from("${project.rootDir}/src/dist") {
-            include 'license.txt'
-            include 'notice.txt'
-            into 'META-INF'
-            expand(copyright: new Date().format('yyyy'), version: project.version)
-        }
+    jarLicenseFilesSpec = copySpec {
+        into 'META-INF'
+        with(project.licenseFilesSpec)
     }
+}
+
+def jarTaskCollection = tasks.withType(Jar).matching {
+    it.name in ['jar', 'javadocJar', 'sourcesJar']
+}
+
+jarTaskCollection.all {
+    manifest = java.manifest {
+        from project.sharedManifest
+    }
+    with(project.jarLicenseFilesSpec)
 }
 
 repositories {
