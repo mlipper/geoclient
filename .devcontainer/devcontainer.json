@@ -29,6 +29,7 @@
 				]
 			},
 			"extensions": [
+                          "asciidoctor.asciidoctor-vscode",
                           "42Crunch.vscode-openapi",
                           "DavidAnson.vscode-markdownlint",
                           "donjayamanne.githistory",
