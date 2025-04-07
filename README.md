@@ -23,7 +23,7 @@ See the [website](https://mlipper.github.io/geoclient/):
 
 ## The big picture
 
-![Geoclient components](src/doc/geoclient-runtime.png)
+![Geoclient components](documentation/src/docs/asciidoc/images/geoclient-runtime.png)
 
 Geoclient is written in `Java` and Geosupport is written in `C`. Geoclient uses the Java Native Interface (`JNI`) to call Geosupport's `C` shared libraries.
 
