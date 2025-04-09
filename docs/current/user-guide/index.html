@@ -653,6 +653,10 @@ pre.rouge {
 </style>
 <!-- Stuff goes here. -->
 <style type="text/css">
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 .geo {
   border-radius: 9px;
   background-color: rgba(0, 0, 0, 0.6);
@@ -676,7 +680,7 @@ pre.rouge {
 <div id="header">
 <h1>Geoclient User Guide</h1>
 <div class="details">
-<span id="revnumber">version 2.0.1-rc.2</span>
+<span id="revnumber">version 2.0.2-beta</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -685,10 +689,10 @@ pre.rouge {
 <li><a href="#rest-api">2. REST API</a>
 <ul class="sectlevel2">
 <li><a href="#calling-the-geoclient-api">2.1. Calling the Geoclient API</a></li>
-<li><a href="#auth">2.2. Authentication/Authorization</a></li>
-<li><a href="#common-request">2.3. Common query string and request parameters</a></li>
-<li><a href="#understanding-geoclient-response-status">2.4. Understanding Geoclient Response Status</a></li>
-<li><a href="#geosupport-street-name-functions">2.5. Geosupport Street Name Functions</a></li>
+<li><a href="#common-request">2.2. Common query string and request parameters</a></li>
+<li><a href="#understanding-geoclient-response-status">2.3. Understanding Geoclient Response Status</a></li>
+<li><a href="#geosupport-street-name-functions">2.4. Geosupport Street Name Functions</a></li>
+<li><a href="#examples">2.5. Examples</a></li>
 </ul>
 </li>
 <li><a href="#endpoints">3. Endpoints</a>
@@ -713,16 +717,17 @@ pre.rouge {
 </li>
 <li><a href="#development">5. Development</a>
 <ul class="sectlevel2">
-<li><a href="#platforms">5.1. Platforms</a></li>
-<li><a href="#building-from-source">5.2. Building from source</a></li>
-<li><a href="#projects">5.3. Projects</a></li>
-<li><a href="#docker">5.4. Docker</a></li>
-<li><a href="#kubernetes">5.5. Kubernetes</a></li>
+<li><a href="#core-design">5.1. Core design</a></li>
+<li><a href="#platforms">5.2. Platforms</a></li>
+<li><a href="#building-from-source">5.3. Building from source</a></li>
+<li><a href="#projects">5.4. Projects</a></li>
+<li><a href="#docker">5.5. Docker</a></li>
+<li><a href="#kubernetes">5.6. Kubernetes</a></li>
 </ul>
 </li>
-<li><a href="#samples">6. Samples</a>
+<li><a href="#public-endpoint">6. Public Endpoint</a>
 <ul class="sectlevel2">
-<li><a href="#simple-javascript-example">6.1. Simple JavaScript Example</a></li>
+<li><a href="#authenticationauthorization">6.1. Authentication/Authorization</a></li>
 </ul>
 </li>
 <li><a href="#contact-us">7. Contact Us</a></li>
@@ -908,7 +913,7 @@ pre.rouge {
 <div class="title">Warning</div>
 </td>
 <td class="content">
-In the example above, (2) and (3) use file extensions as request (path) parameters. This functionality is deprecated and will eventually be removed from Geoclient. In future versions, use of the <code>Content-Type</code> header will be the way to request a non-default media type.
+In the example above, (2) and (3) use file extensions as request (path) parameters. This functionality is deprecated and will eventually be removed from Geoclient. In future versions, adding a <code>Content-Type</code> header or an <code>HTTP</code> query string parameter will be the way to request a non-default media type.
 </td>
 </tr>
 </table>
@@ -951,61 +956,7 @@ The responses shown below are for example purposes only and do not include all p
 </div>
 </div>
 <div class="sect2">
-<h3 id="auth"><a class="anchor" href="#auth"></a><a class="link" href="#auth">2.2. Authentication/Authorization</a></h3>
-<div class="paragraph">
-<p>Geoclient does not perform any kind of authentication or authorization. However, most hosted instances of the service run behind some kind API gateway that requires access credentials.</p>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="title">Historical documentation of access API&#8217;s</div>
-<div class="paragraph">
-<p>Previous versions of this document described accessing protected Geoclient servers that were hosted by the City of New York. However, since that time, more hosted endpoints using different authentication schemes have become available.</p>
-</div>
-<div class="paragraph">
-<p>Although it is beyond the scope of this document, here&#8217;s a brief summary of access methods still in use at this time:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>API authorization provided as:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>HTTP</code> header:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>Ocp-Apim-Subscription-Key</code></p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><code>HTTP</code> query string parameters:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>app_id</code></p>
-</li>
-<li>
-<p><code>app_key</code></p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Contact your provider for signup and access instructions.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="common-request"><a class="anchor" href="#common-request"></a><a class="link" href="#common-request">2.3. Common query string and request parameters</a></h3>
+<h3 id="common-request"><a class="anchor" href="#common-request"></a><a class="link" href="#common-request">2.2. Common query string and request parameters</a></h3>
 <div class="paragraph">
 <p>The following request parameters are required for all operations (except where noted):</p>
 </div>
@@ -1043,7 +994,7 @@ The responses shown below are for example purposes only and do not include all p
 </div>
 </div>
 <div class="sect3">
-<h4 id="borough"><a class="anchor" href="#borough"></a><a class="link" href="#borough">2.3.1. Borough</a></h4>
+<h4 id="borough"><a class="anchor" href="#borough"></a><a class="link" href="#borough">2.2.1. Borough</a></h4>
 <div class="paragraph">
 <p>The <code>borough</code> parameter can either be a borough name or a borough number. Borough names are <strong>not</strong> case-sensitive.</p>
 </div>
@@ -1228,12 +1179,12 @@ Woodside</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="understanding-geoclient-response-status"><a class="anchor" href="#understanding-geoclient-response-status"></a><a class="link" href="#understanding-geoclient-response-status">2.4. Understanding Geoclient Response Status</a></h3>
+<h3 id="understanding-geoclient-response-status"><a class="anchor" href="#understanding-geoclient-response-status"></a><a class="link" href="#understanding-geoclient-response-status">2.3. Understanding Geoclient Response Status</a></h3>
 <div class="paragraph">
 <p>There are two ways in which the Geoclient service communicates call status information: <code>HTTP</code> status codes and Geosupport return codes.</p>
 </div>
 <div class="sect3">
-<h4 id="http-status-codes"><a class="anchor" href="#http-status-codes"></a><a class="link" href="#http-status-codes">2.4.1. HTTP Status Codes</a></h4>
+<h4 id="http-status-codes"><a class="anchor" href="#http-status-codes"></a><a class="link" href="#http-status-codes">2.3.1. HTTP Status Codes</a></h4>
 <div class="paragraph">
 <p>Clients calling the service will always receive an <code>HTTP</code> status code, either from the service or (e.g., if a connection cannot be made) from the <code>HTTP</code> protocol implementation itself.</p>
 </div>
@@ -1310,7 +1261,7 @@ Woodside</pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="geosupport-return-codes"><a class="anchor" href="#geosupport-return-codes"></a><a class="link" href="#geosupport-return-codes">2.4.2. Geosupport Return Codes</a></h4>
+<h4 id="geosupport-return-codes"><a class="anchor" href="#geosupport-return-codes"></a><a class="link" href="#geosupport-return-codes">2.3.2. Geosupport Return Codes</a></h4>
 <div class="paragraph">
 <p>The Geosupport application uses return codes, reason codes, and messages to indicate the processing status of a given function call.</p>
 </div>
@@ -1480,7 +1431,7 @@ At this time, function <code>1B</code> (exposed by the Geoclient <code>/address<
 </div>
 </div>
 <div class="sect2">
-<h3 id="geosupport-street-name-functions"><a class="anchor" href="#geosupport-street-name-functions"></a><a class="link" href="#geosupport-street-name-functions">2.5. Geosupport Street Name Functions</a></h3>
+<h3 id="geosupport-street-name-functions"><a class="anchor" href="#geosupport-street-name-functions"></a><a class="link" href="#geosupport-street-name-functions">2.4. Geosupport Street Name Functions</a></h3>
 <div class="paragraph">
 <p>Geosupport has a rich model for streets and provides many functions and flags to support street processing. Geoclient supports calls to functions <code>D</code>, <code>DG</code>, and <code>DN</code> with the <code>/streetcode</code> endpoint and function <code>N</code> with the <code>/normalize</code> function.</p>
 </div>
@@ -1561,7 +1512,13 @@ At this time, function <code>1B</code> (exposed by the Geoclient <code>/address<
 </ul>
 </div>
 <div class="paragraph">
-<p>Finally, the Geosupport input API used by the Geoclient <code>/normalize</code> and <code>/streetcode</code> endpoints is documented <a href="https://nycplanning.github.io/Geosupport-UPG/appendices/appendix13#character-only-work-area-1-cow-all-functions">here</a>.</p>
+<p>The Geosupport input API used by the Geoclient <code>/normalize</code> and <code>/streetcode</code> endpoints is documented <a href="https://nycplanning.github.io/Geosupport-UPG/appendices/appendix13#character-only-work-area-1-cow-all-functions">here</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="examples"><a class="anchor" href="#examples"></a><a class="link" href="#examples">2.5. Examples</a></h3>
+<div class="paragraph">
+<p>For examples of calling Geoclient programmatically, see the <a href="https://github.com/mlipper/geoclient-examples">geoclient-examples</a> repository on GitHub.</p>
 </div>
 </div>
 </div>
@@ -3129,9 +3086,9 @@ Input ending in only a single instance of <code>NY</code> or <code>New York</cod
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 15. <code>/search</code> arguments</caption>
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
 </colgroup>
 <thead>
 <tr>
@@ -3875,7 +3832,37 @@ Input ending in only a single instance of <code>NY</code> or <code>New York</cod
 </div>
 <hr>
 <div class="sect2">
-<h3 id="platforms"><a class="anchor" href="#platforms"></a><a class="link" href="#platforms">5.1. Platforms</a></h3>
+<h3 id="core-design"><a class="anchor" href="#core-design"></a><a class="link" href="#core-design">5.1. Core design</a></h3>
+<div class="paragraph">
+<p>The <code>geoclient-core</code> subproject defines the API and implementation of the Java classes responsible for transforming the output of a Geosupport function call into runtime objects contains a structured representation of the data.
+Geosupport responses are either one or two large character buffers containing position-delimited values defined by the Geosupport API.
+In Java land, courtesy of the <code>geoclient-jni</code> subproject, these buffers are contained in <code>java.nio.ByteBuffer</code> instances.</p>
+</div>
+<div class="paragraph">
+<p>It is the responsibility of the classes in the <code>gov.nyc.doitt.gis.geoclient.function</code> package to pluck out each attribute and place it in a <code>java.util.Map&lt;String, Object&gt;</code>.
+The <code>geoclient.xml</code> configuration file provides the name of the attribute used as the <code>Map</code> key and the start and end positions of the attribute&#8217;s location in the <code>ByteBuffer</code>.</p>
+</div>
+<div class="paragraph">
+<p>This class diagram shows the composition of the core classes responsibile for this process:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/function-api.png" alt="Function API class diagram">
+</div>
+<div class="title">Figure 2. The Function API core classes</div>
+</div>
+<div class="paragraph">
+<p>This sequence diagram shows the call graph of these objects at runtime:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/function-call-sequence.png" alt="Function API sequence diagram">
+</div>
+<div class="title">Figure 3. The call sequence for the Function API</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="platforms"><a class="anchor" href="#platforms"></a><a class="link" href="#platforms">5.2. Platforms</a></h3>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Linux x86_64</dt>
@@ -3890,7 +3877,7 @@ Input ending in only a single instance of <code>NY</code> or <code>New York</cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="building-from-source"><a class="anchor" href="#building-from-source"></a><a class="link" href="#building-from-source">5.2. Building from source</a></h3>
+<h3 id="building-from-source"><a class="anchor" href="#building-from-source"></a><a class="link" href="#building-from-source">5.3. Building from source</a></h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="paragraph">
@@ -3908,7 +3895,7 @@ Input ending in only a single instance of <code>NY</code> or <code>New York</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="requirements"><a class="anchor" href="#requirements"></a><a class="link" href="#requirements">5.2.1. Requirements</a></h4>
+<h4 id="requirements"><a class="anchor" href="#requirements"></a><a class="link" href="#requirements">5.3.1. Requirements</a></h4>
 <div class="ulist">
 <ul>
 <li>
@@ -3930,11 +3917,11 @@ Input ending in only a single instance of <code>NY</code> or <code>New York</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="gradle-build"><a class="anchor" href="#gradle-build"></a><a class="link" href="#gradle-build">5.2.2. Gradle Build</a></h4>
+<h4 id="gradle-build"><a class="anchor" href="#gradle-build"></a><a class="link" href="#gradle-build">5.3.2. Gradle Build</a></h4>
 <div class="listingblock">
 <div class="title">Gradle build from bash</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sh">git clone <span class="o">{</span>geoclient-repo<span class="o">}</span>
+<pre class="rouge highlight"><code data-lang="sh">git clone https://github.com/mlipper/geoclient
 <span class="nb">cd </span>geoclient
 ./gradlew build</code></pre>
 </div>
@@ -3942,7 +3929,7 @@ Input ending in only a single instance of <code>NY</code> or <code>New York</cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="projects"><a class="anchor" href="#projects"></a><a class="link" href="#projects">5.3. Projects</a></h3>
+<h3 id="projects"><a class="anchor" href="#projects"></a><a class="link" href="#projects">5.4. Projects</a></h3>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="txt">.
@@ -3969,7 +3956,7 @@ Input ending in only a single instance of <code>NY</code> or <code>New York</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoclient-service"><a class="anchor" href="#geoclient-service"></a><a class="link" href="#geoclient-service">5.3.1. geoclient-service</a></h4>
+<h4 id="geoclient-service"><a class="anchor" href="#geoclient-service"></a><a class="link" href="#geoclient-service">5.4.1. geoclient-service</a></h4>
 <div class="paragraph">
 <p>The <code>geoclient-service</code> project uses Spring Boot for dependency-injection
 and to minimize the need boiler-plate code and configuration.
@@ -4145,22 +4132,22 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="docker"><a class="anchor" href="#docker"></a><a class="link" href="#docker">5.4. Docker</a></h3>
+<h3 id="docker"><a class="anchor" href="#docker"></a><a class="link" href="#docker">5.5. Docker</a></h3>
 <div class="paragraph">
-<p>This section explains the two most common ways to build and run <code>geoclient</code> using Docker:</p>
+<p>This section explains two common ways to build and run <code>geoclient</code> using Docker. It is based on <code>Dockerfile</code> files in the <code>&lt;project root&gt;/images</code> directory:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="#the-build-image">latest-build</a>: builds the project from and then runs <code>geoclient-service</code>.</p>
+<p><a href="#the-build-image">build.Dockerfile</a> which installs Geosupport, builds this project from source, and then runs <code>geoclient-service</code>.</p>
 </li>
 <li>
-<p><a href="#the-run-image">latest-run</a>: runs <code>geoclient-service</code> using the <code>geoclient.jar</code> built by the <code>geoclient-service</code> subproject and a local, named Docker <code>Volume</code> pre-populated with a recent Geosupport installation.</p>
+<p><a href="#the-run-image">run.Dockerfile</a> which runs <code>geoclient-service</code> using an externally specified <code>geoclient-service</code> Jar file in the container where a configured Geosupport installation has been mounted on the file system using a Docker <code>Volume</code>.</p>
 </li>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="assumptions"><a class="anchor" href="#assumptions"></a><a class="link" href="#assumptions">5.4.1. Assumptions</a></h4>
+<h4 id="assumptions"><a class="anchor" href="#assumptions"></a><a class="link" href="#assumptions">5.5.1. Assumptions</a></h4>
 <div class="ulist">
 <ul>
 <li>
@@ -4179,7 +4166,7 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="requirements-2"><a class="anchor" href="#requirements-2"></a><a class="link" href="#requirements-2">5.4.2. Requirements</a></h4>
+<h4 id="requirements-2"><a class="anchor" href="#requirements-2"></a><a class="link" href="#requirements-2">5.5.2. Requirements</a></h4>
 <div class="ulist">
 <ul>
 <li>
@@ -4193,7 +4180,7 @@ if it does not exist before starting the app.</p>
 <p>Compiling the <code>geoclient-jni</code> C code requires patched header files.</p>
 </li>
 <li>
-<p>The example <code>Dockerfile</code>s rely on the additional management and installation features that <code>geosupport-docker</code> provides.</p>
+<p>The <code>Dockerfile</code> examples rely on the additional management and installation features that <code>geosupport-docker</code> provides.</p>
 </li>
 <li>
 <p>See <a href="#about-geosupport-docker">below</a> for more details about <code>geosupport-docker</code>.</p>
@@ -4208,29 +4195,44 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="building-a-docker-image-from-source"><a class="anchor" href="#building-a-docker-image-from-source"></a><a class="link" href="#building-a-docker-image-from-source">5.4.3. Building a Docker image from source</a></h4>
+<h4 id="building-a-docker-image-from-source"><a class="anchor" href="#building-a-docker-image-from-source"></a><a class="link" href="#building-a-docker-image-from-source">5.5.3. Building a Docker image from source</a></h4>
 <div class="paragraph">
-<p>Clone the <code>geoclient</code> from GitHub and change to the project&#8217;s <strong>root</strong> directory.</p>
+<p>The purpose of this example is to demonstrate how to build and run Geoclient in a Docker container as might be done as part of a Continuous Integration pipeline.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+See the <code>&lt;project root&gt;/ci/Dockerfile</code> file which this project uses for CI. It similar <code>build.Dockerfile</code> but adds some extra commands to aggregate test and coverage reports.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Start by cloning <code>geoclient</code> from GitHub and changing to the project&#8217;s <strong>root</strong> directory.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sh">  git clone https://github.com/mlipper/geoclient.git
+<pre class="rouge highlight"><code data-lang="sh">git clone https://github.com/mlipper/geoclient
 
-  Cloning into <span class="s1">'geoclient'</span>...
-  remote: Enumerating objects: 11580, <span class="k">done</span><span class="nb">.</span>
-  remote: Counting objects: 100% <span class="o">(</span>2578/2578<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
-  remote: Compressing objects: 100% <span class="o">(</span>904/904<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
-  remote: Total 11580 <span class="o">(</span>delta 1020<span class="o">)</span>, reused 2463 <span class="o">(</span>delta 972<span class="o">)</span>, pack-reused 9002
-  Receiving objects: 100% <span class="o">(</span>11580/11580<span class="o">)</span>, 10.27 MiB | 13.71 MiB/s, <span class="k">done</span><span class="nb">.</span>
-  Resolving deltas: 100% <span class="o">(</span>4942/4942<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
+Cloning into <span class="s1">'geoclient'</span>...
+remote: Enumerating objects: 11580, <span class="k">done</span><span class="nb">.</span>
+remote: Counting objects: 100% <span class="o">(</span>2578/2578<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
+remote: Compressing objects: 100% <span class="o">(</span>904/904<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
+remote: Total 11580 <span class="o">(</span>delta 1020<span class="o">)</span>, reused 2463 <span class="o">(</span>delta 972<span class="o">)</span>, pack-reused 9002
+Receiving objects: 100% <span class="o">(</span>11580/11580<span class="o">)</span>, 10.27 MiB | 13.71 MiB/s, <span class="k">done</span><span class="nb">.</span>
+Resolving deltas: 100% <span class="o">(</span>4942/4942<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
 
-  <span class="c"># Change to the root project directory.</span>
-  <span class="nb">cd </span>geoclient</code></pre>
+<span class="c"># Change to the root project directory.</span>
+<span class="nb">cd</span> ./geoclient</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="the-build-image"><a class="anchor" href="#the-build-image"></a><a class="link" href="#the-build-image">5.4.4. The <code>build</code> image</a></h4>
+<h4 id="the-build-image"><a class="anchor" href="#the-build-image"></a><a class="link" href="#the-build-image">5.5.4. The <code>build</code> image</a></h4>
 <div class="paragraph">
 <p>This image installs Geosupport, builds the project from source using <a href="https://gradle.org/">Gradle</a>, and runs geoclient.</p>
 </div>
@@ -4262,7 +4264,7 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="the-run-image"><a class="anchor" href="#the-run-image"></a><a class="link" href="#the-run-image">5.4.5. The <code>run</code> image</a></h4>
+<h4 id="the-run-image"><a class="anchor" href="#the-run-image"></a><a class="link" href="#the-run-image">5.5.5. The <code>run</code> image</a></h4>
 <div class="paragraph">
 <p>Runs geoclient using the exploded contents of the <a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/">spring-boot</a>-packaged jar built from the <code>geoclient-service</code> subproject.</p>
 </div>
@@ -4302,7 +4304,7 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="creating-a-named-geosupport-volume"><a class="anchor" href="#creating-a-named-geosupport-volume"></a><a class="link" href="#creating-a-named-geosupport-volume">5.4.6. Creating a named Geosupport volume</a></h4>
+<h4 id="creating-a-named-geosupport-volume"><a class="anchor" href="#creating-a-named-geosupport-volume"></a><a class="link" href="#creating-a-named-geosupport-volume">5.5.6. Creating a named Geosupport volume</a></h4>
 <div class="paragraph">
 <p>Create a local, named volume containing a Geosupport installation, using the <a href="https://github.com/mlipper/geosupport-docker">geosupport-docker</a> project. Use the default <code>GEOSUPPORT_BASE</code> path of <code>/opt/geosupport</code>.</p>
 </div>
@@ -4317,7 +4319,7 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="docker-compose"><a class="anchor" href="#docker-compose"></a><a class="link" href="#docker-compose">5.4.7. Docker Compose</a></h4>
+<h4 id="docker-compose"><a class="anchor" href="#docker-compose"></a><a class="link" href="#docker-compose">5.5.7. Docker Compose</a></h4>
 <div class="paragraph">
 <p>This section assumes you&#8217;ve followed the instructions in <a href="#the-run-image">The Run Image</a> and <a href="#creating-a-named-geosupport-volume">Creating a Named Geosupport Volume</a> above. The following objects should be available from your local Docker registry/installation:</p>
 </div>
@@ -4352,9 +4354,12 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="testing-the-container"><a class="anchor" href="#testing-the-container"></a><a class="link" href="#testing-the-container">5.4.8. Testing the container</a></h4>
+<h4 id="testing-the-container"><a class="anchor" href="#testing-the-container"></a><a class="link" href="#testing-the-container">5.5.8. Testing the container</a></h4>
 <div class="paragraph">
-<p>Using the tool of your choice, geocode a NYC intersection. E.g., "east 53 street and 3rd avenue".</p>
+<p>This section assumes you are running Geoclient on your workstation, mapped to local port <code>8080</code>; e.g., by running a container built using <code>build.Dockerfile</code>, <code>run.Dockerfile</code>, or <code>compose.yaml</code> described above.</p>
+</div>
+<div class="paragraph">
+<p>Geocode a NYC intersection. E.g., "east 53 street and 3rd avenue".</p>
 </div>
 <div class="ulist">
 <ul>
@@ -4362,18 +4367,18 @@ if it does not exist before starting the app.</p>
 <p>Use <code>curl</code> from the command line</p>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sh">  curl <span class="s1">'http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue'</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sh">curl <span class="s1">'http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue'</span></code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Or use a browser to open <a href="http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue">this URL</a>.</p>
+<p>Or use a browser to open <a href="http://localhost:8080/geoclient/v2/search?input=east%2053%20street%20and%203rd%20avenue">the same URL</a>.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect3">
-<h4 id="about-geosupport-docker"><a class="anchor" href="#about-geosupport-docker"></a><a class="link" href="#about-geosupport-docker">5.4.9. About geosupport-docker</a></h4>
+<h4 id="about-geosupport-docker"><a class="anchor" href="#about-geosupport-docker"></a><a class="link" href="#about-geosupport-docker">5.5.9. About geosupport-docker</a></h4>
 <div class="paragraph">
 <p>The <a href="https://github.com/mlipper/geosupport-docker">geosupport-docker</a> provides an opinionated, re-packaged version of the official Linux distribution of Geosupport available from New York City&#8217;s <a href="https://www.nyc.gov/site/planning/index.page">Department of City Planning</a>. This project&#8217;s Docker images depend upon <code>geosupport-docker</code>'s CLI scripts and patched <code>C</code> header files for installation, system configuration and native compilation tasks.</p>
 </div>
@@ -4383,222 +4388,307 @@ if it does not exist before starting the app.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="kubernetes"><a class="anchor" href="#kubernetes"></a><a class="link" href="#kubernetes">5.5. Kubernetes</a></h3>
-<div class="sect3">
-<h4 id="kustomize"><a class="anchor" href="#kustomize"></a><a class="link" href="#kustomize">5.5.1. Kustomize</a></h4>
+<h3 id="kubernetes"><a class="anchor" href="#kubernetes"></a><a class="link" href="#kubernetes">5.6. Kubernetes</a></h3>
+<div class="paragraph">
+<p>This section provides a very basic example of deploying Geoclient to <a href="https://kubernetes.io">Kubernetes</a> using <a href="https://minikube.sigs.k8s.io/docs/start/">Minikube</a>. The configuration files are part of the project&#8217;s source, located in the <code>&lt;project root&gt;/manifests</code> directory.</p>
+</div>
+<div class="paragraph">
+<p>This example uses existing Geoclient and Geosupport Docker images that are publicly available on Docker Hub rather than from a local Docker container registry (e.g., Docker Desktop). Although Minikube supports the use of local registries, this requires extra configuration which is beyond the scope of this tutorial.</p>
+</div>
+<div class="paragraph">
+<p>These are the public Docker Hub registries configured in the <code>kustomization.yaml</code> file:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>build.sh</code>: runs kustomize and optionally parses out individual object manifests.</p>
+<p><a href="https://hub.docker.com/repository/docker/mlipper/geoclient/general"><code>mlipper/geoclient</code></a></p>
 </li>
 <li>
-<p><code>cluster-state.sh</code>: generates backup of existing object YAML definitions.</p>
+<p><a href="https://hub.docker.com/repository/docker/mlipper/geosupport-docker/general"><code>mlipper/geosupport-docker</code></a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For information on configuring Minikube to use a local registry, see Minikube&#8217;s documentation on <a href="https://minikube.sigs.k8s.io/docs/handbook/registry/">configuring registries</a> and <a href="https://minikube.sigs.k8s.io/docs/handbook/pushing/">pushing images</a>.</p>
+</div>
+<div class="sect3">
+<h4 id="asumptions"><a class="anchor" href="#asumptions"></a><a class="link" href="#asumptions">5.6.1. Asumptions</a></h4>
+<div class="paragraph">
+<p>This section assumes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Working installation of <a href="https://minikube.sigs.k8s.io/docs/start/">Minikube</a>.</p>
+</li>
+<li>
+<p>Working installation of <a href="https://kubectl.docs.kubernetes.io/installation/kubectl"><code>kubectl</code></a>.</p>
+<div class="paragraph">
+<p>This should be a recent version of <code>kubectl</code> that has built-in support for <a href="https://kustomize.io/"><code>kustomize</code></a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Minikube includes <code>kubectl</code> and it is run using <code>minikube kubectl</code>. This section assumes you&#8217;ve either got <code>kubectl</code> installed separately or are using Minikube&#8217;s built-in but have aliased <code>minikube kubectl</code> to <code>kubectl</code>.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Minikube is using the default, out-of-the-box support for <code>PersistentVolume</code> of type <a href="https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/"><code>hostPath</code></a>.</p>
+</li>
+<li>
+<p>Minikube can connect to the Internet to download images from the public <code>geoclient</code> and <code>geosupport-docker</code> registries mentioned above.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect3">
-<h4 id="overlays"><a class="anchor" href="#overlays"></a><a class="link" href="#overlays">5.5.2. Overlays</a></h4>
-<div class="sect4">
-<h5 id="main-overlays"><a class="anchor" href="#main-overlays"></a><a class="link" href="#main-overlays">Main Overlays</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Component</th>
-<th class="tableblock halign-left valign-top">Generated Objects</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/app/dev/no-pvc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">development</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">deployment, hpa, service</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/app/dev/pvc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">development</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">deployment, hpa, service, pvc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/app/prd/no-pvc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">production</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">deployment, hpa, service</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/app/prd/pvc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">production</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">deployment, hpa, service, pvc</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="ingress-overlays"><a class="anchor" href="#ingress-overlays"></a><a class="link" href="#ingress-overlays">Ingress Overlays</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Component</th>
-<th class="tableblock halign-left valign-top">Generated Objects</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/ingress-nginx/dev</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">development</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ingress</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/ingress-nginx/prd</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">production</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ingress</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="pvc-overlays"><a class="anchor" href="#pvc-overlays"></a><a class="link" href="#pvc-overlays">PVC Overlays</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Component</th>
-<th class="tableblock halign-left valign-top">Generated Objects</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/pvc-azurefile/dev</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">development</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">pvc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overlays/pvc-azurefile/prd</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">production</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">pvc</p></td>
-</tr>
-</tbody>
-</table>
+<h4 id="start-minikube"><a class="anchor" href="#start-minikube"></a><a class="link" href="#start-minikube">5.6.2. Start Minikube</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sh">overlays/
-├── app
-│   ├── dev
-│   │   ├── no-pvc
-│   │   └── pvc
-│   └── prd
-│       ├── no-pvc
-│       └── pvc
-├── ingress-nginx
-│   ├── base
-│   ├── dev
-│   └── prd
-├── minikube
-└── pvc-azurefile
-    ├── base
-    ├── dev
-    └── prd</code></pre>
+<pre class="rouge highlight"><code data-lang="sh">minikube start</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="configure-kubectl"><a class="anchor" href="#configure-kubectl"></a><a class="link" href="#configure-kubectl">5.6.3. Configure <code>kubectl</code></a></h4>
+<div class="paragraph">
+<p>Configure <code>kubectl</code> to use Minikube. The following assumes you&#8217;re using the default context name <code>minikube</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sh">kubectl config use-context minikube</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="use-kubectl-and-kustomize-to-deploy-to-minikube"><a class="anchor" href="#use-kubectl-and-kustomize-to-deploy-to-minikube"></a><a class="link" href="#use-kubectl-and-kustomize-to-deploy-to-minikube">5.6.4. Use <code>kubectl</code> and <code>kustomize</code> to deploy to Minikube</a></h4>
+<div class="paragraph">
+<p>This tutorial uses <a href="https://kustomize.io/"><code>kustomize</code></a> to provide a simple templating mechanism which simplifies configuring Geoclient and Geosupport versions and environment variables in a single <code>kustomization.yaml</code>. To run <code>kustomize</code> commands with <code>kubectl</code>, add the <code>-k</code> switch.</p>
+</div>
+<div class="paragraph">
+<p>From your shell, <code>cd</code> into the <code>&lt;project root&gt;/manifests</code> directory.</p>
+</div>
+<div class="paragraph">
+<p>If this is the first time you&#8217;re deploying Geoclient to this Minikube cluster, some one-time setup is required:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sh"><span class="c"># Create the  gis-apps Namespace</span>
+kubectl create <span class="nt">-f</span> namespace.yaml
+
+<span class="c"># Create the PersistentVolumeClaim used to mount a Geosupport installation into the Pods' filesystem.</span>
+kubectl apply <span class="nt">-f</span> pvc-geosupport.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now use <code>kustomize</code> to template the manifest files (<code>deployment.yaml</code>, <code>hpa.yaml</code>, <code>service.yaml</code>) and apply them with <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sh">kubectl apply <span class="nt">-k</span> .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will create the <code>geoclient-v2</code> Service, Deployment, andf HorizontalPodAutoscaling objects. This take a minute or two (depending on your hardware, network connection, Minikube configuration, etc.). The next step requires that all pods be up and running. To see the progress of pod initializations, add the watch switch, <code>-w</code>, to the <code>get pods</code> command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sh">kubectl get pods <span class="nt">-w</span>
+
+NAME                            READY   STATUS     RESTARTS   AGE
+geoclient-v2-75899fdc94-drtnn   0/1     Init:0/1   0          16s
+geoclient-v2-75899fdc94-p2v5l   0/1     Running    0          31s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the example above, you can see that one pod is up and running but the other is still initializing.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sh">NAME                            READY   STATUS    RESTARTS      AGE
+geoclient-v2-75899fdc94-drtnn   1/1     Running   0             58m
+geoclient-v2-75899fdc94-p2v5l   1/1     Running   1 <span class="o">(</span>58m ago<span class="o">)</span>   59m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once both are running, you need to make the <code>geoclient-v2</code> service visible to your host machine. To do this, use the <code>kubectl port-forward</code> command. The syntax for this command is <code>kubectl port-forward service/&lt;service name&gt; &lt;host port&gt;:&lt;service port&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>Run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sh">kubectl port-forward service/geoclient-v2 8081:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the <code>kubectl port-forward ...</code> command above will block your terminal (unless you run it in the background by appending a <code>&amp;</code> to the end of the line).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-different-versions-of-geoclient-or-geosupport"><a class="anchor" href="#using-different-versions-of-geoclient-or-geosupport"></a><a class="link" href="#using-different-versions-of-geoclient-or-geosupport">5.6.5. Using different versions of Geoclient or Geosupport</a></h4>
+<div class="paragraph">
+<p>Both <code>geoclient</code> and <code>geosupport-docker</code> are actively developed projects and new versions are being released regularly. <code>kustomize</code> is very useful for "externalizing" the configuration of image tags or environment variables.</p>
+</div>
+<div class="paragraph">
+<p>Snippet from the <code>kustomization.yaml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">configMapGenerator</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">geosupport-env</span>
+  <span class="na">literals</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">GEOFILES=/opt/geosupport/current/fls/</span>
+    <span class="pi">-</span> <span class="s">GEOSUPPORT_FULLVERSION=25a1_25.11</span>       <span class="c1"># A #</span>
+    <span class="pi">-</span> <span class="s">GEOSUPPORT_HOME=/opt/geosupport/current</span>
+
+<span class="na">images</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">docker.io/mlipper/geosupport-docker</span>
+  <span class="na">newTag</span><span class="pi">:</span> <span class="s">2.0.26</span>                              <span class="c1"># B #</span>
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">docker.io/mlipper/geoclient</span>
+  <span class="na">newTag</span><span class="pi">:</span> <span class="s">2.0.1</span>                               <span class="c1"># C #</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the configuration above, <code>A</code> will almost always need to change when <code>B</code> is changed because almost every new <code>geosupport-docker</code> release implies a new version of Geosupport.</p>
+</div>
+<div class="paragraph">
+<p><code>C</code> is where the version of the <code>geoclient</code> image is configured. This can change independently of the Geosupport version.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bask-in-the-glory-of-your-handiwork"><a class="anchor" href="#bask-in-the-glory-of-your-handiwork"></a><a class="link" href="#bask-in-the-glory-of-your-handiwork">5.6.6. Bask in the glory of your handiwork</a></h4>
+<div class="paragraph">
+<p>Now, geoclient-v2 is running locally, listening on port (<code>&lt;host port&gt;</code>) <code>8081</code>. By default, geoclient-v2&#8217;s base endpoint URL is <code>http://localhost:8081/geoclient/v2</code>.</p>
+</div>
+<div class="paragraph">
+<p>However, to do anything useful you need to call one of Geoclient&#8217;s service <a href="#endpoints">endpoints</a>, adding any relevant arguments to the query string.</p>
+</div>
+<div class="paragraph">
+<p>Try, for example, <code>/version</code> endpoint by opening <a href="http://localhost:8081/geoclient/v2/version">http://localhost:8081/geoclient/v2/version</a> in your browser.</p>
+</div>
+<div class="paragraph">
+<p>Try calling the same endpoint from the command line with <code>curl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sh">curl <span class="nt">-s</span> <span class="nt">--get</span> http://localhost:8081/geoclient/v2/version</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If you&#8217;re making Geoclient requests in a browser, the service is exposed with <code>http</code> and not <code>https</code>. Many browsers automatically convert <code>http</code> to <code>https</code> if you&#8217;re cutting and pasting or double-clicking a link. Make sure the browser is using the correct scheme if you are having problems.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="samples"><a class="anchor" href="#samples"></a><a class="link" href="#samples">6. Samples</a></h2>
+<h2 id="public-endpoint"><a class="anchor" href="#public-endpoint"></a><a class="link" href="#public-endpoint">6. Public Endpoint</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section documents code samples that are included in the Geoclient source tree.</p>
+<p>This section documents the publicly hosted (and free) Geoclient endpoint.</p>
 </div>
 <hr>
-<div class="sect2">
-<h3 id="simple-javascript-example"><a class="anchor" href="#simple-javascript-example"></a><a class="link" href="#simple-javascript-example">6.1. Simple JavaScript Example</a></h3>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Getting Access the Geoclient Public Endpoint</div>
 <div class="paragraph">
-<p>This sample provides a minimal example of calling the geoclient service using <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing"><code>CORS</code></a>.</p>
+<p>Sponsored by NYC&#8217;s Office of Technology and Innovation, the Geoclient REST service is freely available to the public on the <a href="https://api-portal.nyc.gov">NYC API Developers Portal</a>.</p>
 </div>
-<div class="paragraph">
-<p>The demo uses geoclient&#8217;s RESTful <a href="/geoclient/v2/address.json"><code>address</code></a> endpoint to geocode an address and use the returned DSNY attribute data to display collection schedule information.</p>
 </div>
-<div class="paragraph">
-<p>This app is simply static site files that has been hard-coded to call the geoclient service instance hosted on the server configured from properties in <code>gradle.properties</code>. By default, this is your <a href="http://localhost:8080/geoclient/v2">localhost</a> on port 8080.</p>
 </div>
-<div class="paragraph">
-<p>Access to the service is free but requires that you <a href="https://developer.cityofnewyork.us/user/register?destination=node/182">sign-up</a> and register an application (think named project) requesting app keys to access the <code>Geoclient API</code> service.</p>
-</div>
-<div class="paragraph">
-<p><strong>IMPORTANT:</strong> This sample <em>will not work</em> unless you have valid credentials to access a hosted Geoclient service!</p>
-</div>
-<h4 id="build" class="discrete">Build</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Install <a href="https://docs.gradle.org/current/userguide/userguide.html">Gradle</a></p>
-</li>
-<li>
-<p>Run the Gradle with the appId and appKey properties defined</p>
-<div class="olist loweralpha">
-<ol class="loweralpha">
-<li>
-<p>Add valid id and key values to <code>gradle.properties</code>
-OR</p>
-</li>
-<li>
-<p>Define these properties on the command line:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="bash"><span class="nv">$ </span>gradle <span class="nt">-PappId</span><span class="o">=</span>&lt;your_app_id&gt; <span class="nt">-PappKey</span><span class="o">=</span>&lt;your_app_key&gt;</code></pre>
+<p>Go to the <a href="https://api-portal.nyc.gov">NYC API Developers Portal</a> site.</p>
+<div class="paragraph">
+<p><span class="image"><img src="./images/api-portal/index-not-signed-in.png" alt="Home page"></span></p>
 </div>
+</li>
+<li>
+<p>If you don’t already have an account, <a href="https://api-portal.nyc.gov/signup">sign up</a> for one by clicking the large green “Sign up” button.</p>
+<div class="paragraph">
+<p><span class="image"><img src="./images/api-portal/index-click-sign-up.png" alt="Signup button"></span></p>
+</div>
+</li>
+<li>
+<p>If you are not already logged in, <a href="https://api-portal.nyc.gov/signin">sign in to your account</a>.</p>
+</li>
+<li>
+<p>Go to the <a href="https://api-portal.nyc.gov/product">Products page</a> by clicking the “Products” button:</p>
+<div class="paragraph">
+<p><span class="image"><img src="./images/api-portal/products-page.png" alt="Products page"></span></p>
+</div>
+</li>
+<li>
+<p>Click the <a href="https://api-portal.nyc.gov/product#product=geoclient-user">Geoclient User</a> link. Make sure to choose the subscription to "<strong>Geoclient - v2</strong>" as <em>v1 is deprecated and scheduled for deactivation</em>.</p>
+<div class="paragraph">
+<p><span class="image"><img src="./images/api-portal/index-signed-in-products.png" alt="Products button"></span></p>
+</div>
+</li>
+<li>
+<p>In the “Your Subscriptions” section of the page, enter the name of the “product” to associate with this Geoclient v2 subscription key and click the “Subscribe” button.</p>
+<div class="paragraph">
+<p><span class="image"><img src="./images/api-portal/subscribe.png" alt="Subscribe to v2"></span></p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Your account can register multiple “products” with different subscription keys for accessing the same API. You can think of a “product” as an application, a project, or a functional use case like “testing”.</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>You should receive an email notifying you that your subscription has been created.</p>
+<div class="paragraph">
+<p><span class="image"><img src="./images/api-portal/subscription-email.png" alt="Subscription email"></span></p>
+</div>
+</li>
+<li>
+<p><a href="https://api-portal.nyc.gov/signin">Sign in to your account</a> again (if necessary) and follow the “Profile” link in the top right of the page. This page allows you to manage many of your account settings. Go to the “Subscriptions” section and click on “Show” to view your subscription key.</p>
+<div class="paragraph">
+<p><span class="image"><img src="./images/api-portal/user-profile.png" alt="User profile"></span></p>
 </div>
 </li>
 </ol>
 </div>
+<div class="sect2">
+<h3 id="authenticationauthorization"><a class="anchor" href="#authenticationauthorization"></a><a class="link" href="#authenticationauthorization">6.1. Authentication/Authorization</a></h3>
+<div class="paragraph">
+<p>Geoclient does not perform any kind of authentication or authorization. However, the endpoint that is available to the public (after signing up for access) does sit behind an API gateway. This endpoint requires that an API key be included with every <code>HTTP</code> request.</p>
+</div>
+<div class="paragraph">
+<p>Although detailed instructions are beyond the scope of this document to provide detailed instructions, each call to the Geoclient public endpoint requires your assigned API key (A.K.A. "subscription key").</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The recommended way to do this is with an <code>HTTP</code> header named <code>Ocp-Apim-Subscription-Key</code> whose value is your key.</p>
 </li>
-</ol>
+<li>
+<p>At this time, it is possible to submit your key on the <code>HTTP</code> query string using a query string parameter named <code>key</code> (i.e., <code>key=&lt;your_key_goes_here&gt;</code>). However, this method isn&#8217;t officially documented by the <a href="https://api-portal.nyc.gov">NYC API Developers Portal</a> so, if possible, prefer the <code>HTTP</code> header method.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>See the Gradle <a href="https://docs.gradle.org/current/userguide/build_environment.html">documentation</a> for more info about working with Gradle properties.</p>
-</div>
-<div class="paragraph">
-<p>This will create</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="txt">+---distributions
-|       geoclient-simple-js-example-2.0.0.zip
-|
-\---geoclient-simple-js-example
-    |   index.html
-    |
-    \---js
-            geocode.js</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Open the <code>build/geoclient-simple-js-example/index.html</code> in your browser.</p>
-</div>
-<div class="paragraph">
-<p><strong>NOTE:</strong>
-If you don&#8217;t want to install Gradle, simply replace the '<code class="code">@appId@</code>' and '<code class="code">@appKey@</code>' tokens found in the <code>src/main/webapp/index.html</code> file with valid values and then open this file in a browser.</p>
-</div>
-<div class="paragraph">
-<p><a href="https://maps.nyc.gov/geoclient/v2/doc">City of New York / OTI / GIS</a>.</p>
+<p>See the <a href="https://github.com/mlipper/geoclient-examples">geoclient-examples</a> repository on GitHub for examples in different programming languages.</p>
 </div>
 </div>
 </div>
@@ -4607,21 +4697,7 @@ If you don&#8217;t want to install Gradle, simply replace the '<code class="code
 <h2 id="contact-us"><a class="anchor" href="#contact-us"></a><a class="link" href="#contact-us">7. Contact Us</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With questions, comments, feature requests, bug reports, threats, etc.</p>
-</div>
-<hr>
-<div class="ulist">
-<ul>
-<li>
-<p>Feature requests</p>
-</li>
-<li>
-<p>Bug reports</p>
-</li>
-<li>
-<p>Development questions</p>
-</li>
-</ul>
+<p>On <a href="https://github.com/mlipper/geoclient/issues">GitHub</a> with questions, comments, feature requests, bug reports, threats, etc.</p>
 </div>
 </div>
 </div>
@@ -4655,7 +4731,7 @@ If you don&#8217;t want to install Gradle, simply replace the '<code class="code
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 2.0.1-rc.2<br>
+Version 2.0.2-beta<br>
 </div>
 </div>
 </body>

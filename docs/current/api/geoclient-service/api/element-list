@@ -1,0 +1,15 @@
+gov.nyc.doitt.gis.geoclient.service
+gov.nyc.doitt.gis.geoclient.service.configuration
+gov.nyc.doitt.gis.geoclient.service.domain
+gov.nyc.doitt.gis.geoclient.service.invoker
+gov.nyc.doitt.gis.geoclient.service.mapper
+gov.nyc.doitt.gis.geoclient.service.sanitizer
+gov.nyc.doitt.gis.geoclient.service.search
+gov.nyc.doitt.gis.geoclient.service.search.policy
+gov.nyc.doitt.gis.geoclient.service.search.request
+gov.nyc.doitt.gis.geoclient.service.search.task
+gov.nyc.doitt.gis.geoclient.service.search.web
+gov.nyc.doitt.gis.geoclient.service.search.web.response
+gov.nyc.doitt.gis.geoclient.service.street.web
+gov.nyc.doitt.gis.geoclient.service.web
+gov.nyc.doitt.gis.geoclient.service.xstream

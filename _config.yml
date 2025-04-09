@@ -1,13 +1,18 @@
-title: Geoclient Project Documentation
+title: Geoclient
 description: Geoclient is a geocoding API for New York City.
-show_downloads: true
+show_downloads: false
 google_analytics:
 theme: jekyll-theme-slate
 remote_theme: pages-themes/slate@v0.2.0
 plugins:
 - jekyll-remote-theme
+- jemoji
 exclude:
   - .devcontainer
   - .gradle
   - .local
   - .vscode
+kramdown:
+  gfm_emojis: true
+geoclient:
+  version: 2.0.2

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"gov.nyc.doitt.gis.geoclient.api"},{"l":"gov.nyc.doitt.gis.geoclient.cli"},{"l":"gov.nyc.doitt.gis.geoclient.config"},{"l":"gov.nyc.doitt.gis.geoclient.config.xml"},{"l":"gov.nyc.doitt.gis.geoclient.function"},{"l":"gov.nyc.doitt.gis.geoclient.util"}];updateSearchResults();

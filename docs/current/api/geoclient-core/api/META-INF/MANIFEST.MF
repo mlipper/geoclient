@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: geoclient-core
+Implementation-Version: 2.0.2
+Automatic-Module-Name: geoclient.core
+Build-Jdk-Spec: 17
+Built-Gradle: 8.13
+Include-Resource: META-INF/notice.txt=notice.txt,META-INF/license.txt=li
+ cense.txt
+

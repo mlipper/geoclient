@@ -1,0 +1,6 @@
+gov.nyc.doitt.gis.geoclient.api
+gov.nyc.doitt.gis.geoclient.cli
+gov.nyc.doitt.gis.geoclient.config
+gov.nyc.doitt.gis.geoclient.config.xml
+gov.nyc.doitt.gis.geoclient.function
+gov.nyc.doitt.gis.geoclient.util
