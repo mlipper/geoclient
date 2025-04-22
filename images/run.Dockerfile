@@ -7,7 +7,7 @@ ARG JARFILE
 ENV JARFILE="${JARFILE:-./geoclient-service/build/libs/geoclient.jar}"
 
 WORKDIR /app
-COPY "${JARFILE}" .
+COPY "${JARFILE}" geoclient.jar
 COPY --chmod=755 images/run.sh .
 
 RUN set -ex \
