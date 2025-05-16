@@ -29,3 +29,55 @@ For more troubleshooting tips, see:
 
 * [Setting up a GitHub Pages site locally with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll>)
 * [Troubleshooting Jekyll build errors for a GitHub Pages site](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/troubleshooting-jekyll-build-errors-for-github-pages-sites)
+
+
+## Problems
+
+### Error running `script/bootstrap`
+
+#### Symptom
+
+```sh
+
+./script/bootstrap 
+
+Successfully installed bundler-2.6.9
+Parsing documentation for bundler-2.6.9
+Done installing documentation for bundler after 0 seconds
+1 gem installed
+/usr/local/lib/ruby/gems/3.4.0/bin/bundle:25:in 'Kernel#load': cannot load such file -- /usr/local/lib/ruby/gems/3.4.0/gems/bundler-2.6.6/exe/bundle (LoadError)
+	from /usr/local/lib/ruby/gems/3.4.0/bin/bundle:25:in '<main>'
+
+```
+
+#### Cause
+
+Error triggered by line `bundle install`.
+Cause seems to be multiple versions of `bundler` installed.
+
+#### Solution
+
+Fixed by first adding the `gem` installation to the `PATH`.
+
+```sh
+# Add gem install to the PATH.
+export PATH="/usr/local/lib/ruby/gems/3.4.0/bin:$PATH"
+```
+
+Then by removing all but the default copy of `bundler`:
+
+```sh
+gem uninstall bundler
+
+Select gem to uninstall:
+ 1. bundler-2.6.6
+ 2. bundler-2.6.8
+ 3. bundler-2.6.9
+ 4. All versions
+> 4
+Successfully uninstalled bundler-2.6.6
+Successfully uninstalled bundler-2.6.8
+Successfully uninstalled bundler-2.6.9
+There was both a regular copy and a default copy of bundler-2.6.9. The regular copy was successfully uninstalled, but the default copy was left around because default gems can't be removed.
+```
+
