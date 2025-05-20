@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+this_dir="$(dirname "$(readlink -vf "$BASH_SOURCE")")"
+this_file="$(basename "$0")"
+
+GEOCLIENT_REPO="${this_dir}/../../geoclient"
+GEOCLIENT_USERGUIDE_DIR="${GEOCLIENT_REPO}/documentation/build/docs/asciidoc"
+GEOCLIENT_VERSION=2.0.2
+
+BUILD_DIR="${this_dir}/../build"
+
+BUILD_API_DIR="${BUILD_DIR}/api"
+BUILD_USERGUIDE_DIR="${BUILD_DIR}/user-guide"
+SRC_API_INDEX="${this_dir}/../src/api/index.md"
+TARGET_API_DIR="${this_dir}/../docs/current/api"
+TARGET_USERGUIDE_DIR="${this_dir}/../docs/current/user-guide"
+
+build_api_docs() {
+    rm -rf "${BUILD_API_DIR}"
+    mkdir -p "${BUILD_API_DIR}"
+    pull_api_docs
+    # This must come after pull_api_docs call
+    cp "${SRC_API_INDEX}" "${BUILD_API_DIR}/index.md"
+}
+
+build_userguide() {
+    if [[ ! -d "${GEOCLIENT_USERGUIDE_DIR}" ]]; then
+        echo "${GEOCLIENT_USERGUIDE_DIR} does not exist. Make sure to run the documentation:asciidoc task first".
+        exit 0
+    fi
+    rm -rf "${BUILD_USERGUIDE_DIR}"
+    mkdir -p "${BUILD_USERGUIDE_DIR}"
+    cp "${GEOCLIENT_USERGUIDE_DIR}"/*.html "${BUILD_USERGUIDE_DIR}/"
+    cp -r "${GEOCLIENT_USERGUIDE_DIR}/images" "${BUILD_USERGUIDE_DIR}/"
+}
+
+pull_api_docs() {
+    find "${GEOCLIENT_REPO}" -type f -path '**/build/libs/*' -name '*-javadoc.jar' -exec cp {} "${BUILD_API_DIR}" \;
+    for jar in "${BUILD_API_DIR}"/*; do
+        project="${jar%-${GEOCLIENT_VERSION}-javadoc.jar}"
+        project=$(basename "${project}")
+        local apidir="${BUILD_API_DIR}/${project}/api"
+        if [[ "${project}" == cli ]] || [[ "${project}" == jni-test ]]; then
+            apidir="${BUILD_API_DIR}/geoclient-utils/${project}/api"
+        fi
+        rm -rf "${apidir}"
+        mkdir -p "${apidir}"
+        unzip "${jar}" -d "${apidir}" \
+            && rm "${jar}" \
+            && find . -type f -name 'MANIFEST.MF' -exec rm {} \;
+    done
+}
+
+main() {
+    if [ $# -gt 0 ]; then
+        GEOCLIENT_REPO="$1"
+    fi
+
+    if [[ ! -d "${GEOCLIENT_REPO}" ]]; then
+        echo "Error: directory ${GEOCLIENT_REPO} does not exist."
+        exit 1
+    fi
+    build_api_docs
+    build_userguide
+}
+
+main "$@"
