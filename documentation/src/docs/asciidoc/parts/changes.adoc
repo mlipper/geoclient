@@ -72,7 +72,7 @@ Step 4. Your account can register multiple "`products`" with different subscript
 
 Step 5. If you don't receive an email and have checked that it hasn't been mistakenly identified as spam, log into the site and check the Profile page where you can view and manage your account's subscription keys.
 
-See xref:public-endpoint.adoc#getting-access-the-geoclient-public-endpoint[Getting Access the Geoclient Public Endpoint] for a more detailed version of this section.
+See xref:index.adoc#public-endpoint[Getting Access the Geoclient Public Endpoint] for a more detailed version of this section.
 
 === Authentication Methods for Calling Geoclient v2
 
