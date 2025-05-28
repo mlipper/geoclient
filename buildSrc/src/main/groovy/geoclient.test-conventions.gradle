@@ -98,3 +98,11 @@ tasks.register('tarCiReports', Tar) {
     compression = Compression.GZIP
     destinationDirectory = layout.buildDirectory
 }
+
+def script = rootProject.file('src/scripts/test-all.sh')
+tasks.register('testAll', Exec) {
+    description = 'Starts geoclient-service using the built jar and runs all tests.'
+    group = 'verification'
+    commandLine '/bin/bash', '-c', "${script.absolutePath} start"
+    shouldRunAfter(tasks.named('assemble'))
+}
