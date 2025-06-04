@@ -94,7 +94,7 @@ public class RequestUtils {
 
     private static PlaceRequest zeroLevelPlaceRequest(LocationTokens locationTokens, InputValue countyInputValue) {
         PlaceRequest request = new PlaceRequest();
-        request.setStreetInputValue(inputValueOrNull(TokenType.UNRECOGNIZED, locationTokens));
+        request.setStreetInputValue(inputValueOrNull(TokenType.PLACE, locationTokens));
         setLevelAndBoroughOrZip(request, 0, countyInputValue);
         return request;
     }

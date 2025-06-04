@@ -25,18 +25,39 @@ import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
 import gov.nyc.doitt.gis.geoclient.parser.util.Assert;
 
 /**
- * Always matches zero or more characters in the current {@link Chunk} and marks
- * the {@link TokenType} and {@link ChunkType} as unrecogized.
+ * Parser that always matches zero or more characters in the current
+ * {@link Chunk}
+ * and marks the {@link TokenType} and {@link ChunkType} as a (possible) place
+ * name.
+ * <p>
+ * This parser is used as a fallback to handle any input that does not match
+ * more specific patterns. It uses a regular expression that matches any string,
+ * including
+ * the empty string, and assigns the {@link TokenType#PLACE} and
+ * {@link ChunkType#PLACE}
+ * to the resulting match.
+ * </p>
+ * <p>
+ * Previously, this parser assigned the <code>TokenType#UNRECOGNIZED</code> and
+ * <code>ChunkType#UNRECOGNIZED</code> but this was changed to reflect the fact that
+ * is used for a place search after all other parsers have been tried.
  *
  * @author mlipper
  * @since 2.0
  *
- * @see TokenType#UNRECOGNIZED
- * @see ChunkType#UNRECOGNIZED
+ * @see TokenType#PLACE
+ * @see ChunkType#PLACE
  */
 public class UnrecognizedTextParser extends AbstractRegexParser {
     private final Pattern ANYTHING = Pattern.compile("(.*)");
 
+    /**
+     * Constructs a new {@link UnrecognizedTextParser} instance.
+     * This parser uses a regex pattern that matches any input.
+     *
+     * @param parseContext Current parsing context
+     * @see AbstractRegexParser#AbstractRegexParser(ParseContext)
+     */
     @Override
     public void parse(ParseContext parseContext) {
         Chunk currentChunk = parseContext.getCurrent();
@@ -44,8 +65,8 @@ public class UnrecognizedTextParser extends AbstractRegexParser {
         Assert.isTrue(matcher.matches(), String.format("Pattern %s should match any input but it doesn't match '%s'",
             ANYTHING.pattern(), currentChunk.getText()));
         MatchBuilder builder = new MatchBuilder().add(matcher).add(MatchType.COMPLETE).add(parseContext).add(ANYTHING,
-            1, TokenType.UNRECOGNIZED);
-        handleMatch(builder.build(), ChunkType.UNRECOGNIZED);
+            1, TokenType.PLACE);
+        handleMatch(builder.build(), ChunkType.PLACE);
     }
 
 }

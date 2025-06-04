@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
 import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
 import gov.nyc.doitt.gis.geoclient.service.search.request.AddressRequest;
 
@@ -194,5 +195,14 @@ public class SingleFieldSearchHandlerTest {
         assertThat(searchResult.getSearches().size()).isEqualTo(5);
         // Yup! All four compassDirections can be geocoded.
         assertThat(searchResult.successCount()).isEqualTo(4);
+    }
+
+    @Test
+    public void testFindLocationDefaultPolicy_placeWithBorough() {
+        SearchResult searchResult = this.singleFieldSearchHandler.findLocation("World Trade Center, Manhattan");
+        assertThat(searchResult.isExactMatch()).isTrue();
+        assertTrue(searchResult.getSearches().size() < 2);
+        assertThat(searchResult.successCount()).isEqualTo(1);
+        assertThat(searchResult.getLocationTokens().tokensOfType(TokenType.PLACE).size() == 1);
     }
 }

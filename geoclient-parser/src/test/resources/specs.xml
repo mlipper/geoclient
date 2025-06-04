@@ -106,5 +106,5 @@
     <spec id="address29" test="AddressParser">[20-29][ Garage] [120th Street]=ADDRESS(0-25:HOUSE_NUMBER{1},HOUSE_NUMBER_SUFFIX{2},STREET_NAME{3})</spec>
     <spec id="all1" test="AllParsers">[59] [Maiden Lane] [Manhattan]=COUNTY(0-24:BOROUGH_NAME{3})|ADDRESS(0-14:HOUSE_NUMBER{1},STREET_NAME{2})</spec>
     <spec id="all2" test="AllParsers">[59] [Maiden Lane] [NY], [NY] [10025]=COUNTY(0-27:ZIP{5})|COUNTY(0-21:CITY_NAME{3},STATE{4})|ADDRESS(0-14:HOUSE_NUMBER{1},STREET_NAME{2})</spec>
-    <spec id="all3" test="AllParsers">[Empire State Bldg.], [Manhattan]=COUNTY(0-29:BOROUGH_NAME{2})|UNRECOGNIZED(0-18:UNRECOGNIZED{1})</spec>
+    <spec id="all3" test="AllParsers">[Empire State Bldg.], [Manhattan]=COUNTY(0-29:BOROUGH_NAME{2})|PLACE(0-18:PLACE{1})</spec>
 </specs>

@@ -60,7 +60,7 @@ public class DefaultInitialSearchTaskBuilder extends TaskBuilderSupport implemen
                     return initialSearchTasks(BlockfaceRequest.class, BlockfaceSearchTask.class, locationTokens);
                 case INTERSECTION:
                     return initialSearchTasks(IntersectionRequest.class, IntersectionSearchTask.class, locationTokens);
-                case UNRECOGNIZED:
+                case PLACE:
                     return initialSearchTasks(PlaceRequest.class, PlaceSearchTask.class, locationTokens);
                 default:
                     break;
