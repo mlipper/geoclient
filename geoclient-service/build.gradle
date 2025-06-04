@@ -65,7 +65,7 @@ tasks.named('build') {
 }
 
 tasks.named('bootRun') {
-    args '--spring.profiles.active=bootRun'
+    args '--spring.profiles.active=docsamples'
 }
 
 // Uses simple sharing strategy. See:
