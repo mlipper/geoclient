@@ -11,6 +11,15 @@ externalDocs:
 servers:
   - url: https://api.nyc.gov/geoclient/v2
     description: NYC API Developers Portal
+  - url: http://localhost:{port}/geoclient/v2
+    description: Local development server
+    variables:
+      port:
+        default: '8080'
+        enum:
+          - '8080'
+          - '8081'
+        description: Port for local development server
 paths:
   /address:
     get:
