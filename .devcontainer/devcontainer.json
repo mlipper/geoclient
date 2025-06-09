@@ -31,7 +31,8 @@
 			"extensions": [
 				"asciidoctor.asciidoctor-vscode",
 				"vscjava.vscode-java-pack",
-				"vscodevim.vim"
+				"vscodevim.vim",
+				"mhutchie.git-graph"
 			]
 		}
 	},
