@@ -1,0 +1,5 @@
+[versions]
+jacksonDatabind = "2.19.0"
+
+[libraries]
+jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonDatabind" }
