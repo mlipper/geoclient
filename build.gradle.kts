@@ -2,13 +2,12 @@ plugins {
     `java-library`
 }
 
-//val libsDir = rootProject.file("libs")
-
 repositories {
     mavenCentral()
-    flatDir {
-        dirs(rootProject.file("libs"))
-    }
+    mavenLocal()
+    //flatDir {
+    //    dirs(rootProject.file("libs"))
+    //}
 }
 
 dependencies {
