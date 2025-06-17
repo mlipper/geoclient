@@ -47,9 +47,9 @@ package gov.nyc.doitt.gis.geoclient.parser.token;
  *   <li>{@link #PLUS4} - ZIP+4 code</li>
  * </ul>
  *
- * @see gov.nyc.doitt.gis.geoclient.parser.regex.UnrecognizedTextParser
  * @author mlipper
  * @since 2.0
+ * @see gov.nyc.doitt.gis.geoclient.parser.regex.UnrecognizedTextParser
  */
 public enum TokenType {
     AND,
