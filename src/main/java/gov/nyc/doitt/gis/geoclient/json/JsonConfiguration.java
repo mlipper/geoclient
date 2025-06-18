@@ -6,54 +6,70 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.nyc.doitt.gis.geoclient.config.GeosupportConfig;
-import gov.nyc.doitt.gis.geoclient.function.Filter;
 
 public class JsonConfiguration {
     private static final Logger log = LoggerFactory.getLogger(JsonConfiguration.class);
     private static final String DEFAULT_CONFIG_FILE = "geoclient.json";
-    
-    private final JsonNode jsonNode;
+
+    private final JsonNode rootNode;
+    private final ObjectMapper mapper;
 
     public JsonConfiguration(String configFile) {
-        this.jsonNode = loadConfig(configFile);
+        // Must create ObjectMapper first because it is used by
+        // #loadConfig(String file)
+        this.mapper = getObjectMapper();
+        this.rootNode = loadConfig(configFile);
     }
 
     public JsonConfiguration() {
         this(DEFAULT_CONFIG_FILE);
-    } 
+    }
 
     public GeosupportConfig loadGeosupportConfig() {
         return null;
     }
 
-    public List<Filter> loadFilters() {
-        List<JsonNode> filters = this.jsonNode.findValues("filter");
-        List<Filter> result = new ArrayList<>(filters.size());
+    public void load() {
+        FilterList filterList = loadFilters();
+        log.info("Loaded filters {}", filterList);
+    }
+
+    protected FilterList loadFilters() {
+        JsonNode allFilters = this.rootNode.get("geoclient").get("filters");
+        String compositeFiltersId = allFilters.get("id").asText();
+        log.info("Found filters.id: {}", compositeFiltersId);
+        List<JsonNode> filters = allFilters.findValues("filter");
+        List<FilterNode> filterNodes = new ArrayList<>();
         for (JsonNode filterNode : filters) {
             // filterNode is an ObjectNode
-            filterNode.iterator().forEachRemaining(e -> 
-                e.properties().forEach(kv -> {
-                    if (kv.getKey().equals("pattern")) {
-                        result.add(new Filter(kv.getValue().asText()));
-                    }
-                })
-            );
+            filterNode.iterator().forEachRemaining(e -> {
+                String filterId = e.get("id").asText();
+                String pattern = e.get("pattern").asText();
+                filterNodes.add(new FilterNode(filterId, pattern));
+            });
         }
-        return result;
+        FilterList flist = new FilterList();
+        flist.setId(compositeFiltersId);
+        flist.setFilters(filterNodes);
+        return flist;
     }
 
     protected ObjectMapper getObjectMapper() {
-        return new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
+        // to prevent exception when encountering unknown property:
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        // to allow coercion of JSON empty String ("") to null Object value:
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        return objectMapper;
     }
 
     protected JsonNode loadConfig(String configFile) {
-        ObjectMapper mapper = getObjectMapper();
         try (var is = getClass().getClassLoader().getResourceAsStream("geoclient.json")) {
-            //Map<String, String> result = mapper.readValue(is, new com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {});
             JsonNode result = mapper.readTree(is);
             log.info("Configuration loaded: {}", result);
             return result;
