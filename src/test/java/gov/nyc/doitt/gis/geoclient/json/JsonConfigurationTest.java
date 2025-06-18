@@ -15,13 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.function.Filter;
 
-class ConfigurationTest {
+class JsonConfigurationTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ConfigurationTest.class);
+    private static final Logger log = LoggerFactory.getLogger(JsonConfigurationTest.class);
 
     @Test
     void test_loadFilters() throws IOException {
-        Configuration config = new Configuration();
+        JsonConfiguration config = new JsonConfiguration();
         List<Filter> filters = config.loadFilters();
         log.info("filters: {}", filters);
         assertNotNull(filters);

@@ -12,17 +12,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.nyc.doitt.gis.geoclient.config.GeosupportConfig;
 import gov.nyc.doitt.gis.geoclient.function.Filter;
 
-public class Configuration {
-    private static final Logger log = LoggerFactory.getLogger(Configuration.class);
+public class JsonConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(JsonConfiguration.class);
     private static final String DEFAULT_CONFIG_FILE = "geoclient.json";
     
     private final JsonNode jsonNode;
 
-    public Configuration(String configFile) {
+    public JsonConfiguration(String configFile) {
         this.jsonNode = loadConfig(configFile);
     }
 
-    public Configuration() {
+    public JsonConfiguration() {
         this(DEFAULT_CONFIG_FILE);
     } 
 
