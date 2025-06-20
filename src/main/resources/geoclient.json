@@ -55,9 +55,7 @@
           "id": "WA1",
           "isWA1": "true",
           "length": 1200,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -645,9 +643,7 @@
         {
           "id": "WA2_FAP",
           "length": 1363,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -1935,9 +1931,7 @@
         {
           "id": "WA2_F1",
           "length": 300,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -2358,9 +2352,7 @@
         {
           "id": "WA2_F1A",
           "length": 1363,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -3696,9 +3688,7 @@
         {
           "id": "WA2_F1AX",
           "length": 2800,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -5294,9 +5284,7 @@
         {
           "id": "WA2_F1B",
           "length": 4300,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -7873,9 +7861,7 @@
         {
           "id": "WA2_F2",
           "length": 200,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -8190,9 +8176,7 @@
         {
           "id": "WA2_F2W",
           "length": 4000,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
@@ -8702,9 +8686,7 @@
         {
           "id": "WA2_F3",
           "length": 1000,
-          "outputFilters": {
-            "reference": "allFilters"
-          },
+          "outputFilters": [ "allFilters" ],
           "fields": {
             "field": [
               {
