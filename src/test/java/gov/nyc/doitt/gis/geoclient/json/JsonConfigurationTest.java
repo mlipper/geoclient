@@ -1,14 +1,18 @@
 package gov.nyc.doitt.gis.geoclient.json;
 
 
+import static gov.nyc.doitt.gis.geoclient.json.fixtures.FilterFixtures.createFilterList;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.nyc.doitt.gis.geoclient.config.WorkAreaConfig;
 
 class JsonConfigurationTest {
 
@@ -21,12 +25,24 @@ class JsonConfigurationTest {
         log.info("filters: {}", filterList);
         assertNotNull(filterList);
         assertNotNull(filterList.getId());
-        assertNotNull(filterList.getFilters());
-        assumeFalse(filterList.getFilters().isEmpty());
-        for (FilterNode filterNode : filterList.getFilters()) {
+        assertNotNull(filterList.getFilterNodes());
+        assumeFalse(filterList.getFilterNodes().isEmpty());
+        for (FilterNode filterNode : filterList.getFilterNodes()) {
             log.info("filter: {}", filterNode);
             assertNotNull(filterNode.getId());
             assertNotNull(filterNode.getPattern());
+        }
+    }
+
+    @Test
+    void test_loadWorkAreas() throws IOException {
+        JsonConfiguration config = new JsonConfiguration();
+        FilterList filterList = createFilterList(2);
+        List<WorkAreaConfig> waConfigList = config.loadWorkAreas(filterList);
+        log.info("work areas: {}", waConfigList);
+        assertNotNull(waConfigList);
+        for (WorkAreaConfig waConfig : waConfigList) {
+            assertNotNull(waConfig.getId());
         }
     }
 }

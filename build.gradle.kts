@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    `java-test-fixtures`
 }
 
 repositories {
@@ -31,6 +32,6 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
-        showStandardStreams = true
+        //showStandardStreams = true
     }
 }
