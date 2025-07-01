@@ -1,6 +1,6 @@
 {
   "geoclient": {
-    "filters": {
+    "filters": [{
       "id": "allFilters",
       "filter": [
         {
@@ -48,7 +48,7 @@
           "pattern": "taxLotVersionNumber\\w*"
         }
       ]
-    },
+    }],
     "workAreas": [
       {
         "id": "WA1",

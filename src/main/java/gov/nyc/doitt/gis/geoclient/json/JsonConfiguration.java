@@ -2,6 +2,7 @@ package gov.nyc.doitt.gis.geoclient.json;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,33 +105,32 @@ public class JsonConfiguration {
     public void load() {
         GeosupportConfig geosupportConfig = loadGeosupportConfig();
         log.info("Loaded GeosupportConfig: {}", geosupportConfig);
-        FilterList filterList = loadFilters();
+        List<FilterList> filterList = loadFilters();
         log.info("Loaded filters {}", filterList);
         List<WorkAreaConfig> waConfigs = loadWorkAreas(filterList);
         log.info("Loaded work area configurations {}", waConfigs);
     }
 
-    protected FilterList loadFilters() {
-        JsonNode allFilters = this.rootNode.get("geoclient").get("filters");
-        String filterListId = allFilters.get("id").asText();
-        log.info("Found filters.id: {}", filterListId);
-        List<JsonNode> filters = allFilters.findValues("filter");
-        List<FilterNode> filterNodes = new ArrayList<>();
-        for (JsonNode filterNode : filters) {
-            // filterNode is an ObjectNode
-            filterNode.iterator().forEachRemaining(e -> {
-                String filterId = e.get("id").asText();
-                String pattern = e.get("pattern").asText();
-                filterNodes.add(new FilterNode(filterId, pattern));
-            });
+    protected List<FilterList> loadFilters() {
+        ArrayNode fListArray = (ArrayNode)this.rootNode.get("geoclient").get("filters");
+        List<FilterList> listOfFilterLists = new ArrayList<>();
+        for (JsonNode fListNode : fListArray) {
+           String fListId = fListNode.get("id").asText(); 
+           ArrayNode filtersNode = (ArrayNode)fListNode.get("filter");
+           List<FilterNode> filterNodes = new ArrayList<>();
+           for (JsonNode filter : filtersNode) {
+               ObjectNode o = (ObjectNode)filter;
+               filterNodes.add(new FilterNode(o.get("id").asText(), o.get("pattern").asText()));
+           }
+           FilterList list = new FilterList();
+           list.setId(fListId);
+           list.setFilterNodes(filterNodes);
+           listOfFilterLists.add(list);
         }
-        FilterList flist = new FilterList();
-        flist.setId(filterListId);
-        flist.setFilterNodes(filterNodes);
-        return flist;
+        return listOfFilterLists;
     }
 
-    protected List<WorkAreaConfig> loadWorkAreas(FilterList filterList) {
+    protected List<WorkAreaConfig> loadWorkAreas(List<FilterList> filterList) {
         List<WorkAreaConfig> workAreaConfigs = new ArrayList<>();
         ArrayNode workAreas = (ArrayNode)this.rootNode.get("geoclient").get("workAreas");
         for (JsonNode workAreaNode : workAreas) {
@@ -143,8 +143,9 @@ public class JsonConfiguration {
             List<Filter> filters = new ArrayList<>();
             if (workAreaNode.hasNonNull("filters")) {
                 String filtersId = workAreaNode.get("filters").get("id").asText();
-                if (filterList.getId().equals(filtersId)) {
-                    filters.addAll(filterList.asFilters());
+                Optional<FilterList> theList = filterList.stream().filter(fl -> filtersId.equals(fl.getId())).findFirst();
+                if (theList.isPresent()) {
+                    filters.addAll(theList.get().asFilters());
                 }
             }
             List<Field> fields = new ArrayList<Field>();
