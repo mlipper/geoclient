@@ -1,5 +1,6 @@
 import java.nio.file.*
 import java.net.URI
+import org.asciidoctor.gradle.jvm.AbstractAsciidoctorTask
 
 plugins {
     id 'geoclient.library-conventions'
@@ -35,9 +36,8 @@ tasks.named('generateSamples') {
     serviceUrl = System.getenv('GEOCLIENT_SERVICE_URL')
 }
 
-tasks.named('asciidoctor') {
-    group = 'documentation'
-    description = 'Build Asciidoctor documentation'
+// Configures both asciidoctor and asciidoctorPdf tasks
+tasks.withType(AbstractAsciidoctorTask).configureEach {
 
     baseDirFollowsSourceDir()
 
