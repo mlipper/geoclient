@@ -117,14 +117,14 @@ public class JsonConfiguration {
         for (JsonNode fListNode : fListArray) {
            String fListId = fListNode.get("id").asText(); 
            ArrayNode filtersNode = (ArrayNode)fListNode.get("filter");
-           List<FilterNode> filterNodes = new ArrayList<>();
+           List<Filter> filters = new ArrayList<>();
            for (JsonNode filter : filtersNode) {
                ObjectNode o = (ObjectNode)filter;
-               filterNodes.add(new FilterNode(o.get("id").asText(), o.get("pattern").asText()));
+               filters.add(new Filter(o.get("pattern").asText()));
            }
            FilterList list = new FilterList();
            list.setId(fListId);
-           list.setFilterNodes(filterNodes);
+           list.setFilters(filters);
            listOfFilterLists.add(list);
         }
         return listOfFilterLists;
@@ -145,7 +145,7 @@ public class JsonConfiguration {
                 String filtersId = workAreaNode.get("filters").get("id").asText();
                 Optional<FilterList> theList = filterList.stream().filter(fl -> filtersId.equals(fl.getId())).findFirst();
                 if (theList.isPresent()) {
-                    filters.addAll(theList.get().asFilters());
+                    filters.addAll(theList.get().getFilters());
                 }
             }
             List<Field> fields = new ArrayList<Field>();

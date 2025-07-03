@@ -20,6 +20,8 @@ dependencies {
     runtimeOnly(libs.logbackCore)
     testImplementation(libs.junitJupiter)
     testRuntimeOnly(libs.junitPlatformLauncher)
+    testFixturesImplementation(libs.geoclientCore)
+    testFixturesImplementation(libs.geoclientJni)
 }
 
 java {

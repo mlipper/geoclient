@@ -4,6 +4,7 @@ package gov.nyc.doitt.gis.geoclient.json;
 import static gov.nyc.doitt.gis.geoclient.json.fixtures.FilterFixtures.createFilterList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.config.WorkAreaConfig;
+import gov.nyc.doitt.gis.geoclient.function.Filter;
 
 class JsonConfigurationTest {
 
@@ -29,12 +31,12 @@ class JsonConfigurationTest {
         log.info("filters: {}", filterList);
         assertNotNull(filterList);
         assertNotNull(filterList.getId());
-        assertNotNull(filterList.getFilterNodes());
-        assumeFalse(filterList.getFilterNodes().isEmpty());
-        for (FilterNode filterNode : filterList.getFilterNodes()) {
-            log.info("filter: {}", filterNode);
-            assertNotNull(filterNode.getId());
-            assertNotNull(filterNode.getPattern());
+        assertNotNull(filterList.getFilters());
+        assumeFalse(filterList.getFilters().isEmpty());
+        for (Filter filter : filterList.getFilters()) {
+            log.info("filter: {}", filter);
+            assertTrue(filter.toString().startsWith("Filter [pattern="));
+            assertTrue(filter.toString().endsWith("]"));
         }
     }
 
