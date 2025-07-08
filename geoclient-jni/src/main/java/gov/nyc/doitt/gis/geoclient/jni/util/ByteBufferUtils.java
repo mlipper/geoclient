@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.jni.test;
+package gov.nyc.doitt.gis.geoclient.jni.util;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -57,6 +57,13 @@ public class ByteBufferUtils {
             return GEOSUPPORT_RC_SUCCESS.equals(returnCode) || GEOSUPPORT_RC_SUCCESS_WITH_WARN.equals(returnCode);
         }
         return false;
+    }
+
+    public static String readString(ByteBuffer buffer) throws CharacterCodingException {
+        int position = buffer.position();
+        CharBuffer charBuffer = DECODER.decode(buffer);
+        buffer.position(position);
+        return charBuffer.toString();
     }
 
     private static boolean isNotNullOrEmpty(String s) {

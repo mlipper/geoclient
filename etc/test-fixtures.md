@@ -4,13 +4,13 @@
 
 | Project        | Source Folder | Package                              | Class                             |
 | -------------- | ------------- | ------------------------------------ | --------------------------------- |
+| geoclient-jni  | main          | gov.nyc.doitt.gis.geoclient.jni.util | ByteBufferUtils                   |
 | geoclient-jni  | testFixtures  | gov.nyc.doitt.gis.geoclient.jni.test | GeoclientStub                     |
 | geoclient-test | main          | gov.nyc.doitt.gis.geoclient.test     | GeosupportIntegrationTest         |
 | geoclient-test | main          | gov.nyc.doitt.gis.geoclient.test     | IntegrationTestSupport            |
 | geoclient-test | main          | gov.nyc.doitt.gis.geoclient.test     | LogLevelAdapter                   |
 | geoclient-test | main          | gov.nyc.doitt.gis.geoclient.test     | NativeIntegrationTest             |
 | geoclient-test | main          | gov.nyc.doitt.gis.geoclient.test     | RequiresRestServiceCustomCondtion |
-| jni-test       | main          | gov.nyc.doitt.gis.geoclient.jni.test | ByteBufferUtils                   |
 | jni-test       | main          | gov.nyc.doitt.gis.geoclient.jni.test | ConfigInitializer                 |
 | jni-test       | main          | gov.nyc.doitt.gis.geoclient.jni.test | TestConfig                        |
 | jni-test       | main          | gov.nyc.doitt.gis.geoclient.jni.test | TestConfigurationException        |

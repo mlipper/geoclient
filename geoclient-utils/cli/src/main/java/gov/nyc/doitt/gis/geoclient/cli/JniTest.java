@@ -29,12 +29,10 @@ import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
 import gov.nyc.doitt.gis.geoclient.jni.GeoclientJni;
-import gov.nyc.doitt.gis.geoclient.jni.test.ByteBufferUtils;
 import gov.nyc.doitt.gis.geoclient.jni.test.TestConfig;
 import gov.nyc.doitt.gis.geoclient.jni.test.TestFileParser;
+import gov.nyc.doitt.gis.geoclient.jni.util.ByteBufferUtils;
 
-// TODO When rewriting this class see the following for some ideas:
-// https://github.com/gradle/gradle/tree/master/subprojects/docs/src/samples/java-library/multiproject
 public class JniTest {
     private static final String DEFAULT_CLASSPATH_ROOT = "./";
     private static final String DEFAULT_CLASSPATH_ROOT_FROM_JAR = "/";
