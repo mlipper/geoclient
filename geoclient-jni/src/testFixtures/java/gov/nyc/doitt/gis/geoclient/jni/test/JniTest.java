@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.cli;
+package gov.nyc.doitt.gis.geoclient.jni.test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,10 +29,32 @@ import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
 import gov.nyc.doitt.gis.geoclient.jni.GeoclientJni;
-import gov.nyc.doitt.gis.geoclient.jni.test.TestConfig;
-import gov.nyc.doitt.gis.geoclient.jni.test.TestFileParser;
 import gov.nyc.doitt.gis.geoclient.jni.util.ByteBufferUtils;
 
+/**
+ * Originally, this class was used to test JNI configuration and run
+ * simple sanity checks from the command line.
+ *
+ * Given no arguments this class will execute a set of test cases
+ * defined in the <code>jni-test.conf</code> configuration file.
+ *
+ * Here are the notes for running this class with Gradle. They no longer
+ * apply since this class is not packaged as a CLI application.
+ *
+ * To run the app with arguments to the main method use --args="...".
+ *
+ * Example: see the usage message.
+ *
+ * ./gradlew :project:run --args="--help"
+ *
+ * Example: run from the project root and use the project's jni-test.conf file.
+ *
+ * ./gradlew :project:run --args="--file=$(pwd)/project/src/testFixtures/resources/jni-test.conf"
+ *
+ * See:
+ * https://docs.gradle.org/current/userguide/application_plugin.html#application_plugin
+ *
+ */
 public class JniTest {
     private static final String DEFAULT_CLASSPATH_ROOT = "./";
     private static final String DEFAULT_CLASSPATH_ROOT_FROM_JAR = "/";
@@ -47,17 +69,14 @@ public class JniTest {
     private static final String OPTION_FILE = "--file";
     private static final String OPTION_HELP_LONG = "--help";
     private static final String OPTION_HELP_SHORT = "--h";
-
     private static final List<TestConfig> DEFAULT_TEST_CONFIGS = new ArrayList<TestConfig>();
     {
         DEFAULT_TEST_CONFIGS.add(new TestConfig("1A", INPUT_1A, F1A_WA2_LENGTH));
         DEFAULT_TEST_CONFIGS.add(new TestConfig("HR", INPUT_HR, FHR_WA2_LENGTH));
     }
-
     static final Logger logger = LoggerFactory.getLogger(JniTest.class);
     private final Geoclient geoclient;
     private List<TestConfig> testConfigs;
-
     public JniTest(Geoclient geoclient, boolean debug, List<TestConfig> testConfigs) {
         super();
         this.geoclient = geoclient;
@@ -65,6 +84,8 @@ public class JniTest {
     }
 
     /**
+     * Ye Olde main method.
+     *
      * @param args command line arguments
      * @throws Exception if anything goes wrong
      */
@@ -115,15 +136,12 @@ public class JniTest {
                     fileOption = string.substring((OPTION_FILE + "=").length());
                 }
             }
-
         }
-
         logger.debug("PATH=" + System.getenv("PATH"));
         logger.debug("LD_LIBRARY_PATH=" + System.getenv("LD_LIBRARY_PATH"));
         logger.debug("Using OPTIONS: ");
         logger.debug("    --debug=" + (debugOption ? "true" : "false"));
         logger.debug("    --file=" + (fileOption != null ? fileOption : "<not given>"));
-
         JniTest jniTest = new JniTest(new GeoclientJni(), debugOption, getTestCaseData(fileOption));
         System.exit(jniTest.runTest());
     }
@@ -135,17 +153,14 @@ public class JniTest {
         if (fileOption == null) {
             // Try to find default file on the CLASSPATH
             logger.debug("--file option not given; checking for default file '" + DEFAULT_FILE + "'");
-
             String defaultFile = (iAmRunningFromAJar() ? DEFAULT_CLASSPATH_ROOT_FROM_JAR : DEFAULT_CLASSPATH_ROOT)
                     + DEFAULT_FILE;
             fileStream = getClasspathResource(defaultFile);
-
             if (fileStream == null) {
                 logger.debug("Tests will be run with built-in test case data");
                 return DEFAULT_TEST_CONFIGS;
             }
             logger.debug("Tests will be run with default test case file '" + defaultFile + "' found on the CLASSPATH");
-
         }
         else {
             // User supplied a file
@@ -157,16 +172,13 @@ public class JniTest {
                 // Regular File resource
                 fileStream = getFilePathResource(fileOption);
             }
-
             // User supplied file not found
             if (fileStream == null) {
                 throw new IOException("Supplied file argument '" + fileOption
                         + "' could not be resolved to an existing file. Run again with --debug to see what file path is being checked.");
             }
-
             logger.debug("Tests will be run with data from supplied file argument '" + fileOption + "'");
         }
-
         return new TestFileParser(fileStream).parse();
     }
 
@@ -187,7 +199,6 @@ public class JniTest {
             logger.debug(msg + "true");
             return url.openStream();
         }
-
         msg = "JniTest.class.getClassLoader().getResource(" + classpathFile + ") works? ";
         url = JniTest.class.getClassLoader().getResource(classpathFile);
         if (url == null) {
@@ -195,13 +206,11 @@ public class JniTest {
             return null;
         }
         logger.debug(msg + "true");
-
         return url.openStream();
     }
 
     private static InputStream getFilePathResource(String fileOption) throws IOException {
         File file = new File(fileOption);
-
         if (file.isAbsolute()) {
             logger.debug("Checking for file using absolute file path: " + fileOption);
         }

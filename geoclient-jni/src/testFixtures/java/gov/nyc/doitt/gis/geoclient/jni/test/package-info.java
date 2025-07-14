@@ -15,9 +15,11 @@
  */
 
 /**
- * Classes and utilities for creating function calls (WA1) from a
- * configuration file. Useful for testing the the {@code geoclient-jni}
- * project directly.
+ * Test fixtures for the geoclient-jni project.
+ *
+ * This package includes classes and utilities for making Geosupport calls
+ * using a configuration file to assemble WA1. Useful for testing the
+ * {@code geoclient-jni} project directly.
  *
  * @author Matthew Lipper
  *

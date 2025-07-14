@@ -15,8 +15,7 @@
  */
 
 /**
- * Java application for testing the {@code geoclient-jni} project from
- * the command line.
+ * Geoclient command line Java application for calling the Geosupport API.
  *
  * @author Matthew Lipper
  *

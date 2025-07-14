@@ -4,11 +4,6 @@ plugins {
     id 'geoclient.test-conventions'
 }
 
-dependencies {
-    integrationTestImplementation(project(':geoclient-utils:jni-test'))
-    testFixturesImplementation(project(':geoclient-utils:jni-test'))
-}
-
 Provider<Directory> generatedResourcesDirectory = layout.buildDirectory.dir("generated-resources/main")
 File generatedResources = generatedResourcesDirectory.get().asFile
 def libPath = file('/opt/geosupport/current/lib')

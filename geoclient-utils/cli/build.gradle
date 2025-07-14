@@ -4,27 +4,14 @@ plugins {
 }
 
 dependencies {
-    implementation project(':geoclient-utils:jni-test')
     implementation project(':geoclient-jni')
+    implementation project(':geoclient-core')
 }
 
+// Note: using the 'application' plugin's run task does not work,
+// seemingly due to Gradle's handling of stdout and stdin.
+// However, using the distribution does work.
 application {
     //applicationDefaultJvmArgs = ['-Xcheck:jni']
-    mainClass = 'gov.nyc.doitt.gis.geoclient.cli.JniTest'
+    mainClass = 'gov.nyc.doitt.gis.geoclient.cli.GeosupportClient'
 }
-
-//
-// To run the app with arguments to the main method use --args="...".
-//
-// Example: see the usage message.
-//
-// ./gradlew :geoclient-utils:cli:run --args="--help"
-//
-// Example: run from the project root and use the :geoclient-utils:jni-test
-// project's jni-test.conf file.
-//
-// ./gradlew :g-u:cli:run --args="--file=$(pwd)/geoclient-utils/jni-test/src/main/resources/jni-test.conf"
-//
-// See:
-// https://docs.gradle.org/current/userguide/application_plugin.html#application_plugin
-//
