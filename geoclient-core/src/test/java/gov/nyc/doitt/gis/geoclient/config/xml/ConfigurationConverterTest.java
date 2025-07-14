@@ -21,14 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.thoughtworks.xstream.XStream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.thoughtworks.xstream.XStream;
+
 import gov.nyc.doitt.gis.geoclient.function.Configuration;
 import gov.nyc.doitt.gis.geoclient.function.DefaultConfiguration;
-import gov.nyc.doitt.gis.geoclient.test.Fixtures;
 
 public class ConfigurationConverterTest {
 
@@ -38,7 +37,7 @@ public class ConfigurationConverterTest {
 
     @BeforeEach
     public void setUp() {
-        metadata = new Fixtures().configurationConverterMetadata();
+        metadata = GeoclientXmlReader.getConfigurationConverterMetadata();
         converter = new ConfigurationConverter(metadata);
         xstream = new XStreamBuilder().addAllClassesInSamePackageAs(DefaultConfiguration.class).registerConverter(
             converter).alias("configuration", DefaultConfiguration.class).build();
