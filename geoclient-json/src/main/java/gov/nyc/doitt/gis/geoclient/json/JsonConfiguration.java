@@ -1,17 +1,32 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package gov.nyc.doitt.gis.geoclient.json;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.config.GeosupportConfig;
 import gov.nyc.doitt.gis.geoclient.config.WorkAreaConfig;
@@ -112,27 +127,27 @@ public class JsonConfiguration {
     }
 
     protected List<FilterList> loadFilters() {
-        ArrayNode fListArray = (ArrayNode)this.rootNode.get("geoclient").get("filters");
+        ArrayNode fListArray = (ArrayNode) this.rootNode.get("geoclient").get("filters");
         List<FilterList> listOfFilterLists = new ArrayList<>();
         for (JsonNode fListNode : fListArray) {
-           String fListId = fListNode.get("id").asText(); 
-           ArrayNode filtersNode = (ArrayNode)fListNode.get("filter");
-           List<Filter> filters = new ArrayList<>();
-           for (JsonNode filter : filtersNode) {
-               ObjectNode o = (ObjectNode)filter;
-               filters.add(new Filter(o.get("pattern").asText()));
-           }
-           FilterList list = new FilterList();
-           list.setId(fListId);
-           list.setFilters(filters);
-           listOfFilterLists.add(list);
+            String fListId = fListNode.get("id").asText();
+            ArrayNode filtersNode = (ArrayNode) fListNode.get("filter");
+            List<Filter> filters = new ArrayList<>();
+            for (JsonNode filter : filtersNode) {
+                ObjectNode o = (ObjectNode) filter;
+                filters.add(new Filter(o.get("pattern").asText()));
+            }
+            FilterList list = new FilterList();
+            list.setId(fListId);
+            list.setFilters(filters);
+            listOfFilterLists.add(list);
         }
         return listOfFilterLists;
     }
 
     protected List<WorkAreaConfig> loadWorkAreas(List<FilterList> filterList) {
         List<WorkAreaConfig> workAreaConfigs = new ArrayList<>();
-        ArrayNode workAreas = (ArrayNode)this.rootNode.get("geoclient").get("workAreas");
+        ArrayNode workAreas = (ArrayNode) this.rootNode.get("geoclient").get("workAreas");
         for (JsonNode workAreaNode : workAreas) {
             String id = workAreaNode.get("id").asText();
             Integer length = workAreaNode.get("length").asInt();
@@ -143,15 +158,16 @@ public class JsonConfiguration {
             List<Filter> filters = new ArrayList<>();
             if (workAreaNode.hasNonNull("filters")) {
                 String filtersId = workAreaNode.get("filters").get("id").asText();
-                Optional<FilterList> theList = filterList.stream().filter(fl -> filtersId.equals(fl.getId())).findFirst();
+                Optional<FilterList> theList = filterList.stream().filter(
+                    fl -> filtersId.equals(fl.getId())).findFirst();
                 if (theList.isPresent()) {
                     filters.addAll(theList.get().getFilters());
                 }
             }
             List<Field> fields = new ArrayList<Field>();
-            ArrayNode fieldsNode = (ArrayNode)workAreaNode.get("fields");
+            ArrayNode fieldsNode = (ArrayNode) workAreaNode.get("fields");
             for (JsonNode fieldNode : fieldsNode) {
-                fields.add(getField((ObjectNode)fieldNode));
+                fields.add(getField((ObjectNode) fieldNode));
             }
             WorkAreaConfig workAreaConfig = new WorkAreaConfig(id, length, isWorkAreaOne, fields, filters);
             workAreaConfigs.add(workAreaConfig);
@@ -165,11 +181,7 @@ public class JsonConfiguration {
         int start = f.get("start").asInt();
         int length = f.get("length").asInt();
         FieldBuilder builder = new FieldBuilder(id, start, length);
-        return builder.composite(f)
-            .input(f)
-            .alias(f)
-            .whitespaceSignificant(f)
-            .outputAlias(f).build();
+        return builder.composite(f).input(f).alias(f).whitespaceSignificant(f).outputAlias(f).build();
     }
 
     protected ObjectMapper getObjectMapper() {
@@ -186,7 +198,8 @@ public class JsonConfiguration {
             JsonNode result = mapper.readTree(is);
             log.info("Configuration loaded: {}", result);
             return result;
-        } catch (java.io.IOException | NullPointerException e) {
+        }
+        catch (java.io.IOException | NullPointerException e) {
             log.error("Failed to load JSON configuration", e);
             throw new JsonConfigurationException("Could not load Geoclient JSON configuration", e);
         }
