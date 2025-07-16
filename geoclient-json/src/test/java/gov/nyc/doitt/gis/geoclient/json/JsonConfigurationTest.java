@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.nyc.doitt.gis.geoclient.config.FunctionConfig;
 import gov.nyc.doitt.gis.geoclient.config.WorkAreaConfig;
 import gov.nyc.doitt.gis.geoclient.function.Filter;
 
@@ -65,6 +66,21 @@ class JsonConfigurationTest {
         assertNotNull(waConfigList);
         for (WorkAreaConfig waConfig : waConfigList) {
             assertNotNull(waConfig.getId());
+        }
+    }
+
+    @Test
+    void test_loadFunctions() throws IOException {
+        JsonConfiguration config = new JsonConfiguration();
+        FilterList filterList = createFilterList(2);
+        List<FilterList> listOfFilterLists = new ArrayList<>();
+        listOfFilterLists.add(filterList);
+        List<WorkAreaConfig> waConfigList = config.loadWorkAreas(listOfFilterLists);
+        List<FunctionConfig> functionConfigs = config.loadFunctions(waConfigList);
+        log.info("functions: {}", functionConfigs);
+        assertNotNull(functionConfigs);
+        for (FunctionConfig functionConfig : functionConfigs) {
+            assertNotNull(functionConfig.getId());
         }
     }
 }

@@ -1,54 +1,56 @@
 {
   "geoclient": {
-    "filters": [{
-      "id": "allFilters",
-      "filter": [
-        {
-          "id": "angleToFilter",
-          "pattern": "angleTo(From|To)Node(Alpha|Beta)Value"
-        },
-        {
-          "id": "attributeBytesFilter",
-          "pattern": "attributeBytes"
-        },
-        {
-          "id": "fillerFilter",
-          "pattern": "\\w*[fF]iller\\d*\\w*"
-        },
-        {
-          "id": "fractionForCurveCalculationFilter",
-          "pattern": "fractionForCurveCalculation"
-        },
-        {
-          "id": "internalUseFilter",
-          "pattern": "\\w*[Ii]nternalUse\\w*"
-        },
-        {
-          "id": "lowHouseNumberFilter",
-          "pattern": "lowHouseNumber(In|SortFormat|SortFormatIn)?"
-        },
-        {
-          "id": "ninFilter",
-          "pattern": "nin"
-        },
-        {
-          "id": "reasonCodeQualifierFilter",
-          "pattern": "reasonCodeQualifier(.)?"
-        },
-        {
-          "id": "reservedForFilter",
-          "pattern": "reservedFor\\w*"
-        },
-        {
-          "id": "streetAttributeIndicatorFilter",
-          "pattern": "streetAttributeIndicator"
-        },
-        {
-          "id": "taxLotVersionNumberFilter",
-          "pattern": "taxLotVersionNumber\\w*"
-        }
-      ]
-    }],
+    "filters": [
+      {
+        "id": "allFilters",
+        "filter": [
+          {
+            "id": "angleToFilter",
+            "pattern": "angleTo(From|To)Node(Alpha|Beta)Value"
+          },
+          {
+            "id": "attributeBytesFilter",
+            "pattern": "attributeBytes"
+          },
+          {
+            "id": "fillerFilter",
+            "pattern": "\\w*[fF]iller\\d*\\w*"
+          },
+          {
+            "id": "fractionForCurveCalculationFilter",
+            "pattern": "fractionForCurveCalculation"
+          },
+          {
+            "id": "internalUseFilter",
+            "pattern": "\\w*[Ii]nternalUse\\w*"
+          },
+          {
+            "id": "lowHouseNumberFilter",
+            "pattern": "lowHouseNumber(In|SortFormat|SortFormatIn)?"
+          },
+          {
+            "id": "ninFilter",
+            "pattern": "nin"
+          },
+          {
+            "id": "reasonCodeQualifierFilter",
+            "pattern": "reasonCodeQualifier(.)?"
+          },
+          {
+            "id": "reservedForFilter",
+            "pattern": "reservedFor\\w*"
+          },
+          {
+            "id": "streetAttributeIndicatorFilter",
+            "pattern": "streetAttributeIndicator"
+          },
+          {
+            "id": "taxLotVersionNumberFilter",
+            "pattern": "taxLotVersionNumber\\w*"
+          }
+        ]
+      }
+    ],
     "workAreas": [
       {
         "id": "WA1",
@@ -10418,417 +10420,355 @@
         ]
       }
     ],
-    "functions": {
-      "function": [
-        {
-          "id": "AP",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_FAP"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "AP"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
-        },
-        {
-          "id": "HR",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_HR"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "HR"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
-        },
-        {
-          "id": "1",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "1"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              }
-            ]
-          }
-        },
-        {
-          "id": "1E",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "1E"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              }
-            ]
-          }
-        },
-        {
-          "id": "1A",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F1A"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "1A"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              }
-            ]
-          }
-        },
-        {
-          "id": "1AX",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F1AX"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "1AX"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              },
-              {
-                "name": "modeSwitch",
-                "value": "X"
-              }
-            ]
-          }
-        },
-        {
-          "id": "1B",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F1B"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "1B"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              }
-            ]
-          }
-        },
-        {
-          "id": "BL",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F1AX"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "BL"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "modeSwitch",
-                "value": "X"
-              }
-            ]
-          }
-        },
-        {
-          "id": "BN",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F1AX"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "BN"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "modeSwitch",
-                "value": "X"
-              }
-            ]
-          }
-        },
-        {
-          "id": "2",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F2"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "2"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              }
-            ]
-          }
-        },
-        {
-          "id": "2W",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F2W"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "2W"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              }
-            ]
-          }
-        },
-        {
-          "id": "3",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "workAreaTwo": {
-            "reference": "WA2_F3"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "3"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              },
-              {
-                "name": "crossStreetNamesFlag",
-                "value": "E"
-              },
-              {
-                "name": "modeSwitch",
-                "value": "X"
-              }
-            ]
-          }
-        },
-        {
-          "id": "D",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "D"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
-        },
-        {
-          "id": "DG",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "DG"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
-        },
-        {
-          "id": "DN",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "DN"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
-        },
-        {
-          "id": "BF",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "BF"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
-        },
-        {
-          "id": "BB",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "BB"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
-        },
-        {
-          "id": "N",
-          "workAreaOne": {
-            "reference": "WA1"
-          },
-          "configuration": {
-            "requiredArgument": [
-              {
-                "name": "geosupportFunctionCode",
-                "value": "N*"
-              },
-              {
-                "name": "workAreaFormatIndicator",
-                "value": "C"
-              }
-            ]
-          }
+    "functions": [
+      {
+        "id": "AP",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_FAP",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "AP"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
         }
-      ]
-    }
+      },
+      {
+        "id": "HR",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_HR",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "HR"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
+        }
+      },
+      {
+        "id": "1",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "1"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            }
+          ]
+        }
+      },
+      {
+        "id": "1E",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "1E"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            }
+          ]
+        }
+      },
+      {
+        "id": "1A",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F1A",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "1A"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            }
+          ]
+        }
+      },
+      {
+        "id": "1AX",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F1AX",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "1AX"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            },
+            {
+              "name": "modeSwitch",
+              "value": "X"
+            }
+          ]
+        }
+      },
+      {
+        "id": "1B",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F1B",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "1B"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            }
+          ]
+        }
+      },
+      {
+        "id": "BL",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F1AX",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "BL"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "modeSwitch",
+              "value": "X"
+            }
+          ]
+        }
+      },
+      {
+        "id": "BN",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F1AX",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "BN"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "modeSwitch",
+              "value": "X"
+            }
+          ]
+        }
+      },
+      {
+        "id": "2",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F2",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "2"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            }
+          ]
+        }
+      },
+      {
+        "id": "2W",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F2W",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "2W"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            }
+          ]
+        }
+      },
+      {
+        "id": "3",
+        "workAreaOne": "WA1",
+        "workAreaTwo": "WA2_F3",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "3"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            },
+            {
+              "name": "crossStreetNamesFlag",
+              "value": "E"
+            },
+            {
+              "name": "modeSwitch",
+              "value": "X"
+            }
+          ]
+        }
+      },
+      {
+        "id": "D",
+        "workAreaOne": "WA1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "D"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
+        }
+      },
+      {
+        "id": "DG",
+        "workAreaOne": "WA1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "DG"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
+        }
+      },
+      {
+        "id": "DN",
+        "workAreaOne": "WA1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "DN"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
+        }
+      },
+      {
+        "id": "BF",
+        "workAreaOne": "WA1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "BF"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
+        }
+      },
+      {
+        "id": "BB",
+        "workAreaOne": "WA1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "BB"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
+        }
+      },
+      {
+        "id": "N",
+        "workAreaOne": "WA1",
+        "configuration": {
+          "requiredArguments": [
+            {
+              "name": "geosupportFunctionCode",
+              "value": "N*"
+            },
+            {
+              "name": "workAreaFormatIndicator",
+              "value": "C"
+            }
+          ]
+        }
+      }
+    ]
   }
 }

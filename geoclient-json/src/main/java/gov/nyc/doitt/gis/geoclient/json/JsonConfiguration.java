@@ -17,6 +17,7 @@ package gov.nyc.doitt.gis.geoclient.json;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,8 +29,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.nyc.doitt.gis.geoclient.config.FunctionConfig;
 import gov.nyc.doitt.gis.geoclient.config.GeosupportConfig;
 import gov.nyc.doitt.gis.geoclient.config.WorkAreaConfig;
+import gov.nyc.doitt.gis.geoclient.function.DefaultConfiguration;
 import gov.nyc.doitt.gis.geoclient.function.Field;
 import gov.nyc.doitt.gis.geoclient.function.Filter;
 
@@ -124,6 +127,8 @@ public class JsonConfiguration {
         log.info("Loaded filters {}", filterList);
         List<WorkAreaConfig> waConfigs = loadWorkAreas(filterList);
         log.info("Loaded work area configurations {}", waConfigs);
+        List<FunctionConfig> functionConfigs = loadFunctions(waConfigs);
+        log.info("Loaded functions {}", functionConfigs);
     }
 
     protected List<FilterList> loadFilters() {
@@ -143,6 +148,45 @@ public class JsonConfiguration {
             listOfFilterLists.add(list);
         }
         return listOfFilterLists;
+    }
+
+    protected List<FunctionConfig> loadFunctions(List<WorkAreaConfig> workAreaConfigs) {
+        List<FunctionConfig> functionConfigs = new ArrayList<>();
+        ArrayNode functions = (ArrayNode) this.rootNode.get("geoclient").get("functions");
+        for (JsonNode functionNode : functions) {
+            String id = functionNode.get("id").asText();
+            String workAreaOneId = functionNode.get("workAreaOne").asText();
+            WorkAreaConfig workAreaOneConfig = workAreaConfigs.stream().filter(
+                wa -> wa.getId().equals(workAreaOneId)).findFirst().orElseThrow(
+                    () -> new JsonConfigurationException("Work area one not found: " + workAreaOneId));
+            Optional<WorkAreaConfig> workAreaTwoConfig = Optional.empty();
+            if (functionNode.has("workAreaTwo")) {
+                String workAreaTwoId = functionNode.get("workAreaTwo").asText();
+                workAreaTwoConfig = workAreaConfigs.stream().filter(wa -> wa.getId().equals(workAreaTwoId)).findFirst();
+            }
+            Optional<DefaultConfiguration> configuration = Optional.empty();
+            if (functionNode.has("configuration")) {
+                ObjectNode configNode = (ObjectNode) functionNode.get("configuration");
+                if (configNode.has("requiredArguments")) {
+                    ArrayNode requiredArgsNode = (ArrayNode) configNode.get("requiredArguments");
+                    Map<String, Object> requiredArguments = new java.util.HashMap<>();
+                    for (JsonNode args : requiredArgsNode) {
+                        String name = args.get("name").asText();
+                        String value = args.get("value").asText();
+                        requiredArguments.put(name, value);
+                    }
+                    configuration = Optional.of(new DefaultConfiguration());
+                    configuration.get().setRequiredArguments(requiredArguments);
+                }
+                else {
+                    log.warn("Configuration for function {} does not have requiredArguments", id);
+                }
+            }
+            FunctionConfig functionConfig = new FunctionConfig(id, workAreaOneConfig, workAreaTwoConfig.orElse(null),
+                configuration.orElse(null));
+            functionConfigs.add(functionConfig);
+        }
+        return functionConfigs;
     }
 
     protected List<WorkAreaConfig> loadWorkAreas(List<FilterList> filterList) {
