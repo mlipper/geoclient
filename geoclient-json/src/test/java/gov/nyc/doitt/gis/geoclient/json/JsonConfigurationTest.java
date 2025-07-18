@@ -15,41 +15,43 @@
  */
 package gov.nyc.doitt.gis.geoclient.json;
 
-import static gov.nyc.doitt.gis.geoclient.json.fixtures.FilterFixtures.createFilterList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import gov.nyc.doitt.gis.geoclient.config.FunctionConfig;
-import gov.nyc.doitt.gis.geoclient.config.WorkAreaConfig;
 import gov.nyc.doitt.gis.geoclient.function.Filter;
+import gov.nyc.doitt.gis.geoclient.jni.test.GeoclientStub;
+import gov.nyc.doitt.gis.geoclient.json.JsonConfiguration.JsonRegistry;
 
 class JsonConfigurationTest {
 
-    private static final Logger log = LoggerFactory.getLogger(JsonConfigurationTest.class);
+    private GeoclientStub geoclientStub;
+    private JsonConfiguration jsonConfiguration;
+    private JsonRegistry jsonRegistry;
+
+    @BeforeEach
+    void setUp() {
+        this.geoclientStub = new GeoclientStub();
+        this.jsonConfiguration = new JsonConfiguration(this.geoclientStub);
+        this.jsonRegistry = this.jsonConfiguration.getJsonRegistry();
+    }
 
     @Test
     void test_loadFilters() throws IOException {
-        JsonConfiguration config = new JsonConfiguration();
-        List<FilterList> listOfFilterLists = config.loadFilters();
-        assertEquals(1, listOfFilterLists.size());
-        FilterList filterList = listOfFilterLists.get(0);
-        log.info("filters: {}", filterList);
+        this.jsonConfiguration.loadFilters();
+        FilterList filterList = this.jsonRegistry.getFilterList("allFilters");
         assertNotNull(filterList);
         assertNotNull(filterList.getId());
         assertNotNull(filterList.getFilters());
         assumeFalse(filterList.getFilters().isEmpty());
         for (Filter filter : filterList.getFilters()) {
-            log.info("filter: {}", filter);
             assertTrue(filter.toString().startsWith("Filter [pattern="));
             assertTrue(filter.toString().endsWith("]"));
         }
@@ -57,30 +59,58 @@ class JsonConfigurationTest {
 
     @Test
     void test_loadWorkAreas() throws IOException {
-        JsonConfiguration config = new JsonConfiguration();
-        FilterList filterList = createFilterList(2);
-        List<FilterList> listOfFilterLists = new ArrayList<>();
-        listOfFilterLists.add(filterList);
-        List<WorkAreaConfig> waConfigList = config.loadWorkAreas(listOfFilterLists);
-        log.info("work areas: {}", waConfigList);
-        assertNotNull(waConfigList);
-        for (WorkAreaConfig waConfig : waConfigList) {
-            assertNotNull(waConfig.getId());
-        }
+        this.jsonConfiguration.loadFilters();
+        this.jsonConfiguration.loadWorkAreas();
+        assertNotNull(this.jsonRegistry.getWorkArea("WA1"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_FAP"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_F1"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_F1A"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_F1AX"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_F1B"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_F2"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_F2W"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_F3"));
+        assertNotNull(this.jsonRegistry.getWorkArea("WA2_HR"));
+        assertFalse(this.jsonRegistry.hasWorkArea("WA2_F6X"));
     }
 
     @Test
     void test_loadFunctions() throws IOException {
-        JsonConfiguration config = new JsonConfiguration();
-        FilterList filterList = createFilterList(2);
-        List<FilterList> listOfFilterLists = new ArrayList<>();
-        listOfFilterLists.add(filterList);
-        List<WorkAreaConfig> waConfigList = config.loadWorkAreas(listOfFilterLists);
-        List<FunctionConfig> functionConfigs = config.loadFunctions(waConfigList);
-        log.info("functions: {}", functionConfigs);
-        assertNotNull(functionConfigs);
-        for (FunctionConfig functionConfig : functionConfigs) {
-            assertNotNull(functionConfig.getId());
-        }
+        this.jsonConfiguration.loadFilters();
+        this.jsonConfiguration.loadWorkAreas();
+        this.jsonConfiguration.loadFunctions();
+        assertNotNull(this.jsonRegistry.getFunction("1"));
+        assertNotNull(this.jsonRegistry.getFunction("1A"));
+        assertNotNull(this.jsonRegistry.getFunction("1AX"));
+        assertNotNull(this.jsonRegistry.getFunction("1B"));
+        assertNotNull(this.jsonRegistry.getFunction("1E"));
+        assertNotNull(this.jsonRegistry.getFunction("2"));
+        assertNotNull(this.jsonRegistry.getFunction("2W"));
+        assertNotNull(this.jsonRegistry.getFunction("3"));
+        assertNotNull(this.jsonRegistry.getFunction("AP"));
+        assertNotNull(this.jsonRegistry.getFunction("BB"));
+        assertNotNull(this.jsonRegistry.getFunction("BF"));
+        assertNotNull(this.jsonRegistry.getFunction("BL"));
+        assertNotNull(this.jsonRegistry.getFunction("BN"));
+        assertNotNull(this.jsonRegistry.getFunction("D"));
+        assertNotNull(this.jsonRegistry.getFunction("DG"));
+        assertNotNull(this.jsonRegistry.getFunction("DN"));
+        assertNotNull(this.jsonRegistry.getFunction("HR"));
+        assertNotNull(this.jsonRegistry.getFunction("N"));
+        assertFalse(this.jsonRegistry.hasFunction("6X"));
+    }
+
+    @Test
+    void test_loadWorkAreas_withoutLoadedFilters() {
+        assertThrows(NullPointerException.class, () -> {
+            this.jsonConfiguration.loadWorkAreas();
+        });
+    }
+
+    @Test
+    void test_loadFunctions_withoutLoadedWorkAreas() {
+        assertThrows(JsonConfigurationException.class, () -> {
+            this.jsonConfiguration.loadFunctions();
+        });
     }
 }

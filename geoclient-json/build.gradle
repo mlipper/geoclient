@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(':geoclient-jni'))
     implementation(project(':geoclient-core'))
     implementation(libs.jackson.databind)
     testImplementation(testFixtures(project(':geoclient-jni')))
