@@ -9576,6 +9576,7 @@
       {
         "id": "WA2_HR",
         "length": 5026,
+        "outputFilters": [],
         "fields": [
           {
             "id": "geoFileRecordType1",

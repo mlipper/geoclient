@@ -46,6 +46,7 @@ public class JsonConfiguration {
     private static final String DEFAULT_CONFIG_FILE = "geoclient.json";
 
     static class FieldBuilder {
+        static final String FIELD_TYPE_COMPOSITE = "COMP";
         private String id;
         private Integer start;
         private Integer length;
@@ -67,8 +68,11 @@ public class JsonConfiguration {
         }
 
         public FieldBuilder composite(ObjectNode node) {
-            if (node.has("composite")) {
-                this.composite = node.get("composite").asBoolean();
+            if (node.has("type")) {
+                String compString = node.get("type").asText();
+                if (FIELD_TYPE_COMPOSITE.equals(compString)) {
+                    this.composite = true;
+                }
             }
             return this;
         }
@@ -88,8 +92,8 @@ public class JsonConfiguration {
         }
 
         public FieldBuilder whitespaceSignificant(ObjectNode node) {
-            if (node.has("whitespaceSignificant")) {
-                this.whitespaceSignificant = node.get("whitespaceSignificant").asBoolean();
+            if (node.has("whitespace")) {
+                this.whitespaceSignificant = node.get("whitespace").asBoolean();
             }
             return this;
         }
@@ -132,6 +136,7 @@ public class JsonConfiguration {
         }
 
         public FilterList getFilterList(String id) {
+            log.warn("getFilterList({})", id);
             return filterListRegistry.get(id);
         }
 
@@ -173,8 +178,15 @@ public class JsonConfiguration {
         public WorkArea build() {
             SortedSet<Field> uniqueSet = new TreeSet<Field>();
             removeDuplicates(this.fields, uniqueSet);
-            List<Filter> outputFilters = this.jsonRegistry.getFilterList(this.outputFilterListId).getFilters();
-            WorkArea workArea = new WorkArea(this.id, uniqueSet, outputFilters);
+            WorkArea workArea = null;
+            if (this.outputFilterListId != null) {
+                List<Filter> outputFilters = this.jsonRegistry.getFilterList(this.outputFilterListId).getFilters();
+                workArea = new WorkArea(this.id, uniqueSet, outputFilters);
+            }
+            else {
+                log.warn("No output filters configured for WorkArea[id={}]", this.id);
+                workArea = new WorkArea(this.id, uniqueSet);
+            }
             validate(workArea);
             return workArea;
         }
@@ -372,15 +384,16 @@ public class JsonConfiguration {
         for (JsonNode workAreaNode : workAreaArrayNode) {
             WorkAreaBuilder builder = new WorkAreaBuilder(this.jsonRegistry);
             builder.id(workAreaNode.get("id").asText()).length(workAreaNode.get("length").asInt());
-            // TODO FIXME: outputFilters is an array, not a single value
-            ArrayNode outputFiltersArrayNode = (ArrayNode)workAreaNode.get("outputFilters");
+            JsonNode o = workAreaNode.get("outputFilters");
+            log.debug("nodeType: {}", o.getNodeType());
+            ArrayNode outputFiltersArrayNode = (ArrayNode) workAreaNode.get("outputFilters");
             List<String> outputFilterListIds = new ArrayList<>();
             for (JsonNode textNode : outputFiltersArrayNode) {
-               outputFilterListIds.add(textNode.asText());
+                outputFilterListIds.add(textNode.asText());
             }
-            builder.outputFilterListId(outputFilterListIds.get(0));
-            //builder.id(workAreaNode.get("id").asText()).length(workAreaNode.get("length").asInt()).outputFilterListId(
-            //    workAreaNode.get("outputFilters").asText());
+            if (outputFilterListIds.size() > 0) {
+                builder.outputFilterListId(outputFilterListIds.get(0));
+            }
             ArrayNode fieldArrayNode = (ArrayNode) workAreaNode.get("fields");
             for (JsonNode fieldNode : fieldArrayNode) {
                 Field field = getField((ObjectNode) fieldNode);
