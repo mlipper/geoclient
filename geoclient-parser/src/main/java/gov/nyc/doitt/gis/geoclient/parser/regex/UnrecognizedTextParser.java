@@ -56,7 +56,7 @@ public class UnrecognizedTextParser extends AbstractRegexParser {
      * This parser uses a regex pattern that matches any input.
      *
      * @param parseContext Current parsing context
-     * @see AbstractRegexParser#AbstractRegexParser(ParseContext)
+     * @see AbstractRegexParser#parse(ParseContext)
      */
     @Override
     public void parse(ParseContext parseContext) {
