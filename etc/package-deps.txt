@@ -1,0 +1,204 @@
+gov.nyc.doitt.gis.geoclient.service.search
+----------------------------------------------------------------------------
+CountyResolver
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.parser.token
+
+GeosupportReturnCode
+- gov.nyc.doitt.gis.geoclient.api
+
+InputValue
+- gov.nyc.doitt.gis.geoclient.parser.token
+- gov.nyc.doitt.gis.geoclient.util
+
+gov.nyc.doitt.gis.geoclient.service.search.policy
+----------------------------------------------------------------------------
+DefaultExactMatchPolicy
+- gov.nyc.doitt.gis.geoclient.service.search
+
+DefaultSearchDepthPolicy
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+ExactMatchPolicy
+- gov.nyc.doitt.gis.geoclient.service.search
+
+SearchDepthPolicy
+- gov.nyc.doitt.gis.geoclient.service.search
+
+SearchPolicy
+- gov.nyc.doitt.gis.geoclient.service.search
+
+gov.nyc.doitt.gis.geoclient.service.search.request
+----------------------------------------------------------------------------
+AddressRequest
+- gov.nyc.doitt.gis.geoclient.service.search
+
+BblRequest
+- gov.nyc.doitt.gis.geoclient.service.search
+
+BinRequest
+- gov.nyc.doitt.gis.geoclient.service.search
+
+BlockfaceRequest
+- gov.nyc.doitt.gis.geoclient.service.search
+
+CountyRequest
+- gov.nyc.doitt.gis.geoclient.service.search
+
+IntersectionRequest
+- gov.nyc.doitt.gis.geoclient.service.search
+
+PlaceRequest
+- gov.nyc.doitt.gis.geoclient.service.search
+
+Request
+- gov.nyc.doitt.gis.geoclient.service.search
+
+RequestUtils
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.parser.token
+- gov.nyc.doitt.gis.geoclient.service.search
+
+gov.nyc.doitt.gis.geoclient.service.search
+----------------------------------------------------------------------------
+Search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+SearchResult
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+
+SingleFieldSearchHandler
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+- gov.nyc.doitt.gis.geoclient.service.search.task
+
+gov.nyc.doitt.gis.geoclient.service.search.task
+----------------------------------------------------------------------------
+AddressSearchTask
+- gov.nyc.doitt.gis.geoclient.function
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+BblSearchTask
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+BinSearchTask
+- gov.nyc.doitt.gis.geoclient.function
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+BlockfaceSearchTask
+- gov.nyc.doitt.gis.geoclient.function
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+CompassDirectionTaskBuilder
+- gov.nyc.doitt.gis.geoclient.api
+- gov.nyc.doitt.gis.geoclient.parser.token
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+DefaultInitialSearchTaskBuilder
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.parser.token
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+DefaultSpawnedTaskBuilder
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+
+InitialSearchTaskBuilder
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+
+IntersectionSearchTask
+- gov.nyc.doitt.gis.geoclient.function
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+PlaceSearchTask
+- gov.nyc.doitt.gis.geoclient.function
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+SearchTask
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+SearchTaskFactory
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+
+SimilarNamesTaskBuilder
+- gov.nyc.doitt.gis.geoclient.parser.token
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+- gov.nyc.doitt.gis.geoclient.service.search.request
+
+SpawnedSearchTaskBuilder
+- gov.nyc.doitt.gis.geoclient.service.search
+
+TaskBuilderSupport
+- gov.nyc.doitt.gis.geoclient.service.invoker
+- gov.nyc.doitt.gis.geoclient.service.mapper
+- gov.nyc.doitt.gis.geoclient.service.search
+
+gov.nyc.doitt.gis.geoclient.service.search.web.response
+----------------------------------------------------------------------------
+ParamsAndResult
+- gov.nyc.doitt.gis.geoclient.service.search
+
+ParseTree
+- gov.nyc.doitt.gis.geoclient.parser.token
+
+SearchParameters
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+
+SearchResponse
+- gov.nyc.doitt.gis.geoclient.parser.token
+
+SearchResult
+- gov.nyc.doitt.gis.geoclient.parser
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+
+SearchResultConverter
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.policy
+
+SearchSummary
+- gov.nyc.doitt.gis.geoclient.service.xstream
+
+gov.nyc.doitt.gis.geoclient.service.search.web
+----------------------------------------------------------------------------
+SingleFieldSearchController
+- gov.nyc.doitt.gis.geoclient.service.search
+- gov.nyc.doitt.gis.geoclient.service.search.web.response
+

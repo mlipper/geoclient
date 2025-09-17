@@ -1,0 +1,222 @@
+gov.nyc.doitt.gis.geoclient.service.search
+----------------------------------------------------------------------------
+CountyResolver
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.parser.token.Token;
+- import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
+GeosupportReturnCode
+- import gov.nyc.doitt.gis.geoclient.api.ReturnCodeValue;
+InputValue
+- import gov.nyc.doitt.gis.geoclient.parser.token.Token;
+- import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
+- import gov.nyc.doitt.gis.geoclient.util.Assert;
+
+gov.nyc.doitt.gis.geoclient.service.search.policy
+----------------------------------------------------------------------------
+DefaultExactMatchPolicy
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+DefaultSearchDepthPolicy
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+ExactMatchPolicy
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+SearchDepthPolicy
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+SearchPolicy
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+
+gov.nyc.doitt.gis.geoclient.service.search.request
+----------------------------------------------------------------------------
+AddressRequest
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+BblRequest
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+BinRequest
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+BlockfaceRequest
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+CountyRequest
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+IntersectionRequest
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+PlaceRequest
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+Request
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+RequestUtils
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.parser.token.Token;
+- import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+
+gov.nyc.doitt.gis.geoclient.service.search
+----------------------------------------------------------------------------
+Search
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+SearchResult
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+SingleFieldSearchHandler
+- import gov.nyc.doitt.gis.geoclient.parser.Input;
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokenizer;
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+- import gov.nyc.doitt.gis.geoclient.service.search.task.SearchTask;
+- import gov.nyc.doitt.gis.geoclient.service.search.task.SearchTaskFactory;
+
+gov.nyc.doitt.gis.geoclient.service.search.task
+----------------------------------------------------------------------------
+AddressSearchTask
+- import gov.nyc.doitt.gis.geoclient.function.Function;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.AddressRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+BblSearchTask
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.BblRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+BinSearchTask
+- import gov.nyc.doitt.gis.geoclient.function.Function;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.BinRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+BlockfaceSearchTask
+- import gov.nyc.doitt.gis.geoclient.function.Function;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.BlockfaceRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+CompassDirectionTaskBuilder
+- import gov.nyc.doitt.gis.geoclient.api.InputParam;
+- import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.CountyResolver;
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.IntersectionRequest;
+DefaultInitialSearchTaskBuilder
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.CountyResolver;
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.ValueResolution;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.AddressRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.BblRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.BinRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.BlockfaceRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.IntersectionRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.PlaceRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.RequestUtils;
+DefaultSpawnedTaskBuilder
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.CountyResolver;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+InitialSearchTaskBuilder
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+IntersectionSearchTask
+- import gov.nyc.doitt.gis.geoclient.function.Function;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.IntersectionRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+PlaceSearchTask
+- import gov.nyc.doitt.gis.geoclient.function.Function;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.PlaceRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+SearchTask
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.Response;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+SearchTaskFactory
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+SimilarNamesTaskBuilder
+- import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.CountyResolver;
+- import gov.nyc.doitt.gis.geoclient.service.search.InputValue;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.AddressRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.BlockfaceRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.IntersectionRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.PlaceRequest;
+- import gov.nyc.doitt.gis.geoclient.service.search.request.Request;
+SpawnedSearchTaskBuilder
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+TaskBuilderSupport
+- import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+- import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
+- import gov.nyc.doitt.gis.geoclient.service.search.CountyResolver;
+- import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+
+gov.nyc.doitt.gis.geoclient.service.search.web.response
+----------------------------------------------------------------------------
+ParamsAndResult
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+ParseTree
+- import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
+SearchParameters
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultExactMatchPolicy;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultSearchDepthPolicy;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultSimilarNamesPolicy;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+SearchResponse
+- import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
+SearchResult
+- import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+SearchResultConverter
+- import gov.nyc.doitt.gis.geoclient.service.search.Search;
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.Policy;
+- import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+SearchSummary
+- import gov.nyc.doitt.gis.geoclient.service.xstream.MapConverter;
+
+gov.nyc.doitt.gis.geoclient.service.search.web
+----------------------------------------------------------------------------
+SingleFieldSearchController
+- import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+- import gov.nyc.doitt.gis.geoclient.service.search.SingleFieldSearchHandler;
+- import gov.nyc.doitt.gis.geoclient.service.search.web.response.ParamsAndResult;
+- import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchParameters;
+- import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResponse;
+
