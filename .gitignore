@@ -45,3 +45,6 @@
 **/local-plugins
 **/manifests/release
 **/docs-static
+
+# Draw.io
+**/*.bkp
