@@ -200,3 +200,48 @@ SingleFieldSearchController
 - gov.nyc.doitt.gis.geoclient.service.search
 - gov.nyc.doitt.gis.geoclient.service.search.web.response
 
+
+External Dependencies
+---------------------
+
+search
+----------------------------------------------------------------------------
+Response
+- org.apache.commons.lang3.StringUtils;
+
+SingleFieldSearchHandler
+- jakarta.annotation.PreDestroy;
+
+search.polcy
+----------------------------------------------------------------------------
+DefaultSimilarNamesPolicy
+- org.apache.commons.text.similarity.LevenshteinDistance;
+
+
+search.task
+----------------------------------------------------------------------------
+DefaultInitialSearchTaskBuilder
+- org.apache.commons.lang3.reflect.ConstructorUtils;
+
+search.web
+----------------------------------------------------------------------------
+SingleFieldSearchController
+- jakarta.validation.Valid;
+
+search.web.response
+----------------------------------------------------------------------------
+SearchParameters
+- jakarta.validation.constraints.Max;
+- jakarta.validation.constraints.Min;
+- jakarta.validation.constraints.NotEmpty;
+
+SearchResponse
+- com.thoughtworks.xstream.annotations.XStreamAlias;
+- com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+- com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+SearchSummary
+- com.thoughtworks.xstream.annotations.XStreamAlias;
+- com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+- com.thoughtworks.xstream.annotations.XStreamConverter;
+
