@@ -111,7 +111,7 @@ public class JsonConfiguration {
 
     }
 
-    static class JsonRegistry {
+    public static class JsonRegistry {
 
         private final ConcurrentMap<String, FilterList> filterListRegistry;
         private final ConcurrentMap<String, Function> functionRegistry;
