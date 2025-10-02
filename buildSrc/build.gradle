@@ -53,5 +53,9 @@ gradlePlugin {
             id = 'geoclientbuild.documentation'
             implementationClass = 'geoclientbuild.docs.DocumentationPlugin'
         }
+        apiserver {
+            id = 'geoclientbuild.apiserver'
+            implementationClass = 'geoclientbuild.server.GeoclientBuildServicePlugin'
+        }
     }
 }
