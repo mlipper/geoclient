@@ -1,21 +1,23 @@
 package geoclientbuild.server;
 
-import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.provider.Property;
-import org.gradle.api.services.BuildService;
-import org.gradle.api.services.BuildServiceParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.gradle.api.file.RegularFileProperty;
+import org.gradle.api.provider.Property;
+import org.gradle.api.services.BuildService;
+import org.gradle.api.services.BuildServiceParameters;
+import org.gradle.process.ExecOperations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoCloseable {
     interface Params extends BuildServiceParameters {
+        Property<Integer> getPort();
         Property<String> getContextPath();
         Property<String> getHost();
-        Property<Integer> getPort();
-        DirectoryProperty getResources();
         Property<String> getScheme();
+        RegularFileProperty getApiServerJar();
     }
 
     public static final String DEFAULT_CONTEXT_PATH = "geoclient/v2";
@@ -26,6 +28,7 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
 
     private Logger logger = LoggerFactory.getLogger(ApiServer.class);
     private final URI uri;
+    private final RegularFileProperty apiServerJar;
 
     public ApiServer() throws URISyntaxException{
         String scheme = getScheme();
@@ -33,6 +36,7 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
         int port = getPort();
         String contextPath = getContextPath();
         uri = new URI(String.format("%s://%s:%d/%s", scheme, host, port, contextPath)); 
+        apiServerJar = getApiServerJar();
     }
 
     public URI getUri() {
@@ -47,6 +51,9 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
 
     protected void startServer() {
         // Logic to start the API server
+        //getExecOperations().exec(spec -> {
+        //    spec.commandLine("java", "-jar", apiServerJar.getAsFile().get().getAbsolutePath());
+        //});
         logger.info(String.format("Server is running at %s", uri));
     }
 
@@ -64,5 +71,9 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
 
     private String getContextPath() {
         return getParameters().getContextPath().getOrElse(DEFAULT_CONTEXT_PATH);
+    }
+
+    private RegularFileProperty getApiServerJar() {
+        return getParameters().getApiServerJar();
     }
 }

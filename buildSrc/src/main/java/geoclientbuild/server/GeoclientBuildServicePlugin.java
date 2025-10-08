@@ -3,17 +3,22 @@
  */
 package geoclientbuild.server;
 
+import java.io.File;
+
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Provider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+import org.gradle.api.logging.Logging;
+import org.gradle.api.logging.Logger;
 
 /**
  * A simple 'hello world' plugin.
  */
 public class GeoclientBuildServicePlugin implements Plugin<Project> {
-    private Logger logger = LoggerFactory.getLogger(GeoclientBuildServicePlugin.class);
+    //private Logger logger = LoggerFactory.getLogger(GeoclientBuildServicePlugin.class);
+    private Logger logger = Logging.getLogger(GeoclientBuildServicePlugin.class);
 
     public static final String APISERVER_EXTENSION_NAME = "apiserver";
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
@@ -25,18 +30,25 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
         // Register the service
         project.getGradle().getSharedServices().registerIfAbsent(ApiServer.SERVICE_NAME, ApiServer.class, spec -> {
             // Provide some parameters
-            spec.getParameters().getScheme().set(extension.getScheme().get);
-            spec.getParameters().getHost().set(extension.getHost().get);
-            spec.getParameters().getPort().set(extension.getPort().get);
+            spec.getParameters().getScheme().set(extension.getScheme().get());
+            spec.getParameters().getHost().set(extension.getHost().get());
+            spec.getParameters().getPort().set(extension.getPort().get());
+            spec.getParameters().getContextPath().set(extension.getContextPath().get());
+            spec.getParameters().getApiServerJar().set(extension.getApiServerJar());
         });
 
         // Register a task
         project.getTasks().register(APISERVER_INFO_TASK_NAME, task -> {
-            String url = String.format("%s://%s:%d/geoclient/v2",
+            String url = String.format("%s://%s:%d/%s",
                     extension.getScheme().get(),
                     extension.getHost().get(),
-                    extension.getPort().get());
-            task.doLast(s -> logger.info("ApiServer build service URL: " + url));
+                    extension.getPort().get(),
+                    extension.getContextPath().get());
+            Provider<File> jarfile = extension.getApiServerJar().getAsFile();
+            task.doLast(s -> {
+                logger.lifecycle("ApiServer build service URL: " + url);
+                logger.lifecycle("ApiServer JAR: " + jarfile.get().getAbsolutePath());
+            });
         });
     }
 
@@ -46,6 +58,7 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
         extension.getHost().convention(ApiServer.DEFAULT_HOST);
         extension.getPort().convention(ApiServer.DEFAULT_PORT);
         extension.getScheme().convention(ApiServer.DEFAULT_SCHEME);
+        extension.getContextPath().convention(ApiServer.DEFAULT_CONTEXT_PATH);
         return extension;
     }
 }

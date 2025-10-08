@@ -6,6 +6,7 @@ plugins {
     id 'geoclient.library-conventions'
     id 'geoclient.test-conventions'
     id 'geoclientbuild.documentation'
+    id 'geoclientbuild.apiserver'
 	alias(libs.plugins.asciidoctorConvert)
 	alias(libs.plugins.asciidoctorPdf)
 }
@@ -88,6 +89,13 @@ def bootJarFile = project.configurations.internalServerClasspath.getFiles().toAr
 //tasks.register('startService', Exec) {
 //    commandLine '/bin/bash', '-c', "java -jar ${bootJarFile} --spring.profiles.active=docsamples &"
 //}
+
+apiserver {
+    host = 'localhost'
+    port = 8081
+    contextPath = '/geoclient/v2'
+    apiServerJar = bootJarFile
+}
 
 tasks.register('showBootJarFile') {
     Directory projectDirectory = layout.projectDirectory
