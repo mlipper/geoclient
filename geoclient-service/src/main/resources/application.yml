@@ -108,8 +108,7 @@ spring:
 logging:
     level:
         spring-all: "INFO"
-        geoclient-service: "INFO"
-        geoclient-parser: "INFO"
+        geoclient-all: "INFO"
     file:
         name: "build/docsamples/logs/geoclient.log"
 management:
