@@ -12,7 +12,7 @@ plugins {
 }
 
 configurations {
-    internalServerClasspath {
+    apiServerClasspath {
         canBeConsumed = false
     }
 }
@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.httpclient)
     implementation('org.springframework.boot:spring-boot-starter-json')
     integrationTestImplementation(project(':geoclient-test'))
-    internalServerClasspath(project(path: ':geoclient-service', configuration: 'internalServer'))
+    apiServerClasspath(project(path: ':geoclient-service', configuration: 'apiServer'))
 }
 
 tasks.register('updateLicenseFiles', Copy) {
@@ -83,7 +83,7 @@ tasks.withType(AbstractAsciidoctorTask).configureEach {
 }
 
 // java.io.File
-def bootJarFile = project.configurations.internalServerClasspath.getFiles().toArray()[0]
+def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()[0]
 
 // Does not work with ampersand. Removing it creates foreground process until blocks until SIGINT.
 //tasks.register('startService', Exec) {
@@ -95,6 +95,9 @@ apiserver {
     port = 8081
     contextPath = '/geoclient/v2'
     apiServerJar = bootJarFile
+    arguments = [
+        '--spring.profiles.active=docsamples'
+    ]
 }
 
 tasks.register('showBootJarFile') {
@@ -104,14 +107,15 @@ tasks.register('showBootJarFile') {
         theFiles.collect { projectDirectory.asFile.relativePath(it) }.sort().each { println it }
     }
 }
-tasks.register('startService', JavaExec) {
-   classpath = files(bootJarFile)
-   args '--spring.profiles.active=docsamples'
-}
 
-tasks.register('stopService', Exec) {
-    commandLine '/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:8080/geoclient/v2/actuator/shutdown'
-}
+//tasks.register('startService', JavaExec) {
+//   classpath = files(bootJarFile)
+//   args '--spring.profiles.active=docsamples'
+//}
+//
+//tasks.register('stopService', Exec) {
+//    commandLine '/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:8080/geoclient/v2/actuator/shutdown'
+//}
 
 def generatedSamplesDir = Paths.get(layout.buildDirectory.dir('samples').get().getAsFile().getPath())
 

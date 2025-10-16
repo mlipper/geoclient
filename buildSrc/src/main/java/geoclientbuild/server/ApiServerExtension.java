@@ -1,12 +1,20 @@
 package geoclientbuild.server;
 
+import org.gradle.api.provider.ListProperty;
+import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.file.RegularFileProperty;
 
 public interface ApiServerExtension {
+
+    public static final String EXTENSION_NAME = "apiserver";
+
+    RegularFileProperty getApiServerJar();
     Property<String> getContextPath();
     Property<String> getHost();
     Property<Integer> getPort();
     Property<String> getScheme();
-    RegularFileProperty getApiServerJar();
+    MapProperty<String, String> getEnvironment();
+    MapProperty<String, String> getSystemProperties();
+    ListProperty<String> getArguments();
 }

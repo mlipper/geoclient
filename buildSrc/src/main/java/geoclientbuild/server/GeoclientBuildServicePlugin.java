@@ -7,20 +7,14 @@ import java.io.File;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.provider.Provider;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-import org.gradle.api.logging.Logging;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
+import org.gradle.api.provider.Provider;
 
-/**
- * A simple 'hello world' plugin.
- */
 public class GeoclientBuildServicePlugin implements Plugin<Project> {
     //private Logger logger = LoggerFactory.getLogger(GeoclientBuildServicePlugin.class);
     private Logger logger = Logging.getLogger(GeoclientBuildServicePlugin.class);
 
-    public static final String APISERVER_EXTENSION_NAME = "apiserver";
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
 
     public void apply(Project project) {
@@ -37,7 +31,9 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
             spec.getParameters().getApiServerJar().set(extension.getApiServerJar());
         });
 
-        // Register a task
+        // Register tasks
+        project.getTasks().register(StartServer.TASK_NAME, StartServer.class);
+        project.getTasks().register(StopServer.TASK_NAME, StartServer.class);
         project.getTasks().register(APISERVER_INFO_TASK_NAME, task -> {
             String url = String.format("%s://%s:%d/%s",
                     extension.getScheme().get(),
@@ -53,12 +49,23 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
     }
 
     private ApiServerExtension registerExtension(Project project) {
-        ApiServerExtension extension = project.getExtensions().create(APISERVER_EXTENSION_NAME, ApiServerExtension.class);
+        ApiServerExtension extension = project.getExtensions().create(ApiServerExtension.EXTENSION_NAME, ApiServerExtension.class);
         // Configure the extension with some defaults
         extension.getHost().convention(ApiServer.DEFAULT_HOST);
         extension.getPort().convention(ApiServer.DEFAULT_PORT);
         extension.getScheme().convention(ApiServer.DEFAULT_SCHEME);
         extension.getContextPath().convention(ApiServer.DEFAULT_CONTEXT_PATH);
+        extension.getEnvironment().convention(System.getenv());
+        extension.getSystemProperties().convention(System.getProperties().entrySet().stream()
+            .collect(java.util.stream.Collectors.toMap(
+                e -> String.valueOf(e.getKey()),
+                e -> String.valueOf(e.getValue())
+            )));
+        extension.getArguments().convention(java.util.Collections.emptyList());
         return extension;
     }
+
+    //private File resolveJarFile(Project project, String configurationName) {
+    //    return project.getConfigurations().getByName(configurationName).getSingleFile();
+    //}
 }

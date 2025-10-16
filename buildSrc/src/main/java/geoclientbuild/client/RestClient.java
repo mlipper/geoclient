@@ -1,4 +1,4 @@
-package geoclientbuild.docs;
+package geoclientbuild.client;
 
 import java.util.Map;
 

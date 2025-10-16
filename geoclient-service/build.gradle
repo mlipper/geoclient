@@ -71,7 +71,7 @@ tasks.named('bootRun') {
 // Uses simple sharing strategy. See:
 // https://docs.gradle.org/current/userguide/cross_project_publications.html#cross_project_publications
 configurations {
-    internalServer {
+    apiServer {
         canBeConsumed = true
         canBeResolved = false
         //extendsFrom implementation, runtimeOnly
@@ -79,7 +79,7 @@ configurations {
 }
 
 artifacts {
-    internalServer(bootJar.archiveFile) {
+    apiServer(bootJar.archiveFile) {
         builtBy(bootJar)
     }
 }

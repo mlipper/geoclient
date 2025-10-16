@@ -26,6 +26,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import geoclientbuild.client.Request;
+import geoclientbuild.client.RestClient;
+
 abstract public class GenerateSamplesTask extends DefaultTask {
 
     public static final String ASCIIDOC_BEGIN_TAG = "// tag::user_guide[]";
