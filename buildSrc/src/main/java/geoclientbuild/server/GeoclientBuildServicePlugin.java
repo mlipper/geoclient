@@ -4,9 +4,11 @@
 package geoclientbuild.server;
 
 import java.io.File;
+import java.util.List;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.file.RegularFile;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.provider.Provider;
@@ -16,6 +18,9 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
     private Logger logger = Logging.getLogger(GeoclientBuildServicePlugin.class);
 
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
+    public static final String APISERVER_DEFAULT_OUTPUT_DIRECTORY = "api-server";
+    public static final String APISERVER_DEFAULT_OUTPUT_FILE = "api-server.log";
+    public static final String APISERVER_DEFAULT_PROFILE = "docsamples";
 
     public void apply(Project project) {
         // Register the extension
@@ -32,8 +37,21 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
         });
 
         // Register tasks
-        project.getTasks().register(StartServer.TASK_NAME, StartServer.class);
-        project.getTasks().register(StopServer.TASK_NAME, StartServer.class);
+        project.getTasks().register(StartServer.TASK_NAME, StartServer.class, task -> {
+                List<String> args = new ArgumentsBuilder.BootArgumentsBuilder()
+                    .host(extension.getHost().get())
+                    .port(extension.getPort().get())
+                    .contextPath(extension.getContextPath().get())
+                    .profile(APISERVER_DEFAULT_PROFILE)
+                    .build();
+                task.getArguments().set(args);
+                String outputFilePath = APISERVER_DEFAULT_OUTPUT_DIRECTORY + File.separator + APISERVER_DEFAULT_OUTPUT_FILE;
+                Provider<RegularFile> outputFile = project.getLayout().getBuildDirectory().file(outputFilePath);
+                task.getOutputFile().set(outputFile);
+            });
+
+        project.getTasks().register(StopServer.TASK_NAME, StopServer.class, task -> {
+        });
         project.getTasks().register(APISERVER_INFO_TASK_NAME, task -> {
             String url = String.format("%s://%s:%d/%s",
                     extension.getScheme().get(),

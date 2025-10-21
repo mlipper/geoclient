@@ -92,12 +92,20 @@ def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()
 
 apiserver {
     host = 'localhost'
-    port = 8081
-    contextPath = '/geoclient/v2'
+    port = 8080
+    contextPath = 'geoclient/v2'
     apiServerJar = bootJarFile
-    arguments = [
-        '--spring.profiles.active=docsamples'
-    ]
+}
+
+tasks.register('serverTest') {
+    //dependsOn('startServer')
+    //finalizedBy('stopServer')
+    dependsOn('startService')
+    finalizedBy('stopService')
+    doLast {
+        println "API Server JAR: ${bootJarFile}"
+        println "API Server URL: http://${apiserver.host}:${apiserver.port}/${apiserver.contextPath}"
+    }
 }
 
 tasks.register('showBootJarFile') {
@@ -108,14 +116,28 @@ tasks.register('showBootJarFile') {
     }
 }
 
-//tasks.register('startService', JavaExec) {
-//   classpath = files(bootJarFile)
-//   args '--spring.profiles.active=docsamples'
-//}
-//
-//tasks.register('stopService', Exec) {
-//    commandLine '/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:8080/geoclient/v2/actuator/shutdown'
-//}
+tasks.register('startService', Exec) {
+
+    //dependsOn('clean')
+    executable = '/usr/bin/bash'
+    //commandLine '/bin/bash', '-c', "java -jar ${bootJarFile}", "&"
+    args '-c', "java -jar ${bootJarFile.absolutePath} --spring.profiles.active=docsamples ---server.port=9090"
+
+    // Crucially, set ignoreExitValue to true to prevent Gradle from waiting.
+    ignoreExitValue true
+
+    // Optionally, redirect standard output to a log file.
+    //standardOutput = new File(project.buildDir, 'non-blocking-process.log').newOutputStream()
+
+    // Add a doLast block to display a message after the command is issued.
+    doLast {
+        println 'Started non-blocking Java process.'
+    }
+}
+
+tasks.register('stopService', Exec) {
+    commandLine '/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:8080/geoclient/v2/actuator/shutdown'
+}
 
 def generatedSamplesDir = Paths.get(layout.buildDirectory.dir('samples').get().getAsFile().getPath())
 

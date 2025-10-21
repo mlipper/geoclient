@@ -1,17 +1,9 @@
 package geoclientbuild.server;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ArgumentsBuilder {
-
-    //        "-jar", apiServerJar.getAsFile().get().getAbsolutePath(),
-    //        "--server.address=" + getHost(),
-    //        "--server.port=" + getPort(),
-    //        "--server.servlet.context-path=/" + getContextPath(),
-    //        "--spring.profiles.active=docsamples");
-    //    processBuilder.environment().put("GEOSUPPORT_HOME", "/opt/geosupport/current");
 
     public static class BootArgumentsBuilder {
         private String host = "localhost";
@@ -46,19 +38,6 @@ public class ArgumentsBuilder {
                 "--server.servlet.context-path=/" + contextPath,
                 "--spring.profiles.active=" + profile
             });
-        }
-    }
-
-    public static class JvmArgumentsBuilder {
-        private List<String> jvmArgs = Collections.emptyList();
-
-        public JvmArgumentsBuilder jvmArgs(List<String> jvmArgs) {
-            this.jvmArgs = jvmArgs;
-            return this;
-        }
-
-        public List<String> build() {
-            return jvmArgs;
         }
     }
 }
