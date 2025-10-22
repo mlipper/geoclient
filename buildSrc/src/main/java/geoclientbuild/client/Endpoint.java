@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpHead;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
-import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
@@ -42,6 +42,14 @@ public class Endpoint {
         return buildHttpGet();
     }
 
+    public HttpHead httpHeadRequest(Map<String, String> parameters, Map<String, String> httpHeaders) throws URISyntaxException {
+        return buildHttpHead(parameters, httpHeaders);
+    }
+
+    public HttpPost httpPostRequest(Map<String, String> parameters, Map<String, String> httpHeaders) throws URISyntaxException {
+        return buildHttpPost(parameters, httpHeaders);
+    }
+
     public String getName() {
         return name;
     }
@@ -66,6 +74,16 @@ public class Endpoint {
         return new HttpGet(this.baseUri + "/" + this.name);
     }
 
+    private HttpHead buildHttpHead(Map<String, String> parameters, Map<String, String> headers) throws URISyntaxException {
+        HttpHead httpHead = new HttpHead(this.baseUri + "/" + this.name);
+        URI uri = new URIBuilder(httpHead.getUri()).addParameters(params(parameters)).build();
+        httpHead.setUri(uri);
+        if (headers != null && !headers.isEmpty()) {
+            headers.forEach((k, v) -> httpHead.addHeader(k, v));
+        }
+        return httpHead;
+    }
+
     private HttpPost buildHttpPost(Map<String, String> parameters, Map<String, String> headers) {
         HttpPost httpPost = new HttpPost(this.baseUri + "/" + this.name);
         if (parameters != null && !parameters.isEmpty()) {
@@ -75,10 +93,6 @@ public class Endpoint {
             headers.forEach((k, v) -> httpPost.addHeader(k, v));
         }
         return httpPost;
-    }
-
-    private HttpPost buildHttpPost() {
-        return buildHttpPost(null, null);
     }
 
     @Override

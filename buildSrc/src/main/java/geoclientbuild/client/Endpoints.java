@@ -1,10 +1,12 @@
 package geoclientbuild.client;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Endpoints {
 
+    public static final String ACTUATOR_SHUTDOWN = "actuator/shutdown";
     public static final String ADDRESS = "address";
     public static final String ADDRESS_POINT= "addresspoint";
     public static final String BBL = "bbl";
@@ -17,28 +19,21 @@ public class Endpoints {
     public static final String STREETCODE = "streetcode";
     public static final String STREETCODE_B5SC = "streetcode/b5sc";
     public static final String VERSION = "version";
+    public static final String READINESS = VERSION;
+
+
     public static final String RC_NOT_IMPLEMENTED_JSON_TEMPLATE = "{ \"returnCode\": \"EE\", \"message\": \"Endpoint %s has not been implemented.\" }";
 
     private final String baseUri;
     private final Map<String, Endpoint> endpoints = new HashMap<>();
+    private final Map<String, EndpointMapping> mappings = new HashMap<>();
 
     /**
      * @param baseUri
      */
     public Endpoints(String baseUri) {
         this.baseUri = baseUri;
-        endpoints.put(ADDRESS, new Endpoint(ADDRESS, baseUri));
-        endpoints.put(ADDRESS_POINT, new Endpoint(ADDRESS_POINT, baseUri));
-        endpoints.put(BBL, new Endpoint(BBL, baseUri));
-        endpoints.put(BIN, new Endpoint(BIN, baseUri));
-        endpoints.put(BLOCKFACE, new Endpoint(BLOCKFACE, baseUri));
-        endpoints.put(INTERSECTION, new Endpoint(INTERSECTION, baseUri));
-        endpoints.put(NORMALIZE, new Endpoint(NORMALIZE, baseUri));
-        endpoints.put(PLACE, new Endpoint(PLACE, baseUri));
-        endpoints.put(SEARCH, new Endpoint(SEARCH, baseUri));
-        endpoints.put(STREETCODE, new Endpoint(STREETCODE, baseUri));
-        endpoints.put(STREETCODE_B5SC, new Endpoint(STREETCODE_B5SC, baseUri));
-        endpoints.put(VERSION, new Endpoint(VERSION, baseUri));
+        init();
     }
 
     public String getBaseUri() {
@@ -53,6 +48,10 @@ public class Endpoints {
         return this.endpoints.get(name);
     }
 
+    public Endpoint getActuatorShutdown() {
+        return endpoints.get(ACTUATOR_SHUTDOWN);
+    }
+
     public Endpoint getAddress() {
         return endpoints.get(ADDRESS);
     }
@@ -65,5 +64,36 @@ public class Endpoints {
         return endpoints.get(VERSION);
     }
 
+    private void init(){
+        List<String> names = List.of(
+            ACTUATOR_SHUTDOWN,
+            ADDRESS,
+            ADDRESS_POINT,
+            BBL,
+            BIN,
+            BLOCKFACE,
+            INTERSECTION,
+            NORMALIZE,
+            PLACE,
+            SEARCH,
+            STREETCODE,
+            STREETCODE_B5SC,
+            VERSION);
 
+        for (String name : names) {
+            Endpoint endpoint = new Endpoint(name, baseUri);
+            endpoints.put(name, endpoint);
+            switch (name) {
+                case ACTUATOR_SHUTDOWN:
+                    mappings.put(name, new EndpointMapping(endpoint, EndpointMapping.HTTP_POST_METHOD, null, null));
+                    break;
+                case READINESS:
+                    mappings.put(name, new EndpointMapping(endpoint, EndpointMapping.HTTP_HEAD_METHOD, null, null));
+                    break;
+                default:
+                    mappings.put(name, new EndpointMapping(endpoint, EndpointMapping.HTTP_GET_METHOD, null, null));
+                    break;
+            }
+        }
+    }
 }

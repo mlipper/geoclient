@@ -37,9 +37,6 @@ abstract public class GenerateSamplesTask extends DefaultTask {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Input
-    abstract public MapProperty<String, String> getHttpHeaders();
-
-    @Input
     abstract public Property<String> getServiceUrl();
 
     @InputFile
@@ -53,7 +50,7 @@ abstract public class GenerateSamplesTask extends DefaultTask {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         File file = getRequestsFile().getAsFile().get();
         List<Request> requests = loadRequests(file);
-        RestClient restClient = new RestClient(getServiceUrl().get(), getHttpHeaders().get());
+        RestClient restClient = new RestClient(getServiceUrl().get());
         for(Request request: requests) {
             try {
                 StringBuffer buff = new StringBuffer(ASCIIDOC_BEGIN_TAG);
