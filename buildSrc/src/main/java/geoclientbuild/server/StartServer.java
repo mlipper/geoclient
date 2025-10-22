@@ -1,38 +1,32 @@
 package geoclientbuild.server;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.stream.Stream;
+import java.lang.ProcessBuilder.Redirect;
+import java.net.URI;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.services.ServiceReference;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.process.ExecOperations;
-import org.gradle.process.ExecResult;
 
 public abstract class StartServer extends DefaultTask {
     public static final String TASK_NAME = "startServer";
 
-    @ServiceReference(ApiServer.SERVICE_NAME)
-    abstract Property<ApiServer> getApiServer();
+    @InputFile
+    abstract RegularFileProperty getApiServerJar();
 
     @Input
     abstract ListProperty<String> getArguments();
 
+    @Input
+    abstract Property<URI> getUri();
+    
     @OutputFile
     abstract RegularFileProperty getOutputFile();
-
-    @javax.inject.Inject
-    public abstract ExecOperations getExecOperations();
 
     public StartServer() {
         setGroup("API Server");
@@ -40,33 +34,22 @@ public abstract class StartServer extends DefaultTask {
     }
 
     @TaskAction
-    public void startApiServer() {
-        ApiServer server = getApiServer().get();
-        String jarPath = server.getApiServerJarFile().getAbsolutePath();
-        getLogger().lifecycle("Starting API server at {}", server.getUri());
-        List<String> arguments = getArguments().get();
-         File outputFile = getOutputFile().getAsFile().get();
-        try (PrintWriter writer = new PrintWriter(new FileWriter(outputFile))) {
-            writer.println("API Server started with the following parameters:");
-            writer.println("JAR Path: " + jarPath);
-            writer.println("Arguments: " + String.join(" ", arguments));
-        } catch (IOException e) {
-            getLogger().error("Failed to write output file: " + outputFile.getAbsolutePath(), e);
-        }
-        ExecResult result = getExecOperations().javaexec(spec -> {
-            //spec.commandLine("java", "-jar", jarPath, arguments.toArray(new String[0]));
-            spec.classpath(jarPath);
-            spec.args(arguments);
-            spec.setStandardInput(System.in);
-            spec.setStandardOutput(System.out);
-            spec.setErrorOutput(System.err);
-        });
-        int exitCode = result.getExitValue();
-        getLogger().lifecycle("API server process exited with code {}", exitCode);
-        try (Stream<String> stream = Files.lines(outputFile.toPath())) {
-            stream.forEach(System.out::println);
-        } catch (IOException e) {
-            getLogger().error("Failed to read output file: " + outputFile.getAbsolutePath(), e);
-        }
+    public void startApiServer() throws Exception {
+        String jarPath = getApiServerJar().getAsFile().get().getAbsolutePath();
+        getLogger().lifecycle("Starting API server at {}", getUri().get().toString());
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command().add("java");
+        processBuilder.command().add("-jar");
+        processBuilder.command().add(jarPath);
+        processBuilder.command().addAll(getArguments().get());
+        File outputFile = getOutputFile().getAsFile().get();
+        processBuilder.redirectOutput(Redirect.appendTo(outputFile));
+        processBuilder.redirectError(Redirect.appendTo(outputFile));
+        File nullInput = new File(System.getProperty("os.name").startsWith("Windows") ? "NUL" : "/dev/null");
+        processBuilder.redirectInput(Redirect.from(nullInput));
+        Process process = processBuilder.start();
+        Thread.sleep(5000); // Wait for server to start
+        getLogger().lifecycle("API server process started with PID {}", process.pid());
     }
+
 }

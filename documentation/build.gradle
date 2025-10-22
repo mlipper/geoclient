@@ -5,8 +5,8 @@ import org.asciidoctor.gradle.jvm.AbstractAsciidoctorTask
 plugins {
     id 'geoclient.library-conventions'
     id 'geoclient.test-conventions'
-    id 'geoclientbuild.documentation'
     id 'geoclientbuild.apiserver'
+    id 'geoclientbuild.documentation'
 	alias(libs.plugins.asciidoctorConvert)
 	alias(libs.plugins.asciidoctorPdf)
 }
@@ -16,6 +16,7 @@ configurations {
         canBeConsumed = false
     }
 }
+
 dependencies {
     implementation(libs.httpclient)
     implementation('org.springframework.boot:spring-boot-starter-json')
@@ -85,26 +86,23 @@ tasks.withType(AbstractAsciidoctorTask).configureEach {
 // java.io.File
 def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()[0]
 
+apiserver {
+    host = 'localhost'
+    port = 9090
+    contextPath = 'geoclient/v2'
+    apiServerJar = bootJarFile
+}
 // Does not work with ampersand. Removing it creates foreground process until blocks until SIGINT.
 //tasks.register('startService', Exec) {
 //    commandLine '/bin/bash', '-c', "java -jar ${bootJarFile} --spring.profiles.active=docsamples &"
 //}
 
-apiserver {
-    host = 'localhost'
-    port = 8080
-    contextPath = 'geoclient/v2'
-    apiServerJar = bootJarFile
-}
-
 tasks.register('serverTest') {
-    //dependsOn('startServer')
-    //finalizedBy('stopServer')
-    dependsOn('startService')
-    finalizedBy('stopService')
+    dependsOn('startServer')
+    finalizedBy('stopServer')
     doLast {
         println "API Server JAR: ${bootJarFile}"
-        println "API Server URL: http://${apiserver.host}:${apiserver.port}/${apiserver.contextPath}"
+        //println "API Server URL: http://${apiserver.host.get}:${apiserver.port.get}/${apiserver.contextPath.get}"
     }
 }
 

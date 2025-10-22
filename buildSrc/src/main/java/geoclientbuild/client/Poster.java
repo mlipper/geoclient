@@ -1,5 +1,6 @@
 package geoclientbuild.client;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,15 +22,41 @@ public class Poster {
         "Accept", "application/json");
     public static final Map<String, String> DEFAULT_PARAMETERS = Collections.emptyMap();
 
+    /**
+     * Performs an HTTP POST request to the specified URL with given parameters and headers.
+     * Suitable for a typical form submission.
+     * 
+     * @param url
+     * @param parameters
+     * @param httpHeaders
+     * @return String response content
+     * @throws Exception
+     */
     public String post(String url,
         Map<String, String> parameters,
         Map<String, String> httpHeaders) throws Exception {
 
-        final StringBuffer content = new StringBuffer();
         List<NameValuePair> formParams = createFormParams(parameters);
         HttpPost httpPost = createHttpPost(url, formParams);
         // Add headers (optional)
         addHttpHeaders(httpPost, httpHeaders);
+        return doPost(httpPost); 
+    }
+
+    /**
+     * Performs an HTTP POST request to the specified URI without parameters or headers.
+     * Suitable for endpoints that do not require a request body.
+     * 
+     * @param uri
+     * @return String response content
+     * @throws Exception
+     */
+    public String post(URI uri) throws Exception {
+        return doPost(new HttpPost(uri));
+    }
+
+    private String doPost(HttpPost httpPost) throws Exception {
+        final StringBuffer content = new StringBuffer();
         try (CloseableHttpClient client = HttpClients.createDefault();
                 CloseableHttpResponse response = (CloseableHttpResponse) client.execute(httpPost, httpResponse -> {
                     content.append(EntityUtils.toString(httpResponse.getEntity(), "UTF-8"));

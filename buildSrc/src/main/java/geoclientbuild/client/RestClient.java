@@ -34,7 +34,12 @@ public class RestClient {
         HttpGet httpGet = request.hasParameters() ? endpoint.httpGetRequest(request.getParameters()) : endpoint.httpGetRequest();
         addHttpHeaders(httpGet);
         logger.lifecycle("Calling REST endpoint: " + httpGet.getUri());
-        return call(httpGet);
+        HttpClient client = new HttpClient() {
+            
+        };
+        Response response = client.execute(httpGet);
+        return response.getBody();
+        //return call(httpGet);
     }
 
     private void addHttpHeaders(HttpGet httpGet) {

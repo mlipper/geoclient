@@ -4,6 +4,7 @@
 package geoclientbuild.server;
 
 import java.io.File;
+import java.net.URI;
 import java.util.List;
 
 import org.gradle.api.Plugin;
@@ -26,18 +27,20 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
         // Register the extension
         ApiServerExtension extension = registerExtension(project);
 
-        // Register the service
-        project.getGradle().getSharedServices().registerIfAbsent(ApiServer.SERVICE_NAME, ApiServer.class, spec -> {
-            // Provide some parameters
-            spec.getParameters().getScheme().set(extension.getScheme().get());
-            spec.getParameters().getHost().set(extension.getHost().get());
-            spec.getParameters().getPort().set(extension.getPort().get());
-            spec.getParameters().getContextPath().set(extension.getContextPath().get());
-            spec.getParameters().getApiServerJar().set(extension.getApiServerJar());
-        });
+        //// Register the service
+        //project.getGradle().getSharedServices().registerIfAbsent(ApiServer.SERVICE_NAME, ApiServer.class, spec -> {
+        //    // Provide some parameters
+        //    spec.getParameters().getScheme().set(extension.getScheme().get());
+        //    spec.getParameters().getHost().set(extension.getHost().get());
+        //    spec.getParameters().getPort().set(extension.getPort().get());
+        //    spec.getParameters().getContextPath().set(extension.getContextPath().get());
+        //    spec.getParameters().getApiServerJar().set(extension.getApiServerJar());
+        //});
 
         // Register tasks
         project.getTasks().register(StartServer.TASK_NAME, StartServer.class, task -> {
+                task.getApiServerJar().set(extension.getApiServerJar());
+                task.getUri().set(baseUri(extension));
                 List<String> args = new ArgumentsBuilder.BootArgumentsBuilder()
                     .host(extension.getHost().get())
                     .port(extension.getPort().get())
@@ -51,7 +54,16 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
             });
 
         project.getTasks().register(StopServer.TASK_NAME, StopServer.class, task -> {
+            URI baseUri = baseUri(extension);
+            task.getLogger().lifecycle("stopServer base URI: " + baseUri.toString());
+            URI uri = baseUri(extension).resolve(StopServer.DEFAULT_ENDPOINT);
+            task.getLogger().lifecycle("stopServer URI: " + uri.toString());
+            task.getURI().set(uri);
+            String outputFilePath = APISERVER_DEFAULT_OUTPUT_DIRECTORY + File.separator + APISERVER_DEFAULT_OUTPUT_FILE;
+            Provider<RegularFile> outputFile = project.getLayout().getBuildDirectory().file(outputFilePath);
+            task.getOutputFile().set(outputFile);
         });
+
         project.getTasks().register(APISERVER_INFO_TASK_NAME, task -> {
             String url = String.format("%s://%s:%d/%s",
                     extension.getScheme().get(),
@@ -83,6 +95,17 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
         return extension;
     }
 
+    private URI baseUri(ApiServerExtension extension) {
+        try{
+            return new URI(String.format("%s://%s:%d/%s",
+                extension.getScheme().get(),
+                extension.getHost().get(),
+                extension.getPort().get(),
+                extension.getContextPath().get()));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to build API server URI", e);
+        }
+    }
     //private File resolveJarFile(Project project, String configurationName) {
     //    return project.getConfigurations().getByName(configurationName).getSingleFile();
     //}

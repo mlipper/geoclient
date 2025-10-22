@@ -6,10 +6,10 @@ import java.util.List;
 public class ArgumentsBuilder {
 
     public static class BootArgumentsBuilder {
-        private String host = "localhost";
-        private int port = 8080;
-        private String contextPath = "geoclient/v2";
-        private String profile = "docsamples";
+        private String host;
+        private int port;
+        private String contextPath;
+        private String profile;
 
         public BootArgumentsBuilder host(String host) {
             this.host = host;

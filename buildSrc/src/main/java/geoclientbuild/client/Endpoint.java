@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
@@ -27,8 +30,12 @@ public class Endpoint {
         this.baseUri = baseUri;
     }
 
+    public HttpGet httpGetRequest(Map<String, String> parameters, Map<String, String> httpHeaders) throws URISyntaxException {
+        return buildHttpGet(parameters, httpHeaders);
+    }
+
     public HttpGet httpGetRequest(Map<String, String> parameters) throws URISyntaxException {
-        return buildHttpGet(parameters);
+        return httpGetRequest(parameters, null);
     }
 
     public HttpGet httpGetRequest() {
@@ -39,21 +46,39 @@ public class Endpoint {
         return name;
     }
 
-    List<NameValuePair> queryParams(Map<String, String> parameters) {
+    private List<NameValuePair> params(Map<String, String> parameters) {
         List<NameValuePair> params = new ArrayList<>();
         parameters.forEach((k, v) -> params.add(new BasicNameValuePair(k, v)));
         return params;
     }
 
-    HttpGet buildHttpGet(Map<String, String> parameters) throws URISyntaxException {
+    private HttpGet buildHttpGet(Map<String, String> parameters, Map<String, String> headers) throws URISyntaxException {
         HttpGet httpGet = buildHttpGet();
-        URI uri = new URIBuilder(httpGet.getUri()).addParameters(queryParams(parameters)).build();
+        URI uri = new URIBuilder(httpGet.getUri()).addParameters(params(parameters)).build();
         httpGet.setUri(uri);
+        if (headers != null && !headers.isEmpty()) {
+            headers.forEach((k, v) -> httpGet.addHeader(k, v));
+        }
         return httpGet;
     }
 
-    HttpGet buildHttpGet() {
+    private HttpGet buildHttpGet() {
         return new HttpGet(this.baseUri + "/" + this.name);
+    }
+
+    private HttpPost buildHttpPost(Map<String, String> parameters, Map<String, String> headers) {
+        HttpPost httpPost = new HttpPost(this.baseUri + "/" + this.name);
+        if (parameters != null && !parameters.isEmpty()) {
+            httpPost.setEntity(new UrlEncodedFormEntity(params(parameters)));
+        }
+        if (headers != null && !headers.isEmpty()) {
+            headers.forEach((k, v) -> httpPost.addHeader(k, v));
+        }
+        return httpPost;
+    }
+
+    private HttpPost buildHttpPost() {
+        return buildHttpPost(null, null);
     }
 
     @Override
