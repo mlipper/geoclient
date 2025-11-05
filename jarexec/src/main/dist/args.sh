@@ -7,7 +7,7 @@ this_file="$(basename "$0")"
 
 mkdir -p "${this_dir}"/logs
 
-cp -v "${this_dir}"/../../../../geoclient-service/build/libs/geoclient.jar "${this_dir}"
+cp -v "@geoclientjar@" "${this_dir}/geoclient.jar"
 
 "${this_dir}"/bin/jarexec \
 --jarfile="${this_dir}"/geoclient.jar \

@@ -55,29 +55,8 @@ public class Main {
     }
 
     public void startService() {
-        //// Add a shutdown hook to handle signals like Ctrl+C
-        //Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-        //    logger.info("JVM shutdown hook triggered. Stopping service.");
-        //    service.stopAsync().awaitTerminated();
-        //    logger.info("Service terminated by shutdown hook.");
-        //}));
-
-        //// Start the service asynchronously
-        //service.startAsync();
-
-        //// Wait for the service to be healthy (running)
-        //service.awaitRunning();
-
-        //// The main thread can do other work while the service is running.
-        //logger.info("Main application running. Press Ctrl+C to stop.");
-        
-        //// Wait for termination
-        //service.awaitTerminated();
-        //logger.info("Main application exiting.");
-
         // Start the service asynchronously
         this.service.startAsync();
-
         // Wait for the service to be healthy (running)
         this.service.awaitRunning();
     }

@@ -3,6 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id 'application'
+    alias(libs.plugins.shadow)
 }
 
 repositories {
@@ -49,6 +50,24 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'com.digitalclash.geoclient.jarexec.Main'
+    applicationDefaultJvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+}
+
+def jarfile = layout.projectDirectory.dir("../geoclient-service/build/libs").file("geoclient.jar").getAsFile()
+distributions.shadow {
+    contents {
+        from('src/main/dist/args.sh') {
+            //into 'bin'
+            filter(ReplaceTokens, tokens: [geoclientjar: jarfile.getAbsolutePath()])
+            filter(FixCrLfFilter)
+            filteringCharset = 'UTF-8'
+        }
+        from('src/main/dist/http-shutdown.json') {
+            //into 'bin'
+            filter(FixCrLfFilter)
+            filteringCharset = 'UTF-8'
+        }
+    }
 }
 
 //def jarfile = layout.projectDirectory.dir("../geoclient-service/build").file("geoclient.jar").getAsFile()

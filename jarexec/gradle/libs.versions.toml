@@ -4,9 +4,11 @@ httpclient = "5.5"
 jackson-databind = "2.19.2"
 jopt-simple = "5.0.4"
 logback-classic = "1.5.18"
+shadow-plugin = "9.2.2"
 slf4j-api = "2.0.17"
 
 [plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow-plugin" }
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
