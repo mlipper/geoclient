@@ -7,12 +7,21 @@ this_file="$(basename "$0")"
 
 PATTERN='META-INF/(license|notice).txt'
 ROOT_DIR="$(readlink -f ${this_dir}/../..)"
-VERSION=2.0.3
+#VERSION=2.0.4
+source "${this_dir}/configure-env.sh"
 
 REPORT_DIR="${ROOT_DIR}/build/reports"
 REPORT="${REPORT_DIR}/license-report.txt"
 
-declare -A PROJECTS=(["documentation"]="documentation" ["geoclient-core"]="geoclient-core" ["geoclient-jni"]="geoclient-jni" ["geoclient-parser"]="geoclient-parser" ["geoclient-service"]="geoclient-service" ["geoclient-test"]="geoclient-test" ["cli"]="geoclient-utils/cli" ["jni-test"]="geoclient-utils/jni-test")
+declare -A PROJECTS=(
+    ["documentation"]="documentation"
+    ["geoclient-cli"]="geoclient-cli"
+    ["geoclient-core"]="geoclient-core"
+    ["geoclient-jni"]="geoclient-jni"
+    ["geoclient-json"]="geoclient-json"
+    ["geoclient-parser"]="geoclient-parser"
+    ["geoclient-service"]="geoclient-service"
+    ["geoclient-test"]="geoclient-test")
 
 report() {
     local msg="$1"
