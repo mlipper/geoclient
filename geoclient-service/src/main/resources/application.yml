@@ -110,7 +110,7 @@ logging:
         spring-all: "INFO"
         geoclient-all: "INFO"
     file:
-        name: "build/docsamples/logs/geoclient.log"
+        name: "logs/geoclient.log"
 management:
   endpoint:
     shutdown:
