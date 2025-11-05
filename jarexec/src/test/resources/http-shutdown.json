@@ -1,0 +1,10 @@
+{
+    "url": "http://localhost:8080/shutdown",
+    "httpMethod": "POST",
+    "parameters": {
+        "key": "abc123"
+    },
+    "headers": {
+        "Authorization": "Bearer tokenvalue"
+    }
+}

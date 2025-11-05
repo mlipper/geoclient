@@ -1,0 +1,64 @@
+import org.apache.tools.ant.filters.FixCrLfFilter
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libs.guava
+    implementation libs.httpclient
+    implementation libs.jackson.databind
+    implementation libs.logback.classic
+    implementation libs.slf4j.api
+    implementation libs.jopt.simple
+}
+
+testing {
+    suites {
+        test {
+            useJUnitJupiter('5.12.1')
+            targets {
+                all {
+                    testTask.configure {
+                        testLogging {
+                            events "FAILED", "PASSED", "SKIPPED"
+                            showExceptions = true
+                            showStackTraces = true
+                            showStandardStreams = true
+                            exceptionFormat = "FULL" // Or "SHORT", "NONE"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Apply a specific Java toolchain to ease working on different environments.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'com.digitalclash.geoclient.jarexec.Main'
+}
+
+//def jarfile = layout.projectDirectory.dir("../geoclient-service/build").file("geoclient.jar").getAsFile()
+//println(jarfile.absolutePath)
+//distributions {
+//    main {
+//        contents {
+//            filter(FixCrLfFilter)
+//            filter(ReplaceTokens, tokens: [geoclientjar: jarfile.getAbsolutePath().toString()])
+//            filteringCharset = 'UTF-8'
+//        }
+//    }
+//}

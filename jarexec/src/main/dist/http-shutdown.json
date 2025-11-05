@@ -1,0 +1,4 @@
+{
+    "url": "http://localhost:9090/geoclient/v2/shutdown",
+    "httpMethod": "POST"
+}
