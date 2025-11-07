@@ -22,15 +22,22 @@ SERVER="localhost"
 CONTEXT_PATH="/geoclient/v2"
 SHUTDOWN_PATH="/actuator/shutdown"
 STATUS_PATH="/version"
+STATUS_RUNNING="running"
+STATUS_STOPPED="stopped"
+STATUS_UNKNOWN="unknown"
+STATUS_UNKNOWN_MESSAGE_PREFIX="Error: service returned HTTP"
+
 # Derived global variables
 BASE_URL=""
-GEOCLIENT_SERVICE_STATUS=
+
+# Environment variable to maintain state
+#export GEOCLIENT_SERVICE_STATUS="${STATUS_UNKNOWN}"
 
 #
 # Configure getopt bash built-in
 #
-SHORT_OPTS="j:p:r:s:h"
-LONG_OPTS="jarfile:,profiles:,port:,server:,help"
+SHORT_OPTS="s:r:a:p:oth"
+LONG_OPTS="start:,profiles:,address:,port:,stop,status,help"
 
 # Use getopt to process and reorder the command-line arguments.
 # The "|| exit 1" ensures the script stops if invalid options are provided.
@@ -45,26 +52,34 @@ PARSED_OPTS=$(getopt -o "$SHORT_OPTS" --long "$LONG_OPTS" -n "$0" -- "$@") || ex
 # correctly.
 eval set -- "${PARSED_OPTS}"
 
-
 main() {
     # Loop through the reordered options and their values
     while true; do
         case "$1" in
-            -j | --jarfile )
+            -s | --start )
+                ACTION="start"
                 JARFILE="$2"
-                shift 2
-                ;;
-            -p | --port )
-                PORT="$2"
                 shift 2
                 ;;
             -r | --profiles )
                 PROFILES="$2"
                 shift 2
                 ;;
-            -s | --server )
+            -a | --address )
                 SERVER="$2"
                 shift 2
+                ;;
+            -p | --port )
+                PORT="$2"
+                shift 2
+                ;;
+            -o | --stop )
+                ACTION="stop"
+                shift 1
+                ;;
+            -t | --status )
+                ACTION="status"
+                shift 1
                 ;;
             -h | --help )
                 usage
@@ -84,33 +99,28 @@ main() {
 
     BASE_URL="http://${SERVER}:${PORT}${CONTEXT_PATH}"
 
-    # Process any remaining non-option argument assigned to ACTION:
-    # start | stop | status
-    if [ "$#" -gt 0 ]; then
-        for arg in "$@"; do
-            while true; do
-                case "$arg" in
-                    start )
-                        start
-                        break
-                        ;;
-                    stop )
-                        stop
-                        break
-                        ;;
-                    status )
-                        status
-                        break
-                        ;;
-                    * )
-                        echo "Error: unrecognized action '$arg'" >&2
-                        usage
-                        exit 1
-                        ;;
-                esac
-            done
+    # Call the action function
+    eval "$ACTION"
+}
+
+progress_bar() {
+    # Default to 24 if total steps is not provided
+    local total_steps=${1:-32}
+    echo "totatl_steps=${total_steps}"
+    local progress_char="."
+    local empty_char=" "
+    for i in $(seq 1 $total_steps); do
+        progress_bar=""
+        for ((j=0; j<i; j++)); do
+            progress_bar="${progress_bar}${progress_char}"
         done
-    fi
+        for ((j=i; j<total_steps; j++)); do
+            progress_bar="${progress_bar}${empty_char}"
+        done
+        # Print the progress bar, using \r to return to the beginning of the line
+        echo -ne "\r${progress_bar}"
+        sleep 0.5
+    done
 }
 
 #
@@ -140,31 +150,51 @@ start() {
     [[ ! -z "${PROFILES}" ]] && bootargs+=" --spring.profiles.active=${PROFILES}"
     local appargs='-Dgeoclient.service.status=running -Dtesting.samples.test=true'
     cmd=$(cat << EOF
-$javacmd -jar $JARFILE $jvmargs $bootargs $appargs
+$javacmd -jar $JARFILE \\
+    $jvmargs \\
+    $bootargs \\
+    $appargs
 EOF
 )
-    echo "${cmd}"
     eval "$cmd" &
-    local -i seconds=0
-    local -i max_wait=8
-    local http_code=$(curl -s -o /dev/null -w "%{http_code}" "${BASE_URL}${STATUS_PATH}")
-    while [[ "${http_code}"!="200" ]]; do
-        [ $seconds -eq $max_wait ] && break
-        seconds=$((seconds + 1))
-        echo "."
-        sleep 1
-        http_code=$(curl -s -o /dev/null -w "%{http_code}" "${BASE_URL}${STATUS_PATH}")
-    done
+    echo "${cmd} & "
+    progress_bar 32
     echo
-    export GEOCLIENT_SERVICE_STATUS=running
+    local stat="$(status)"
+    if [[ "${stat}"=="${STATUS_UNKNOWN_MESSAGE_PREFIX}"* ]]; then
+        #unset GEOCLIENT_SERVICE_STATUS
+        #export GEOCLIENT_SERVICE_STATUS="${STATUS_UNKNOWN}"
+        echo "${stat}"
+        exit 1
+    fi
+    echo "${STATUS_RUNNING}"
+    #unset GEOCLIENT_SERVICE_STATUS
+    #export GEOCLIENT_SERVICE_STATUS="${STATUS_RUNNING}"
 }
 
 status() {
-    echo "${GEOCLIENT_SERVICE_STATUS:-"stopped"}"
+    local -i http_code="$(curl -s -o /dev/null -w "%{http_code}" "${BASE_URL}${STATUS_PATH}")"
+    echo "HTTP ${http_code}"
+    if [ $http_code -eq 0 ]; then
+        echo "${STATUS_STOPPED}"
+    elif [ $http_code -eq 200 ]; then
+        echo "${STATUS_RUNNING}"
+    else
+        echo "${STATUS_UNKNOWN_MESSAGE_PREFIX} ${http_code}. Check port ${PORT} before attempting to start again."
+    fi
 }
 
 stop() {
-    echo curl -X POST "${BASE_URL}${SHUTDOWN_PATH}"
+    if ! curl -X POST "${BASE_URL}${SHUTDOWN_PATH}"; then
+        #unset GEOCLIENT_SERVICE_STATUS
+        #export GEOCLIENT_SERVICE_STATUS="${STATUS_UNKNOWN}"
+        echo "${STATUS_UNKNOWN_MESSAGE_PREFIX} ${http_code}. Check port ${PORT} before attempting to start again."
+        #echo "Error: failed to shutdown service running on port ${PORT}."
+        exit 1
+    fi
+    #unset GEOCLIENT_SERVICE_STATUS
+    #export GEOCLIENT_SERVICE_STATUS="${STATUS_STOPPED}"
+    echo "${STATUS_STOPPED}"
 }
 
 synopsis() {
