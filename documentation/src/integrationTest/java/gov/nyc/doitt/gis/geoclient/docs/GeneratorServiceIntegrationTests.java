@@ -34,7 +34,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @EnabledIf("gov.nyc.doitt.gis.geoclient.test.RequiresRestServiceCustomCondtion#restServiceRunning")
 @SpringBootTest
 @EnableConfigurationProperties(ExternalProperties.class)
-public class GeneratorServiceIntegrationTests {
+public class GeneratorServiceIntegrationTests extends AbstractServiceIntegrationTest {
     private static final Logger logger = LoggerFactory.getLogger(GeneratorServiceIntegrationTests.class);
 
     @Autowired

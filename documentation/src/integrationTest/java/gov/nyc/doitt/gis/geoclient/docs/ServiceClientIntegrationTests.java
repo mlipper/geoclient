@@ -35,7 +35,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 @EnabledIf("gov.nyc.doitt.gis.geoclient.test.RequiresRestServiceCustomCondtion#restServiceRunning")
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @EnableConfigurationProperties(ExternalProperties.class)
-public class ServiceClientIntegrationTests {
+public class ServiceClientIntegrationTests extends AbstractServiceIntegrationTest {
 
     private static final Pattern URI_WITHOUT_QUERY_PATTERN = Pattern.compile("([^?]+)(.*)");
     private static final Pattern QUERY_PARAM_PATTERN = Pattern.compile("([^&=]+)(=?)([^&]+)?");
