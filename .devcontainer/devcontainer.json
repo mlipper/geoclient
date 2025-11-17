@@ -1,19 +1,15 @@
 {
 	"name": "geoclient",
-	"image": "mcr.microsoft.com/devcontainers/java:17",
+	"image": "mcr.microsoft.com/devcontainers/java:21",
 	"forwardPorts": ["8080:8080","8000:8000","5005:5005"],
 	"containerEnv": {
 		"GEOFILES": "/opt/geosupport/current/fls/"
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
-			"version": "17",
+			"version": "21",
 			"installMaven": "true",
-			"installGradle": "true",
-      "jdkDistro": "tem" // Use Temurin JDK instead of Microsoft default.
-		},
-		"ghcr.io/devcontainers/features/node:1": {
-			"version": "none"
+			"installGradle": "true"
 		}
 	},
 	"customizations": {
@@ -23,7 +19,7 @@
 				"java.configuration.runtimes": [
 					{
 						"default": true,
-						"name": "JavaSE-17",
+						"name": "JavaSE-21",
 						"path": "/usr/local/sdkman/candidates/java/current"
 					}
 				]
