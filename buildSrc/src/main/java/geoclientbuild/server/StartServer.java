@@ -3,6 +3,11 @@ package geoclientbuild.server;
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
 import java.net.URI;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
@@ -10,6 +15,7 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 
@@ -24,6 +30,10 @@ public abstract class StartServer extends DefaultTask {
 
     @Input
     abstract Property<URI> getUri();
+
+    @Optional
+    @Input
+    abstract Property<Long> getWaitSecondsAfterStart();
     
     @OutputFile
     abstract RegularFileProperty getOutputFile();
@@ -36,7 +46,7 @@ public abstract class StartServer extends DefaultTask {
     @TaskAction
     public void startApiServer() throws Exception {
         String jarPath = getApiServerJar().getAsFile().get().getAbsolutePath();
-        getLogger().lifecycle("Starting API server at {}", getUri().get().toString());
+        getLogger().lifecycle("API server base endpoint: {}", getUri().get().toString());
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command().add("java");
         processBuilder.command().add("-jar");
@@ -47,9 +57,18 @@ public abstract class StartServer extends DefaultTask {
         processBuilder.redirectError(Redirect.appendTo(outputFile));
         File nullInput = new File(System.getProperty("os.name").startsWith("Windows") ? "NUL" : "/dev/null");
         processBuilder.redirectInput(Redirect.from(nullInput));
+        long sleepTime = 1000 * getWaitSecondsAfterStart().get();
+        LocalTime startTime = LocalTime.now();
         Process process = processBuilder.start();
-        Thread.sleep(5000); // Wait for server to start
-        getLogger().lifecycle("API server process started with PID {}", process.pid());
+        getLogger().lifecycle("API server PID {}", process.pid());
+        Thread.sleep(sleepTime); // Wait for server to start
+        LocalTime afterSleepTime = LocalTime.now();
+        long duration = Duration.between(startTime, afterSleepTime).getSeconds();
+        getLogger().lifecycle("{} task slept for {} seconds (local time) after API server start.", TASK_NAME, duration);
+    }
+
+    private boolean serverRunning() {
+        return false;
     }
 
 }

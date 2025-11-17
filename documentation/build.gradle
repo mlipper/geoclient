@@ -91,6 +91,7 @@ apiserver {
     port = 9090
     contextPath = 'geoclient/v2'
     apiServerJar = bootJarFile
+    waitSecondsAfterStart = 9;
 }
 // Does not work with ampersand. Removing it creates foreground process until blocks until SIGINT.
 //tasks.register('startService', Exec) {
@@ -98,10 +99,11 @@ apiserver {
 //}
 
 tasks.register('serverTest') {
-    dependsOn('startServer')
-    finalizedBy('stopServer')
+    dependsOn('startService')
+    finalizedBy('stopService')
     doLast {
-        println "API Server JAR: ${bootJarFile}"
+        println '--------------------- serverTest ---------------------------'
+        //println "API Server JAR: ${bootJarFile}"
         //println "API Server URL: http://${apiserver.host.get}:${apiserver.port.get}/${apiserver.contextPath.get}"
     }
 }
@@ -114,12 +116,17 @@ tasks.register('showBootJarFile') {
     }
 }
 
+def jarexecJarFile = layout.projectDirectory.dir("../jarexec/build/install/jarexec-shadow/lib").file("jarexec-all.jar").getAsFile()
+def httpShutdownFile = layout.projectDirectory.dir("../jarexec/build/install/jarexec-shadow").file("http-shutdown.json").getAsFile()
+def argsFile = layout.projectDirectory.dir("../jarexec/build/install/jarexec-shadow").file("args.sh").getAsFile()
 tasks.register('startService', Exec) {
 
-    //dependsOn('clean')
-    executable = '/usr/bin/bash'
+    //executable = '/usr/bin/bash'
+    //args '-c', "java -jar ${jarexecJarFile.absolutePath} --jarfile=${bootJarFile.absolutePath} --httpfile=${httpShutdownFile.absolutePath} --arg=--spring.profiles.active=docsamples --arg=--server.port=9090 --start"
+    //commandLine 'exec', "/usr/bin/bash -c ${argsFile.absolutePath}" 
     //commandLine '/bin/bash', '-c', "java -jar ${bootJarFile}", "&"
-    args '-c', "java -jar ${bootJarFile.absolutePath} --spring.profiles.active=docsamples ---server.port=9090"
+    //commandLine '/usr/bin/bash', '-c', 'while true; do sleep 2; echo `date`; done', '&' 
+    commandLine '/usr/bin/bash', '-c', rootDir.getAbsolutePath() + '/src/scripts/test-all.sh start'
 
     // Crucially, set ignoreExitValue to true to prevent Gradle from waiting.
     ignoreExitValue true
@@ -129,12 +136,16 @@ tasks.register('startService', Exec) {
 
     // Add a doLast block to display a message after the command is issued.
     doLast {
-        println 'Started non-blocking Java process.'
+        println '--------------------- startService ---------------------------'
     }
 }
 
 tasks.register('stopService', Exec) {
-    commandLine '/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:8080/geoclient/v2/actuator/shutdown'
+    commandLine '/usr/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:8080/geoclient/v2/actuator/shutdown'
+    //commandLine '/usr/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:9090/geoclient/v2/actuator/shutdown'
+    doLast {
+        println '--------------------- stopService ---------------------------'
+    }
 }
 
 def generatedSamplesDir = Paths.get(layout.buildDirectory.dir('samples').get().getAsFile().getPath())

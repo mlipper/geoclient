@@ -22,6 +22,7 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
     public static final String APISERVER_DEFAULT_OUTPUT_DIRECTORY = "api-server";
     public static final String APISERVER_DEFAULT_OUTPUT_FILE = "api-server.log";
     public static final String APISERVER_DEFAULT_PROFILE = "docsamples";
+    public static final Long APISERVER_DEFAULT_WAIT_SECONDS = 8L;
 
     public void apply(Project project) {
         // Register the extension
@@ -51,6 +52,7 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
                 String outputFilePath = APISERVER_DEFAULT_OUTPUT_DIRECTORY + File.separator + APISERVER_DEFAULT_OUTPUT_FILE;
                 Provider<RegularFile> outputFile = project.getLayout().getBuildDirectory().file(outputFilePath);
                 task.getOutputFile().set(outputFile);
+                task.getWaitSecondsAfterStart().set(extension.getWaitSecondsAfterStart());
             });
 
         project.getTasks().register(StopServer.TASK_NAME, StopServer.class, task -> {
@@ -85,6 +87,7 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
         extension.getPort().convention(ApiServer.DEFAULT_PORT);
         extension.getScheme().convention(ApiServer.DEFAULT_SCHEME);
         extension.getContextPath().convention(ApiServer.DEFAULT_CONTEXT_PATH);
+        extension.getWaitSecondsAfterStart().convention(APISERVER_DEFAULT_WAIT_SECONDS);
         extension.getEnvironment().convention(System.getenv());
         extension.getSystemProperties().convention(System.getProperties().entrySet().stream()
             .collect(java.util.stream.Collectors.toMap(

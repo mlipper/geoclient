@@ -64,6 +64,10 @@ public class Endpoints {
         return endpoints.get(VERSION);
     }
 
+    public Endpoint getReadiness() {
+        return endpoints.get(READINESS);
+    }
+
     private void init(){
         List<String> names = List.of(
             ACTUATOR_SHUTDOWN,
@@ -78,7 +82,8 @@ public class Endpoints {
             SEARCH,
             STREETCODE,
             STREETCODE_B5SC,
-            VERSION);
+            VERSION,
+            READINESS);
 
         for (String name : names) {
             Endpoint endpoint = new Endpoint(name, baseUri);

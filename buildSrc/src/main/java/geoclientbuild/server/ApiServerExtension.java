@@ -17,4 +17,5 @@ public interface ApiServerExtension {
     MapProperty<String, String> getEnvironment();
     MapProperty<String, String> getSystemProperties();
     ListProperty<String> getArguments();
+    Property<Long> getWaitSecondsAfterStart();
 }
