@@ -1,17 +1,16 @@
 package geoclientbuild.jarexec.exec;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.util.concurrent.AbstractExecutionThreadService;
 
 import geoclientbuild.client.Request;
 import geoclientbuild.client.Response;
 import geoclientbuild.client.RestClient;
 import geoclientbuild.jarexec.settings.Settings;
-import com.google.common.util.concurrent.AbstractExecutionThreadService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class JarExecutionService extends AbstractExecutionThreadService {
 
