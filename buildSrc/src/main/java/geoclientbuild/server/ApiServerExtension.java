@@ -10,7 +10,9 @@ public interface ApiServerExtension {
     public static final String EXTENSION_NAME = "apiserver";
 
     RegularFileProperty getApiServerJar();
+    RegularFileProperty getPidFile();
     Property<String> getContextPath();
+    Property<String> getJavaCommand();
     Property<String> getHost();
     Property<Integer> getPort();
     Property<String> getScheme();

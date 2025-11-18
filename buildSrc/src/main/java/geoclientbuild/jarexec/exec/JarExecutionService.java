@@ -5,47 +5,32 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.util.concurrent.AbstractExecutionThreadService;
-
-import geoclientbuild.client.Request;
-import geoclientbuild.client.Response;
-import geoclientbuild.client.RestClient;
 import geoclientbuild.jarexec.settings.Settings;
 
-public class JarExecutionService extends AbstractExecutionThreadService {
+public class JarExecutionService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private Process process;
-    private final RestClient restClient;
     private final Settings settings;
 
-    public JarExecutionService(RestClient restClient, Settings settings) {
-        this.restClient = restClient;
+    public JarExecutionService(Settings settings) {
         this.settings = settings;
     }
 
-    @Override
-    protected void run() throws Exception {
+    public Process start() throws Exception {
         ProcessBuilder processBuilder = new ProcessBuilder();
         configureProcess(processBuilder);
         logger.info("Service starting up. Launching external process...");
-        this.process = processBuilder.start();
+        Process process = processBuilder.start();
         logger.info("External process started with PID: {}", process.pid());
-        TimeUnit.SECONDS.sleep(4); // Wait for process to be fully initialized 
+        TimeUnit.SECONDS.sleep(10); // Wait for process to be fully initialized 
         logger.info("Service running...");
-        int exitCode = this.process.waitFor();
-        logger.info("External process finished with exit code: {}", exitCode);
+        return process;
     }
 
-    @Override
-    protected void shutDown() throws Exception {
+    public void stop(Process process) throws Exception {
         logger.info("Service shutting down. Stopping external process...");
-        if(isProcessAlive() && settings.supportsHttpShutdown()){
-            httpShutdown();
-            TimeUnit.SECONDS.sleep(5); // Wait a bit for graceful HTTP shutdown
-        }
-        destroyProcess(); // Does nothing if process is already terminated or null
+        destroyProcess(process); // Does nothing if process is already terminated or null
         logger.info("Service shut down complete.");
     }
     
@@ -60,30 +45,15 @@ public class JarExecutionService extends AbstractExecutionThreadService {
         }
     }
 
-    void httpShutdown() {
-        Request request = settings.createHttpShutdownRequest();
-        logger.info("Sending HTTP shutdown request to " + request.toString());
-        Response response = null;
-        try {
-            response = restClient.call(request);
-            logger.info("HTTP shutdown request sent successfully.");
-        } catch (Exception e) {
-            logger.error("Failed to send HTTP shutdown request: {}", e.getMessage());
-            if(response != null) {
-                logger.error("Response: {}", response.toString());
-            }
-        }
-    }
-
-    private boolean isProcessAlive() {
+    private boolean isProcessAlive(Process process) {
         if (process != null && process.isAlive()) {
             return true;
         }
         return false;
     }
 
-    private void destroyProcess() {
-        if (isProcessAlive()) {
+    private void destroyProcess(Process process) {
+        if (isProcessAlive(process)) {
             logger.info("Sending SIGTERM to process: {}", process.pid());
             process.destroy(); // Non-blocking: attempts graceful shutdown (SIGTERM)
             try {

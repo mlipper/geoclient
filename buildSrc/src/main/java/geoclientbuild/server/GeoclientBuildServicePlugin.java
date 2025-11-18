@@ -15,28 +15,19 @@ import org.gradle.api.logging.Logging;
 import org.gradle.api.provider.Provider;
 
 public class GeoclientBuildServicePlugin implements Plugin<Project> {
-    //private Logger logger = LoggerFactory.getLogger(GeoclientBuildServicePlugin.class);
     private Logger logger = Logging.getLogger(GeoclientBuildServicePlugin.class);
 
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
     public static final String APISERVER_DEFAULT_OUTPUT_DIRECTORY = "api-server";
-    public static final String APISERVER_DEFAULT_OUTPUT_FILE = "api-server.log";
+    public static final String APISERVER_DEFAULT_JAVA_COMMAND = "java";
+    public static final String APISERVER_DEFAULT_PID_FILE = "api-server.pid";
+    public static final String APISERVER_DEFAULT_PID_FILE_PATH = APISERVER_DEFAULT_OUTPUT_DIRECTORY + File.separator + APISERVER_DEFAULT_PID_FILE;
     public static final String APISERVER_DEFAULT_PROFILE = "docsamples";
     public static final Long APISERVER_DEFAULT_WAIT_SECONDS = 8L;
 
     public void apply(Project project) {
         // Register the extension
         ApiServerExtension extension = registerExtension(project);
-
-        //// Register the service
-        //project.getGradle().getSharedServices().registerIfAbsent(ApiServer.SERVICE_NAME, ApiServer.class, spec -> {
-        //    // Provide some parameters
-        //    spec.getParameters().getScheme().set(extension.getScheme().get());
-        //    spec.getParameters().getHost().set(extension.getHost().get());
-        //    spec.getParameters().getPort().set(extension.getPort().get());
-        //    spec.getParameters().getContextPath().set(extension.getContextPath().get());
-        //    spec.getParameters().getApiServerJar().set(extension.getApiServerJar());
-        //});
 
         // Register tasks
         project.getTasks().register(StartServer.TASK_NAME, StartServer.class, task -> {
@@ -49,9 +40,7 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
                     .profile(APISERVER_DEFAULT_PROFILE)
                     .build();
                 task.getArguments().set(args);
-                String outputFilePath = APISERVER_DEFAULT_OUTPUT_DIRECTORY + File.separator + APISERVER_DEFAULT_OUTPUT_FILE;
-                Provider<RegularFile> outputFile = project.getLayout().getBuildDirectory().file(outputFilePath);
-                task.getOutputFile().set(outputFile);
+                task.getPidFile().set(extension.getPidFile());
                 task.getWaitSecondsAfterStart().set(extension.getWaitSecondsAfterStart());
             });
 
@@ -61,9 +50,7 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
             URI uri = baseUri(extension).resolve(StopServer.DEFAULT_ENDPOINT);
             task.getLogger().lifecycle("stopServer URI: " + uri.toString());
             task.getURI().set(uri);
-            String outputFilePath = APISERVER_DEFAULT_OUTPUT_DIRECTORY + File.separator + APISERVER_DEFAULT_OUTPUT_FILE;
-            Provider<RegularFile> outputFile = project.getLayout().getBuildDirectory().file(outputFilePath);
-            task.getOutputFile().set(outputFile);
+            task.getPidFile().set(extension.getPidFile());
         });
 
         project.getTasks().register(APISERVER_INFO_TASK_NAME, task -> {
@@ -95,6 +82,10 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
                 e -> String.valueOf(e.getValue())
             )));
         extension.getArguments().convention(java.util.Collections.emptyList());
+        extension.getJavaCommand().convention(APISERVER_DEFAULT_JAVA_COMMAND);
+        String pidFilePath = APISERVER_DEFAULT_PID_FILE_PATH;
+        Provider<RegularFile> pidFile = project.getLayout().getBuildDirectory().file(pidFilePath);
+        extension.getPidFile().convention(pidFile);
         return extension;
     }
 
@@ -109,7 +100,4 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
             throw new RuntimeException("Failed to build API server URI", e);
         }
     }
-    //private File resolveJarFile(Project project, String configurationName) {
-    //    return project.getConfigurations().getByName(configurationName).getSingleFile();
-    //}
 }

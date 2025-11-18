@@ -22,6 +22,10 @@ public abstract class StartServer extends DefaultTask {
     @InputFile
     abstract RegularFileProperty getApiServerJar();
 
+    @Optional
+    @Input
+    abstract Property<String> getJavaCommand();
+
     @Input
     abstract ListProperty<String> getArguments();
 
@@ -33,7 +37,7 @@ public abstract class StartServer extends DefaultTask {
     abstract Property<Long> getWaitSecondsAfterStart();
     
     @OutputFile
-    abstract RegularFileProperty getOutputFile();
+    abstract RegularFileProperty getPidFile();
 
     public StartServer() {
         setGroup("API Server");
@@ -45,19 +49,16 @@ public abstract class StartServer extends DefaultTask {
         String jarPath = getApiServerJar().getAsFile().get().getAbsolutePath();
         getLogger().lifecycle("API server base endpoint: {}", getUri().get().toString());
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command().add("java");
+        processBuilder.command().add(getJavaCommand().get());
         processBuilder.command().add("-jar");
         processBuilder.command().add(jarPath);
         processBuilder.command().addAll(getArguments().get());
-        File outputFile = getOutputFile().getAsFile().get();
-        processBuilder.redirectOutput(Redirect.appendTo(outputFile));
-        processBuilder.redirectError(Redirect.appendTo(outputFile));
-        File nullInput = new File(System.getProperty("os.name").startsWith("Windows") ? "NUL" : "/dev/null");
-        processBuilder.redirectInput(Redirect.from(nullInput));
+        processBuilder.inheritIO();
         long sleepTime = 1000 * getWaitSecondsAfterStart().get();
         LocalTime startTime = LocalTime.now();
         Process process = processBuilder.start();
         getLogger().lifecycle("API server PID {}", process.pid());
+        FileUtils.writeTextFile("" + process.pid(), getPidFile());
         Thread.sleep(sleepTime); // Wait for server to start
         LocalTime afterSleepTime = LocalTime.now();
         long duration = Duration.between(startTime, afterSleepTime).getSeconds();

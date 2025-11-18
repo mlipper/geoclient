@@ -40,10 +40,11 @@ public class Main {
 
     private final JarExecutionService service;
     private final Settings settings;
+    private Process process;
 
     public Main(Settings settings) {
         this.settings = settings;
-        this.service = new JarExecutionService(new HttpClient(), settings);
+        this.service = new JarExecutionService(settings);
     }
 
     public void showSettings() {
@@ -55,20 +56,28 @@ public class Main {
     }
 
     public void startService() {
-        // Start the service asynchronously
-        this.service.startAsync();
-        // Wait for the service to be healthy (running)
-        this.service.awaitRunning();
+        try {
+            this.process = this.service.start();
+        } catch (Exception e) {
+            logger.error("Error executing jar process.", e);
+            throw new RuntimeException("Jar process failed to start.", e);
+        }
     }
 
     public void stopService() {
-        this.service.stopAsync();
+        try {
+            this.service.stop(this.process);
+        } catch (Exception e) {
+            logger.error("Error stopping jar process.", e);
+            throw new RuntimeException("Jar process failed to stop.", e);
+        }
     }
 
     public static void main(String[] args) throws IOException{
         Main main = newInstance(args);
         if(main != null) {
             // Application started successfully
+            System.out.println("[OK]");
         }
     }
 
