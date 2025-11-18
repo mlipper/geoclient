@@ -13,9 +13,6 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import geoclientbuild.jarexec.settings.Settings;
-import geoclientbuild.jarexec.settings.SettingsInfo;
-
 public class SettingsInfoTest extends AbstractSettingsTest {
 
     @Test

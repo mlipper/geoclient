@@ -1,16 +1,15 @@
 package geoclientbuild.docs;
 
+import static geoclientbuild.docs.DocumentationPlugin.GENERATE_SAMPLES_TASK_NAME;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.CopyOption;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,13 +17,10 @@ import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static geoclientbuild.docs.DocumentationPlugin.GENERATE_SAMPLES_TASK_NAME;
 
 // See https://github.com/spring-projects/spring-boot/blob/main/buildSrc/src/test/java/org/springframework/boot/build/ConventionsPluginTests.java
 @EnabledIfSystemProperty(named = "testing.endpoint", matches = "^https?://.+")
@@ -107,13 +103,13 @@ public class GenerateSamplesTaskTest {
 			.build();
 	}
 
-	private String environmentVariable(String name) {
-		String result = System.getenv(name);
-		if(result != null) {
-			return result;
-		}
-		return null;
-	}
+	//private String environmentVariable(String name) {
+	//	String result = System.getenv(name);
+	//	if(result != null) {
+	//		return result;
+	//	}
+	//	return null;
+	//}
 
     private void logBuildFile() throws IOException {
 		String buildFileString = new String(Files.readAllBytes(Path.of(this.buildFile.toURI())));

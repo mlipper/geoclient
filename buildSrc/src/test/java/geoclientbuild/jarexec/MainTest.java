@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import geoclientbuild.jarexec.Main;
 import geoclientbuild.jarexec.settings.Settings;
 
 class MainTest {

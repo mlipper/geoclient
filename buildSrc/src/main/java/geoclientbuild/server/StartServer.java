@@ -4,10 +4,7 @@ import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
 import java.net.URI;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
@@ -65,10 +62,6 @@ public abstract class StartServer extends DefaultTask {
         LocalTime afterSleepTime = LocalTime.now();
         long duration = Duration.between(startTime, afterSleepTime).getSeconds();
         getLogger().lifecycle("{} task slept for {} seconds (local time) after API server start.", TASK_NAME, duration);
-    }
-
-    private boolean serverRunning() {
-        return false;
     }
 
 }
