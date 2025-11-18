@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
@@ -25,7 +26,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import geoclientbuild.client.HttpClient;
 import geoclientbuild.client.Request;
+import geoclientbuild.client.Response;
 import geoclientbuild.client.RestClient;
 
 abstract public class GenerateSamplesTask extends DefaultTask {
@@ -48,19 +51,20 @@ abstract public class GenerateSamplesTask extends DefaultTask {
     public void generateSamples() {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         File file = getRequestsFile().getAsFile().get();
-        List<Request> requests = loadRequests(file);
-        RestClient restClient = new RestClient(getServiceUrl().get());
-        for(Request request: requests) {
+        List<HttpRequestAdapter> requests = loadRequests(file);
+        RestClient restClient = new HttpClient();
+        for(HttpRequestAdapter request: requests) {
             try {
                 StringBuffer buff = new StringBuffer(ASCIIDOC_BEGIN_TAG);
                 buff.append('\n');
-                buff.append(format(restClient.call(request)));
+                Response response = restClient.call(request);
+                buff.append(format(response.getBody()));
                 buff.append('\n');
                 buff.append(ASCIIDOC_END_TAG);
                 buff.append('\n');
-                String response = buff.toString();
-                getLogger().info(response);
-                writeResponse(request, response);
+                String responseStr = buff.toString();
+                getLogger().info(responseStr);
+                writeResponse(request, responseStr);
             } catch (Exception e) {
                 getLogger().error(e.getMessage());
                 throw new RuntimeException("Build failed:", e);
@@ -68,13 +72,24 @@ abstract public class GenerateSamplesTask extends DefaultTask {
         }
     }
 
-    private List<Request> loadRequests(File file) {
+    private List<HttpRequestAdapter> adapt(List<HttpRequestAdapter> requests) {
+
+        final String serviceUrl = getServiceUrl().get();
+        return requests.stream()
+            .map(r -> { 
+                r.setUri(serviceUrl);
+                r.setMethod(Request.HTTP_GET_METHOD);
+                return r;
+            }).collect(Collectors.toList());
+    }
+
+    private List<HttpRequestAdapter> loadRequests(File file) {
         try {
             JsonNode node = mapper.readTree(file);
             JsonNode requestsNode = node.get("requests");
-            TypeReference<List<Request>> typeReference = new TypeReference<List<Request>>() {};
-            List<Request> requests = mapper.convertValue(requestsNode, typeReference);
-            return requests;
+            TypeReference<List<HttpRequestAdapter>> typeReference = new TypeReference<List<HttpRequestAdapter>>() {};
+            List<HttpRequestAdapter> requests = mapper.convertValue(requestsNode, typeReference);
+            return adapt(requests);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -92,7 +107,7 @@ abstract public class GenerateSamplesTask extends DefaultTask {
         return Paths.get(javaIoFile.toURI());
     }
 
-    private void writeResponse(Request request, String response) {
+    private void writeResponse(HttpRequestAdapter request, String response) {
         String fileName = String.format("%s-%s.jsonc", request.getType(), request.getId());
         Path filePath = outputFilePath(fileName.replace('/', '-'));
         try {

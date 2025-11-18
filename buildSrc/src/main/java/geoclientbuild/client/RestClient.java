@@ -1,23 +1,23 @@
 package geoclientbuild.client;
 
-import org.apache.hc.client5.http.classic.methods.HttpGet;
+/**
+ * A very simple REST client interface for making HTTP requests.
+ * This interface defines a method to send a request and receive a response
+ * without relying on HTTP-specific libraries.
+ * 
+ * It intentionally provides a minimal abstraction over HTTP communication, limiting
+ * the functionality to just sending HTTP GET, POST, and HEAD requests with the ability
+ * to set headers and parameters and read response status and body.
+ *
+ * @author mlipper
+ */
+public interface RestClient {
 
-public class RestClient extends HttpClient {
-
-    private Endpoints endpoints;
-
-    public RestClient(String baseUri) {
-        this.endpoints = new Endpoints(baseUri);
-    }
-
-    public String call(Request request) throws Exception {
-        if (!this.endpoints.contains(request.getType())) {
-            return String.format(Endpoints.RC_NOT_IMPLEMENTED_JSON_TEMPLATE, request.getType());
-        }
-        Endpoint endpoint = endpoints.get(request.getType());
-        HttpGet httpGet = request.hasParameters() ? endpoint.httpGetRequest(request.getParameters()) : endpoint.httpGetRequest();
-        getLogger().lifecycle("Calling REST endpoint: " + httpGet.getUri());
-        Response response = execute(httpGet);
-        return response.getBody();
-    }
+    /**
+     * Makes an HTTP request and returns the response.
+     * @param request
+     * @return response
+     * @throws Exception
+     */
+    Response call(Request request) throws Exception;
 }
