@@ -30,6 +30,8 @@
 **/.gradletasknamecache
 
 **/*.log
+**/log/
+**/logs/
 
 # Local native development artifacts
 #**/geoclient-test
