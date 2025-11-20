@@ -1,14 +1,11 @@
 package geoclientbuild.server;
 
-import java.io.File;
-import java.lang.ProcessBuilder.Redirect;
 import java.net.URI;
-import java.time.Duration;
-import java.time.LocalTime;
+import java.util.Map;
 
-import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
+import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
@@ -16,26 +13,29 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 
-public abstract class StartServer extends DefaultTask {
+import geoclientbuild.jarexec.exec.JarExecutionService;
+import geoclientbuild.jarexec.settings.Settings;
+
+public abstract class StartServer extends AbstractServerProcess {
     public static final String TASK_NAME = "startServer";
 
     @InputFile
-    abstract RegularFileProperty getApiServerJar();
-
-    @Optional
-    @Input
-    abstract Property<String> getJavaCommand();
+    abstract RegularFileProperty getServerJar();
 
     @Input
     abstract ListProperty<String> getArguments();
 
     @Input
-    abstract Property<URI> getUri();
+    abstract MapProperty<String, String> getEnvironment();
 
     @Optional
     @Input
-    abstract Property<Long> getWaitSecondsAfterStart();
-    
+    abstract Property<String> getJavaCommand();
+
+    @Optional
+    @Input
+    abstract Property<Long> getSleepSecondsAfterStart();
+
     @OutputFile
     abstract RegularFileProperty getPidFile();
 
@@ -45,24 +45,34 @@ public abstract class StartServer extends DefaultTask {
     }
 
     @TaskAction
-    public void startApiServer() throws Exception {
-        String jarPath = getApiServerJar().getAsFile().get().getAbsolutePath();
-        getLogger().lifecycle("API server base endpoint: {}", getUri().get().toString());
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command().add(getJavaCommand().get());
-        processBuilder.command().add("-jar");
-        processBuilder.command().add(jarPath);
-        processBuilder.command().addAll(getArguments().get());
-        processBuilder.inheritIO();
-        long sleepTime = 1000 * getWaitSecondsAfterStart().get();
-        LocalTime startTime = LocalTime.now();
-        Process process = processBuilder.start();
-        getLogger().lifecycle("API server PID {}", process.pid());
-        FileUtils.writeTextFile("" + process.pid(), getPidFile());
-        Thread.sleep(sleepTime); // Wait for server to start
-        LocalTime afterSleepTime = LocalTime.now();
-        long duration = Duration.between(startTime, afterSleepTime).getSeconds();
-        getLogger().lifecycle("{} task slept for {} seconds (local time) after API server start.", TASK_NAME, duration);
+    public void startServer() throws ApiServerException {
+        Settings settings = createSettings();
+        JarExecutionService jarExec = new JarExecutionService(settings);
+        long pid = -1L;
+        try {
+            Process process = jarExec.start();
+            pid = process.pid();
+            writePidFile(getPidFile(), pid);
+            getLogger().info("Wrote PID file {} for API server process {}.", pidFileAsFile(getPidFile()).getAbsolutePath(), pid);
+            getLogger().lifecycle("API server running with PID {}.", pid);
+        } catch (Exception e) {
+            getLogger().error("Error starting server process.", e);
+            ApiServerException apiServerException = deletePidFileAndBuildException(getPidFile(), "Failed to start API server.", e);
+            throw apiServerException;
+        }
     }
 
+    private Settings createSettings() {
+        Settings settings = new Settings.Builder()
+            .withJavaCommand(getJavaCommand().get())
+            .withJarFile(getServerJar().get().getAsFile())
+            .withArguments(getArguments().get())
+            .withSleepSecondsAfterStart(getSleepSecondsAfterStart().get())
+            .build();
+        Map<String, String> env = getEnvironment().getOrNull();
+        if(env != null && !env.isEmpty()) {
+            settings.setEnvironment(env);
+        }
+        return settings;
+    }
 }

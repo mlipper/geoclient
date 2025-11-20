@@ -9,7 +9,7 @@ public interface ApiServerExtension {
 
     public static final String EXTENSION_NAME = "apiserver";
 
-    RegularFileProperty getApiServerJar();
+    RegularFileProperty getServerJar();
     RegularFileProperty getPidFile();
     Property<String> getContextPath();
     Property<String> getJavaCommand();
@@ -17,7 +17,6 @@ public interface ApiServerExtension {
     Property<Integer> getPort();
     Property<String> getScheme();
     MapProperty<String, String> getEnvironment();
-    MapProperty<String, String> getSystemProperties();
     ListProperty<String> getArguments();
-    Property<Long> getWaitSecondsAfterStart();
+    Property<Long> getSleepSecondsAfterStart();
 }

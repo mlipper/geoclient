@@ -1,23 +1,17 @@
 package geoclientbuild.server;
 
-import java.net.URI;
 import java.util.Optional;
 
-import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
-import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.TaskAction;
 
-public abstract class StopServer extends DefaultTask {
+public abstract class StopServer extends AbstractServerProcess {
 
     public static final String TASK_NAME = "stopServer";
     public static final String DEFAULT_ENDPOINT = "/actuator/shutdown";
 
-    @Input
-    abstract Property<URI> getURI();
-
-    @Input
+    @InputFile
     abstract RegularFileProperty getPidFile();
 
     public StopServer() {
@@ -26,24 +20,30 @@ public abstract class StopServer extends DefaultTask {
     }
 
     @TaskAction
-    public void stopServer() throws Exception {
-        // HTTP shutdown
-        //URI uri = getURI().get();
-        //getLogger().lifecycle("Stopping API server with empty-body POST to {}", uri.toString());
-        //Request postRequest = new Request("stop-server", getURI().get().toString(), Request.HTTP_POST_METHOD, null);
-        //RestClient restClient = new HttpClient();
-        //String response = restClient.call(postRequest).getBody();
-        //getLogger().lifecycle("API server shutdown response: {}", response);
-        String pid = FileUtils.readTextFile(getPidFile());
-        Optional<ProcessHandle> processHandle = ProcessHandle.of(Long.valueOf(pid));
-        if(processHandle.isPresent()) {
-            stopProcess(processHandle.get());
+    public void stopServer() throws ApiServerException {
+        long pid = -1L;
+        try {
+            pid = readPidFile(getPidFile());
+            Optional<ProcessHandle> processHandle = ProcessHandle.of(pid);
+            if(processHandle.isPresent()) {
+                getLogger().lifecycle("Stopping server process {}.", pid);
+                stopProcess(processHandle.get(), pid);
+                getLogger().lifecycle("Server process {} has been stopped.", pid);
+            }
+            deletePidFile(getPidFile());
+        } catch (Exception e) {
+            getLogger().error("Error stopping server process.", e);
+            ApiServerException apiServerException = deletePidFileAndBuildException(getPidFile(), "Failed to stop API server.", e);
+            throw apiServerException;
         }
     }
 
-    private void stopProcess(ProcessHandle processHandle) {
+    private void stopProcess(ProcessHandle processHandle, long pid) {
         if(processHandle != null && processHandle.isAlive()) {
+            ProcessHandle.Info phInfo = processHandle.info();
+            getLogger().debug("Attempting to destroy process {} with ProcessHandle: {}", pid, phInfo.toString());
             if(!processHandle.destroy()) {
+                getLogger().debug("Failed to destroy process {}. Attempting to destroy it forcibly.", pid);
                 if(processHandle != null && processHandle.isAlive()) {
                     if(!processHandle.destroyForcibly()) {
                         throw new IllegalStateException(processHandle.info().toString());

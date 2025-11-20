@@ -35,7 +35,7 @@ public class ArgumentsBuilder {
             return Arrays.asList(new String[] {
                 "--server.address=" + host,
                 "--server.port=" + port,
-                "--server.servlet.context-path=/" + contextPath,
+                "--server.servlet.context-path=" + contextPath,
                 "--spring.profiles.active=" + profile
             });
         }

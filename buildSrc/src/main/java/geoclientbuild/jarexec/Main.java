@@ -6,6 +6,8 @@ import static geoclientbuild.jarexec.OptionSpecs.OPT_HELP;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_HTTPFILE;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_JARFILE;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_JAVACMD;
+import static geoclientbuild.jarexec.OptionSpecs.OPT_START;
+import static geoclientbuild.jarexec.OptionSpecs.OPT_STOP;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_ARG;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_ENV;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_HELP;
@@ -13,9 +15,7 @@ import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_HTTPFILE;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_JARFILE;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_JAVACMD;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_START;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_START;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_STOP;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_STOP;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_WORKDIR;
 import static geoclientbuild.jarexec.OptionSpecs.OPT_WORKDIR;
 
@@ -24,15 +24,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import geoclientbuild.jarexec.exec.JarExecutionService;
-import geoclientbuild.client.HttpClient;
-import geoclientbuild.jarexec.settings.Settings;
-
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import geoclientbuild.jarexec.exec.JarExecutionService;
+import geoclientbuild.jarexec.settings.Settings;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 
 public class Main {
 

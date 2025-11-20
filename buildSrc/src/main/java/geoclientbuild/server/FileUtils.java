@@ -36,11 +36,11 @@ public class FileUtils {
      * Read a small text file (< 1G) into a String.
      *
      * @param contents
-     * @param targetLocation
+     * @param regularFile
      * @throws IOException
      */
-    public static String readTextFile(Provider<RegularFile> targetLocation) throws IOException {
-        Path path = targetLocation.get().getAsFile().toPath();
+    public static String readTextFile(Provider<RegularFile> regularFile) throws IOException {
+        Path path = regularFile.get().getAsFile().toPath();
         return Files.readString(path, StandardCharsets.UTF_8);
     }
 

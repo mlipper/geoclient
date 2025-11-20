@@ -18,12 +18,18 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
     private Logger logger = Logging.getLogger(GeoclientBuildServicePlugin.class);
 
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
+
+
+    public static final String APISERVER_DEFAULT_CONTEXT_PATH = "geoclient/v2";
+    public static final String APISERVER_DEFAULT_HOST = "localhost";
+    public static final Integer APISERVER_DEFAULT_PORT = 8080;
+    public static final String APISERVER_DEFAULT_SCHEME = "http";
     public static final String APISERVER_DEFAULT_OUTPUT_DIRECTORY = "api-server";
     public static final String APISERVER_DEFAULT_JAVA_COMMAND = "java";
     public static final String APISERVER_DEFAULT_PID_FILE = "api-server.pid";
     public static final String APISERVER_DEFAULT_PID_FILE_PATH = APISERVER_DEFAULT_OUTPUT_DIRECTORY + File.separator + APISERVER_DEFAULT_PID_FILE;
     public static final String APISERVER_DEFAULT_PROFILE = "docsamples";
-    public static final Long APISERVER_DEFAULT_WAIT_SECONDS = 8L;
+    public static final Long APISERVER_DEFAULT_SLEEP_SECONDS = 8L;
 
     public void apply(Project project) {
         // Register the extension
@@ -31,7 +37,8 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
 
         // Register tasks
         project.getTasks().register(StartServer.TASK_NAME, StartServer.class, task -> {
-                task.getApiServerJar().set(extension.getApiServerJar());
+                task.getServerJar().set(extension.getServerJar());
+                task.getJavaCommand().set(extension.getJavaCommand());
                 task.getUri().set(baseUri(extension));
                 List<String> args = new ArgumentsBuilder.BootArgumentsBuilder()
                     .host(extension.getHost().get())
@@ -41,15 +48,11 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
                     .build();
                 task.getArguments().set(args);
                 task.getPidFile().set(extension.getPidFile());
-                task.getWaitSecondsAfterStart().set(extension.getWaitSecondsAfterStart());
+                task.getSleepSecondsAfterStart().set(extension.getSleepSecondsAfterStart());
             });
 
         project.getTasks().register(StopServer.TASK_NAME, StopServer.class, task -> {
-            URI baseUri = baseUri(extension);
-            task.getLogger().lifecycle("stopServer base URI: " + baseUri.toString());
-            URI uri = baseUri(extension).resolve(StopServer.DEFAULT_ENDPOINT);
-            task.getLogger().lifecycle("stopServer URI: " + uri.toString());
-            task.getURI().set(uri);
+            task.getUri().set(baseUri(extension));
             task.getPidFile().set(extension.getPidFile());
         });
 
@@ -59,7 +62,7 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
                     extension.getHost().get(),
                     extension.getPort().get(),
                     extension.getContextPath().get());
-            Provider<File> jarfile = extension.getApiServerJar().getAsFile();
+            Provider<File> jarfile = extension.getServerJar().getAsFile();
             task.doLast(s -> {
                 logger.lifecycle("ApiServer build service URL: " + url);
                 logger.lifecycle("ApiServer JAR: " + jarfile.get().getAbsolutePath());
@@ -70,21 +73,20 @@ public class GeoclientBuildServicePlugin implements Plugin<Project> {
     private ApiServerExtension registerExtension(Project project) {
         ApiServerExtension extension = project.getExtensions().create(ApiServerExtension.EXTENSION_NAME, ApiServerExtension.class);
         // Configure the extension with some defaults
-        extension.getHost().convention(ApiServer.DEFAULT_HOST);
-        extension.getPort().convention(ApiServer.DEFAULT_PORT);
-        extension.getScheme().convention(ApiServer.DEFAULT_SCHEME);
-        extension.getContextPath().convention(ApiServer.DEFAULT_CONTEXT_PATH);
-        extension.getWaitSecondsAfterStart().convention(APISERVER_DEFAULT_WAIT_SECONDS);
+        
+        // Configure default base URI
+        extension.getScheme().convention(APISERVER_DEFAULT_SCHEME);
+        extension.getHost().convention(APISERVER_DEFAULT_HOST);
+        extension.getPort().convention(APISERVER_DEFAULT_PORT);
+        extension.getContextPath().convention(APISERVER_DEFAULT_CONTEXT_PATH);
+    
+        // Configure process environment
+        extension.getSleepSecondsAfterStart().convention(APISERVER_DEFAULT_SLEEP_SECONDS);
         extension.getEnvironment().convention(System.getenv());
-        extension.getSystemProperties().convention(System.getProperties().entrySet().stream()
-            .collect(java.util.stream.Collectors.toMap(
-                e -> String.valueOf(e.getKey()),
-                e -> String.valueOf(e.getValue())
-            )));
         extension.getArguments().convention(java.util.Collections.emptyList());
         extension.getJavaCommand().convention(APISERVER_DEFAULT_JAVA_COMMAND);
-        String pidFilePath = APISERVER_DEFAULT_PID_FILE_PATH;
-        Provider<RegularFile> pidFile = project.getLayout().getBuildDirectory().file(pidFilePath);
+        // Change to tmpDir?
+        Provider<RegularFile> pidFile = project.getLayout().getBuildDirectory().file(APISERVER_DEFAULT_PID_FILE_PATH);
         extension.getPidFile().convention(pidFile);
         return extension;
     }

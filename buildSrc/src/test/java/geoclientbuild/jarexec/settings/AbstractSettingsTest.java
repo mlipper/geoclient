@@ -20,11 +20,15 @@ public abstract class AbstractSettingsTest {
 
     protected File jarFile = new File("/app/example.jar");
 
+    protected String javaCommand = "lava";
+
     protected File httpShutdownFile;
 
     protected String shutDownHttpMethod = "POST";
 
     protected String shutDownUrl = "http://localhost:8080/shutdown";
+
+    protected long sleepSecondsAfterStart = 6L;
 
     protected AbstractSettingsTest() {
         // Should be on the test classpath
@@ -40,7 +44,9 @@ public abstract class AbstractSettingsTest {
         settings.setArguments(arguments);
         settings.setEnvironment(environment);
         settings.setJarFile(jarFile);
+        settings.setJavaCommand(javaCommand);
         settings.setHttpShutdownFile(httpShutdownFile);
+        settings.setSleepSecondsAfterStart(sleepSecondsAfterStart);
         settings.setWorkingDirectory(jarFile);
         return settings;
     }

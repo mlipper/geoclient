@@ -10,6 +10,7 @@ import geoclientbuild.jarexec.exec.ConfigurationException;
 public class Settings {
 
     public static final String DEFAULT_JAVA_COMMAND = "java";
+    public static final long DEFAULT_SLEEP_SECONDS_AFTER_START = 10L;
     public static final String JAR_ARGUMENT = "-jar";
 
     private List<String> arguments;
@@ -19,6 +20,7 @@ public class Settings {
     private SettingsInfo settingsInfo;
     private File httpShutdownFile;
     private File workingDirectory;
+    private long sleepSecondsAfterStart = DEFAULT_SLEEP_SECONDS_AFTER_START;
 
     public static class Builder {
         private final Settings settings;
@@ -45,6 +47,11 @@ public class Settings {
             return this;
         }
 
+        public Builder withJavaCommand(String javaCommand) {
+            settings.setJavaCommand(javaCommand);
+            return this;
+        }
+
         public Builder withArguments(List<String> arguments) {
             settings.setArguments(arguments);
             return this;
@@ -52,6 +59,11 @@ public class Settings {
 
         public Builder withEnvironment(Map<String, String> environment) {
             settings.setEnvironment(environment);
+            return this;
+        }
+
+        public Builder withSleepSecondsAfterStart(long seconds) {
+            settings.setSleepSecondsAfterStart(seconds);
             return this;
         }
 
@@ -179,6 +191,14 @@ public class Settings {
 
     public SettingsInfo getSettingsInfo() {
         return settingsInfo;
+    }
+
+    public long getSleepSecondsAfterStart() {
+        return sleepSecondsAfterStart;
+    }
+
+    public void setSleepSecondsAfterStart(long sleepSecondsAfterStart) {
+        this.sleepSecondsAfterStart = sleepSecondsAfterStart;
     }
 
     public File getWorkingDirectory() {

@@ -89,22 +89,23 @@ def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()
 apiserver {
     host = 'localhost'
     port = 9090
-    contextPath = 'geoclient/v2'
-    apiServerJar = bootJarFile
-    waitSecondsAfterStart = 9;
+    contextPath = '/geoclient/v2'
+    serverJar = bootJarFile
+    sleepSecondsAfterStart = 9;
 }
-// Does not work with ampersand. Removing it creates foreground process until blocks until SIGINT.
-//tasks.register('startService', Exec) {
-//    commandLine '/bin/bash', '-c', "java -jar ${bootJarFile} --spring.profiles.active=docsamples &"
-//}
 
 tasks.register('serverTest') {
-    dependsOn('startService')
-    finalizedBy('stopService')
+    dependsOn('startServer')
+    finalizedBy('stopServer')
+    doFirst {
+        println '[START]'
+        Thread.sleep(2)
+        println '.......'
+    }
     doLast {
-        println '--------------------- serverTest ---------------------------'
-        //println "API Server JAR: ${bootJarFile}"
-        //println "API Server URL: http://${apiserver.host.get}:${apiserver.port.get}/${apiserver.contextPath.get}"
+        println '[STOP]'
+        Thread.sleep(2)
+        println '.......'
     }
 }
 
@@ -113,38 +114,6 @@ tasks.register('showBootJarFile') {
     doLast {
         def theFiles = files(bootJarFile)
         theFiles.collect { projectDirectory.asFile.relativePath(it) }.sort().each { println it }
-    }
-}
-
-def jarexecJarFile = layout.projectDirectory.dir("../jarexec/build/install/jarexec-shadow/lib").file("jarexec-all.jar").getAsFile()
-def httpShutdownFile = layout.projectDirectory.dir("../jarexec/build/install/jarexec-shadow").file("http-shutdown.json").getAsFile()
-def argsFile = layout.projectDirectory.dir("../jarexec/build/install/jarexec-shadow").file("args.sh").getAsFile()
-tasks.register('startService', Exec) {
-
-    //executable = '/usr/bin/bash'
-    //args '-c', "java -jar ${jarexecJarFile.absolutePath} --jarfile=${bootJarFile.absolutePath} --httpfile=${httpShutdownFile.absolutePath} --arg=--spring.profiles.active=docsamples --arg=--server.port=9090 --start"
-    //commandLine 'exec', "/usr/bin/bash -c ${argsFile.absolutePath}" 
-    //commandLine '/bin/bash', '-c', "java -jar ${bootJarFile}", "&"
-    //commandLine '/usr/bin/bash', '-c', 'while true; do sleep 2; echo `date`; done', '&' 
-    commandLine '/usr/bin/bash', '-c', rootDir.getAbsolutePath() + '/src/scripts/test-all.sh start'
-
-    // Crucially, set ignoreExitValue to true to prevent Gradle from waiting.
-    ignoreExitValue true
-
-    // Optionally, redirect standard output to a log file.
-    //standardOutput = new File(project.buildDir, 'non-blocking-process.log').newOutputStream()
-
-    // Add a doLast block to display a message after the command is issued.
-    doLast {
-        println '--------------------- startService ---------------------------'
-    }
-}
-
-tasks.register('stopService', Exec) {
-    commandLine '/usr/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:8080/geoclient/v2/actuator/shutdown'
-    //commandLine '/usr/bin/bash', '-c', '/usr/bin/curl -X POST http://localhost:9090/geoclient/v2/actuator/shutdown'
-    doLast {
-        println '--------------------- stopService ---------------------------'
     }
 }
 
@@ -162,7 +131,6 @@ tasks.named('test', Test) {
     ext.defaultOutputDir = generatedSamplesDir
     environment('GENERATOR_BASEURL', System.getenv('GENERATOR_BASEURL') ?: ext.defaultBaseUrl)
     environment('GENERATOR_OUTPUTDIR', System.getenv('GENERATOR_OUTPUTDIR') ?: ext.defaultOutputDir)
-
     testLogging {
         showStandardStreams = true
     }
@@ -176,10 +144,8 @@ tasks.named('integrationTest', Test) {
     ext.defaultOutputDir = generatedSamplesDir
     environment('GENERATOR_BASEURL', System.getenv('GENERATOR_BASEURL') ?: ext.defaultBaseUrl)
     environment('GENERATOR_OUTPUTDIR', System.getenv('GENERATOR_OUTPUTDIR') ?: ext.defaultOutputDir)
-
     environment('GEOCLIENT_SERVICE_STATUS', System.getenv('GEOCLIENT_SERVICE_STATUS'))
     systemProperties(['geoclient.service.status': System.getProperty('geoclient.service.status', '')])
-
     testLogging {
         events "failed", "skipped"
         showStandardStreams = true
@@ -188,7 +154,6 @@ tasks.named('integrationTest', Test) {
             exceptionFormat = "full"
             showStandardStreams = true
         }
-
         info {
             events "failed", "skipped"
             showStandardStreams = true

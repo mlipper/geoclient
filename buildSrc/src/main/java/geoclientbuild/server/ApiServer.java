@@ -22,11 +22,11 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
 
     private final Logger logger = Logging.getLogger(ApiServer.class);
 
-    public static final String DEFAULT_CONTEXT_PATH = "geoclient/v2";
-    public static final String DEFAULT_HOST = "localhost";
-    public static final Integer DEFAULT_PORT = 8080;
-    public static final String DEFAULT_SCHEME = "http";
-    public static final String SERVICE_NAME = "geoclientbuild.apiserver";
+    //public static final String DEFAULT_CONTEXT_PATH = "geoclient/v2";
+    //public static final String DEFAULT_HOST = "localhost";
+    //public static final Integer DEFAULT_PORT = 8080;
+    //public static final String DEFAULT_SCHEME = "http";
+    //public static final String SERVICE_NAME = "geoclientbuild.apiserver";
 
     private final URI uri;
 
