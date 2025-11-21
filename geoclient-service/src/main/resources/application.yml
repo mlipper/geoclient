@@ -107,10 +107,10 @@ spring:
         log-request-details: true
 logging:
     level:
-        spring-all: "INFO"
+        spring-all: "WARN"
         geoclient-all: "INFO"
     file:
-        name: "logs/geoclient.log"
+        name: "docsamples.log"
 management:
   endpoint:
     shutdown:
