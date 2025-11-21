@@ -29,6 +29,8 @@ public class JarExecutionService {
     }
 
     public void stop(Process process) throws Exception {
+    }
+    public void stop(ProcessHandle process) throws Exception {
         logger.info("Service shutting down. Stopping external process...");
         destroyProcess(process); // Does nothing if process is already terminated or null
         logger.info("Service shut down complete.");
@@ -52,6 +54,15 @@ public class JarExecutionService {
         return false;
     }
 
+    private boolean isProcessAlive(ProcessHandle process) {
+        if (process != null && process.isAlive()) {
+            return true;
+        }
+        return false;
+    }
+
+    private void destroyProcess(ProcessHandle process) {
+    }
     private void destroyProcess(Process process) {
         if (isProcessAlive(process)) {
             logger.info("Sending SIGTERM to process: {}", process.pid());
