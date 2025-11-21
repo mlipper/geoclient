@@ -1,10 +1,12 @@
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.jarexec.exec.process;
 
 import java.io.File;
 
+import geoclientbuild.jarexec.exec.ProcessManager;
+
 /**
  * Silly class to encapsulate argument to different
- * {@link DestroyProcessStrategy} instances.
+ * {@link ProcessManager} instances.
  * Replace with abstract generic ProcessInstance<T> if this proves too clumsy.
  */
 public class ProcessHolder {

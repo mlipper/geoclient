@@ -1,6 +1,8 @@
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.jarexec.exec.process;
 
 import java.io.File;
+
+import geoclientbuild.jarexec.exec.TargetProcess;
 
 public class PidFileInstance<T extends File> implements TargetProcess<T> {
 

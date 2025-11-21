@@ -1,4 +1,6 @@
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.jarexec.exec.process;
+
+import geoclientbuild.jarexec.exec.TargetProcess;
 
 public class ProcessHandleInstance<T extends ProcessHandle> implements TargetProcess<T> {
 

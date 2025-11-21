@@ -106,3 +106,8 @@ tasks.register('testAll', Exec) {
     commandLine '/bin/bash', '-c', "${script.absolutePath} start"
     shouldRunAfter(tasks.named('assemble'))
 }
+
+// Turn off class data sharing to avoid JDK warning
+tasks.withType(Test).configureEach {
+    jvmArgs "-Xshare:off"
+}

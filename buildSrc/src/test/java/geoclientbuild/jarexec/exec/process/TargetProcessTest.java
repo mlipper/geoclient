@@ -1,4 +1,4 @@
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.jarexec.exec.process;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -10,6 +10,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+
+import geoclientbuild.jarexec.exec.TargetProcess;
+import geoclientbuild.jarexec.exec.process.PidFileInstance;
+import geoclientbuild.jarexec.exec.process.ProcessHandleInstance;
+import geoclientbuild.jarexec.exec.process.ProcessInstance;
 
 /*
  * Place holder for real process fixtures, mocks, tests, etc...
@@ -46,7 +51,6 @@ public class TargetProcessTest {
 
             @Override
             public Stream<ProcessHandle> children() {
-                // TODO Auto-generated method stub
                 return null;
             }
 
