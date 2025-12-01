@@ -130,6 +130,7 @@ spotless {
         importOrderFile(rootProject.file('gradle/config/eclipse/geoclient-eclipse.importorder'))
         indentWithSpaces()
         licenseHeaderFile(rootProject.file('gradle/config/spotless/apache-license-2.0.java'))
+        removeUnusedImports()
         trimTrailingWhitespace()
         toggleOffOn()
     }

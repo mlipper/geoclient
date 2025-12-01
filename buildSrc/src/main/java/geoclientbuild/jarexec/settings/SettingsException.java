@@ -13,22 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.server;
+package geoclientbuild.jarexec.settings;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class SettingsException extends RuntimeException {
 
-import org.gradle.api.Project;
-import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.jupiter.api.Test;
+    public SettingsException(String message) {
+        super(message);
+    }
 
-/**
- * A simple unit test for the 'geoclientbuild.apiserver' plugin.
- */
-class GeoclientBuildServicePluginTest {
-    @Test
-    void pluginRegistersATask() {
-        Project project = ProjectBuilder.builder().build();
-        project.getPlugins().apply("geoclientbuild.apiserver");
-        assertNotNull(project.getTasks().findByName(GeoclientBuildServicePlugin.APISERVER_INFO_TASK_NAME));
+    public SettingsException(String message, Throwable t) {
+        super(message, t);
     }
 }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package geoclientbuild.server;
 
 import java.io.File;
@@ -14,9 +29,13 @@ import org.gradle.api.services.BuildServiceParameters;
 public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoCloseable {
     interface Params extends BuildServiceParameters {
         Property<Integer> getPort();
+
         Property<String> getContextPath();
+
         Property<String> getHost();
+
         Property<String> getScheme();
+
         RegularFileProperty getApiServerJar();
     }
 
@@ -30,7 +49,7 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
 
     private final URI uri;
 
-    public ApiServer() throws URISyntaxException{
+    public ApiServer() throws URISyntaxException {
         //configureApiServerConventions();
         String scheme = getParameters().getScheme().getOrElse("http");
         String host = getParameters().getHost().get();
@@ -54,11 +73,11 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
         // Implement any necessary cleanup logic here
     }
 
-//    private void configureApiServerConventions() {
-//        // Set default values for parameters if not provided
-//        getParameters().getPort().convention(DEFAULT_PORT);
-//        getParameters().getHost().convention(DEFAULT_HOST);
-//        getParameters().getScheme().convention(DEFAULT_SCHEME);
-//        getParameters().getContextPath().convention(DEFAULT_CONTEXT_PATH);
-//    }
+    //    private void configureApiServerConventions() {
+    //        // Set default values for parameters if not provided
+    //        getParameters().getPort().convention(DEFAULT_PORT);
+    //        getParameters().getHost().convention(DEFAULT_HOST);
+    //        getParameters().getScheme().convention(DEFAULT_SCHEME);
+    //        getParameters().getContextPath().convention(DEFAULT_CONTEXT_PATH);
+    //    }
 }

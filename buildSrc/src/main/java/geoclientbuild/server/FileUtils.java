@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package geoclientbuild.server;
 
 import java.io.BufferedReader;
@@ -13,14 +28,15 @@ import org.gradle.api.file.RegularFile;
 import org.gradle.api.provider.Provider;
 
 public class FileUtils {
-    private FileUtils() {}
+    private FileUtils() {
+    }
 
     /**
-     * 
+     *
      * Write a text file creating any missing intermediate directories if necessary.
-     * 
+     *
      * This method is copied from the <a href="https://github.com/gradle/native-platform/blob/master/buildSrc/src/main/java/gradlebuild/WriteNativeVersionSources.java">native-platform</a> project.
-     * 
+     *
      * @param contents
      * @param targetLocation
      * @throws IOException
@@ -32,7 +48,7 @@ public class FileUtils {
     }
 
     /**
-     * 
+     *
      * Read a small text file (< 1G) into a String.
      *
      * @param contents
@@ -45,7 +61,7 @@ public class FileUtils {
     }
 
     /**
-     * 
+     *
      * Read an InputStream into String.
      *
      * This method is copied from the <a href="https://github.com/gradle/gradle-org-conventions-plugin/blob/master/src/main/java/io/github/gradle/conventions/customvalueprovider/DevelocityConventions.java">gradle-org-conventions-plugin</a> project.

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package geoclientbuild.jarexec;
 
 import static geoclientbuild.jarexec.OptionSpecs.OPT_ARG;
@@ -56,7 +71,8 @@ public class Main {
     public void startService() {
         try {
             this.process = this.service.start();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("Error executing jar process.", e);
             throw new RuntimeException("Jar process failed to start.", e);
         }
@@ -65,75 +81,73 @@ public class Main {
     public void stopService() {
         try {
             this.service.stop(this.process);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("Error stopping jar process.", e);
             throw new RuntimeException("Jar process failed to stop.", e);
         }
     }
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         Main main = newInstance(args);
-        if(main != null) {
+        if (main != null) {
             // Application started successfully
             System.out.println("[OK]");
         }
     }
 
     static Main newInstance(String[] args) throws IOException {
-        OptionParser parser = new OptionParser() {{
-            accepts(OPT_HELP, OPT_TXT_HELP).forHelp();
-            accepts(OPT_ARG, OPT_TXT_ARG).withRequiredArg();
-            accepts(OPT_ENV, OPT_TXT_ENV).withRequiredArg();
-            accepts(OPT_HTTPFILE, OPT_TXT_HTTPFILE).withRequiredArg();
-            accepts(OPT_JARFILE, OPT_TXT_JARFILE).withRequiredArg().required();
-            accepts(OPT_JAVACMD, OPT_TXT_JAVACMD).withRequiredArg().defaultsTo("java");
-            accepts(OPT_START, OPT_TXT_START);
-            accepts(OPT_STOP, OPT_TXT_STOP);
-            accepts(OPT_WORKDIR, OPT_TXT_WORKDIR).withRequiredArg();
-        }};
+        OptionParser parser = new OptionParser() {
+            {
+                accepts(OPT_HELP, OPT_TXT_HELP).forHelp();
+                accepts(OPT_ARG, OPT_TXT_ARG).withRequiredArg();
+                accepts(OPT_ENV, OPT_TXT_ENV).withRequiredArg();
+                accepts(OPT_HTTPFILE, OPT_TXT_HTTPFILE).withRequiredArg();
+                accepts(OPT_JARFILE, OPT_TXT_JARFILE).withRequiredArg().required();
+                accepts(OPT_JAVACMD, OPT_TXT_JAVACMD).withRequiredArg().defaultsTo("java");
+                accepts(OPT_START, OPT_TXT_START);
+                accepts(OPT_STOP, OPT_TXT_STOP);
+                accepts(OPT_WORKDIR, OPT_TXT_WORKDIR).withRequiredArg();
+            }
+        };
 
         OptionSet options = parser.parse(args);
-        if(options.has(OPT_HELP)) {
+        if (options.has(OPT_HELP)) {
             parser.printHelpOn(System.out);
             return null;
         }
         Settings settings = createSettings(options);
         logger.info(String.format("%nStarting application with settings:%n%s", settings.settings()));
         Main main = new Main(settings);
-        if(options.has(OPT_START)) {
+        if (options.has(OPT_START)) {
             logger.info(String.format("%nStarting application with settings:%n%s", settings.settings()));
             main.startService();
         }
         return main;
     }
 
-    static Settings createSettings(OptionSet options){
+    static Settings createSettings(OptionSet options) {
         Settings settings = new Settings();
-        if(options.has(OPT_ARG)) {
-            List<String> args = options.valuesOf(OPT_ARG).stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        if (options.has(OPT_ARG)) {
+            List<String> args = options.valuesOf(OPT_ARG).stream().map(Object::toString).collect(Collectors.toList());
             settings.setArguments(args);
         }
-        if(options.has(OPT_ENV)) {
-            List<String> envs = options.valuesOf(OPT_ENV).stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
-            Map<String, String> envMap = envs.stream()
-                .map(str -> str.split("="))
-                .collect(Collectors.toMap(str -> str[0], str -> str[1]));
+        if (options.has(OPT_ENV)) {
+            List<String> envs = options.valuesOf(OPT_ENV).stream().map(Object::toString).collect(Collectors.toList());
+            Map<String, String> envMap = envs.stream().map(str -> str.split("=")).collect(
+                Collectors.toMap(str -> str[0], str -> str[1]));
             settings.setEnvironment(envMap);
         }
-        if(options.has(OPT_HTTPFILE)) {
-            settings.setHttpShutdownFile(options.valueOf(OPT_HTTPFILE).toString());
-        }
-        if(options.has(OPT_JARFILE)) {
+        //if(options.has(OPT_HTTPFILE)) {
+        //    settings.setSettingsFile(options.valueOf(OPT_HTTPFILE).toString());
+        //}
+        if (options.has(OPT_JARFILE)) {
             settings.setJarFile(options.valueOf(OPT_JARFILE).toString());
         }
-        if(options.has(OPT_JAVACMD)) {
+        if (options.has(OPT_JAVACMD)) {
             settings.setJavaCommand(options.valueOf(OPT_JAVACMD).toString());
         }
-        if(options.has(OPT_WORKDIR)) {
+        if (options.has(OPT_WORKDIR)) {
             settings.setWorkingDirectory(options.valueOf(OPT_WORKDIR).toString());
         }
         return settings;

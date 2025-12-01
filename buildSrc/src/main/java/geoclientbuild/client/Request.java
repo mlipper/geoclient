@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package geoclientbuild.client;
 
 import java.util.List;
@@ -10,12 +25,14 @@ public class Request {
 
     public static final Map<String, String> ACCEPT_HEADER_ANY = Map.of("Accept", "*/*");
     public static final Map<String, String> ACCEPT_HEADER_JSON = Map.of("Accept", "application/json");
-    public static final Map<String, String> CONTENT_TYPE_HEADER_FORM_URLENCODED = Map.of("Content-Type", "application/x-www-form-urlencoded");
+    public static final Map<String, String> CONTENT_TYPE_HEADER_FORM_URLENCODED = Map.of("Content-Type",
+        "application/x-www-form-urlencoded");
     public static final String HTTP_GET_METHOD = "GET";
     public static final String HTTP_HEAD_METHOD = "HEAD";
     public static final String HTTP_POST_METHOD = "POST";
     public static final String HTTP_METHOD_DEFAULT = HTTP_GET_METHOD;
-    public static final List<String> SUPPORTED_HTTP_METHODS = List.of(HTTP_GET_METHOD, HTTP_POST_METHOD, HTTP_HEAD_METHOD);
+    public static final List<String> SUPPORTED_HTTP_METHODS = List.of(HTTP_GET_METHOD, HTTP_POST_METHOD,
+        HTTP_HEAD_METHOD);
     public static final String UNSUPPORTED_HTTP_METHOD_EXCEPTION_TEMPLATE = "Unsupported HTTP method: %s";
 
     private String id;
@@ -41,11 +58,11 @@ public class Request {
      * @param parameters
      * @param headers
      */
-    public Request(String id, String uri, String method, Map<String, String> parameters ,Map<String, String> headers) {
+    public Request(String id, String uri, String method, Map<String, String> parameters, Map<String, String> headers) {
         this.id = id;
         this.uri = uri;
         this.method = (method != null ? method : HTTP_METHOD_DEFAULT);
-        if(method != null && !SUPPORTED_HTTP_METHODS.contains(method)) {
+        if (method != null && !SUPPORTED_HTTP_METHODS.contains(method)) {
             throw new IllegalArgumentException(String.format(UNSUPPORTED_HTTP_METHOD_EXCEPTION_TEMPLATE, method));
         }
         this.parameters = parameters;
@@ -54,7 +71,7 @@ public class Request {
 
     /**
      * Creates a Request with a uninque id, a target endpoint uri and parameters.
-     * 
+     *
      * @param id
      * @param uri
      * @param method
@@ -178,27 +195,32 @@ public class Request {
         if (id == null) {
             if (other.id != null)
                 return false;
-        } else if (!id.equals(other.id))
+        }
+        else if (!id.equals(other.id))
             return false;
         if (uri == null) {
             if (other.uri != null)
                 return false;
-        } else if (!uri.equals(other.uri))
+        }
+        else if (!uri.equals(other.uri))
             return false;
         if (method == null) {
             if (other.method != null)
                 return false;
-        } else if (!method.equals(other.method))
+        }
+        else if (!method.equals(other.method))
             return false;
         if (parameters == null) {
             if (other.parameters != null)
                 return false;
-        } else if (!parameters.equals(other.parameters))
+        }
+        else if (!parameters.equals(other.parameters))
             return false;
         if (headers == null) {
             if (other.headers != null)
                 return false;
-        } else if (!headers.equals(other.headers))
+        }
+        else if (!headers.equals(other.headers))
             return false;
         return true;
     }

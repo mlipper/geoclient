@@ -61,3 +61,26 @@ gradlePlugin {
         }
     }
 }
+
+// TODO: Refactor to avoid duplication with main build.gradle
+import java.nio.file.Paths
+def parentPath = Paths.get(rootDir.toString()).getParent().toString()
+spotless {
+    java {
+        // Based on JUnit5 project's spotless config
+        eclipse().configFile(project.file("${parentPath}/gradle/config/eclipse/geoclient-eclipse-formatter-settings.xml"))
+        importOrderFile(project.file("${parentPath}/gradle/config/eclipse/geoclient-eclipse.importorder"))
+        indentWithSpaces()
+        licenseHeaderFile(project.file("${parentPath}/gradle/config/spotless/apache-license-2.0.java"))
+        removeUnusedImports()
+        target 'src/*/java/**/*.java'
+        trimTrailingWhitespace()
+        toggleOffOn()
+    }
+    groovy {
+        target '**/*.groovy'
+        targetExclude '**/build/**'
+        licenseHeaderFile project.file("${parentPath}/gradle/config/spotless/apache-license-2.0.java")
+    }
+    groovyGradle {}
+}

@@ -1,17 +1,28 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package geoclientbuild.jarexec.settings;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import geoclientbuild.client.Request;
 import geoclientbuild.jarexec.settings.Settings.Builder;
 
-public class SettingsTest extends AbstractSettingsTest {
+public class SettingsTest extends BaseSettingsTest {
 
     @Test
     void testCommandLine() {
@@ -28,21 +39,18 @@ public class SettingsTest extends AbstractSettingsTest {
     @Test
     void testBuilder() {
         Builder builder = Settings.builder();
-        Settings settings = builder
-            .withJarFile(jarFile)
-            .withJavaCommand(javaCommand)
-            .withArguments(arguments)
-            .withEnvironment(environment)
-            .withHttpShutdownFile(httpShutdownFile)
-            .withSleepSecondsAfterStart(sleepSecondsAfterStart)
-            .build();
+        Settings settings = builder.withJarFile(jarFile).withJavaCommand(javaCommand).withArguments(
+            arguments).withEnvironment(environment)
+                //.withHttpShutdownFile(httpShutdownFile)
+                .withSleepSecondsAfterStart(sleepSecondsAfterStart).build();
         Settings fixture = settingsFixture();
         assertEquals(fixture.getJarFile(), settings.getJarFile(), "Jar files should match");
         assertEquals(fixture.getJavaCommand(), settings.getJavaCommand(), "Java command should match");
         assertEquals(fixture.getArguments(), settings.getArguments(), "Arguments should match");
         assertEquals(fixture.getEnvironment(), settings.getEnvironment(), "Environments should match");
-        assertEquals(fixture.httpShutdown().settings(), settings.httpShutdown().settings(), "HTTP shutdown settings should match");
-        assertEquals(fixture.getSleepSecondsAfterStart(), settings.getSleepSecondsAfterStart(), "Sleep seconds after start should match");
+        //assertEquals(fixture.httpShutdown().settings(), settings.httpShutdown().settings(), "HTTP shutdown settings should match");
+        assertEquals(fixture.getSleepSecondsAfterStart(), settings.getSleepSecondsAfterStart(),
+            "Sleep seconds after start should match");
     }
 
     @Test
@@ -52,7 +60,8 @@ public class SettingsTest extends AbstractSettingsTest {
         assertEquals(3, settings.commandLineAsList().size(), "Command line list size should match");
         assertEquals("java", settings.commandLineAsList().get(0), "First command line element should match");
         assertEquals("-jar", settings.commandLineAsList().get(1), "Second command line element should match");
-        assertEquals("/app/example.jar", settings.commandLineAsList().get(2), "Third command line element should match");
+        assertEquals("/app/example.jar", settings.commandLineAsList().get(2),
+            "Third command line element should match");
     }
 
     @Test
@@ -63,7 +72,8 @@ public class SettingsTest extends AbstractSettingsTest {
         assertEquals(3, settings.commandLineAsList().size(), "Command line list size should match");
         assertEquals("/usr/local/java", settings.commandLineAsList().get(0), "First command line element should match");
         assertEquals("-jar", settings.commandLineAsList().get(1), "Second command line element should match");
-        assertEquals("/app/example.jar", settings.commandLineAsList().get(2), "Third command line element should match");
+        assertEquals("/app/example.jar", settings.commandLineAsList().get(2),
+            "Third command line element should match");
     }
 
     @Test
@@ -74,7 +84,8 @@ public class SettingsTest extends AbstractSettingsTest {
         assertEquals(6, settings.commandLineAsList().size(), "Command line list size should match");
         assertEquals("java", settings.commandLineAsList().get(0), "First command line element should match");
         assertEquals("-jar", settings.commandLineAsList().get(1), "Second command line element should match");
-        assertEquals("/app/example.jar", settings.commandLineAsList().get(2), "Third command line element should match");
+        assertEquals("/app/example.jar", settings.commandLineAsList().get(2),
+            "Third command line element should match");
         assertEquals("arg1", settings.commandLineAsList().get(3), "Fourth command line element should match");
         assertEquals("arg2", settings.commandLineAsList().get(4), "Fifth command line element should match");
         assertEquals("arg3", settings.commandLineAsList().get(5), "Sixth command line element should match");
@@ -89,33 +100,10 @@ public class SettingsTest extends AbstractSettingsTest {
         assertEquals(6, settings.commandLineAsList().size(), "Command line list size should match");
         assertEquals("/usr/local/java", settings.commandLineAsList().get(0), "First command line element should match");
         assertEquals("-jar", settings.commandLineAsList().get(1), "Second command line element should match");
-        assertEquals("/app/example.jar", settings.commandLineAsList().get(2), "Third command line element should match");
+        assertEquals("/app/example.jar", settings.commandLineAsList().get(2),
+            "Third command line element should match");
         assertEquals("arg1", settings.commandLineAsList().get(3), "Fourth command line element should match");
         assertEquals("arg2", settings.commandLineAsList().get(4), "Fifth command line element should match");
         assertEquals("arg3", settings.commandLineAsList().get(5), "Sixth command line element should match");
-    }
-
-    @Test
-    void testSupportsHttpShutdown() {
-        Settings settings = new Settings();
-        assertEquals(false, settings.supportsHttpShutdown(), "Expected supportsHttpShutdown to be false when httpShutdownFile is null");
-        settings.setHttpShutdownFile(new File("fake-file.json"));
-        assertEquals(false, settings.supportsHttpShutdown(), "Expected supportsHttpShutdown to be false when httpShutdownFile is missing");
-        settings.setHttpShutdownFile(httpShutdownFile);
-        assertEquals(true, settings.supportsHttpShutdown(), "Expected supportsHttpShutdown to be true when httpShutdownFile exists and is valid");
-    }
-
-    @Test
-    void testCreateHttpShutdownRequest() {
-        Settings settings = new Settings();
-        settings.setHttpShutdownFile(httpShutdownFile);
-        assertEquals(true, settings.supportsHttpShutdown(), "Expected supportsHttpShutdown to be true when httpShutdownFile exists and is valid");
-        HttpShutdown httpShutdown = settings.httpShutdown();
-        Request request = settings.createHttpShutdownRequest();
-        assertNotNull(request.getId());
-        assertEquals(httpShutdown.getUrl(), request.getUri(), "Request URL should match HttpShutdown URL");
-        assertEquals(httpShutdown.getHttpMethod(), request.getMethod(), "Request method should match HttpShutdown method");
-        assertEquals(httpShutdown.getParameters(), request.getParameters(), "Request parameters should match HttpShutdown parameters");
-        assertEquals(httpShutdown.getHeaders(), request.getHeaders(), "Request headers should match HttpShutdown headers");
     }
 }

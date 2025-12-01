@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package geoclientbuild.docs;
 
 import java.io.File;
@@ -10,6 +25,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.RegularFile;
@@ -19,12 +40,6 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import geoclientbuild.client.HttpClient;
 import geoclientbuild.client.Request;
@@ -53,7 +68,7 @@ abstract public class GenerateSamplesTask extends DefaultTask {
         File file = getRequestsFile().getAsFile().get();
         List<HttpRequestAdapter> requests = loadRequests(file);
         RestClient restClient = new HttpClient();
-        for(HttpRequestAdapter request: requests) {
+        for (HttpRequestAdapter request : requests) {
             try {
                 StringBuffer buff = new StringBuffer(ASCIIDOC_BEGIN_TAG);
                 buff.append('\n');
@@ -65,7 +80,8 @@ abstract public class GenerateSamplesTask extends DefaultTask {
                 String responseStr = buff.toString();
                 getLogger().info(responseStr);
                 writeResponse(request, responseStr);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 getLogger().error(e.getMessage());
                 throw new RuntimeException("Build failed:", e);
             }
@@ -75,22 +91,23 @@ abstract public class GenerateSamplesTask extends DefaultTask {
     private List<HttpRequestAdapter> adapt(List<HttpRequestAdapter> requests) {
 
         final String serviceUrl = getServiceUrl().get();
-        return requests.stream()
-            .map(r -> { 
-                r.setUri(serviceUrl);
-                r.setMethod(Request.HTTP_GET_METHOD);
-                return r;
-            }).collect(Collectors.toList());
+        return requests.stream().map(r -> {
+            r.setUri(serviceUrl);
+            r.setMethod(Request.HTTP_GET_METHOD);
+            return r;
+        }).collect(Collectors.toList());
     }
 
     private List<HttpRequestAdapter> loadRequests(File file) {
         try {
             JsonNode node = mapper.readTree(file);
             JsonNode requestsNode = node.get("requests");
-            TypeReference<List<HttpRequestAdapter>> typeReference = new TypeReference<List<HttpRequestAdapter>>() {};
+            TypeReference<List<HttpRequestAdapter>> typeReference = new TypeReference<List<HttpRequestAdapter>>() {
+            };
             List<HttpRequestAdapter> requests = mapper.convertValue(requestsNode, typeReference);
             return adapt(requests);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -113,7 +130,8 @@ abstract public class GenerateSamplesTask extends DefaultTask {
         try {
             Files.writeString(filePath, response, StandardCharsets.UTF_8);
             getLogger().info("Successfully wrote {} file.", filePath.toString());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }

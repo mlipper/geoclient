@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package geoclientbuild.client;
 
 import java.net.URI;
@@ -36,16 +51,17 @@ public class HttpClient implements RestClient {
         ClassicHttpRequest httpRequest = null;
         switch (request.getMethod()) {
             case Request.HTTP_GET_METHOD:
-                httpRequest = buildGetRequest(request);    
+                httpRequest = buildGetRequest(request);
                 break;
             case Request.HTTP_HEAD_METHOD:
-                httpRequest = buildHeadRequest(request);    
+                httpRequest = buildHeadRequest(request);
                 break;
             case Request.HTTP_POST_METHOD:
-                httpRequest = buildPostRequest(request);    
+                httpRequest = buildPostRequest(request);
                 break;
             default:
-                throw new IllegalArgumentException(String.format(Request.UNSUPPORTED_HTTP_METHOD_EXCEPTION_TEMPLATE, request.getMethod()));
+                throw new IllegalArgumentException(
+                    String.format(Request.UNSUPPORTED_HTTP_METHOD_EXCEPTION_TEMPLATE, request.getMethod()));
         }
         return execute(httpRequest);
     }
@@ -55,9 +71,11 @@ public class HttpClient implements RestClient {
         URI endpoint = new URI(request.getUri());
         if (request.hasParameters() && request.hasHeaders()) {
             httpGet = httpGetRequest(endpoint, request.getParameters(), request.getHeaders());
-        } else if (request.hasParameters()) {
+        }
+        else if (request.hasParameters()) {
             httpGet = httpGetRequest(endpoint, request.getParameters());
-        } else {
+        }
+        else {
             httpGet = httpGetRequest(endpoint);
             if (request.hasHeaders()) {
                 addHeaders(httpGet, request.getHeaders());
@@ -71,9 +89,11 @@ public class HttpClient implements RestClient {
         URI endpoint = new URI(request.getUri());
         if (request.hasParameters() && request.hasHeaders()) {
             httpHead = httpHeadRequest(endpoint, request.getParameters(), request.getHeaders());
-        } else if (request.hasParameters()) {
+        }
+        else if (request.hasParameters()) {
             httpHead = httpHeadRequest(endpoint, null, request.getHeaders());
-        } else {
+        }
+        else {
             httpHead = httpHeadRequest(endpoint, null, null);
             if (request.hasHeaders()) {
                 addHeaders(httpHead, request.getHeaders());
@@ -87,9 +107,11 @@ public class HttpClient implements RestClient {
         URI endpoint = new URI(request.getUri());
         if (request.hasParameters() && request.hasHeaders()) {
             httpPost = httpPostRequest(endpoint, request.getParameters(), request.getHeaders());
-        } else if (request.hasParameters()) {
+        }
+        else if (request.hasParameters()) {
             httpPost = httpPostRequest(endpoint, null, request.getHeaders());
-        } else {
+        }
+        else {
             httpPost = httpPostRequest(endpoint, null, null);
             if (request.hasHeaders()) {
                 addHeaders(httpPost, request.getHeaders());
@@ -101,7 +123,7 @@ public class HttpClient implements RestClient {
     protected Response execute(ClassicHttpRequest httpRequest) throws Exception {
         logger.info("Executing HTTP request: " + httpRequest.getUri());
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                httpClient.execute(httpRequest, httpResponse -> {
+            httpClient.execute(httpRequest, httpResponse -> {
                 int status = httpResponse.getCode();
                 String responseBody = EntityUtils.toString(httpResponse.getEntity());
                 logger.info("Response Status: " + status);
@@ -116,7 +138,8 @@ public class HttpClient implements RestClient {
         return logger;
     }
 
-    protected HttpGet httpGetRequest(URI uri, Map<String, String> parameters, Map<String, String> httpHeaders) throws URISyntaxException {
+    protected HttpGet httpGetRequest(URI uri, Map<String, String> parameters, Map<String, String> httpHeaders)
+            throws URISyntaxException {
         return buildHttpGet(uri, parameters, httpHeaders);
     }
 
@@ -128,11 +151,13 @@ public class HttpClient implements RestClient {
         return buildHttpGet(uri);
     }
 
-    protected HttpHead httpHeadRequest(URI uri, Map<String, String> parameters, Map<String, String> httpHeaders) throws URISyntaxException {
+    protected HttpHead httpHeadRequest(URI uri, Map<String, String> parameters, Map<String, String> httpHeaders)
+            throws URISyntaxException {
         return buildHttpHead(uri, parameters, httpHeaders);
     }
 
-    protected HttpPost httpPostRequest(URI uri, Map<String, String> parameters, Map<String, String> httpHeaders) throws URISyntaxException {
+    protected HttpPost httpPostRequest(URI uri, Map<String, String> parameters, Map<String, String> httpHeaders)
+            throws URISyntaxException {
         return buildHttpPost(uri, parameters, httpHeaders);
     }
 
@@ -149,7 +174,8 @@ public class HttpClient implements RestClient {
         return params;
     }
 
-    private HttpGet buildHttpGet(URI uri, Map<String, String> parameters, Map<String, String> headers) throws URISyntaxException {
+    private HttpGet buildHttpGet(URI uri, Map<String, String> parameters, Map<String, String> headers)
+            throws URISyntaxException {
         HttpGet httpGet = buildHttpGet(uri);
         URI targetUri = new URIBuilder(httpGet.getUri()).addParameters(params(parameters)).build();
         httpGet.setUri(targetUri);
@@ -163,7 +189,8 @@ public class HttpClient implements RestClient {
         return new HttpGet(uri);
     }
 
-    private HttpHead buildHttpHead(URI uri, Map<String, String> parameters, Map<String, String> headers) throws URISyntaxException {
+    private HttpHead buildHttpHead(URI uri, Map<String, String> parameters, Map<String, String> headers)
+            throws URISyntaxException {
         HttpHead httpHead = new HttpHead(uri);
         URI targetUri = new URIBuilder(httpHead.getUri()).addParameters(params(parameters)).build();
         httpHead.setUri(targetUri);
