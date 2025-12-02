@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import geoclientbuild.jarexec.exec.ProcessSettings;
+
 public class Settings {
 
     public static final String DEFAULT_JAVA_COMMAND = "java";
@@ -180,6 +182,14 @@ public class Settings {
         this.workingDirectory = workingDirectory;
     }
 
+    public ProcessSettings toProcessSettings() {
+        ProcessSettings.Builder psBuilder = new ProcessSettings.Builder();
+        return psBuilder.withCommandLine(commandLineAsList())
+            .withEnvironment(environment)
+            .withWorkingDirectory(workingDirectory)
+            .withSleepSecondsAfterStart(sleepSecondsAfterStart)
+            .build();
+    }
     private String resolveJavaCommand() {
         return javaCommand != null ? javaCommand : DEFAULT_JAVA_COMMAND;
     }

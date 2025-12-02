@@ -15,6 +15,7 @@
  */
 package geoclientbuild.jarexec.exec;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -44,12 +45,23 @@ public class JarExecutionService {
     }
 
     public void stop(Process process) throws Exception {
+        if(process == null) {
+            throw new IllegalArgumentException("ProcessHandle argument cannot be null.");
+        }
+        Long pid = process.pid();
+        logger.info("Destroying process {}...", pid);
+        destroyProcess(process); // Does nothing if process is already terminated or null
+        logger.info("Process {} has been destroyed.", pid);
     }
 
-    public void stop(ProcessHandle process) throws Exception {
-        logger.info("Service shutting down. Stopping external process...");
-        destroyProcess(process); // Does nothing if process is already terminated or null
-        logger.info("Service shut down complete.");
+    public void stop(ProcessHandle handle) throws Exception {
+        if(handle == null) {
+            throw new IllegalArgumentException("ProcessHandle argument cannot be null.");
+        }
+        Long pid = handle.pid();
+        logger.info("Destroying process {}...", pid);
+        destroyProcess(handle); // Does nothing if process is already terminated or null
+        logger.info("Process {} has been destroyed.", pid);
     }
 
     void configureProcess(ProcessBuilder processBuilder) {
@@ -70,24 +82,42 @@ public class JarExecutionService {
         return false;
     }
 
-    private boolean isProcessAlive(ProcessHandle process) {
-        if (process != null && process.isAlive()) {
+    private boolean isProcessAlive(ProcessHandle handle) {
+        if (handle != null && handle.isAlive()) {
             return true;
         }
         return false;
     }
 
-    private void destroyProcess(ProcessHandle process) {
+    private void destroyProcess(ProcessHandle handle) {
+        if(isProcessAlive(handle)) {
+            logger.info("Sending SIGTERM to process: {}", handle.pid());
+            if(!handle.destroy()) {
+                try {
+                    Thread.sleep(Duration.ofSeconds(10));
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    String msg = String.format("Thread interrupted waiting for PID %d to stop: %s", handle.pid(), e.getMessage());
+                    logger.warn(msg);
+                }
+                if(!handle.destroyForcibly()) {
+                    String msg = String.format("Failed to forcibly destroy process %d.", handle.pid());
+                    logger.error(msg);
+                    throw new IllegalStateException(msg);
+                }
+            }
+        }
     }
 
     private void destroyProcess(Process process) {
         if (isProcessAlive(process)) {
-            logger.info("Sending SIGTERM to process: {}", process.pid());
+            Long pid = process.pid();
+            logger.info("Sending SIGTERM to process: {}", pid);
             process.destroy(); // Non-blocking: attempts graceful shutdown (SIGTERM)
             try {
                 // Wait for a few seconds for the process to terminate gracefully
                 if (!process.waitFor(10, TimeUnit.SECONDS)) {
-                    logger.warn("Process did not terminate gracefully. Forcing shutdown.");
+                    logger.warn("Process {} did not terminate gracefully. Forcing shutdown.", pid);
                     process.destroyForcibly(); // Forceful shutdown (SIGKILL)
                 }
             }
