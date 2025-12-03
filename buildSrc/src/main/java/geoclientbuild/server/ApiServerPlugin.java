@@ -26,8 +26,8 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.provider.Provider;
 
-public class GeoclientBuildServicePlugin implements Plugin<Project> {
-    private Logger logger = Logging.getLogger(GeoclientBuildServicePlugin.class);
+public class ApiServerPlugin implements Plugin<Project> {
+    private Logger logger = Logging.getLogger(ApiServerPlugin.class);
 
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
 

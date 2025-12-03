@@ -70,6 +70,7 @@ public abstract class StartServer extends AbstractServerProcess {
             getLogger().info("Wrote PID file {} for API server process {}.",
                 pidFileAsFile(getPidFile()).getAbsolutePath(), pid);
             getLogger().lifecycle("API server running with PID {}.", pid);
+            getLogger().lifecycle("API server started with settings: {}", settings.getSettingsInfo().info());
         }
         catch (Exception e) {
             getLogger().error("Error starting server process.", e);

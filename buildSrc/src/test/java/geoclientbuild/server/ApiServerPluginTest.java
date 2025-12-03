@@ -24,11 +24,11 @@ import org.junit.jupiter.api.Test;
 /**
  * A simple unit test for the 'geoclientbuild.apiserver' plugin.
  */
-class GeoclientBuildServicePluginTest {
+class ApiServerPluginTest {
     @Test
     void pluginRegistersATask() {
         Project project = ProjectBuilder.builder().build();
         project.getPlugins().apply("geoclientbuild.apiserver");
-        assertNotNull(project.getTasks().findByName(GeoclientBuildServicePlugin.APISERVER_INFO_TASK_NAME));
+        assertNotNull(project.getTasks().findByName(ApiServerPlugin.APISERVER_INFO_TASK_NAME));
     }
 }

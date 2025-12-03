@@ -57,7 +57,7 @@ gradlePlugin {
         }
         apiserver {
             id = 'geoclientbuild.apiserver'
-            implementationClass = 'geoclientbuild.server.GeoclientBuildServicePlugin'
+            implementationClass = 'geoclientbuild.server.ApiServerPlugin'
         }
     }
 }
