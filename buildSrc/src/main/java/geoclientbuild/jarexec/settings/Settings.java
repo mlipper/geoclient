@@ -24,7 +24,8 @@ import geoclientbuild.jarexec.exec.ProcessSettings;
 public class Settings {
 
     public static final String DEFAULT_JAVA_COMMAND = "java";
-    public static final long DEFAULT_SLEEP_SECONDS_AFTER_START = 10L;
+    public static final long DEFAULT_SLEEP_SECONDS_AFTER_START = 8L;
+    public static final long DEFAULT_SLEEP_SECONDS_AFTER_STOP = 4L;
     public static final String JAR_ARGUMENT = "-jar";
 
     private List<String> arguments;
@@ -34,6 +35,7 @@ public class Settings {
     private SettingsInfo settingsInfo;
     private File workingDirectory;
     private long sleepSecondsAfterStart = DEFAULT_SLEEP_SECONDS_AFTER_START;
+    private long sleepSecondsAfterStop = DEFAULT_SLEEP_SECONDS_AFTER_STOP;
 
     public static class Builder {
         private final Settings settings;
@@ -68,6 +70,11 @@ public class Settings {
 
         public Builder withSleepSecondsAfterStart(long seconds) {
             settings.setSleepSecondsAfterStart(seconds);
+            return this;
+        }
+
+        public Builder withSleepSecondsAfterStop(long seconds) {
+            settings.setSleepSecondsAfterStop(seconds);
             return this;
         }
 
@@ -168,6 +175,14 @@ public class Settings {
 
     public void setSleepSecondsAfterStart(long sleepSecondsAfterStart) {
         this.sleepSecondsAfterStart = sleepSecondsAfterStart;
+    }
+
+    public long getSleepSecondsAfterStop() {
+        return sleepSecondsAfterStop;
+    }
+
+    public void setSleepSecondsAfterStop(long sleepSecondsAfterStop) {
+        this.sleepSecondsAfterStop = sleepSecondsAfterStop;
     }
 
     public File getWorkingDirectory() {

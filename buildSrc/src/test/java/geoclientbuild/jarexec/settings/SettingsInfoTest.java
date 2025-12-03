@@ -35,7 +35,6 @@ public class SettingsInfoTest extends BaseSettingsTest {
         abstractInfo.appendInfoSection(txt, WORKING_DIR_SECTION_TITLE,
             settingsFixture.getWorkingDirectory().getAbsolutePath());
         abstractInfo.appendInfoSection(txt, COMMAND_LINE_SECTION_TITLE, settingsFixture.commandLine());
-        //abstractInfo.appendInfoSection(txt, HTTP_SHUTDOWN_SECTION_TITLE, httpShutdownInfo(settingsFixture));
         String expectedInfo = txt.toString();
         // Get actual info from SettingsInfo created from fixture
         String actualInfo = new SettingsInfo(settingsFixture).info();

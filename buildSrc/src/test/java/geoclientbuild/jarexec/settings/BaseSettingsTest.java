@@ -35,6 +35,7 @@ public abstract class BaseSettingsTest {
     protected File jarFile = new File("/app/example.jar");
     protected String javaCommand = "lava";
     protected long sleepSecondsAfterStart = 6L;
+    protected long sleepSecondsAfterStop = 4L;
 
     protected Settings settingsFixture() {
         Settings settings = new Settings();
@@ -43,6 +44,7 @@ public abstract class BaseSettingsTest {
         settings.setJarFile(jarFile);
         settings.setJavaCommand(javaCommand);
         settings.setSleepSecondsAfterStart(sleepSecondsAfterStart);
+        settings.setSleepSecondsAfterStop(sleepSecondsAfterStop);
         settings.setWorkingDirectory(jarFile);
         return settings;
     }

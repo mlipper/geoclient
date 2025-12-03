@@ -41,16 +41,16 @@ public class SettingsTest extends BaseSettingsTest {
         Builder builder = Settings.builder();
         Settings settings = builder.withJarFile(jarFile).withJavaCommand(javaCommand).withArguments(
             arguments).withEnvironment(environment)
-                //.withHttpShutdownFile(httpShutdownFile)
-                .withSleepSecondsAfterStart(sleepSecondsAfterStart).build();
+                .withSleepSecondsAfterStart(sleepSecondsAfterStart).withSleepSecondsAfterStop(sleepSecondsAfterStop).build();
         Settings fixture = settingsFixture();
         assertEquals(fixture.getJarFile(), settings.getJarFile(), "Jar files should match");
         assertEquals(fixture.getJavaCommand(), settings.getJavaCommand(), "Java command should match");
         assertEquals(fixture.getArguments(), settings.getArguments(), "Arguments should match");
         assertEquals(fixture.getEnvironment(), settings.getEnvironment(), "Environments should match");
-        //assertEquals(fixture.httpShutdown().settings(), settings.httpShutdown().settings(), "HTTP shutdown settings should match");
         assertEquals(fixture.getSleepSecondsAfterStart(), settings.getSleepSecondsAfterStart(),
             "Sleep seconds after start should match");
+        assertEquals(fixture.getSleepSecondsAfterStop(), settings.getSleepSecondsAfterStop(),
+            "Sleep seconds after stop should match");
     }
 
     @Test
