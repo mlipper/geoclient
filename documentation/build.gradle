@@ -24,6 +24,17 @@ dependencies {
     apiServerClasspath(project(path: ':geoclient-service', configuration: 'apiServer'))
 }
 
+// java.io.File
+def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()[0]
+
+apiserver {
+    host = 'localhost'
+    port = 9090
+    contextPath = '/geoclient/v2'
+    serverJar = bootJarFile
+    sleepSecondsAfterStart = 9;
+}
+
 tasks.register('updateLicenseFiles', Copy) {
     description = 'Updates license files in the project root.'
     group = 'Build'
@@ -35,7 +46,14 @@ tasks.register('updateLicenseFiles', Copy) {
 }
 
 tasks.named('generateSamples') {
-    serviceUrl = System.getenv('GEOCLIENT_SERVICE_URL')
+    dependsOn('startServer')
+    finalizedBy('stopServer')
+    serviceUrl = 'http://localhost:9090/geoclient/v2'
+    //serviceUrl = System.getenv('GEOCLIENT_SERVICE_URL')
+    doFirst {
+        println "Generating samples from service at: ${serviceUrl}"
+        Thread.sleep(8)
+    }
 }
 
 // Configures both asciidoctor and asciidoctorPdf tasks
@@ -81,17 +99,6 @@ tasks.withType(AbstractAsciidoctorTask).configureEach {
     }
 
     notCompatibleWithConfigurationCache("https://github.com/asciidoctor/asciidoctor-gradle-plugin/issues/564")
-}
-
-// java.io.File
-def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()[0]
-
-apiserver {
-    host = 'localhost'
-    port = 9090
-    contextPath = '/geoclient/v2'
-    serverJar = bootJarFile
-    sleepSecondsAfterStart = 9;
 }
 
 tasks.register('serverTest') {
