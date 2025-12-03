@@ -72,7 +72,9 @@ abstract public class GenerateSamplesTask extends DefaultTask {
             try {
                 StringBuffer buff = new StringBuffer(ASCIIDOC_BEGIN_TAG);
                 buff.append('\n');
+                getLogger().debug("request: {}", request.toString());
                 Response response = restClient.call(request);
+                getLogger().debug("response: {}", response.toString());
                 buff.append(format(response.getBody()));
                 buff.append('\n');
                 buff.append(ASCIIDOC_END_TAG);
@@ -92,7 +94,7 @@ abstract public class GenerateSamplesTask extends DefaultTask {
 
         final String serviceUrl = getServiceUrl().get();
         return requests.stream().map(r -> {
-            r.setUri(serviceUrl);
+            r.setUri(String.format("%s/%s", serviceUrl, r.getType()));
             r.setMethod(Request.HTTP_GET_METHOD);
             return r;
         }).collect(Collectors.toList());
