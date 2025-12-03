@@ -39,7 +39,7 @@ public class JarExecutionService {
         logger.info("Service starting up. Launching external process...");
         Process process = processBuilder.start();
         logger.info("External process started with PID: {}", process.pid());
-        TimeUnit.SECONDS.sleep(10); // Wait for process to be fully initialized
+        TimeUnit.SECONDS.sleep(settings.getSleepSecondsAfterStart()); // Wait for process to be fully initialized
         logger.info("Service running...");
         return process;
     }
