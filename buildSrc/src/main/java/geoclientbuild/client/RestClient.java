@@ -34,7 +34,7 @@ public interface RestClient {
      * @return response
      * @throws Exception
      */
-    Response call(Request request) throws Exception;
+    Response call(Request request);
 
     /**
      * Checks if the response status code indicates a successful request (2xx).

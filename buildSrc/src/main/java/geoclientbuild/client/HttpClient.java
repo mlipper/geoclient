@@ -15,6 +15,7 @@
  */
 package geoclientbuild.client;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 
 /**
  * A simple {@link RestClient} implementation using Apache HttpClient.
@@ -41,13 +42,13 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpClient implements RestClient {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = Logging.getLogger(this.getClass());
 
     /*
      * @see RestClient#call(com.digitalclash.geoclient.samples.Request)
      */
     @Override
-    public Response call(Request request) throws Exception {
+    public Response call(Request request) {
         ClassicHttpRequest httpRequest = null;
         switch (request.getMethod()) {
             case Request.HTTP_GET_METHOD:
@@ -66,72 +67,88 @@ public class HttpClient implements RestClient {
         return execute(httpRequest);
     }
 
-    protected HttpGet buildGetRequest(Request request) throws URISyntaxException {
+    protected HttpGet buildGetRequest(Request request) {
         HttpGet httpGet = null;
-        URI endpoint = new URI(request.getUri());
-        if (request.hasParameters() && request.hasHeaders()) {
-            httpGet = httpGetRequest(endpoint, request.getParameters(), request.getHeaders());
-        }
-        else if (request.hasParameters()) {
-            httpGet = httpGetRequest(endpoint, request.getParameters());
-        }
-        else {
-            httpGet = httpGetRequest(endpoint);
-            if (request.hasHeaders()) {
-                addHeaders(httpGet, request.getHeaders());
+        try {
+            URI endpoint = new URI(request.getUri());
+            if (request.hasParameters() && request.hasHeaders()) {
+                httpGet = httpGetRequest(endpoint, request.getParameters(), request.getHeaders());
             }
+            else if (request.hasParameters()) {
+                httpGet = httpGetRequest(endpoint, request.getParameters());
+            }
+            else {
+                httpGet = httpGetRequest(endpoint);
+                if (request.hasHeaders()) {
+                    addHeaders(httpGet, request.getHeaders());
+                }
+            }
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid URI: " + request.getUri(), e);
         }
         return httpGet;
     }
 
-    protected HttpHead buildHeadRequest(Request request) throws URISyntaxException {
+    protected HttpHead buildHeadRequest(Request request) {
         HttpHead httpHead = null;
-        URI endpoint = new URI(request.getUri());
-        if (request.hasParameters() && request.hasHeaders()) {
-            httpHead = httpHeadRequest(endpoint, request.getParameters(), request.getHeaders());
-        }
-        else if (request.hasParameters()) {
-            httpHead = httpHeadRequest(endpoint, null, request.getHeaders());
-        }
-        else {
-            httpHead = httpHeadRequest(endpoint, null, null);
-            if (request.hasHeaders()) {
-                addHeaders(httpHead, request.getHeaders());
+        try {
+            URI endpoint = new URI(request.getUri());
+            if (request.hasParameters() && request.hasHeaders()) {
+                httpHead = httpHeadRequest(endpoint, request.getParameters(), request.getHeaders());
             }
+            else if (request.hasParameters()) {
+                httpHead = httpHeadRequest(endpoint, null, request.getHeaders());
+            }
+            else {
+                httpHead = httpHeadRequest(endpoint, null, null);
+                if (request.hasHeaders()) {
+                    addHeaders(httpHead, request.getHeaders());
+                }
+            }
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid URI: " + request.getUri(), e);
         }
         return httpHead;
     }
 
-    protected HttpPost buildPostRequest(Request request) throws URISyntaxException {
+    protected HttpPost buildPostRequest(Request request) {
         HttpPost httpPost = null;
-        URI endpoint = new URI(request.getUri());
-        if (request.hasParameters() && request.hasHeaders()) {
-            httpPost = httpPostRequest(endpoint, request.getParameters(), request.getHeaders());
-        }
-        else if (request.hasParameters()) {
-            httpPost = httpPostRequest(endpoint, null, request.getHeaders());
-        }
-        else {
-            httpPost = httpPostRequest(endpoint, null, null);
-            if (request.hasHeaders()) {
-                addHeaders(httpPost, request.getHeaders());
+        try {
+            URI endpoint = new URI(request.getUri());
+            if (request.hasParameters() && request.hasHeaders()) {
+                httpPost = httpPostRequest(endpoint, request.getParameters(), request.getHeaders());
             }
+            else if (request.hasParameters()) {
+                httpPost = httpPostRequest(endpoint, null, request.getHeaders());
+            }
+            else {
+                httpPost = httpPostRequest(endpoint, null, null);
+                if (request.hasHeaders()) {
+                    addHeaders(httpPost, request.getHeaders());
+                }
+            }
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid URI: " + request.getUri(), e);
         }
         return httpPost;
     }
 
-    protected Response execute(ClassicHttpRequest httpRequest) throws Exception {
-        logger.info("Executing HTTP request: " + httpRequest.getUri());
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            httpClient.execute(httpRequest, httpResponse -> {
-                int status = httpResponse.getCode();
-                String responseBody = EntityUtils.toString(httpResponse.getEntity());
-                logger.info("Response Status: " + status);
-                logger.debug("Response Body: " + responseBody);
-                return new Response(status, responseBody);
-            });
+    protected Response execute(ClassicHttpRequest httpRequest) {
+        try {
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                logger.info("Executing HTTP request: " + httpRequest.getUri());
+                Response response = httpClient.execute(httpRequest, httpResponse -> {
+                    int status = httpResponse.getCode();
+                    String responseBody = EntityUtils.toString(httpResponse.getEntity());
+                    logger.info("Response Status: " + status);
+                    logger.debug("Response Body: " + responseBody);
+                    return new Response(status, responseBody);
+                });
+                return response;
+            }
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException("Error executing HTTP request: ", e);
         }
-        return null;
     }
 
     protected Logger getLogger() {
