@@ -24,7 +24,6 @@ import org.gradle.api.tasks.TaskAction;
 public abstract class StopServer extends AbstractServerProcess {
 
     public static final String TASK_NAME = "stopServer";
-    public static final String DEFAULT_ENDPOINT = "/actuator/shutdown";
 
     @InputFile
     abstract RegularFileProperty getPidFile();
