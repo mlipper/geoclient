@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec;
+package geoclientbuild.cli;
 
-import static geoclientbuild.jarexec.OptionSpecs.OPT_ARG;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_ENV;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_HELP;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_HTTPFILE;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_JARFILE;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_JAVACMD;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_START;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_STOP;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_ARG;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_ENV;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_HELP;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_HTTPFILE;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_JARFILE;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_JAVACMD;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_START;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_STOP;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_TXT_WORKDIR;
-import static geoclientbuild.jarexec.OptionSpecs.OPT_WORKDIR;
+import static geoclientbuild.cli.OptionSpecs.OPT_ARG;
+import static geoclientbuild.cli.OptionSpecs.OPT_ENV;
+import static geoclientbuild.cli.OptionSpecs.OPT_HELP;
+import static geoclientbuild.cli.OptionSpecs.OPT_HTTPFILE;
+import static geoclientbuild.cli.OptionSpecs.OPT_JARFILE;
+import static geoclientbuild.cli.OptionSpecs.OPT_JAVACMD;
+import static geoclientbuild.cli.OptionSpecs.OPT_START;
+import static geoclientbuild.cli.OptionSpecs.OPT_STOP;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_ARG;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_ENV;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_HELP;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_HTTPFILE;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_JARFILE;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_JAVACMD;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_START;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_STOP;
+import static geoclientbuild.cli.OptionSpecs.OPT_TXT_WORKDIR;
+import static geoclientbuild.cli.OptionSpecs.OPT_WORKDIR;
 
 import java.io.IOException;
 import java.util.List;
