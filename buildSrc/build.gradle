@@ -27,7 +27,6 @@ dependencies {
     implementation(platform(libs.spring.boot.dependencies))
     testImplementation(platform(libs.junit.bom))
     // Dependencies
-    implementation('org.springframework.boot:spring-boot-starter-logging')
     implementation libs.httpclient
     implementation libs.jackson.databind
     testImplementation gradleTestKit()
