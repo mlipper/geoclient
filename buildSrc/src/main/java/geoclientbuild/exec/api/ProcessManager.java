@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.exec.api;
 
 /**
  * Abstraction over various ways to destroy a process.

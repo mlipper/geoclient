@@ -13,15 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.exec.api;
 
-public class SettingsException extends RuntimeException {
-
-    public SettingsException(String message) {
-        super(message);
-    }
-
-    public SettingsException(String message, Throwable t) {
-        super(message, t);
-    }
+public interface TargetProcess<T> {
+    T getTarget();
 }

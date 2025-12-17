@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.exec.settings;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import geoclientbuild.jarexec.settings.Settings.Builder;
+import geoclientbuild.exec.settings.Settings.Builder;
 
 public class SettingsTest extends BaseSettingsTest {
 

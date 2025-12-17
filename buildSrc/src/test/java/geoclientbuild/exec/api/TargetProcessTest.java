@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.exec.api;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -25,10 +25,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-
-import geoclientbuild.jarexec.exec.process.PidFileInstance;
-import geoclientbuild.jarexec.exec.process.ProcessHandleInstance;
-import geoclientbuild.jarexec.exec.process.ProcessInstance;
 
 /*
  * Place holder for real process fixtures, mocks, tests, etc...

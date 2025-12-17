@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.exec.settings;
 
-import static geoclientbuild.jarexec.settings.SettingsInfo.COMMAND_LINE_SECTION_TITLE;
-import static geoclientbuild.jarexec.settings.SettingsInfo.ENV_SECTION_TITLE;
-import static geoclientbuild.jarexec.settings.SettingsInfo.WORKING_DIR_SECTION_TITLE;
+import static geoclientbuild.exec.settings.SettingsInfo.COMMAND_LINE_SECTION_TITLE;
+import static geoclientbuild.exec.settings.SettingsInfo.ENV_SECTION_TITLE;
+import static geoclientbuild.exec.settings.SettingsInfo.WORKING_DIR_SECTION_TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;

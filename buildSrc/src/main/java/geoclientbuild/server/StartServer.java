@@ -27,8 +27,8 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 
-import geoclientbuild.jarexec.exec.JarExecutionService;
-import geoclientbuild.jarexec.settings.Settings;
+import geoclientbuild.exec.JarExecutionService;
+import geoclientbuild.exec.settings.Settings;
 
 public abstract class StartServer extends AbstractServerProcess {
     public static final String TASK_NAME = "startServer";

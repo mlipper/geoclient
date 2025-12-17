@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec.process;
+package geoclientbuild.exec.api;
 
 import java.io.File;
-
-import geoclientbuild.jarexec.exec.ProcessManager;
 
 /**
  * Silly class to encapsulate argument to different

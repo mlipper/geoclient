@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import geoclientbuild.jarexec.settings.SettingsException;
+import geoclientbuild.exec.settings.SettingsException;
 
 /**
  * JSON-based configuration file loader for HTTP shutdown settings.

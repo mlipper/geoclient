@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec.process;
-
-import geoclientbuild.jarexec.exec.TargetProcess;
+package geoclientbuild.exec.api;
 
 public class ProcessInstance<T extends Process> implements TargetProcess<T> {
 

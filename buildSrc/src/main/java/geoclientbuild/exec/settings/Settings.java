@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.exec.settings;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-
-import geoclientbuild.jarexec.exec.ProcessSettings;
 
 public class Settings {
 
@@ -197,14 +195,6 @@ public class Settings {
         this.workingDirectory = workingDirectory;
     }
 
-    public ProcessSettings toProcessSettings() {
-        ProcessSettings.Builder psBuilder = new ProcessSettings.Builder();
-        return psBuilder.withCommandLine(commandLineAsList())
-            .withEnvironment(environment)
-            .withWorkingDirectory(workingDirectory)
-            .withSleepSecondsAfterStart(sleepSecondsAfterStart)
-            .build();
-    }
     private String resolveJavaCommand() {
         return javaCommand != null ? javaCommand : DEFAULT_JAVA_COMMAND;
     }

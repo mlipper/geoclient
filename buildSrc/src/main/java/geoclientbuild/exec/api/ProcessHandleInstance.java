@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.exec.api;
 
-/**
- * Unchecked exception indicating a configuration error.
- */
-public class ConfigurationException extends RuntimeException {
-    public ConfigurationException(String message) {
-        super(message);
+public class ProcessHandleInstance<T extends ProcessHandle> implements TargetProcess<T> {
+
+    private final T handle;
+
+    public ProcessHandleInstance(T handle) {
+        if (handle == null) {
+            throw new IllegalArgumentException("ProcessHandle argument cannot be null.");
+        }
+        this.handle = handle;
     }
 
-    public ConfigurationException(String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    public T getTarget() {
+        return handle;
     }
 
 }

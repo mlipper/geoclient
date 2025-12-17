@@ -13,8 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.exec.api;
 
-public interface TargetProcess<T> {
-    T getTarget();
+import java.io.File;
+
+public class PidFileInstance<T extends File> implements TargetProcess<T> {
+
+    private final T pidFile;
+
+    public PidFileInstance(T pidFile) {
+        this.pidFile = pidFile;
+    }
+
+    @Override
+    public T getTarget() {
+        return pidFile;
+    }
+
 }

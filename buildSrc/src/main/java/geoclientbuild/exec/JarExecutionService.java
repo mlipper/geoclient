@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec;
+package geoclientbuild.exec;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import geoclientbuild.jarexec.settings.Settings;
+import geoclientbuild.exec.settings.Settings;
 
 public class JarExecutionService {
 

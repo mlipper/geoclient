@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.exec.process;
+package geoclientbuild.exec.settings;
 
-import geoclientbuild.jarexec.exec.TargetProcess;
+public class SettingsException extends RuntimeException {
 
-public class ProcessHandleInstance<T extends ProcessHandle> implements TargetProcess<T> {
-
-    private final T handle;
-
-    public ProcessHandleInstance(T handle) {
-        if (handle == null) {
-            throw new IllegalArgumentException("ProcessHandle argument cannot be null.");
-        }
-        this.handle = handle;
+    public SettingsException(String message) {
+        super(message);
     }
 
-    @Override
-    public T getTarget() {
-        return handle;
+    public SettingsException(String message, Throwable t) {
+        super(message, t);
     }
-
 }

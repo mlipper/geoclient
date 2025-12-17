@@ -42,8 +42,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import geoclientbuild.jarexec.exec.JarExecutionService;
-import geoclientbuild.jarexec.settings.Settings;
+import geoclientbuild.exec.JarExecutionService;
+import geoclientbuild.exec.settings.Settings;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
