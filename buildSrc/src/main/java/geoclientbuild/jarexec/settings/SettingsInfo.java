@@ -15,6 +15,8 @@
  */
 package geoclientbuild.jarexec.settings;
 
+import geoclientbuild.base.AbstractSettingsInfo;
+
 public class SettingsInfo extends AbstractSettingsInfo {
 
     static final String ENV_SECTION_TITLE = "Environment variables";

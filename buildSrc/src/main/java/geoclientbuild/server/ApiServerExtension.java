@@ -15,10 +15,13 @@
  */
 package geoclientbuild.server;
 
+import java.net.URI;
+
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 
 public interface ApiServerExtension {
 
@@ -43,4 +46,8 @@ public interface ApiServerExtension {
     ListProperty<String> getArguments();
 
     Property<Long> getSleepSecondsAfterStart();
+
+    Property<Long> getSleepSecondsAfterStop();
+
+    Property<String> getBaseUri();
 }

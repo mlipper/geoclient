@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import geoclientbuild.base.AbstractSettingsInfo;
+
 public abstract class BaseSettingsTest {
 
     protected AbstractSettingsInfo abstractInfo = new AbstractSettingsInfo() {
@@ -46,12 +48,6 @@ public abstract class BaseSettingsTest {
         settings.setSleepSecondsAfterStart(sleepSecondsAfterStart);
         settings.setSleepSecondsAfterStop(sleepSecondsAfterStop);
         settings.setWorkingDirectory(jarFile);
-        return settings;
-    }
-
-    protected HttpShutdownSettings httpShutdownSettingsFixture() throws Exception {
-        HttpShutdownSettings settings = new HttpShutdownSettings();
-        settings.setSettingsFile(new File(this.getClass().getResource("/http-shutdown.json").toURI()));
         return settings;
     }
 }

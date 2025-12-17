@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.client.shutdown;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import geoclientbuild.base.AbstractSettingsInfo;
 
 /**
  * Info about HTTP shutdown settings.

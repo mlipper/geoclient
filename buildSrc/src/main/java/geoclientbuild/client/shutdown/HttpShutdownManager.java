@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.client.shutdown;
 
 import geoclientbuild.client.Request;
 import geoclientbuild.client.Response;

@@ -32,7 +32,8 @@ apiserver {
     port = 9090
     contextPath = '/geoclient/v2'
     serverJar = bootJarFile
-    sleepSecondsAfterStart = 9;
+    sleepSecondsAfterStart = 8;
+    sleepSecondsAfterStop = 2;
 }
 
 tasks.register('updateLicenseFiles', Copy) {

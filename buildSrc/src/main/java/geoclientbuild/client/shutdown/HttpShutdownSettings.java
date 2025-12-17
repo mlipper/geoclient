@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.client.shutdown;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,8 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import geoclientbuild.jarexec.settings.SettingsException;
 
 /**
  * JSON-based configuration file loader for HTTP shutdown settings.

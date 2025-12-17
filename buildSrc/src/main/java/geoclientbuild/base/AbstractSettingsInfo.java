@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.base;
 
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public abstract class AbstractSettingsInfo {
 
     public abstract String info();
 
-    protected MapSummary<String, String> DEFAULT_MAP_SUMMARY = new MapSummary<String, String>() {
+    public MapSummary<String, String> DEFAULT_MAP_SUMMARY = new MapSummary<String, String>() {
         @Override
         public String execute(Map<String, String> map) {
             if (isNullOrEmpty(map)) {
@@ -42,7 +42,7 @@ public abstract class AbstractSettingsInfo {
         }
     };
 
-    protected void appendInfoSection(StringBuilder txt, String title, String content) {
+    public void appendInfoSection(StringBuilder txt, String title, String content) {
         txt.append(System.lineSeparator());
         txt.append(title).append(":").append(System.lineSeparator());
         txt.append("----------------------").append(System.lineSeparator());

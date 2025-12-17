@@ -13,14 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package geoclientbuild.jarexec.settings;
+package geoclientbuild.client.shutdown;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+
 import org.junit.jupiter.api.Test;
 
-public class HttpShutdownInfoTest extends BaseSettingsTest {
+import geoclientbuild.base.AbstractSettingsInfo;
+
+public class HttpShutdownInfoTest {
+
+    private AbstractSettingsInfo abstractInfo = new AbstractSettingsInfo() {
+        @Override
+        public String info() {
+            return "";
+        }
+    };
+
+    private HttpShutdownSettings httpShutdownSettingsFixture() throws Exception {
+        HttpShutdownSettings settings = new HttpShutdownSettings();
+        settings.setSettingsFile(new File(this.getClass().getResource("/http-shutdown.json").toURI()));
+        return settings;
+    }
 
     @Test
     void testInfo_shutdownFileExists() throws Exception {
