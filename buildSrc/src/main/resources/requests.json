@@ -10,8 +10,8 @@
         { "id": "800",  "type": "place", "parameters": { "name": "empire state building", "borough": "manhattan" } },
         { "id": "900",  "type": "search", "parameters": { "input": "280 riverside drive manhattan" } },
         { "id": "901",  "type": "search", "parameters": { "input": "280 riverside drive 10025", "returnTokens": "true" } },
-        { "id": "1000", "type": "streetCode", "parameters": { "streetCode": "10234567" } },
-        { "id": "1100", "type": "streetCode/b5sc", "parameters": { "streetCode": "102345" } },
+        { "id": "1000", "type": "streetcode", "parameters": { "streetCode": "10234567" } },
+        { "id": "1100", "type": "streetcode/b5sc", "parameters": { "streetCode": "102345" } },
         { "id": "1200", "type": "version", "parameters": {} }
     ]
 }
