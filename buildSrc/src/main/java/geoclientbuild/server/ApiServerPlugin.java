@@ -17,6 +17,7 @@ package geoclientbuild.server;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.gradle.api.Plugin;
@@ -29,17 +30,16 @@ import org.gradle.api.provider.Provider;
 public class ApiServerPlugin implements Plugin<Project> {
     private Logger logger = Logging.getLogger(ApiServerPlugin.class);
 
+    public static final String APISERVER_EXTENSION_NAME = "apiserver";
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
 
-    public static final String DEFAULT_CONTEXT_PATH = "geoclient/v2";
-    public static final String DEFAULT_HOST = "localhost";
-    public static final Integer DEFAULT_PORT = 8080;
-    public static final String DEFAULT_SCHEME = "http";
-    public static final String DEFAULT_OUTPUT_DIRECTORY = "api-server";
+    public static final String DEFAULT_BASE_URI = "http://localhost:8080/geoclient/v2/";
     public static final String DEFAULT_JAVA_COMMAND = "java";
+    public static final String DEFAULT_OUTPUT_DIRECTORY = "api-server";
     public static final String DEFAULT_PID_FILE = "api-server.pid";
-    public static final String DEFAULT_PID_FILE_PATH = DEFAULT_OUTPUT_DIRECTORY + File.separator
-            + DEFAULT_PID_FILE;
+    public static final String DEFAULT_PID_FILE_PATH = DEFAULT_OUTPUT_DIRECTORY
+                                                            + File.separator
+                                                            + DEFAULT_PID_FILE;
     public static final String DEFAULT_PROFILE = "docsamples";
     public static final Long DEFAULT_SLEEP_AFTER_START_SECONDS = 8L;
     public static final Long DEFAULT_SLEEP_AFTER_STOP_SECONDS = 4L;
@@ -48,14 +48,14 @@ public class ApiServerPlugin implements Plugin<Project> {
         // Register the extension
         ApiServerExtension extension = registerExtension(project);
 
-        URI baseUri = baseUri(extension);
+        //URI baseUri = extension.getBaseUri().get();
         // Register tasks
         project.getTasks().register(StartServer.TASK_NAME, StartServer.class, task -> {
             task.getServerJar().set(extension.getServerJar());
             task.getJavaCommand().set(extension.getJavaCommand());
-            task.getUri().set(baseUri);
-            List<String> args = new ArgumentsBuilder.BootArgumentsBuilder().host(extension.getHost().get()).port(
-                extension.getPort().get()).contextPath(extension.getContextPath().get()).profile(
+            task.getUri().set(extension.getBaseUri().get());
+            List<String> args = new ArgumentsBuilder.BootArgumentsBuilder().host(extension.getBaseUri().get().getHost()).port(
+                extension.getBaseUri().get().getPort()).contextPath(extension.getBaseUri().get().getPath()).profile(
                     DEFAULT_PROFILE).build();
             task.getArguments().set(args);
             task.getPidFile().set(extension.getPidFile());
@@ -63,31 +63,30 @@ public class ApiServerPlugin implements Plugin<Project> {
         });
 
         project.getTasks().register(StopServer.TASK_NAME, StopServer.class, task -> {
-            task.getUri().set(baseUri(extension));
+            task.getUri().set(extension.getBaseUri().get());
             task.getPidFile().set(extension.getPidFile());
         });
 
         project.getTasks().register(APISERVER_INFO_TASK_NAME, task -> {
-            String url = String.format("%s://%s:%d/%s", extension.getScheme().get(), extension.getHost().get(),
-                extension.getPort().get(), extension.getContextPath().get());
             Provider<File> jarfile = extension.getServerJar().getAsFile();
             task.doLast(s -> {
-                logger.lifecycle("ApiServer build service URL: " + url);
+                logger.lifecycle("ApiServer base URI: " + extension.getBaseUri().get().toString());
                 logger.lifecycle("ApiServer JAR: " + jarfile.get().getAbsolutePath());
             });
         });
     }
 
     private ApiServerExtension registerExtension(Project project) {
-        ApiServerExtension extension = project.getExtensions().create(ApiServerExtension.EXTENSION_NAME,
+        ApiServerExtension extension = project.getExtensions().create(ApiServerPlugin.APISERVER_EXTENSION_NAME,
             ApiServerExtension.class);
         // Configure the extension with some defaults
 
         // Configure default base URI
-        extension.getScheme().convention(DEFAULT_SCHEME);
-        extension.getHost().convention(DEFAULT_HOST);
-        extension.getPort().convention(DEFAULT_PORT);
-        extension.getContextPath().convention(DEFAULT_CONTEXT_PATH);
+        try {
+            extension.getBaseUri().convention(new URI(DEFAULT_BASE_URI));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid default base URI: " + DEFAULT_BASE_URI, e);
+        }
 
         // Configure process environment
         extension.getSleepSecondsAfterStart().convention(DEFAULT_SLEEP_AFTER_START_SECONDS);
@@ -99,15 +98,5 @@ public class ApiServerPlugin implements Plugin<Project> {
         Provider<RegularFile> pidFile = project.getLayout().getBuildDirectory().file(DEFAULT_PID_FILE_PATH);
         extension.getPidFile().convention(pidFile);
         return extension;
-    }
-
-    private URI baseUri(ApiServerExtension extension) {
-        try {
-            return new URI(String.format("%s://%s:%d/%s", extension.getScheme().get(), extension.getHost().get(),
-                extension.getPort().get(), extension.getContextPath().get()));
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Failed to build API server URI", e);
-        }
     }
 }

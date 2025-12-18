@@ -18,6 +18,9 @@ package gov.nyc.doitt.gis.geoclient.docs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,5 +62,13 @@ public class GeneratorPropertiesTests {
         assertEquals(System.getenv(BASEURL_ENV_VARIABLE), this.props.getBaseUrl());
         assertNotNull(this.props.getOutputDir());
         assertEquals(System.getenv(OUTPUTDIR_ENV_VARIABLE), this.props.getOutputDir().getAbsolutePath());
+    }
+
+    @Test
+    public void testUri() throws URISyntaxException {
+        URI uri = new URI("http://localhost:9090/geoclient/v2/");
+        URI expectedUri = new URI("http://localhost:9090/geoclient/v2/address");
+        URI actualUri = uri.resolve("address");
+        assertEquals(expectedUri, actualUri);
     }
 }

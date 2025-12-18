@@ -18,6 +18,8 @@ package geoclientbuild.docs;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,7 +56,7 @@ abstract public class GenerateSamplesTask extends DefaultTask {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Input
-    abstract public Property<String> getServiceUrl();
+    abstract public Property<URI> getBaseUri();
 
     @InputFile
     abstract public RegularFileProperty getRequestsFile();
@@ -72,9 +74,13 @@ abstract public class GenerateSamplesTask extends DefaultTask {
             try {
                 StringBuffer buff = new StringBuffer(ASCIIDOC_BEGIN_TAG);
                 buff.append('\n');
-                getLogger().debug("request: {}", request.toString());
+                getLogger().lifecycle("request: {}", request.toString());
                 Response response = restClient.call(request);
-                getLogger().debug("response: {}", response.toString());
+                getLogger().lifecycle("response: {}", response.toString());
+                if(response.getHttpCode() != 200) {
+                    throw new RuntimeException(
+                            String.format("Non-200 response code received: %d", response.getHttpCode()));
+                }
                 buff.append(format(response.getBody()));
                 buff.append('\n');
                 buff.append(ASCIIDOC_END_TAG);
@@ -91,13 +97,27 @@ abstract public class GenerateSamplesTask extends DefaultTask {
     }
 
     private List<HttpRequestAdapter> adapt(List<HttpRequestAdapter> requests) {
-
-        final String serviceUrl = getServiceUrl().get();
+        final URI uri = insureEndsWithSlash(getBaseUri().get());
+        getLogger().lifecycle("Using service base URI: {}", uri.toString());
         return requests.stream().map(r -> {
-            r.setUri(String.format("%s/%s", serviceUrl, r.getType()));
+            String serviceUrl = uri.resolve(r.getType()).toString();
+            getLogger().lifecycle("Using service endpoint URL: {}", serviceUrl);
+            r.setUri(serviceUrl);
             r.setMethod(Request.HTTP_GET_METHOD);
             return r;
         }).collect(Collectors.toList());
+    }
+
+    private URI insureEndsWithSlash(URI uri) {
+        String uriStr = uri.toString();
+        if (!uriStr.endsWith("/")) {
+            try {
+                return new URI(uriStr + "/");
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("Invalid URI: " + uriStr, e);
+            }
+        }
+        return uri;
     }
 
     private List<HttpRequestAdapter> loadRequests(File file) {
