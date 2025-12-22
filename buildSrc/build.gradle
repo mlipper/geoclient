@@ -50,13 +50,17 @@ tasks.named('test', Test) {
 
 gradlePlugin {
     plugins {
-        documentationPlugin {
-            id = 'geoclientbuild.documentation'
-            implementationClass = 'geoclientbuild.docs.DocumentationPlugin'
-        }
         apiserver {
             id = 'geoclientbuild.apiserver'
             implementationClass = 'geoclientbuild.server.ApiServerPlugin'
+        }
+        baseGeoclientPlugin {
+            id = 'geoclientbuild.base'
+            implementationClass = 'geoclientbuild.base.BaseGeoclientPlugin'
+        }
+        documentationPlugin {
+            id = 'geoclientbuild.documentation'
+            implementationClass = 'geoclientbuild.docs.DocumentationPlugin'
         }
     }
 }

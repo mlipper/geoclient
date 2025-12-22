@@ -45,10 +45,12 @@ public class ApiServerPlugin implements Plugin<Project> {
     public static final Long DEFAULT_SLEEP_AFTER_STOP_SECONDS = 4L;
 
     public void apply(Project project) {
+        // Apply base plugin
+        project.getPluginManager().apply("geoclientbuild.base");
+
         // Register the extension
         ApiServerExtension extension = registerExtension(project);
 
-        //URI baseUri = extension.getBaseUri().get();
         // Register tasks
         project.getTasks().register(StartServer.TASK_NAME, StartServer.class, task -> {
             task.getServerJar().set(extension.getServerJar());

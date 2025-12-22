@@ -34,15 +34,15 @@ apiserver {
     sleepSecondsAfterStop = 2;
 }
 
-tasks.register('updateLicenseFiles', Copy) {
-    description = 'Updates license files in the project root.'
-    group = 'Build'
-    into(layout.buildDirectory)
-    with(licenseFilesSpec)
-    rename { String name ->
-        (name[0..-5]).toUpperCase()
-    }
-}
+//tasks.register('updateLicenseFiles', Copy) {
+//    description = 'Updates license files in the project root.'
+//    group = 'Build'
+//    into(layout.buildDirectory)
+//    with(licenseFilesSpec)
+//    rename { String name ->
+//        (name[0..-5]).toUpperCase()
+//    }
+//}
 
 tasks.named('generateSamples') {
     dependsOn('processResources')

@@ -21,20 +21,30 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
+import org.gradle.api.tasks.Sync;
+import org.gradle.api.tasks.TaskProvider;
 
 public class DocumentationPlugin implements Plugin<Project> {
 
     public static final String GENERATE_SAMPLES_TASK_NAME = "generateSamples";
+    public static final String SYNC_SAMPLES_TASK_NAME = "syncSamples";
+    public static final String SYNC_SAMPLES_TASK_DESTINATION_DIR = "src/docs/asciidoc/samples";
     private Logger logger = Logging.getLogger(DocumentationPlugin.class);
 
     public void apply(Project project) {
         logger.info("Applying DocumentationPlugin...");
-        project.getTasks().register(GENERATE_SAMPLES_TASK_NAME, GenerateSamplesTask.class, t -> {
+        TaskProvider<GenerateSamplesTask> generateSamplesTaskProvider = project.getTasks().register(GENERATE_SAMPLES_TASK_NAME, GenerateSamplesTask.class, t -> {
             t.setGroup(DOCUMENTATION_GROUP);
             t.setDescription("Write JSON responses to geoclient REST calls files in an output folder.");
             t.getRequestsFile().convention(
                 project.getLayout().getBuildDirectory().file("resources/main/requests.json"));
             t.getDestinationDirectory().convention(project.getLayout().getBuildDirectory().dir("generated/samples"));
+        });
+        project.getTasks().register(SYNC_SAMPLES_TASK_NAME, Sync.class, t -> {
+            t.setGroup(DOCUMENTATION_GROUP);
+            t.setDescription("Copy generated samples to the main source set.");
+            t.from(generateSamplesTaskProvider.get());
+            t.into(project.getLayout().getProjectDirectory().dir(SYNC_SAMPLES_TASK_DESTINATION_DIR));
         });
     }
 }
