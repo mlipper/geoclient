@@ -1,0 +1,11 @@
+plugins {
+    id 'geoclient.library-conventions'
+    id 'geoclient.test-conventions'
+}
+
+dependencies {
+    implementation(project(':geoclient-jni'))
+    implementation(project(':geoclient-core'))
+    implementation(libs.jackson.dataformat.xml)
+    testImplementation(testFixtures(project(':geoclient-core')))
+}
