@@ -1,10 +1,17 @@
 {
 	"name": "geoclient",
 	"image": "mcr.microsoft.com/devcontainers/java:21",
-	"forwardPorts": ["8080:8080","8000:8000","5005:5005"],
+	"forwardPorts": [
+		"8080:8080",
+		"8000:8000",
+		"5005:5005"
+	],
 	"containerEnv": {
 		"GEOFILES": "/opt/geosupport/current/fls/"
 	},
+	"runArgs": [
+		"--platform=linux/amd64"
+	],
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
 			"version": "21",
@@ -33,8 +40,8 @@
 		}
 	},
 	"mounts": [
-    "source=profile,target=/root,type=volume",
-    "target=/root/.vscode-server,type=volume",
+		"source=profile,target=/root,type=volume",
+		"target=/root/.vscode-server,type=volume",
 		"source=geosupport-latest,target=/opt/geosupport,type=volume"
 	],
 	"onCreateCommand": "apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get -y install --no-install-recommends gcc g++ libc6-dev vim ;",
