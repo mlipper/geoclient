@@ -1,0 +1,30 @@
+// tag::user_guide[]
+{
+  "intersection" : {
+    "boroughCode1In" : "1",
+    "crossStreetNamesFlagIn" : "E",
+    "firstBoroughName" : "MANHATTAN",
+    "firstStreetCode" : "13577001010",
+    "firstStreetNameNormalized" : "WEST  100 STREET",
+    "geosupportFunctionCode" : "2W",
+    "geosupportReturnCode" : "EE",
+    "message" : "'AMSTERSDAM AVE' NOT RECOGNIZED. THERE ARE 004 SIMILAR NAMES.",
+    "numberOfStreetCodesAndNamesInList" : "04",
+    "reasonCode" : "4",
+    "reasonCode2w" : "4",
+    "returnCode2w" : "EE",
+    "secondStreetNameNormalized" : "AMSTERSDAM AVENUE",
+    "streetCode1" : "11067501",
+    "streetCode2" : "11171001",
+    "streetCode3" : "11095501",
+    "streetCode4" : "11307002",
+    "streetName1" : "AMSTERDAM AV SB EN TRANS MN EP",
+    "streetName1In" : "W 100 ST",
+    "streetName2" : "AMSTERDAM AVENUE",
+    "streetName2In" : "AMSTERSDAM AVE",
+    "streetName3" : "AMSTERDAM AVENUE HRD SB EN",
+    "streetName4" : "AMSTERDAM HOUSES PEDESTRIAN PATH",
+    "workAreaFormatIndicatorIn" : "C"
+  }
+}
+// end::user_guide[]

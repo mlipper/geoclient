@@ -1,0 +1,15 @@
+// tag::user_guide[]
+{
+  "response" : {
+    "boroughCode1In" : "1",
+    "firstStreetCode" : "12969001010",
+    "firstStreetNameNormalized" : "RIVERSIDE DRIVE",
+    "geosupportFunctionCode" : "D",
+    "geosupportReturnCode" : "00",
+    "streetCode1In" : "29690",
+    "streetNameNormalizationFormatFlagIn" : "S",
+    "streetNameNormalizationLengthLimitIn" : "32",
+    "workAreaFormatIndicatorIn" : "C"
+  }
+}
+// end::user_guide[]

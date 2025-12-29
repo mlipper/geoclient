@@ -41,7 +41,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/address-1.jsonc[tags=user_guide]
+include::../samples/address-100.jsonc[tags=user_guide]
 ----
 ====
 
@@ -66,7 +66,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/addresspoint-1.jsonc[tags=user_guide]
+include::../samples/addresspoint-200.jsonc[tags=user_guide]
 ----
 ====
 
@@ -106,7 +106,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/bbl-1.jsonc[tags=user_guide]
+include::../samples/bbl-300.jsonc[tags=user_guide]
 ----
 ====
 
@@ -139,7 +139,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/bin-1.jsonc[tags=user_guide]
+include::../samples/bin-400.jsonc[tags=user_guide]
 ----
 ====
 
@@ -196,7 +196,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/blockface-1.jsonc[tags=user_guide]
+include::../samples/blockface-500.jsonc[tags=user_guide]
 ----
 ====
 
@@ -245,7 +245,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/intersection-1.jsonc[tags=user_guide]
+include::../samples/intersection-600.jsonc[tags=user_guide]
 ----
 ====
 
@@ -286,7 +286,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/normalize-1.jsonc[tags=user_guide]
+include::../samples/normalize-700.jsonc[tags=user_guide]
 ----
 ====
 
@@ -327,7 +327,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/place-1.jsonc[tags=user_guide]
+include::../samples/place-800.jsonc[tags=user_guide]
 ----
 ====
 
@@ -452,7 +452,7 @@ Request:
 ====
 [source,json,indent=0]
 ----
-include::../samples/search-1.jsonc[tags=user_guide]
+include::../samples/search-900.jsonc[tags=user_guide]
 ----
 ====
 
@@ -503,7 +503,7 @@ Response:
 ====
 [source,json,indent=0]
 ----
-include::../samples/streetcode-1.jsonc[tags=user_guide]
+include::../samples/streetcode-1000.jsonc[tags=user_guide]
 ----
 ====
 
@@ -530,6 +530,6 @@ Response:
 ====
 [source,json,indent=0]
 ----
-include::../samples/version-1.jsonc[tags=user_guide]
+include::../samples/version-1200.jsonc[tags=user_guide]
 ----
 ====

@@ -1,0 +1,224 @@
+// tag::user_guide[]
+{
+  "geoclientJniVersion" : "2.0.4",
+  "geoclientVersion" : "2.0.4",
+  "geoclientParserVersion" : "2.0.4",
+  "geoclientServiceVersion" : "2.0.4",
+  "geosupportVersion" : {
+    "dsNames" : [ "edequiv", "GRID1", "GRID2", "GRID3", "PAD", "san", "snd", "STRETCH", "thined", "GRID1R", "AUXSEG", "TPAD", "apequiv", "AP", "UPAD", "STAT", "STT1", "STT1A", "STT2", "STT3", "STT3S", "STTAP", "STTBL", "STTBN", "STTD", "snequiv" ],
+    "geoFileInfo" : [ {
+      "tag" : "GEO",
+      "date" : "251027",
+      "release" : "2540",
+      "recordCount" : "00000001",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-27"
+    }, {
+      "tag" : "EDEQ",
+      "date" : "200221",
+      "release" : "20A",
+      "recordCount" : "00000001",
+      "recordType" : "0000",
+      "formattedDate" : "2020-02-21"
+    }, {
+      "tag" : "GRD1",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "00234594",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    }, {
+      "tag" : "GRD2",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "00079105",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    }, {
+      "tag" : "GRD3",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "00244143",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    }, {
+      "tag" : "PAD",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "01291298",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    }, {
+      "tag" : "SAN",
+      "date" : "240903",
+      "release" : "24C1",
+      "recordCount" : "00000750",
+      "recordType" : "0000",
+      "formattedDate" : "2024-09-03"
+    }, {
+      "tag" : "SND",
+      "date" : "251023",
+      "release" : "25D",
+      "recordCount" : "00120082",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-23"
+    }, {
+      "tag" : "STCH",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "00030334",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    } ],
+    "thinFileInfo" : {
+      "tag" : "THIN",
+      "date" : "250305",
+      "release" : "25A1",
+      "recordCount" : "00004341",
+      "recordTypes" : [ "0000", "0001", "0002" ],
+      "fillerFields" : null,
+      "formattedDate" : "2025-03-05"
+    },
+    "apFileInfo" : {
+      "tag" : "AP",
+      "date" : "251017",
+      "release" : "25D",
+      "recordCount" : "00968863",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-17"
+    },
+    "apequivFileInfo" : {
+      "tag" : "APEQ",
+      "date" : "250417",
+      "release" : "25B",
+      "recordCount" : "00000001",
+      "recordType" : "0000",
+      "formattedDate" : "2025-04-17"
+    },
+    "auxsegFileInfo" : {
+      "tag" : "SAUX",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "00041251",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    },
+    "grid1RFileInfo" : {
+      "tag" : "GR1R",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "00234597",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    },
+    "sneqFileInfo" : {
+      "tag" : "SNEQ",
+      "date" : "250417",
+      "release" : "25B",
+      "recordCount" : "00000023",
+      "recordType" : "0000",
+      "formattedDate" : "2025-04-17"
+    },
+    "stat1AFileInfo" : {
+      "tag" : "A***",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STT1",
+      "formattedDate" : "******"
+    },
+    "stat1FileInfo" : {
+      "tag" : "****",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STT1",
+      "formattedDate" : "******"
+    },
+    "stat2FileInfo" : {
+      "tag" : "****",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STT2",
+      "formattedDate" : "******"
+    },
+    "stat3FileInfo" : {
+      "tag" : "****",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STT3",
+      "formattedDate" : "******"
+    },
+    "stat3SFileInfo" : {
+      "tag" : "S***",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STT3",
+      "formattedDate" : "******"
+    },
+    "statAPFileInfo" : {
+      "tag" : "P***",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STTA",
+      "formattedDate" : "******"
+    },
+    "statBLFileInfo" : {
+      "tag" : "L***",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STTB",
+      "formattedDate" : "******"
+    },
+    "statBNFileInfo" : {
+      "tag" : "N***",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STTB",
+      "formattedDate" : "******"
+    },
+    "statDFileInfo" : {
+      "tag" : "****",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STTD",
+      "formattedDate" : "******"
+    },
+    "statFileInfo" : {
+      "tag" : "****",
+      "date" : "******",
+      "release" : "****",
+      "recordCount" : "********",
+      "recordType" : "STAT",
+      "formattedDate" : "******"
+    },
+    "tpadFileInfo" : {
+      "tag" : "TPAD",
+      "date" : "251028",
+      "release" : "25C",
+      "recordCount" : "00000000",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-28"
+    },
+    "upadFileInfo" : {
+      "tag" : "UPAD",
+      "date" : "251030",
+      "release" : "25D",
+      "recordCount" : "00000001",
+      "recordType" : "0000",
+      "formattedDate" : "2025-10-30"
+    },
+    "geofilesDirectory" : "/opt/geosupport/current/fls/",
+    "version" : "25.4",
+    "release" : "25D"
+  },
+  "accessMethod" : "Local/JNI"
+}
+// end::user_guide[]

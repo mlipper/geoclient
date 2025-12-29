@@ -1,0 +1,20 @@
+// tag::user_guide[]
+{
+  "bbl" : {
+    "bbl" : "1001860001",
+    "bblBoroughCode" : "1",
+    "bblBoroughCodeIn" : "1",
+    "bblTaxBlock" : "00186",
+    "bblTaxBlockIn" : "186",
+    "bblTaxLot" : "0001",
+    "bblTaxLotIn" : "1",
+    "firstBoroughName" : "MANHATTAN",
+    "geosupportFunctionCode" : "BL",
+    "geosupportReturnCode" : "77",
+    "message" : "TAX LOT NOT FOUND",
+    "modeSwitchIn" : "X",
+    "returnCode1a" : "77",
+    "workAreaFormatIndicatorIn" : "C"
+  }
+}
+// end::user_guide[]

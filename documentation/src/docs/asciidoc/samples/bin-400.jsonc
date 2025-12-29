@@ -1,0 +1,15 @@
+// tag::user_guide[]
+{
+  "bin" : {
+    "buildingIdentificationNumber" : "1234567",
+    "buildingIdentificationNumberIn" : "1234567",
+    "firstBoroughName" : "MANHATTAN",
+    "geosupportFunctionCode" : "BN",
+    "geosupportReturnCode" : "21",
+    "message" : "BUILDING IDENTIFICATION NUMBER (BIN) NOT FOUND",
+    "modeSwitchIn" : "X",
+    "returnCode1a" : "21",
+    "workAreaFormatIndicatorIn" : "C"
+  }
+}
+// end::user_guide[]

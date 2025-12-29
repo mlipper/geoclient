@@ -6,9 +6,9 @@ plugins {
     id 'geoclient.library-conventions'
     id 'geoclient.test-conventions'
     id 'geoclientbuild.apiserver'
-    id 'geoclientbuild.documentation'
 	alias(libs.plugins.asciidoctorConvert)
 	alias(libs.plugins.asciidoctorPdf)
+    id 'geoclientbuild.documentation'
 }
 
 configurations {
