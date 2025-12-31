@@ -23,6 +23,9 @@ dependencies {
     implementation libs.jopt.simple
     implementation libs.spotless.plugin
     implementation libs.gradle.versions.plugin
+    // Needed for DocumentationPlugin
+    implementation libs.asciidoctor.jvm.convert
+    implementation libs.asciidoctor.jvm.pdf
     // Platforms
     implementation(platform(libs.spring.boot.dependencies))
     testImplementation(platform(libs.junit.bom))
@@ -53,6 +56,10 @@ gradlePlugin {
         apiserver {
             id = 'geoclientbuild.apiserver'
             implementationClass = 'geoclientbuild.server.ApiServerPlugin'
+        }
+        applyAsciidoctorPlugin {
+            id = 'geoclientbuild.asciidoctor'
+            implementationClass = 'geoclientbuild.docs.ApplyAsciidoctorPlugin'
         }
         baseGeoclientPlugin {
             id = 'geoclientbuild.base'

@@ -17,6 +17,7 @@ package geoclientbuild.docs;
 
 import static org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP;
 
+import org.asciidoctor.gradle.jvm.AbstractAsciidoctorTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
@@ -52,10 +53,12 @@ public class DocumentationPlugin implements Plugin<Project> {
             t.from(generateSamplesTaskProvider.get());
             t.into(extension.getSamplesSourceDirectory().get());
         });
-        project.getTasks().named(DEFAULT_DOCUMENTATION_TASK_NAME).configure((task) -> {
-            if(extension.getSyncSamples().getOrElse(false)) {
-                task.dependsOn(SYNC_SAMPLES_TASK_NAME);
-            }
+        project.getPluginManager().withPlugin("applyAsciiDoctorPlugin", (plugin) -> {
+            project.getTasks().withType(AbstractAsciidoctorTask.class, task -> {
+                if(extension.getSyncSamples().getOrElse(false)) {
+                    task.dependsOn(SYNC_SAMPLES_TASK_NAME);
+                }
+            });
         });
     }
 

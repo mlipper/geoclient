@@ -17,13 +17,13 @@ xstream = "1.4.21"
 
 [plugins]
 boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
-asciidoctorConvert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor-plugins" }
-asciidoctorPdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor-plugins" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow-plugin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions-plugin" }
 
 [libraries]
+asciidoctor-jvm-convert = { module = "org.asciidoctor:asciidoctor-gradle-jvm", version.ref = "asciidoctor-plugins" }
+asciidoctor-jvm-pdf = { module = "org.asciidoctor:asciidoctor-gradle-jvm-pdf", version.ref = "asciidoctor-plugins" }
 apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardian-api" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
 diffutils = { module = "com.googlecode.java-diff-utils:diffutils", version.ref = "diffutils" }
