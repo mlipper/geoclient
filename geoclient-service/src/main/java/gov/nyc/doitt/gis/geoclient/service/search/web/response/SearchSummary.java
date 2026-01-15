@@ -17,21 +17,16 @@ package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
 import java.util.Map;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamConverter;
-
-import gov.nyc.doitt.gis.geoclient.service.xstream.MapConverter;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class SearchSummary {
-    @XStreamAsAttribute
+    @JacksonXmlProperty(isAttribute = true)
     private String level;
-    @XStreamAsAttribute
+    @JacksonXmlProperty(isAttribute = true)
     private MatchStatus status;
-    @XStreamAsAttribute
+    @JacksonXmlProperty(isAttribute = true)
     private String request;
-    @XStreamAlias("geosupportResponse")
-    @XStreamConverter(MapConverter.class)
+    @JacksonXmlProperty(localName = "geosupportResponse")
     private Map<String, Object> response;
 
     public MatchStatus getStatus() {

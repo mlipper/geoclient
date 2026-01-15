@@ -17,16 +17,28 @@ package gov.nyc.doitt.gis.geoclient.service.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 /**
  * Bean class for data returned by Geosupport function HR.
  */
+@JsonPropertyOrder({ "dsNames", "geoFileInfo", "thinFileInfo", "apFileInfo", "apequivFileInfo", "auxsegFileInfo",
+        "grid1RFileInfo", "sneqFileInfo", "stat1AFileInfo", "stat1FileInfo", "stat2FileInfo", "stat3FileInfo",
+        "stat3SFileInfo", "statAPFileInfo", "statBLFileInfo", "statBNFileInfo", "statDFileInfo", "statFileInfo",
+        "tpadFileInfo", "upadFileInfo", "geofilesDirectory" })
 public class GeosupportVersion {
     public static final String GEO_FILE_TAG = "GEO";
     public static final String PAD_FILE_TAG = "PAD";
     public static final String RELEASE_NOT_AVAILABLE = "RELEASE_NOT_AVAILABLE";
     public static final String VERSION_NOT_AVAILABLE = "VERSION_NOT_AVAILABLE";
 
+    @JacksonXmlElementWrapper(localName = "dsNames")
+    @JacksonXmlProperty(localName = "string")
     private List<String> dsNames;
+    @JacksonXmlElementWrapper(localName = "geoFileInfo")
+    @JacksonXmlProperty(localName = "fileInfo")
     private List<FileInfo> geoFileInfo;
     private ThinFileInfo thinFileInfo;
     private FileInfo apFileInfo;

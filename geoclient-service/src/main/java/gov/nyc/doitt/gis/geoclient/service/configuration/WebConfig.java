@@ -15,11 +15,7 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.configuration;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import com.thoughtworks.xstream.converters.ConverterMatcher;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -35,7 +31,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.lang.NonNull;
-import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -43,13 +38,7 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
-import gov.nyc.doitt.gis.geoclient.parser.token.Token;
-import gov.nyc.doitt.gis.geoclient.service.domain.BadRequest;
-import gov.nyc.doitt.gis.geoclient.service.domain.FileInfo;
-import gov.nyc.doitt.gis.geoclient.service.domain.Version;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResultConverter;
-import gov.nyc.doitt.gis.geoclient.service.xstream.MapConverter;
 
 /**
  * Customizes the default web configuration by implementing the Spring
@@ -135,19 +124,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public XStreamMarshaller marshaller() {
-        XStreamMarshaller marshaller = new XStreamMarshaller();
-        marshaller.setConverters(new ConverterMatcher[] { new MapConverter() });
-        Map<String, Class<?>> aliases = new HashMap<String, Class<?>>();
-        aliases.put("geosupportResponse", Map.class); // -> <geosupportResult class="tree-map">
-        //aliases.put("geosupportResponse", TreeMap.class); // -> <geosupportResult class="geosupportResult">
-        aliases.put("version", Version.class);
-        aliases.put("fileInfo", FileInfo.class);
-        aliases.put("error", BadRequest.class);
-        aliases.put("chunk", Chunk.class);
-        aliases.put("token", Token.class);
-        marshaller.setAliases(aliases);
-        marshaller.setAutodetectAnnotations(true);
+    public JacksonXmlMarshaller marshaller() {
+        JacksonXmlMarshaller marshaller = new JacksonXmlMarshaller();
+        // Note: Jackson handles serialization differently, aliases are handled via annotations
         return marshaller;
     }
 

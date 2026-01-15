@@ -17,32 +17,33 @@ package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 
-// NOTE: JSON root wrapping also needs to be enabled on the Jackson2
-//       ObjectMapper. When using Spring MappingJackson2HttpMessageConverter do
-//       this:
-//
-//         converter.getObjectMapper()
-//                  .configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-//
-//@JsonRootName("searchResponse") // json root name
-@XStreamAlias("searchResponse") // xml root element
+@JacksonXmlRootElement(localName = "searchResponse")
 public class SearchResponse {
-    @XStreamAsAttribute
+    @JacksonXmlProperty(isAttribute = true)
     private String id;
+
     private Status status;
+
     private String input;
-    @XStreamImplicit(itemFieldName = "result")
+
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "result")
     private List<SearchSummary> results;
-    @XStreamAlias("parseTree")
+
+    @JacksonXmlElementWrapper(localName = "parseTree")
+    @JacksonXmlProperty(localName = "chunk")
     private List<Chunk> parseTree;
-    @XStreamImplicit(itemFieldName = "policy")
+
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "policy")
     private List<PolicySummary> policy;
+
     public String getId() {
         return id;
     }

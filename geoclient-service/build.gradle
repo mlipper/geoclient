@@ -8,12 +8,12 @@ dependencies {
     implementation project(':geoclient-jni')
     implementation project(':geoclient-core')
     implementation project(':geoclient-parser')
-    implementation(libs.commons.text)
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-validation')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework:spring-oxm') { exclude(module: 'commons-lang') }
-    implementation(libs.xstream)
+    implementation(libs.commons.text)
+    implementation(libs.jackson.dataformat.xml)
 }
 
 tasks.register('writeVersionProperties', WriteProperties) {

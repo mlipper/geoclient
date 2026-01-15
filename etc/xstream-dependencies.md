@@ -18,9 +18,11 @@ gov.nyc.doitt.gis.geoclient.config.xml.FieldConverterTest.java
 
 ### test
 
-gov.nyc.doitt.gis.geoclient.parser.test.SpecBuilder.java
-gov.nyc.doitt.gis.geoclient.parser.test.UnparsedSpec.java
-gov.nyc.doitt.gis.geoclient.parser.test.UnparsedSpecs.java
+*Replaced with Jackson XML in 2026*
+
+<!-- gov.nyc.doitt.gis.geoclient.parser.test.SpecBuilder.java -->
+<!-- gov.nyc.doitt.gis.geoclient.parser.test.UnparsedSpec.java -->
+<!-- gov.nyc.doitt.gis.geoclient.parser.test.UnparsedSpecs.java -->
 
 ## geoclient-service
 

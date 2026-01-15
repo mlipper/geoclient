@@ -41,7 +41,7 @@ dependencies {
 tasks.named('test', Test) {
     useJUnitPlatform()
     testLogging {
-        showStandardStreams = true
+        showStandardStreams = false
     }
     // Required for test to run
     systemProperty("testing.endpoint", System.getProperty("testing.endpoint", "false"))

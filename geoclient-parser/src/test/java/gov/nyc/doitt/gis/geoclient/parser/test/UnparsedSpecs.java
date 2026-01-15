@@ -18,12 +18,14 @@ package gov.nyc.doitt.gis.geoclient.parser.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-@XStreamAlias("specs")
+@JacksonXmlRootElement(localName = "specs")
 public class UnparsedSpecs {
-    @XStreamImplicit(itemFieldName = "spec")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "spec")
     private List<UnparsedSpec> specs = new ArrayList<>();
 
     public List<UnparsedSpec> getSpecs() {

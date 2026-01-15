@@ -15,6 +15,12 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+@JsonPropertyOrder({ "geoclientJniVersion", "geoclientVersion", "geoclientParserVersion", "geoclientServiceVersion",
+        "geosupportVersion", "accessMethod" })
+@JacksonXmlRootElement(localName = "version")
 public class Version {
     private String geoclientJniVersion;
     private String geoclientVersion;

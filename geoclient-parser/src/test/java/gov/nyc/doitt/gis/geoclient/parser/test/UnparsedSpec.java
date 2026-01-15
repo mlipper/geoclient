@@ -15,13 +15,15 @@
  */
 package gov.nyc.doitt.gis.geoclient.parser.test;
 
-import com.thoughtworks.xstream.annotations.XStreamConverter;
-import com.thoughtworks.xstream.converters.extended.ToAttributedValueConverter;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
-@XStreamConverter(value = ToAttributedValueConverter.class, strings = { "body" })
 public class UnparsedSpec {
+    @JacksonXmlProperty(isAttribute = true)
     private String id;
+    @JacksonXmlProperty(isAttribute = true)
     private String test;
+    @JacksonXmlText
     private String body;
     public String getId() {
         return id;

@@ -18,23 +18,24 @@ package gov.nyc.doitt.gis.geoclient.parser.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import org.springframework.util.ClassUtils;
 
 public class SpecBuilder {
     private static final String PARSER_TEST_DATA_FILE = "specs.xml";
-    private final XStream xStream;
+    private final XmlMapper xmlMapper;
     private final UnparsedSpecs unparsedTokenSpecs;
 
     public SpecBuilder() {
-        xStream = new XStream(new DomDriver());
-        xStream.allowTypes(new Class<?>[] { UnparsedSpecs.class });
-        xStream.setMode(XStream.ID_REFERENCES);
-        xStream.processAnnotations(UnparsedSpecs.class);
-        this.unparsedTokenSpecs = (UnparsedSpecs) xStream.fromXML(
-            ClassUtils.getDefaultClassLoader().getResourceAsStream(PARSER_TEST_DATA_FILE));
+        xmlMapper = new XmlMapper();
+        try {
+            this.unparsedTokenSpecs = xmlMapper.readValue(
+                ClassUtils.getDefaultClassLoader().getResourceAsStream(PARSER_TEST_DATA_FILE), UnparsedSpecs.class);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to parse specs.xml", e);
+        }
     }
 
     public List<ChunkSpec> getSpecs(String testAttribute) {
