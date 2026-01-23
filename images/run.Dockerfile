@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM eclipse-temurin:17-jre AS builder
+FROM eclipse-temurin:21-jre AS builder
 
 # Default for JARFILE assumes Docker context is the root project directory.
 ARG JARFILE
@@ -13,7 +13,7 @@ COPY --chmod=755 images/run.sh .
 RUN set -ex \
   && java -Djarmode=layertools -jar ./geoclient.jar extract
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
 
 RUN set -ex \
   && apt-get update \
