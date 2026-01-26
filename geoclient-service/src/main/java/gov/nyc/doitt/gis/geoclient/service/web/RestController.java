@@ -57,6 +57,7 @@ public class RestController {
     public static final String NORMALIZE_URI = "/normalize";
     public static final String PLACE_URI = "/place";
     public static final String STREETCODE_URI = "/streetcode";
+    public static final String STREETCODE_B5SC_URI = "/streetcode/b5sc";
     public static final String VERSION_URI = "/version";
 
     public static final String ADDRESS_OBJ = ServiceType.ADDRESS.elementName();
@@ -68,6 +69,7 @@ public class RestController {
     public static final String NORMALIZE_OBJ = ServiceType.NORMALIZE.elementName();
     public static final String PLACE_OBJ = ServiceType.PLACE.elementName();
     public static final String STREETCODE_OBJ = ServiceType.STREETCODE.elementName();
+    public static final String STREETCODE_B5SC_OBJ = ServiceType.STREETCODE_B5SC.elementName();
 
     private static final Logger logger = LoggerFactory.getLogger(RestController.class);
 
@@ -183,6 +185,20 @@ public class RestController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put(STREETCODE_OBJ,
             this.geosupportService.callStreetNameFunction(streetCode, streetCodeTwo, streetCodeThree, length, format));
+        return resultMap;
+    }
+
+    @RequestMapping(value = STREETCODE_B5SC_URI, method = RequestMethod.GET)
+    public @ResponseBody Map<String, Object> streetcodeB5sc(@RequestParam String streetCode,
+            @RequestParam(required = false) String streetCodeTwo,
+            @RequestParam(required = false) String streetCodeThree,
+            @RequestParam(required = false, defaultValue = "32") Integer length,
+            @RequestParam(required = false, defaultValue = "S") String format) {
+        logger.debug("street[streetCode='{}',streetCodeTwo='{}',streetCodeThree='{}',length='{}',format='{}']",
+            streetCode, streetCodeTwo, streetCodeThree, length, format);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put(STREETCODE_B5SC_OBJ,
+            this.geosupportService.callFunctionD(streetCode, streetCodeTwo, streetCodeThree, length, format));
         return resultMap;
     }
 
