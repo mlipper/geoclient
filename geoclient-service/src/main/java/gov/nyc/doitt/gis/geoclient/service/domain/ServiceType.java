@@ -27,6 +27,7 @@ public enum ServiceType {
     NORMALIZE("normalize"),
     PLACE("place"),
     STREETCODE("streetcode"),
+    STREETCODE_B5SC("response"), // Special case for D* streetcode response in StreetCodeController
     UNKNOWN("unknown"),
     VERSION("version");
 
