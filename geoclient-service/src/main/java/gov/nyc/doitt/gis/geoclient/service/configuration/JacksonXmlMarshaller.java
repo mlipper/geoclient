@@ -16,18 +16,25 @@
 package gov.nyc.doitt.gis.geoclient.service.configuration;
 
 import java.io.IOException;
+import java.util.EnumSet;
+import java.util.Map;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.XmlMappingException;
 
+import gov.nyc.doitt.gis.geoclient.service.domain.ServiceType;
+
 public class JacksonXmlMarshaller implements Marshaller, Unmarshaller {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JacksonXmlMarshaller.class);
     private final XmlMapper xmlMapper;
 
     public JacksonXmlMarshaller() {
@@ -45,6 +52,11 @@ public class JacksonXmlMarshaller implements Marshaller, Unmarshaller {
 
     @Override
     public void marshal(Object graph, Result result) throws IOException, XmlMappingException {
+        LOGGER.info("Marshalling object of type: {} XML", graph.getClass().getName());
+        if (needsCustomMapSerialization(graph)) {
+            LOGGER.info("Adapting response content: {}", graph);
+            graph = adaptMapForXmlSerialization(graph);
+        }
         // For simplicity, assuming result is a StreamResult or similar
         // In practice, need to handle different Result types
         if (result instanceof javax.xml.transform.stream.StreamResult) {
@@ -74,5 +86,24 @@ public class JacksonXmlMarshaller implements Marshaller, Unmarshaller {
             }
         }
         throw new UnsupportedOperationException("Unsupported Source type: " + source.getClass());
+    }
+
+    boolean needsCustomMapSerialization(Object responseObject) {
+        if (responseObject instanceof Map) {
+            EnumSet<ServiceType> sericeTypes = EnumSet.allOf(ServiceType.class);
+            for (ServiceType serviceType : sericeTypes) {
+                Map<?, ?> map = (Map<?, ?>) responseObject;
+                if (map.containsKey(serviceType.elementName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    GeosupportResponseXmlMapAdapter adaptMapForXmlSerialization(Object responseObject) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> originalMap = (Map<String, Object>) responseObject;
+        return new GeosupportResponseXmlMapAdapter(originalMap);
     }
 }

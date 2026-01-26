@@ -40,7 +40,7 @@ import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
 @RequestMapping("/streetcode")
 public class StreetCodeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(StreetCodeController.class);
 
     @Autowired
     private GeosupportService geosupportService;
