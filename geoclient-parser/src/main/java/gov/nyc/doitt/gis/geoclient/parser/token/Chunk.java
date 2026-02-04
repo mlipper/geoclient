@@ -73,6 +73,7 @@ public class Chunk {
         return text;
     }
 
+    @JacksonXmlProperty(localName = "chunkType")
     public ChunkType getType() {
         return chunkType;
     }
