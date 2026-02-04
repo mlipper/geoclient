@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"gov.nyc.doitt.gis.geoclient.cli","l":"JniTest"}];updateSearchResults();
