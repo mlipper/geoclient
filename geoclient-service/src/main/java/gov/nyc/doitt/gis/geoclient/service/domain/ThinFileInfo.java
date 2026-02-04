@@ -17,7 +17,22 @@ package gov.nyc.doitt.gis.geoclient.service.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+/**
+ * Represents thin file information returned by Geosupport's HR function.
+ *
+ * Note: In version 2.0.4, XML <code>&lt;recordTypes&gt;</code> child elements
+ * were changed from being returned as <code>&lt;string&gt;</code> to
+ * <code>&lt;recordType&gt;</code> to better align with naming conventions.
+ *
+ * @author mlipper
+ * @since 1.00
+ */
 public class ThinFileInfo extends BaseFileInfo {
+    @JacksonXmlElementWrapper(localName = "recordTypes")
+    @JacksonXmlProperty(localName = "recordType")
     private List<String> recordTypes;
     private List<String> fillerFields;
 
