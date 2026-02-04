@@ -17,6 +17,17 @@ package gov.nyc.doitt.gis.geoclient.service.domain;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * Base for different types of file information returned by Geosupport's HR
+ * function.
+ *
+ * Note: Prior to version 2.0.4, XML responses did not include <code>&lt;formattedDate&gt;</code>
+ * as child elements of the various <code>&lt;fileInfo&gt;</code> types.
+ * This element is returned now to better align with the JSON responses using this same class.
+ *
+ * @author mlipper
+ * @since 1.00
+ */
 class BaseFileInfo {
 
     private static final SimpleDateFormat STRING_TO_DATE = new SimpleDateFormat("yyMMdd");
