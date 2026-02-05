@@ -18,24 +18,32 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.addAll("-Werror", "-Xlint:unchecked", "-Xlint:deprecation", "-Xlint:rawtypes","-Xlint:varargs")
 }
 
+// See https://docs.gradle.org/current/userguide/version_catalogs.html#sec:buildsrc-version-catalog
+// Access the version catalog
+def catalogs = project.extensions.getByType(VersionCatalogsExtension)
+def libs = catalogs.named("libs")
+
 dependencies {
-    implementation libs.guava
-    implementation libs.jopt.simple
-    implementation libs.spotless.plugin
-    implementation libs.gradle.versions.plugin
-    // Needed for DocumentationPlugin
-    implementation libs.asciidoctor.jvm.convert
-    implementation libs.asciidoctor.jvm.pdf
+    implementation libs.findLibrary("guava").get()
+    implementation libs.findLibrary("jopt-simple").get()
+    implementation plugin(libs.findPlugin("spotless").get())
+    implementation plugin(libs.findPlugin("versions").get())
     // Platforms
-    implementation(platform(libs.spring.boot.dependencies))
-    testImplementation(platform(libs.junit.bom))
+    implementation(platform(libs.findLibrary("spring-boot-dependencies").get()))
+    testImplementation(platform(libs.findLibrary("junit-bom").get()))
     // Dependencies
-    implementation libs.httpclient
-    implementation libs.jackson.databind
+    implementation libs.findLibrary("httpclient").get()
+    implementation libs.findLibrary("jackson-databind").get()
     testImplementation gradleTestKit()
     testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Helper function that transforms a Gradle Plugin alias from a
+// Version Catalog into a valid dependency notation for buildSrc
+def plugin(Provider<PluginDependency> plugin) {
+    return plugin.map { it.pluginId + ":" + it.pluginId + ".gradle.plugin:" + it.version }
 }
 
 tasks.named('test', Test) {
@@ -56,10 +64,6 @@ gradlePlugin {
         apiserver {
             id = 'geoclientbuild.apiserver'
             implementationClass = 'geoclientbuild.server.ApiServerPlugin'
-        }
-        applyAsciidoctorPlugin {
-            id = 'geoclientbuild.asciidoctor'
-            implementationClass = 'geoclientbuild.docs.ApplyAsciidoctorPlugin'
         }
         baseGeoclientPlugin {
             id = 'geoclientbuild.base'

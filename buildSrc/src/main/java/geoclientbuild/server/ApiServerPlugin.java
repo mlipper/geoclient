@@ -32,6 +32,7 @@ public class ApiServerPlugin implements Plugin<Project> {
 
     public static final String APISERVER_EXTENSION_NAME = "apiserver";
     public static final String APISERVER_INFO_TASK_NAME = "apiServerInfo";
+    public static final String APISERVER_PLUGIN_NAME = "geoclientbuild.apiserver";
 
     public static final String DEFAULT_BASE_URI = "http://localhost:8080/geoclient/v2/";
     public static final String DEFAULT_JAVA_COMMAND = "java";

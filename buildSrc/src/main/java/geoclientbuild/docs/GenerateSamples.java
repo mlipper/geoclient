@@ -48,7 +48,7 @@ import geoclientbuild.client.Request;
 import geoclientbuild.client.Response;
 import geoclientbuild.client.RestClient;
 
-abstract public class GenerateSamplesTask extends DefaultTask {
+abstract public class GenerateSamples extends DefaultTask {
 
     public static final String ASCIIDOC_BEGIN_TAG = "// tag::user_guide[]";
     public static final String ASCIIDOC_END_TAG = "// end::user_guide[]";

@@ -16,6 +16,8 @@ versions-plugin = "0.52.0"
 xstream = "1.4.21"
 
 [plugins]
+asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor-plugins" }
+asciidoctorPdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor-plugins" }
 boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow-plugin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin" }

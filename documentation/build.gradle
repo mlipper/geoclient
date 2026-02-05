@@ -3,13 +3,10 @@ import java.net.URI
 import org.asciidoctor.gradle.jvm.AbstractAsciidoctorTask
 
 plugins {
-    id 'geoclient.library-conventions'
-    id 'geoclient.test-conventions'
-    id 'geoclientbuild.apiserver'
-	//alias(libs.plugins.asciidoctorConvert)
+	alias(libs.plugins.asciidoctor)
 	//alias(libs.plugins.asciidoctorPdf)
-    // Must apply asciidoctor plugins first
-    id 'geoclientbuild.asciidoctor'
+    id 'geoclient.library-conventions'
+    id 'geoclientbuild.apiserver'
     id 'geoclientbuild.documentation'
 }
 
@@ -20,37 +17,27 @@ configurations {
 }
 
 dependencies {
-    implementation(libs.httpclient)
-    implementation('org.springframework.boot:spring-boot-starter-json')
-    integrationTestImplementation(project(':geoclient-test'))
     apiServerClasspath(project(path: ':geoclient-service', configuration: 'apiServer'))
 }
 
+defaultTasks = ['clean', 'asciidoctor']
+
+//tasks.named('build') {
+//    dependsOn tasks.named('asciidoctor')
+//}
+
 // java.io.File
 def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()[0]
-def serviceBaseUri = new URI('http://localhost:9090/geoclient/v2')
+
+// Configure the ApiServerPlugin which is applied by the DocumentationPlugin
 apiserver {
-    baseUri = serviceBaseUri
+    baseUri = new URI('http://localhost:9090/geoclient/v2')
     serverJar = bootJarFile
     sleepSecondsAfterStart = 12;
     sleepSecondsAfterStop = 2;
 }
 
-tasks.named('generateSamples') {
-    dependsOn('processResources')
-    dependsOn('startServer')
-    finalizedBy('stopServer')
-    baseUri = serviceBaseUri
-    //serviceUrl = System.getenv('GEOCLIENT_SERVICE_URL')
-    doFirst {
-        println "Generating samples from service at: ${baseUri.get()}"
-        Thread.sleep(8)
-        println "Awake and ready..."
-    }
-}
-
-// Configures both asciidoctor and asciidoctorPdf tasks
-tasks.withType(AbstractAsciidoctorTask).configureEach {
+asciidoctor {
 
     baseDirFollowsSourceDir()
 
@@ -99,49 +86,5 @@ tasks.register('showBootJarFile') {
     doLast {
         def theFiles = files(bootJarFile)
         theFiles.collect { projectDirectory.asFile.relativePath(it) }.sort().each { println it }
-    }
-}
-
-def generatedSamplesDir = Paths.get(layout.buildDirectory.dir('samples').get().getAsFile().getPath())
-
-tasks.register('ensureSamplesDir') {
-    doLast {
-        Files.createDirectories(generatedSamplesDir)
-    }
-}
-
-tasks.named('test', Test) {
-    dependsOn('ensureSamplesDir')
-    ext.defaultBaseUrl = 'http://localhost:8080/geoclient/v2'
-    ext.defaultOutputDir = generatedSamplesDir
-    environment('GENERATOR_BASEURL', System.getenv('GENERATOR_BASEURL') ?: ext.defaultBaseUrl)
-    environment('GENERATOR_OUTPUTDIR', System.getenv('GENERATOR_OUTPUTDIR') ?: ext.defaultOutputDir)
-    testLogging {
-        showStandardStreams = true
-    }
-}
-
-tasks.named('integrationTest', Test) {
-    dependsOn('ensureSamplesDir')
-    //dependsOn('startService')
-    //finalizedBy('stopService')
-    ext.defaultBaseUrl = 'http://localhost:8080/geoclient/v2'
-    ext.defaultOutputDir = generatedSamplesDir
-    environment('GENERATOR_BASEURL', System.getenv('GENERATOR_BASEURL') ?: ext.defaultBaseUrl)
-    environment('GENERATOR_OUTPUTDIR', System.getenv('GENERATOR_OUTPUTDIR') ?: ext.defaultOutputDir)
-    environment('GEOCLIENT_SERVICE_STATUS', System.getenv('GEOCLIENT_SERVICE_STATUS'))
-    systemProperties(['geoclient.service.status': System.getProperty('geoclient.service.status', '')])
-    testLogging {
-        events "failed", "skipped"
-        showStandardStreams = false
-        debug {
-            events "failed", "skipped"
-            exceptionFormat = "full"
-            showStandardStreams = true
-        }
-        info {
-            events "failed", "skipped"
-            showStandardStreams = true
-        }
     }
 }

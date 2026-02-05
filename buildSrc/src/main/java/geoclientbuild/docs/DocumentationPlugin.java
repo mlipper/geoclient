@@ -17,7 +17,6 @@ package geoclientbuild.docs;
 
 import static org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP;
 
-import org.asciidoctor.gradle.jvm.AbstractAsciidoctorTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
@@ -25,11 +24,21 @@ import org.gradle.api.logging.Logging;
 import org.gradle.api.tasks.Sync;
 import org.gradle.api.tasks.TaskProvider;
 
+import geoclientbuild.server.ApiServerExtension;
+import geoclientbuild.server.ApiServerPlugin;
+import geoclientbuild.server.StartServer;
+import geoclientbuild.server.StopServer;
+
+/**
+ * Plugin to configure documentation generation for Geoclient.
+ */
 public class DocumentationPlugin implements Plugin<Project> {
 
+    public static final String ASCIIDOCTOR_PLUGIN_NAME = "org.asciidoctor.jvm.convert";
+    public static final String ASCIIDOCTOR_TASK_NAME = "asciidoctor";
     public static final String GENERATE_SAMPLES_TASK_NAME = "generateSamples";
     public static final String SAMPLES_EXTENSION_NAME = "samples";
-    public static final String SYNC_SAMPLES_TASK_NAME = "syncSamples";
+    public static final String SYNC_GENERATED_SOURCE_TASK_NAME = "syncGeneratedSource";
     public static final String DEFAULT_DOCUMENTATION_TASK_NAME = "asciidoctor";
     public static final String DEFAULT_SAMPLE_REQUESTS_FILE = "src/main/resources/requests.json";
     public static final String DEFAULT_SAMPLES_RESPONSE_DIR = "generated/samples";
@@ -40,23 +49,35 @@ public class DocumentationPlugin implements Plugin<Project> {
     public void apply(Project project) {
         logger.info("Applying DocumentationPlugin...");
         SamplesExtension extension = registerExtension(project);
-        TaskProvider<GenerateSamplesTask> generateSamplesTaskProvider = project.getTasks().register(GENERATE_SAMPLES_TASK_NAME, GenerateSamplesTask.class, t -> {
+        TaskProvider<GenerateSamples> generateSamplesProvider = project.getTasks().register(GENERATE_SAMPLES_TASK_NAME, GenerateSamples.class, t -> {
             t.setGroup(DOCUMENTATION_GROUP);
             t.setDescription("Write JSON responses to geoclient REST calls as files in an output folder.");
             t.getRequestsFile().convention(extension.getSampleRequestsFile());
             t.getDestinationDirectory().convention(extension.getSamplesResponseDirectory());
+            project.getPluginManager().withPlugin(ApiServerPlugin.APISERVER_PLUGIN_NAME, p -> {
+            // If the ApiServerPlugin is applied, ensure the API server is running
+            // before generating samples, and stop it afterwards.
+                logger.info("The {} plugin has been applied.", p.getClass().getSimpleName());
+                logger.info("Configuring {} task to depend on API server tasks.", GENERATE_SAMPLES_TASK_NAME);
+                t.dependsOn(StartServer.TASK_NAME);
+                t.finalizedBy(StopServer.TASK_NAME);
+                ApiServerExtension apiServerExtension = project.getExtensions().findByType(ApiServerExtension.class);
+                if (apiServerExtension != null) {
+                    t.getBaseUri().set(apiServerExtension.getBaseUri().get());
+                }
+            });
         });
-        project.getTasks().register(SYNC_SAMPLES_TASK_NAME, Sync.class, t -> {
+        project.getTasks().register(SYNC_GENERATED_SOURCE_TASK_NAME, Sync.class, t -> {
             t.setGroup(DOCUMENTATION_GROUP);
             t.setDescription("Copy generated samples to the main source set.");
-            // Implies dependsOn relationship with GenerateSamplesTask.
-            t.from(generateSamplesTaskProvider.get());
+            // Implies dependsOn relationship with GenerateSamples task.
+            t.from(generateSamplesProvider.get());
             t.into(extension.getSamplesSourceDirectory().get());
         });
-        project.getPluginManager().withPlugin("applyAsciiDoctorPlugin", (plugin) -> {
-            project.getTasks().withType(AbstractAsciidoctorTask.class, task -> {
+        project.getPluginManager().withPlugin(ASCIIDOCTOR_PLUGIN_NAME, (plugin) -> {
+            project.getTasks().named(ASCIIDOCTOR_TASK_NAME, task -> {
                 if(extension.getSyncSamples().getOrElse(false)) {
-                    task.dependsOn(SYNC_SAMPLES_TASK_NAME);
+                    task.dependsOn(SYNC_GENERATED_SOURCE_TASK_NAME);
                 }
             });
         });
