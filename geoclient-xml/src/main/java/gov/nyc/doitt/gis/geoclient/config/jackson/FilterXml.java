@@ -25,9 +25,6 @@ public class FilterXml {
     @JacksonXmlProperty(isAttribute = true)
     private String pattern;
 
-    @JacksonXmlProperty(isAttribute = true)
-    private String reference;
-
     public String getId() {
         return id;
     }
@@ -42,13 +39,5 @@ public class FilterXml {
 
     public void setPattern(String pattern) {
         this.pattern = pattern;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
     }
 }
