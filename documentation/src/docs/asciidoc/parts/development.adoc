@@ -33,7 +33,7 @@ Windows x86_64:: Can run on Windows 10 or 11. Not recommended for production use
 ****
 Building Geoclient from source is tricky because of the many combinations of platforms, runtimes, tools, and pre-existing Geosupport binary artifacts.
 
-At this time, the New York City Department of City Planning only distributes binaries for Linux and Windows. The macOS platform is *not* supported.
+At this time, the New York City Department of City Planning only distributes binaries for Linux and Windows compiled for the 64-bit Intel/AMD instruction set (`x86_64`/`AMD64`). `ARM64` and the macOS platform (even on Intel CPUs) are *not* supported.
 
 If you have a choice, prefer building on Linux as more of the standard C/JNI conventions work as expected. It is possible to build and run Geoclient/Geosupport on Windows, but we highly recommend Linux for the best performance.
 
@@ -43,8 +43,8 @@ Finally, always use 64-bit versions of all software. 32-bit versions are *not* s
 ==== Requirements
 
 * 64-bit Geosupport
-* 64-bit JDK 17+ ("Full" JDK required. JRE by itself will *not* build)
-* Gradle 8.7+
+* 64-bit JDK 21+ ("Full" JDK required. JRE by itself will *not* build)
+* Gradle 9.3+
 * 64-bit Linux or Windows
 * 64-bit native `C` and `C&#43;&#43;` compilers: `gcc` and `g&#43;&#43;`
 
@@ -68,14 +68,14 @@ cd geoclient
     |-- config
     |   `-- checkstyle
     |-- documentation
+    |-- geoclient-cli
     |-- geoclient-core
+    |-- geoclient-json
     |-- geoclient-jni
     |-- geoclient-parser
     |-- geoclient-service
     |-- geoclient-test
-    |-- geoclient-utils
-    |   |-- cli
-    |   `-- jni-test
+    |-- geoclient-xml
     |-- gradle
     |-- images
     |-- manifests
@@ -235,14 +235,14 @@ A complete Geosupport installation is approximately 2.3 GB in size and adding it
 +
 [,sh]
 ----
- docker build -t geoclient:latest-build -f images/build.Dockerfile .
+ docker build -t geoclient:latest -f images/build.Dockerfile .
 ----
 
 . Create and run a temporary container in the background, mapping the container port `8080` to your host port `8080`.
 +
 [,sh]
 ----
- docker run --rm -t -p 8080:8080 geoclient:latest-build
+ docker run --rm -t -p 8080:8080 geoclient:latest
 ----
 
 . <<testing-the-container,Test the container>>.
@@ -255,14 +255,14 @@ Runs geoclient using the exploded contents of the https://docs.spring.io/spring-
 +
 [,sh]
 ----
- docker build -t geoclient:latest-run -f images/run.Dockerfile .
+ docker build -t geoclient:latest -f images/run.Dockerfile .
 ----
 +
 This assumes you are using the `geoclient.jar` jar artifact produced by the `geoclient/geoclient-service` subproject's Gradle `build` task. If the the default geoclient-service bootJar artifact `<root project>/geoclient-service/libs/geoclient.jar` is somewhere else, add a Docker build argument with the path to jar file:
 +
 [,sh]
 ----
- docker build --build-arg JARFILE=/path/to/geoclient-service.jar -t geoclient:latest-run -f images/run.Dockerfile .
+ docker build --build-arg JARFILE=/path/to/geoclient-service.jar -t geoclient:latest -f images/run.Dockerfile .
 ----
 
 . Follow the steps <<creating-a-named-geosupport-volume,below>> to create a local volume named `geosupport-latest`, pre-populated with the uncompressed Geosupport distribution.
@@ -270,7 +270,7 @@ This assumes you are using the `geoclient.jar` jar artifact produced by the `geo
 +
 [,sh]
 ----
- docker run --rm -t --mount source=geosupport-latest,target=/opt/geosupport -p 8080:8080 geoclient:latest-run
+ docker run --rm -t --mount source=geosupport-latest,target=/opt/geosupport -p 8080:8080 geoclient:latest
 ----
 
 . <<testing-the-container,Test the container>>.
@@ -291,10 +291,10 @@ _See the https://github.com/mlipper/geosupport-docker/blob/main/README.md[`READM
 
 This section assumes you've followed the instructions in <<the-run-image,The Run Image>> and <<creating-a-named-geosupport-volume,Creating a Named Geosupport Volume>> above. The following objects should be available from your local Docker registry/installation:
 
-* The `geoclient:latest-run` image.
+* The `geoclient:latest` image.
 * The `geosupport-latest` volume.
 
-Note that the `GEOCLIENT_IMAGE` and `GEOSUPPORT_VOLUME` environment variables are defaulted to `geoclient:latest-run` and `geosupport-latest`, respectively by the `images/.env` file.
+Note that the `GEOCLIENT_IMAGE` and `GEOSUPPORT_VOLUME` environment variables are defaulted to `geoclient:latest` and `geosupport-latest`, respectively by the `images/.env` file.
 
 To start the service, run the following from the geoclient project root directory:
 
@@ -339,7 +339,7 @@ This example uses existing Geoclient and Geosupport Docker images that are publi
 
 These are the public Docker Hub registries configured in the `kustomization.yaml` file:
 
-* {geoclient-registry}[`mlipper/geoclient`] 
+* {geoclient-registry}[`mlipper/geoclient`]
 * {geosupport-docker-registry}[`mlipper/geosupport-docker`] 
 
 For information on configuring Minikube to use a local registry, see Minikube's documentation on {minikube}/docs/handbook/registry/[configuring registries] and {minikube}/docs/handbook/pushing/[pushing images].
