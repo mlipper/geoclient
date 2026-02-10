@@ -4,8 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(':geoclient-jni'))
-    implementation(project(':geoclient-core'))
     implementation(libs.jackson.dataformat.xml)
+    // Needed to put the geoclient.xml file on the classpath for testing
     testImplementation(testFixtures(project(':geoclient-core')))
 }
