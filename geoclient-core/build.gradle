@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(':geoclient-jni'))
+    implementation(project(':geoclient-xml'))
     // Version specified by catalog platform libs.spring.boot.dependencies
     implementation('org.apache.commons:commons-lang3')
     implementation(libs.xstream) {
