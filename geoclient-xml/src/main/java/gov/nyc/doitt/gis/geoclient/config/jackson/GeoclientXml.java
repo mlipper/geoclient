@@ -15,6 +15,9 @@
  */
 package gov.nyc.doitt.gis.geoclient.config.jackson;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
@@ -29,6 +32,21 @@ public class GeoclientXml {
 
     @JacksonXmlProperty(localName = "functions")
     private FunctionsXml functions;
+
+    public Map<String, FunctionConfiguration> getFunctionConfigurations() {
+        Map<String, FunctionConfiguration> result = new HashMap<>();
+        for (FunctionXml function : functions.getFunctions()) {
+            WorkAreaXml workAreaOne = findWorkAreaById(function.getWorkAreaOne().getReference());
+            WorkAreaXml workAreaTwo = null;
+            if (function.isTwoWorkAreas()) {
+                workAreaTwo = findWorkAreaById(function.getWorkAreaTwo().getReference());
+            }
+            FunctionConfiguration functionConfiguration = new FunctionConfiguration(function.getId(),
+                function.getConfiguration(), workAreaOne, workAreaTwo);
+            result.put(function.getId(), functionConfiguration);
+        }
+        return result;
+    }
 
     public FiltersXml getFilters() {
         return filters;
@@ -52,5 +70,23 @@ public class GeoclientXml {
 
     public void setFunctions(FunctionsXml functions) {
         this.functions = functions;
+    }
+
+    FunctionXml findFunctionById(String id) {
+        FunctionXml result = functions.getFunctions().stream().filter(f -> id.equals(f.getId())).findFirst().orElse(
+            null);
+        if (result == null) {
+            throw new IllegalArgumentException("Function with id '" + id + "' not found");
+        }
+        return result;
+    }
+
+    WorkAreaXml findWorkAreaById(String id) {
+        WorkAreaXml result = workAreas.getWorkAreas().stream().filter(wa -> id.equals(wa.getId())).findFirst().orElse(
+            null);
+        if (result == null) {
+            throw new IllegalArgumentException("WorkArea with id '" + id + "' not found");
+        }
+        return result;
     }
 }
