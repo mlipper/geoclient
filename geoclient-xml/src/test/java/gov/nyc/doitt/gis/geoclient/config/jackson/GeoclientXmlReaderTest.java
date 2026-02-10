@@ -26,21 +26,27 @@ import java.util.List;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class JacksonXmlTest {
+public class GeoclientXmlReaderTest {
 
-    @Test
-    public void testDeserializeGeoclientXml() throws Exception {
+    private static GeoclientXml geoclient;
+
+    @BeforeAll
+    public static void setup() throws Exception {
         XmlMapper mapper = new XmlMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("geoclient.xml");
+        InputStream inputStream = GeoclientXmlReaderTest.class.getClassLoader().getResourceAsStream("geoclient.xml");
         assertNotNull(inputStream, "geoclient.xml not found in classpath");
 
-        GeoclientXml geoclient = mapper.readValue(inputStream, GeoclientXml.class);
+        geoclient = mapper.readValue(inputStream, GeoclientXml.class);
         assertNotNull(geoclient);
+    }
 
+    @Test
+    public void testFilters() throws Exception {
         // Verify Filters
         FiltersXml filtersXml = geoclient.getFilters();
         assertNotNull(filtersXml);
@@ -59,7 +65,10 @@ public class JacksonXmlTest {
             }
         }
         assertTrue(foundAngleFilter, "angleToFilter not found or incorrect pattern");
+    }
 
+    @Test
+    public void testWorkAreasXml() throws Exception {
         // Verify WorkAreas
         WorkAreasXml workAreasXml = geoclient.getWorkAreas();
         assertNotNull(workAreasXml);
@@ -83,15 +92,23 @@ public class JacksonXmlTest {
         OutputFiltersXml outputFilters = wa1.getOutputFilters();
         assertNotNull(outputFilters, "outputFilters for WA1 should not be null");
         assertEquals("allFilters", outputFilters.getReference());
+    }
 
-        // Check Fields in WA1
-        List<FieldXml> fields = wa1.getFields();
-        assertNotNull(fields);
-        assertFalse(fields.isEmpty());
+    @Test
+    public void testFieldsXml_wa1() throws Exception {
+        // Verify Fields
+        List<WorkAreaXml> workAreasXml = geoclient.getWorkAreas().getWorkAreas();
 
+        List<FieldXml> fieldsXml_wa1 = null;
+        for (WorkAreaXml wa : workAreasXml) {
+            if ("WA1".equals(wa.getId())) {
+                fieldsXml_wa1 = wa.getFields();
+                break;
+            }
+        }
         // Check specific field in WA1
         FieldXml streetName1In = null;
-        for (FieldXml f : fields) {
+        for (FieldXml f : fieldsXml_wa1) {
             if ("streetName1In".equals(f.getId())) {
                 streetName1In = f;
                 break;
@@ -102,21 +119,23 @@ public class JacksonXmlTest {
         assertEquals(32, streetName1In.getLength());
         assertTrue(streetName1In.isInput());
         assertEquals("streetName", streetName1In.getAlias());
+    }
 
-        // Verify outputAlias in WA2_F1
-        WorkAreaXml wa2f1 = null;
-        for (WorkAreaXml wa : workAreas) {
+    @Test
+    public void testFieldsXml_wa2f1() throws Exception {
+        // Verify Fields
+        List<WorkAreaXml> workAreasXml = geoclient.getWorkAreas().getWorkAreas();
+
+        List<FieldXml> fieldsXml_wa2_f1 = null;
+        for (WorkAreaXml wa : workAreasXml) {
             if ("WA2_F1".equals(wa.getId())) {
-                wa2f1 = wa;
+                fieldsXml_wa2_f1 = wa.getFields();
                 break;
             }
         }
-        assertNotNull(wa2f1, "WA2_F1 work area not found");
-        List<FieldXml> wa2f1Fields = wa2f1.getFields();
-        assertNotNull(wa2f1Fields);
 
         FieldXml dynamicBlock = null;
-        for (FieldXml f : wa2f1Fields) {
+        for (FieldXml f : fieldsXml_wa2_f1) {
             if ("dynamicBlock".equals(f.getId())) {
                 dynamicBlock = f;
                 break;
@@ -126,7 +145,7 @@ public class JacksonXmlTest {
         assertEquals("atomicPolygon", dynamicBlock.getOutputAlias());
 
         FieldXml censusTract1990 = null;
-        for (FieldXml f : wa2f1Fields) {
+        for (FieldXml f : fieldsXml_wa2_f1) {
             if ("censusTract1990".equals(f.getId())) {
                 censusTract1990 = f;
                 break;
@@ -134,6 +153,10 @@ public class JacksonXmlTest {
         }
         assertNotNull(censusTract1990, "censusTract1990 field not found in WA2_F1");
         assertTrue(censusTract1990.isWhitespace());
+    }
+
+    @Test
+    public void testFunctionsXml() throws Exception {
 
         // Verify Functions
         FunctionsXml functionsXml = geoclient.getFunctions();
