@@ -19,6 +19,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class FieldXml {
 
+    public static final String TYPE_COMPOSITE = "COMP";
+
     @JacksonXmlProperty(isAttribute = true)
     private String id;
 
@@ -42,6 +44,10 @@ public class FieldXml {
 
     @JacksonXmlProperty(isAttribute = true)
     private boolean whitespace;
+
+    public boolean isComposite() {
+        return TYPE_COMPOSITE.equals(type);
+    }
 
     public String getId() {
         return id;

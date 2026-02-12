@@ -46,6 +46,14 @@ public class GeoclientXmlReaderTest {
     }
 
     @Test
+    public void testFiltersByReference() throws Exception {
+        // Verify Filters by Reference
+        List<FilterXml> filtersXml = geoclient.getFiltersForReference("allFilters");
+        assertNotNull(filtersXml);
+        assertTrue(filtersXml.size() > 0, "No filters found for reference 'allFilters'");
+    }
+
+    @Test
     public void testFilters() throws Exception {
         // Verify Filters
         FiltersXml filtersXml = geoclient.getFilters();
@@ -68,7 +76,7 @@ public class GeoclientXmlReaderTest {
     }
 
     @Test
-    public void testWorkAreasXml() throws Exception {
+    public void testWorkAreasXml_wa1() throws Exception {
         // Verify WorkAreas
         WorkAreasXml workAreasXml = geoclient.getWorkAreas();
         assertNotNull(workAreasXml);
@@ -91,6 +99,33 @@ public class GeoclientXmlReaderTest {
         // Check outputFilters for WA1
         OutputFiltersXml outputFilters = wa1.getOutputFilters();
         assertNotNull(outputFilters, "outputFilters for WA1 should not be null");
+        assertEquals("allFilters", outputFilters.getReference());
+    }
+
+    @Test
+    public void testWorkAreasXml_wa2_f1b() throws Exception {
+        // Verify WorkAreas
+        WorkAreasXml workAreasXml = geoclient.getWorkAreas();
+        assertNotNull(workAreasXml);
+        List<WorkAreaXml> workAreas = workAreasXml.getWorkAreas();
+        assertNotNull(workAreas);
+        assertFalse(workAreas.isEmpty());
+
+        // Check WA1
+        WorkAreaXml wa2_f1b = null;
+        for (WorkAreaXml wa : workAreas) {
+            if ("WA2_F1B".equals(wa.getId())) {
+                wa2_f1b = wa;
+                break;
+            }
+        }
+        assertNotNull(wa2_f1b, "WA2_F1B work area not found");
+        assertFalse(wa2_f1b.isIsWA1());
+        assertEquals(4300, wa2_f1b.getLength());
+
+        // Check outputFilters for WA1
+        OutputFiltersXml outputFilters = wa2_f1b.getOutputFilters();
+        assertNotNull(outputFilters, "outputFilters for WA2_F1B should not be null");
         assertEquals("allFilters", outputFilters.getReference());
     }
 

@@ -16,6 +16,7 @@
 package gov.nyc.doitt.gis.geoclient.config.jackson;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -46,6 +47,14 @@ public class GeoclientXml {
             result.put(function.getId(), functionConfiguration);
         }
         return result;
+    }
+
+    public List<FilterXml> getFiltersForReference(String reference) {
+        FiltersXml filtersXml = getFilters();
+        if (filtersXml.getId().equals(reference)) {
+            return filtersXml.getFilters();
+        }
+        throw new IllegalArgumentException("No filters found for reference '" + reference + "'");
     }
 
     public FiltersXml getFilters() {

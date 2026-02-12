@@ -18,7 +18,6 @@ package gov.nyc.doitt.gis.geoclient.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.nyc.doitt.gis.geoclient.config.xml.GeoclientXmlReader;
 import gov.nyc.doitt.gis.geoclient.function.Function;
 import gov.nyc.doitt.gis.geoclient.function.WorkArea;
 import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
@@ -30,19 +29,21 @@ public class GeosupportConfig {
     private static final Logger log = LoggerFactory.getLogger(GeosupportConfig.class);
     private static final String WORKAREA_ONE_ID = "WA1"; // Hack alert
 
-    private final Geoclient geoclient;
-    private final GeoclientXmlReader geoclientXmlReader;
-
     public GeosupportConfig(Geoclient geoclient) {
         this(DEFAULT_CONFIG_FILE, geoclient);
     }
 
     public GeosupportConfig(String configFile, Geoclient geoclient) {
         log.info("Loading geoclient configuration from file {}", configFile);
-        this.geoclientXmlReader = GeoclientXmlReader.fromXml(configFile);
+        XmlConfigurationLoader xmlConfigurationLoader = new XmlConfigurationLoader();
+        try {
+            xmlConfigurationLoader.load(geoclient, configFile);
+        }
+        catch (Exception e) {
+            log.error("Error loading configuration file: {}", configFile, e);
+            throw new XmlConfigurationException(configFile, e);
+        }
         log.info("Successfully loaded file {}", configFile);
-        this.geoclient = geoclient;
-        init();
     }
 
     public Function getFunction(String id) {
@@ -54,14 +55,6 @@ public class GeosupportConfig {
 
     WorkArea getWorkAreaOne() {
         return Registry.getWorkArea(WORKAREA_ONE_ID);
-    }
-
-    private void init() {
-        for (FunctionConfig functionConfig : this.geoclientXmlReader.getFunctions()) {
-            log.info("Creating function from {}", functionConfig);
-            Function function = functionConfig.createFunction(geoclient);
-            Registry.addFunction(function);
-        }
     }
 
 }

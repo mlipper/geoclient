@@ -44,6 +44,7 @@ public class GeoclientXmlReader {
     public List<WorkAreaXml> getWorkAreas() {
         return geoclientXml.getWorkAreas().getWorkAreas();
     }
+
     private GeoclientXml readGeoclientXml(XmlMapper mapper, InputStream inputStream) throws IOException {
         try {
             return mapper.readValue(inputStream, GeoclientXml.class);
