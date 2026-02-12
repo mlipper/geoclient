@@ -48,7 +48,7 @@ tasks.register('integrationTest', Test) {
         // options for log level LIFECYCLE
         events "failed", "skipped"
         exceptionFormat = "short"
-        showStandardStreams = true
+        showStandardStreams = false
 
         debug {
             events "failed", "skipped", "passed"

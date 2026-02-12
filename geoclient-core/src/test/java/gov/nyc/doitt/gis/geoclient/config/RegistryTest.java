@@ -18,15 +18,19 @@ package gov.nyc.doitt.gis.geoclient.config;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import gov.nyc.doitt.gis.geoclient.function.Configuration;
 import gov.nyc.doitt.gis.geoclient.function.Field;
+import gov.nyc.doitt.gis.geoclient.function.Filter;
 import gov.nyc.doitt.gis.geoclient.function.Function;
 import gov.nyc.doitt.gis.geoclient.function.WorkArea;
 
@@ -35,9 +39,13 @@ public class RegistryTest {
     private WorkArea workArea = new WorkArea(WA_NAME, new TreeSet<Field>());
     private String functionId = Function.F1B;
 
+    @BeforeEach
+    public void setUp() {
+        Registry.clearAll();
+    }
+
     @Test
     public void testWorkAreaRegistry() {
-        Registry.clearWorkAreas();
         assertFalse(Registry.containsWorkArea(WA_NAME));
         assertNull(Registry.getWorkArea(WA_NAME));
         Registry.addWorkArea(workArea);
@@ -50,7 +58,6 @@ public class RegistryTest {
 
     @Test
     public void testFunctionRegistry() {
-        Registry.clearFunctions();
         Function function = new Function() {
             @Override
             public String getId() {
@@ -90,6 +97,25 @@ public class RegistryTest {
         Registry.clearFunctions();
         assertFalse(Registry.containsFunction(functionId));
         assertNull(Registry.getFunction(functionId));
+    }
+
+    @Test
+    public void testFilterListRegistry_null_list() {
+        String filterListId = "FL1";
+        assertFalse(Registry.containsFilterList(filterListId));
+        assertThrows(IllegalArgumentException.class, () -> {
+            Registry.addFilterList(filterListId, null);
+        });
+    }
+
+    @Test
+    public void testFilterListRegistry() {
+        String filterListId = "FL1";
+        assertFalse(Registry.containsFilterList(filterListId));
+        List<Filter> filterList = List.of(new Filter(".*"));
+        Registry.addFilterList(filterListId, filterList);
+        assertTrue(Registry.containsFilterList(filterListId));
+        assertSame(filterList, Registry.getFilterList(filterListId));
     }
 
 }

@@ -97,7 +97,7 @@ public class XmlConfigurationLoader {
             }
             Function function = new GeosupportFunction(id, workAreaOne, workAreaTwo, geoclient, configuration);
             Registry.addFunction(function);
-            log.info("Registered function {}.", function.getId());
+            log.info("Created {}", function);
             functions.add(function);
         }
         return functions;
@@ -117,7 +117,7 @@ public class XmlConfigurationLoader {
             return Registry.getWorkArea(workAreaXml.getId());
         }
         log.info("Loading filters for work area {}.", workAreaXml.getId());
-        List<Filter> filters = convert(workAreaXml.getOutputFilters());
+        List<Filter> filters = convert(workAreaXml.getId(), workAreaXml.getOutputFilters());
         log.info("Loading fields for work area {}.", workAreaXml.getId());
         List<Field> configuredFields = convert(workAreaXml);
         SortedSet<Field> uniqueSet = new TreeSet<Field>();
@@ -129,7 +129,7 @@ public class XmlConfigurationLoader {
         int expectedLength = workAreaXml.getLength();
         validate(workArea, expectedLength);
         Registry.addWorkArea(workArea);
-        log.info("Registered work area {}.", workArea.getId());
+        log.info("Created {}", workArea);
         return workArea;
     }
 
@@ -149,13 +149,17 @@ public class XmlConfigurationLoader {
 
     /**
      * Converts a FieldXml object to a Field object.
+     * The start value from XML is 1-indexed and needs to be adjusted for the
+     * Field class which expects a zero-indexed start value.
      *
      * @param fieldXml the FieldXml object to convert
      * @return the converted Field object
      */
     Field convert(FieldXml fieldXml) {
-        return new Field(fieldXml.getId(), fieldXml.getStart(), fieldXml.getLength(), fieldXml.isComposite(),
+        Field field = new Field(fieldXml.getId(), fieldXml.getStart() - 1, fieldXml.getLength(), fieldXml.isComposite(),
             fieldXml.isInput(), fieldXml.getAlias(), fieldXml.isWhitespace(), fieldXml.getOutputAlias());
+        log.debug("Created {}", field);
+        return field;
     }
 
     /**
@@ -164,18 +168,26 @@ public class XmlConfigurationLoader {
      * @param outputFiltersXml the OutputFiltersXml object
      * @return list of Filters
      */
-    List<Filter> convert(OutputFiltersXml outputFiltersXml) {
+    List<Filter> convert(String workAreaId, OutputFiltersXml outputFiltersXml) {
         List<Filter> filters = new java.util.ArrayList<>();
         if (outputFiltersXml == null || outputFiltersXml.getReference() == null) {
-            log.warn(" OutputFiltersXML or OutputFiltersXML.getReference() returned null.");
+            log.info("WorkAreaXml [{}]: OutputFiltersXML or OutputFiltersXML.getReference() returned null.");
             return filters;
         }
         String reference = outputFiltersXml.getReference();
-        log.info("Loading filters for reference {}.", reference);
+        if (Registry.containsFilterList(reference)) {
+            log.debug("WorkAreaXml [{}]: Filter reference {} is already registered. Returning existing filters.",
+                workAreaId, reference);
+            return Registry.getFilterList(reference);
+        }
+        log.debug("WorkAreaXml [{}]: Loading global filter list {}.", workAreaId, reference);
         List<FilterXml> filterXmls = this.geoclientXml.getFiltersForReference(reference);
         for (FilterXml filterXml : filterXmls) {
-            filters.add(new Filter(filterXml.getPattern()));
+            Filter filter = new Filter(filterXml.getPattern());
+            filters.add(filter);
+            log.debug("WorkAreaXml [{}]: Created {}.", workAreaId, filter);
         }
+        Registry.addFilterList(reference, filters);
         return filters;
     }
 
