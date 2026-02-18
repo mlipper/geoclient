@@ -35,7 +35,7 @@ public class CountryParserTest extends AbstractSpecTest {
     private CountryParser parser;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         parser = new CountryParser();
     }
 

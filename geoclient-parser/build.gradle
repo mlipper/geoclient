@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation("org.springframework:spring-context")
     implementation("org.apache.commons:commons-lang3")
     implementation(libs.jackson.dataformat.xml)
     testImplementation(libs.diffutils)

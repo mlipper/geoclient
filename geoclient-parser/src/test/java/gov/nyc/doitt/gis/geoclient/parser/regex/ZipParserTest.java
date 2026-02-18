@@ -35,7 +35,7 @@ public class ZipParserTest extends AbstractSpecTest {
     private ZipParser parser;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         parser = new ZipParser();
     }
 

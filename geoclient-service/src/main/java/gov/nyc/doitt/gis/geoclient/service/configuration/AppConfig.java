@@ -68,10 +68,13 @@ public class AppConfig {
     @Autowired
     private Environment env;
 
-    @Autowired
-    private ParserConfig parserConfig;
-
     // Spring bean methods
+
+    @Bean
+    public ParserConfig parserConfig() {
+        return new ParserConfig();
+    }
+
     @Bean
     public FieldSetConverter latLongFieldSetConverter() {
         return new DoubleFieldSetConverter(latLongConversions());
@@ -101,7 +104,7 @@ public class AppConfig {
 
     @Bean
     public SingleFieldSearchHandler singleFieldSearchHandler() {
-        return new SingleFieldSearchHandler(searchId(), parserConfig.singleFieldSearchParser(), searchBuilder());
+        return new SingleFieldSearchHandler(searchId(), parserConfig().singleFieldSearchParser(), searchBuilder());
     }
 
     @Bean
@@ -121,7 +124,7 @@ public class AppConfig {
 
     @Bean
     public CountyResolver countyResolver() {
-        return new CountyResolver(parserConfig.boroughNamesToBoroughMap(), parserConfig.cityNamesToBoroughMap());
+        return new CountyResolver(parserConfig().boroughNamesToBoroughMap(), parserConfig().cityNamesToBoroughMap());
     }
 
     @Bean

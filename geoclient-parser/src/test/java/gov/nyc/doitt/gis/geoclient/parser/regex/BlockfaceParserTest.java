@@ -27,7 +27,7 @@ public class BlockfaceParserTest extends AbstractSpecTest {
     private BlockfaceParser parser;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         this.parser = new BlockfaceParser();
     }
 

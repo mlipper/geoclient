@@ -23,10 +23,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 
 import difflib.DiffUtils;
 import difflib.Patch;
+import gov.nyc.doitt.gis.geoclient.parser.configuration.ParserConfig;
 import gov.nyc.doitt.gis.geoclient.parser.test.ChunkSpec;
 import gov.nyc.doitt.gis.geoclient.parser.test.SpecBuilder;
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
@@ -35,9 +37,16 @@ import gov.nyc.doitt.gis.geoclient.parser.token.Token;
 public abstract class AbstractSpecTest {
     protected static SpecBuilder specBuilder;
 
+    protected ParserConfig parserConfig;
+
     @BeforeAll
     public static void setUpOnce() {
         specBuilder = new SpecBuilder();
+    }
+
+    @BeforeEach
+    public void setUp() {
+        parserConfig = new ParserConfig();
     }
 
     protected void testParser(Parser parser, Logger logger) {

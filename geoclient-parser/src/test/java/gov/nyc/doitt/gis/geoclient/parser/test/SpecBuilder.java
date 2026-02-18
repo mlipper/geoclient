@@ -20,7 +20,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import org.springframework.util.ClassUtils;
+import gov.nyc.doitt.gis.geoclient.parser.util.ResourceLoader;
 
 public class SpecBuilder {
     private static final String PARSER_TEST_DATA_FILE = "specs.xml";
@@ -30,8 +30,8 @@ public class SpecBuilder {
     public SpecBuilder() {
         xmlMapper = new XmlMapper();
         try {
-            this.unparsedTokenSpecs = xmlMapper.readValue(
-                ClassUtils.getDefaultClassLoader().getResourceAsStream(PARSER_TEST_DATA_FILE), UnparsedSpecs.class);
+            this.unparsedTokenSpecs = xmlMapper.readValue(new ResourceLoader().classpathResource(PARSER_TEST_DATA_FILE),
+                UnparsedSpecs.class);
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to parse specs.xml", e);

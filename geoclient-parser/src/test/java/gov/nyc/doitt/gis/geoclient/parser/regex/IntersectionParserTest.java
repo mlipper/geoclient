@@ -27,7 +27,7 @@ public class IntersectionParserTest extends AbstractSpecTest {
     private IntersectionParser parser;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         parser = new IntersectionParser();
     }
 
