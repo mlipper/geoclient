@@ -22,12 +22,12 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Assertion class which abstracts use of existing assertion APIs from external
  * libraries. Copied from and/or inspired by
- * {@linkplain org.springframework.util.Assert}.
+ * <a href="https://docs.spring.io/spring-framework/reference/index.html">{@code org.springframework.util.Assert}</a>.
  *
  * @author mlipper
  * @since 2.0
- * @see org.springframework.util.Assert
- * @see org.apache.commons.lang3.StringUtils
+ * @see <a href="https://docs.spring.io/spring-framework/reference/index.html">org.springframework.util.Assert</a>
+ * @see <a href="https://docs.spring.io/spring-framework/reference/index.html">org.apache.commons.lang3.StringUtils</a>
  */
 public class Assert {
 
