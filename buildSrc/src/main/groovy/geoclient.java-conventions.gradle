@@ -61,7 +61,6 @@ dependencies {
     testImplementation(platform(libs.junit.bom))
     // Dependencies
     implementation('org.springframework.boot:spring-boot-starter-logging')
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.junit.jupiter:junit-jupiter')
     testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     //// Avoids log warning generated because of JUnit dependency on apiguardian:

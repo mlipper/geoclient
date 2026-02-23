@@ -1,9 +1,4 @@
 # Default profile
-spring:
-    mvc:
-        pathmatch:
-            matching-strategy: ant-path-matcher
-
 server:
     servlet:
         context-path: "/geoclient/v2"

@@ -53,7 +53,7 @@ public class RestControllerTest {
         String borough = "Manhattan";
         Mockito.when(this.geosupportServiceMock.callFunction1B(houseNumber, street, borough, null)).thenReturn(
             expectedResult);
-        Map<String, Object> actualResult = this.restController.address(houseNumber, street, borough, null);
+        Map<String, Object> actualResult = this.restController.address(houseNumber, street, borough, null, null);
         assertSame(expectedResult, actualResult.get(RestController.ADDRESS_OBJ));
     }
 
@@ -64,7 +64,7 @@ public class RestControllerTest {
         String zip = "10038";
         Mockito.when(this.geosupportServiceMock.callFunction1B(houseNumber, street, null, zip)).thenReturn(
             expectedResult);
-        Map<String, Object> actualResult = this.restController.address(houseNumber, street, null, zip);
+        Map<String, Object> actualResult = this.restController.address(houseNumber, street, null, zip, null);
         assertSame(expectedResult, actualResult.get(RestController.ADDRESS_OBJ));
     }
 
@@ -76,14 +76,14 @@ public class RestControllerTest {
         String zip = "10038";
         Mockito.when(this.geosupportServiceMock.callFunction1B(houseNumber, street, borough, zip)).thenReturn(
             expectedResult);
-        Map<String, Object> actualResult = this.restController.address(houseNumber, street, borough, zip);
+        Map<String, Object> actualResult = this.restController.address(houseNumber, street, borough, zip, null);
         assertSame(expectedResult, actualResult.get(RestController.ADDRESS_OBJ));
     }
 
     @Test
     public void testAddress_withoutBoroughOrZip() throws Exception {
         assertThrows(MissingAnyOfOptionalServletRequestParametersException.class, () -> {
-            this.restController.address("59", "Maiden Ln", null, null);
+            this.restController.address("59", "Maiden Ln", null, null, null);
         });
     }
 
@@ -197,10 +197,9 @@ public class RestControllerTest {
     public void testVersion() {
         Version version = new Version();
         Mockito.when(this.geosupportServiceMock.version()).thenReturn(version);
-        assertSame(version, this.restController.version());
+        assertSame(version, this.restController.version(null));
     }
 
-    @SuppressWarnings("null")
     @Test
     public void testHandleMissingRequestParameter() {
         MockHttpServletRequest req = new MockHttpServletRequest();

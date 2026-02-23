@@ -8,5 +8,7 @@ dependencies {
     implementation(project(':geoclient-xml'))
     // Version specified by catalog platform libs.spring.boot.dependencies
     implementation('org.apache.commons:commons-lang3')
+    testImplementation('org.assertj:assertj-core')
+    testImplementation('org.mockito:mockito-core')
     testImplementation(testFixtures(project(':geoclient-jni')))
 }

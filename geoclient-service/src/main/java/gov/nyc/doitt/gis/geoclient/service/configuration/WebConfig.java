@@ -31,11 +31,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.lang.NonNull;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResultConverter;
@@ -83,12 +81,16 @@ public class WebConfig implements WebMvcConfigurer {
      * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurer#configureContentNegotiation(org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer)
      */
     @Override
-    @SuppressWarnings("deprecation")
     public void configureContentNegotiation(@NonNull ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(true).favorParameter(false).
-        //parameterName("format").
-                ignoreAcceptHeader(true).useJaf(false).defaultContentType(MediaType.APPLICATION_JSON).mediaType("xml",
-                    MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
+        configurer
+                // Enable the query parameter strategy
+                .favorParameter(true)
+                // Set the name of the parameter (default is "format")
+                .parameterName("f")
+                // Set a default content type if the parameter is not specified
+                .defaultContentType(MediaType.APPLICATION_JSON)
+                // Map parameter values to actual MediaTypes
+                .mediaType("json", MediaType.APPLICATION_JSON).mediaType("xml", MediaType.APPLICATION_XML);
     }
 
     /*
@@ -128,13 +130,6 @@ public class WebConfig implements WebMvcConfigurer {
         JacksonXmlMarshaller marshaller = new JacksonXmlMarshaller();
         // Note: Jackson handles serialization differently, aliases are handled via annotations
         return marshaller;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void configurePathMatch(@NonNull PathMatchConfigurer configurer) {
-        configurer.setUseSuffixPatternMatch(true);
-        configurer.setPathMatcher(new AntPathMatcher());
     }
 
     @Bean

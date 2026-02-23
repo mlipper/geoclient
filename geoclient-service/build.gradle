@@ -14,6 +14,7 @@ dependencies {
     implementation('org.springframework:spring-oxm') { exclude(module: 'commons-lang') }
     implementation(libs.commons.text)
     implementation(libs.jackson.dataformat.xml)
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
 tasks.register('writeVersionProperties', WriteProperties) {

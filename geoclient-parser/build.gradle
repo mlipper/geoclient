@@ -6,5 +6,6 @@ plugins {
 dependencies {
     implementation("org.apache.commons:commons-lang3")
     implementation(libs.jackson.dataformat.xml)
+    testImplementation('org.assertj:assertj-core')
     testImplementation(libs.diffutils)
 }

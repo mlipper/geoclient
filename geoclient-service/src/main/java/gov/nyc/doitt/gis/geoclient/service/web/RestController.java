@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -76,12 +77,18 @@ public class RestController {
     @Autowired
     private GeosupportService geosupportService;
 
-    @RequestMapping(value = ADDRESS_URI, method = RequestMethod.GET)
+    @RequestMapping(value = ADDRESS_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> address(@RequestParam(required = false) String houseNumber,
             @RequestParam String street, @RequestParam(required = false) String borough,
-            @RequestParam(required = false) String zip) throws Exception {
+            @RequestParam(required = false) String zip, @RequestParam(required = false) String f) throws Exception {
         logger.debug("address[houseNumber='{}', street='{}', borough='{}', zip='{}']", houseNumber, street, borough,
             zip);
+        String format = ".NONE";
+        if (f != null && !f.isEmpty()) {
+            format = "." + f.toUpperCase();
+        }
+        logger.warn("address[{} {} {} {}]{}", houseNumber, street, borough, zip, format);
         if (borough == null && zip == null) {
             throw new MissingAnyOfOptionalServletRequestParametersException("borough", "zip");
         }
@@ -90,7 +97,8 @@ public class RestController {
         return addressMap;
     }
 
-    @RequestMapping(value = ADDRESSPOINT_URI, method = RequestMethod.GET)
+    @RequestMapping(value = ADDRESSPOINT_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> addresspoint(@RequestParam(required = false) String houseNumber,
             @RequestParam String street, @RequestParam(required = false) String borough,
             @RequestParam(required = false) String zip) throws Exception {
@@ -104,7 +112,8 @@ public class RestController {
         return addressPointMap;
     }
 
-    @RequestMapping(value = PLACE_URI, method = RequestMethod.GET)
+    @RequestMapping(value = PLACE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> place(@RequestParam String name,
             @RequestParam(required = false) String borough, @RequestParam(required = false) String zip)
             throws Exception {
@@ -117,7 +126,8 @@ public class RestController {
         return placeMap;
     }
 
-    @RequestMapping(value = INTERSECTION_URI, method = RequestMethod.GET)
+    @RequestMapping(value = INTERSECTION_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> intersection(@RequestParam String crossStreetOne,
             @RequestParam String crossStreetTwo, @RequestParam String borough,
             @RequestParam(required = false) String boroughCrossStreetTwo,
@@ -131,7 +141,8 @@ public class RestController {
         return intersectionMap;
     }
 
-    @RequestMapping(value = BLOCKFACE_URI, method = RequestMethod.GET)
+    @RequestMapping(value = BLOCKFACE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> blockface(@RequestParam String onStreet,
             @RequestParam String crossStreetOne, @RequestParam String crossStreetTwo, @RequestParam String borough,
             @RequestParam(required = false) String boroughCrossStreetOne,
@@ -147,7 +158,8 @@ public class RestController {
         return blockfaceMap;
     }
 
-    @RequestMapping(value = BBL_URI, method = RequestMethod.GET)
+    @RequestMapping(value = BBL_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> bbl(@RequestParam String borough, @RequestParam String block,
             @RequestParam String lot) {
         logger.debug("bbl[borough='{}',block='{}', lot='{}']", borough, block, lot);
@@ -156,7 +168,8 @@ public class RestController {
         return bblMap;
     }
 
-    @RequestMapping(value = BIN_URI, method = RequestMethod.GET)
+    @RequestMapping(value = BIN_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> bin(@RequestParam String bin) {
         logger.debug("bin[bin='{}']", bin);
         Map<String, Object> binMap = new HashMap<String, Object>();
@@ -164,7 +177,8 @@ public class RestController {
         return binMap;
     }
 
-    @RequestMapping(value = NORMALIZE_URI, method = RequestMethod.GET)
+    @RequestMapping(value = NORMALIZE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> normalize(@RequestParam String name,
             @RequestParam(required = false, defaultValue = "32") Integer length,
             @RequestParam(required = false, defaultValue = "S") String format) {
@@ -174,7 +188,8 @@ public class RestController {
         return resultMap;
     }
 
-    @RequestMapping(value = STREETCODE_URI, method = RequestMethod.GET)
+    @RequestMapping(value = STREETCODE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> streetcode(@RequestParam String streetCode,
             @RequestParam(required = false) String streetCodeTwo,
             @RequestParam(required = false) String streetCodeThree,
@@ -188,7 +203,8 @@ public class RestController {
         return resultMap;
     }
 
-    @RequestMapping(value = STREETCODE_B5SC_URI, method = RequestMethod.GET)
+    @RequestMapping(value = STREETCODE_B5SC_URI, method = RequestMethod.GET, produces = {
+            MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> streetcodeB5sc(@RequestParam String streetCode,
             @RequestParam(required = false) String streetCodeTwo,
             @RequestParam(required = false) String streetCodeThree,
@@ -202,20 +218,22 @@ public class RestController {
         return resultMap;
     }
 
-    @RequestMapping(value = GEOSUPPORT_URI, method = RequestMethod.GET)
+    @RequestMapping(value = GEOSUPPORT_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Map<String, Object> geosupport(@RequestParam Map<String, Object> params) {
         logger.debug("geosupport[{}]", params);
         return this.geosupportService.callGeosupport(params);
     }
 
-    @RequestMapping(value = "/meta/{action}", produces = { "application/json",
-            "application/xml" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/meta/{action}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Version meta(@PathVariable String action) {
         return this.geosupportService.version();
     }
 
-    @RequestMapping(value = VERSION_URI, method = RequestMethod.GET)
-    public @ResponseBody Version version() {
+    @RequestMapping(value = VERSION_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
+    public @ResponseBody Version version(@RequestParam(required = false) String f) {
         return this.geosupportService.version();
     }
 
