@@ -11,7 +11,7 @@ jopt-simple = "5.0.4"
 junit-bom = "5.12.2"
 shadow-plugin = "9.2.2"
 spotless-plugin = "6.25.0"
-spring-boot = "3.5.10"
+spring-boot = "3.5.11"
 versions-plugin = "0.52.0"
 
 [plugins]
