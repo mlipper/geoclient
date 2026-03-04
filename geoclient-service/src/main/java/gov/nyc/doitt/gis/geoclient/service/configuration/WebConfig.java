@@ -17,10 +17,6 @@ package gov.nyc.doitt.gis.geoclient.service.configuration;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository;
 import org.springframework.boot.actuate.web.exchanges.InMemoryHttpExchangeRepository;
 import org.springframework.context.annotation.Bean;
@@ -58,8 +54,6 @@ import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResultConve
 */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
-    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(WebConfig.class);
 
     /**
      * Implements part of the legacy content negotiation/path matching
@@ -114,9 +108,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public HttpMessageConverter<?> jsonMessageConverter() {
-        //MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        //converter.getObjectMapper()
-        //    .configure(SerializationFeature.WRAP_ROOT_VALUE, true);
         return new MappingJackson2HttpMessageConverter();
     }
 
@@ -127,9 +118,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public JacksonXmlMarshaller marshaller() {
-        JacksonXmlMarshaller marshaller = new JacksonXmlMarshaller();
-        // Note: Jackson handles serialization differently, aliases are handled via annotations
-        return marshaller;
+        return new JacksonXmlMarshaller();
     }
 
     @Bean
@@ -142,42 +131,4 @@ public class WebConfig implements WebMvcConfigurer {
         return new MarshallingHttpMessageConverter(marshaller());
     }
 
-    /**
-     * Tomcat 8.5 before 8.5.44 and 9 before 9.0.23 do not have a certain API
-     * that Spring assumes is there and so removing the
-     * "tomcatWebServerFactoryCustomizer" is necessary to prevent a
-     * NoSuchMethodError.
-     *
-     * However, since this bean isn't actually used when deploying a war file
-     * to a container so it's safe to remove.
-     *
-     * Following an upgrade from spring-boot 2.7.5 to 2.7.11, this method
-     * caused a NoSuchBeanDefinitionException in mock test
-     * SingleFieldSearchControllerTest because this bean isn't there to begin
-     * with.
-     *
-     * Adding a try/catch and ignoring the exception fixes the issue. Once
-     * the affected versions of Tomcat are no longer in use, this method can
-     * be removed.
-     *
-     * See https://github.com/spring-projects/spring-boot/issues/19308
-     */
-    @Bean
-    public static BeanFactoryPostProcessor removeTomcatWebServerCustomizer() {
-        return new BeanFactoryPostProcessor() {
-            public void postProcessBeanFactory(@NonNull ConfigurableListableBeanFactory beanFactory) {
-                if (((DefaultListableBeanFactory) beanFactory).containsBeanDefinition(
-                    "tomcatWebServerFactoryCustomizer")) {
-                    //((DefaultListableBeanFactory)beanFactory).removeBeanDefinition("tomcatWebServerFactoryCustomizer");
-                    //LOGGER.info("Removed bean \"tomcatWebServerFactoryCustomizer\".");
-                    LOGGER.info(
-                        "Bean \"tomcatWebServerFactoryCustomizer\" found: NOT removing it due to use of recent versions of Tomcat/Spring Boot.");
-                }
-                else {
-                    LOGGER.info(
-                        "Bean \"tomcatWebServerFactoryCustomizer\" not found: assuming recent versions of Tomcat/Spring Boot.");
-                }
-            }
-        };
-    }
 }
