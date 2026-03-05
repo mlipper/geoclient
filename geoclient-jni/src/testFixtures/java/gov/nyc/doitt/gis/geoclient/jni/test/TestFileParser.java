@@ -53,6 +53,7 @@ public class TestFileParser {
 
     public List<TestConfig> parse(File file) throws FileNotFoundException, IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
+            closeInputStream();
             this.inputStream = fis;
             return parse();
         }
@@ -65,6 +66,18 @@ public class TestFileParser {
     public List<TestConfig> parse(String fileName) throws FileNotFoundException, IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             return parse(reader);
+        }
+    }
+
+    private void closeInputStream() {
+        if (this.inputStream != null) {
+            try {
+                this.inputStream.close();
+            }
+            catch (IOException e) {
+                logger.error("Exception closing InputStream: {}", e.getMessage());
+                throw new IllegalStateException(e);
+            }
         }
     }
 

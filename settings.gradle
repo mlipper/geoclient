@@ -6,11 +6,12 @@ pluginManagement {
 
 rootProject.name = 'geoclient'
 
-include 'documentation'
-include 'geoclient-cli'
-include 'geoclient-core'
+include 'platform'
 include 'geoclient-jni'
-include 'geoclient-parser'
-include 'geoclient-service'
-include 'geoclient-test'
 include 'geoclient-xml'
+include 'geoclient-core'
+//include 'documentation'
+//include 'geoclient-cli'
+//include 'geoclient-parser'
+//include 'geoclient-service'
+//include 'geoclient-test'

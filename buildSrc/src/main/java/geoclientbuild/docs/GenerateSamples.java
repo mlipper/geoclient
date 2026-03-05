@@ -27,11 +27,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.SerializationFeature;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
@@ -53,7 +53,6 @@ abstract public class GenerateSamples extends DefaultTask {
     public static final String ASCIIDOC_BEGIN_TAG = "// tag::user_guide[]";
     public static final String ASCIIDOC_END_TAG = "// end::user_guide[]";
 
-    private final ObjectMapper mapper = new ObjectMapper();
 
     @Input
     abstract public Property<URI> getBaseUri();
@@ -66,9 +65,11 @@ abstract public class GenerateSamples extends DefaultTask {
 
     @TaskAction
     public void generateSamples() {
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        JsonMapper.Builder builder = JsonMapper.builder();
+        builder.enable(SerializationFeature.INDENT_OUTPUT);
+        JsonMapper mapper = builder.build();
         File file = getRequestsFile().getAsFile().get();
-        List<HttpRequestAdapter> requests = loadRequests(file);
+        List<HttpRequestAdapter> requests = loadRequests(mapper, file);
         RestClient restClient = new HttpClient();
         for (HttpRequestAdapter request : requests) {
             try {
@@ -81,7 +82,7 @@ abstract public class GenerateSamples extends DefaultTask {
                     throw new RuntimeException(
                             String.format("Non-200 response code received: %d", response.getHttpCode()));
                 }
-                buff.append(format(response.getBody()));
+                buff.append(format(mapper, response.getBody()));
                 buff.append('\n');
                 buff.append(ASCIIDOC_END_TAG);
                 buff.append('\n');
@@ -120,22 +121,17 @@ abstract public class GenerateSamples extends DefaultTask {
         return uri;
     }
 
-    private List<HttpRequestAdapter> loadRequests(File file) {
-        try {
-            JsonNode node = mapper.readTree(file);
-            JsonNode requestsNode = node.get("requests");
-            TypeReference<List<HttpRequestAdapter>> typeReference = new TypeReference<List<HttpRequestAdapter>>() {
-            };
-            List<HttpRequestAdapter> requests = mapper.convertValue(requestsNode, typeReference);
-            return adapt(requests);
-        }
-        catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+    private List<HttpRequestAdapter> loadRequests(JsonMapper mapper, File file) {
+        JsonNode node = mapper.readTree(file);
+        JsonNode requestsNode = node.get("requests");
+        TypeReference<List<HttpRequestAdapter>> typeReference = new TypeReference<List<HttpRequestAdapter>>() {
+        };
+        List<HttpRequestAdapter> requests = mapper.convertValue(requestsNode, typeReference);
+        return adapt(requests);
     }
 
-    private String format(String response) throws JsonProcessingException {
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    private String format(JsonMapper mapper, String response) throws JacksonException {
+        //mapper.enable(SerializationFeature.INDENT_OUTPUT);
         JsonNode root = mapper.readTree(response);
         return mapper.writeValueAsString(root);
     }

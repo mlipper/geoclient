@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 public class GeoclientXmlReader {
 
@@ -45,18 +45,8 @@ public class GeoclientXmlReader {
         return geoclientXml.getWorkAreas().getWorkAreas();
     }
 
-    private GeoclientXml readGeoclientXml(XmlMapper mapper, InputStream inputStream) throws IOException {
-        try {
-            return mapper.readValue(inputStream, GeoclientXml.class);
-        }
-        catch (IOException e) {
-            throw e;
-        }
-        finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
+    private GeoclientXml readGeoclientXml(XmlMapper mapper, InputStream inputStream) {
+        return mapper.readValue(inputStream, GeoclientXml.class);
     }
 
     private GeoclientXml readGeoclientXml(XmlMapper mapper, String configFile) throws IOException {

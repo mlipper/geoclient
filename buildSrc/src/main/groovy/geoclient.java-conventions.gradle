@@ -1,14 +1,11 @@
 plugins {
-    id 'java'
-    id 'checkstyle'
-    id 'project-report'
-    id 'com.diffplug.spotless'
-    // Note: usage of versions plugin dependencyUpdates task emits
-    // deprecation warnings.
-    id 'com.github.ben-manes.versions'
-    id 'geoclient.build-conventions'
+    id('java')
+    id('checkstyle')
+    id('project-report')
+    id('com.diffplug.spotless')
+    id('com.github.ben-manes.versions')
+    id('geoclient.build-conventions')
 }
-
 
 ext {
     // Default Manifest for Jar tasks. Referenced by the default Jar task
@@ -57,17 +54,9 @@ repositories {
 
 dependencies {
     // Platforms
-    implementation(platform(libs.spring.boot.dependencies))
-    testImplementation(platform(libs.junit.bom))
+    api platform(project(':platform'))
     // Dependencies
     implementation('org.springframework.boot:spring-boot-starter-logging')
-    testImplementation('org.junit.jupiter:junit-jupiter')
-    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
-    //// Avoids log warning generated because of JUnit dependency on apiguardian:
-    //// 'warning: unknown enum constant Status.STABLE'
-    //// This was supposed to have been fixed in JUnit 5.1.x, but still happens,
-    //// possibly because gradle platform or spring BOM.
-    testRuntimeOnly(libs.apiguardian.api)
 }
 
 java {
@@ -124,7 +113,6 @@ tasks.named("dependencyUpdates").configure {
 
 spotless {
     java {
-        // Based on JUnit5 project's spotless config
         eclipse().configFile rootProject.file('gradle/config/eclipse/geoclient-eclipse-formatter-settings.xml')
         importOrderFile(rootProject.file('gradle/config/eclipse/geoclient-eclipse.importorder'))
         indentWithSpaces()

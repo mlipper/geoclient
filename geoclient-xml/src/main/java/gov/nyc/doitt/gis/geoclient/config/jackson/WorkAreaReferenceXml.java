@@ -15,7 +15,7 @@
  */
 package gov.nyc.doitt.gis.geoclient.config.jackson;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class WorkAreaReferenceXml {
 

@@ -3,6 +3,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'checkstyle'
     id 'project-report'
+    id("org.springframework.boot") version "4.0.3"
     alias(libs.plugins.spotless)
     // Note: usage of versions plugin dependencyUpdates task emits
     // deprecation warnings.
@@ -24,19 +25,17 @@ def catalogs = project.extensions.getByType(VersionCatalogsExtension)
 def libs = catalogs.named("libs")
 
 dependencies {
+    // Platforms
+    implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+    // Dependencies
     implementation libs.findLibrary("guava").get()
     implementation libs.findLibrary("jopt-simple").get()
     implementation plugin(libs.findPlugin("spotless").get())
     implementation plugin(libs.findPlugin("versions").get())
-    // Platforms
-    implementation(platform(libs.findLibrary("spring-boot-dependencies").get()))
-    testImplementation(platform(libs.findLibrary("junit-bom").get()))
-    // Dependencies
-    implementation libs.findLibrary("httpclient").get()
-    implementation libs.findLibrary("jackson-databind").get()
+    implementation('org.apache.httpcomponents.client5:httpclient5')
+    implementation('org.springframework.boot:spring-boot-starter-jackson')
     testImplementation gradleTestKit()
-    testImplementation 'org.assertj:assertj-core'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

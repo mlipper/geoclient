@@ -16,11 +16,10 @@
 package geoclientbuild.client.shutdown;
 
 import java.io.File;
-import java.io.IOException;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.json.JsonMapper;
 
 import geoclientbuild.exec.settings.SettingsException;
 
@@ -69,8 +68,8 @@ public class HttpShutdownSettings {
                 "HTTP shutdown file not found: " + (settingsFile != null ? settingsFile.getAbsolutePath() : "<null>"));
         }
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(settingsFile, HttpShutdown.class);
+            JsonMapper mapper = JsonMapper.builder().build();
+            return mapper.readValue(settingsFile, HttpShutdown.class);
         }
         catch (StreamReadException e) {
             throw new SettingsException("Error parsing file " + settingsFile.getAbsolutePath(), e);
@@ -78,9 +77,6 @@ public class HttpShutdownSettings {
         catch (DatabindException e) {
             throw new SettingsException(
                 "Error binding HttpShutdown instance using file " + settingsFile.getAbsolutePath(), e);
-        }
-        catch (IOException e) {
-            throw new SettingsException("I/O error reading file " + settingsFile.getAbsolutePath(), e);
         }
     }
 }

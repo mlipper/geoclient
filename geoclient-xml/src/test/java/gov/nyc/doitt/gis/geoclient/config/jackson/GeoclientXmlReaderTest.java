@@ -23,11 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.InputStream;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 public class GeoclientXmlReaderTest {
 
@@ -35,8 +35,9 @@ public class GeoclientXmlReaderTest {
 
     @BeforeAll
     public static void setup() throws Exception {
-        XmlMapper mapper = new XmlMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        XmlMapper.Builder builder = XmlMapper.builder();
+        builder.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        XmlMapper mapper = builder.build();
 
         InputStream inputStream = GeoclientXmlReaderTest.class.getClassLoader().getResourceAsStream("geoclient.xml");
         assertNotNull(inputStream, "geoclient.xml not found in classpath");

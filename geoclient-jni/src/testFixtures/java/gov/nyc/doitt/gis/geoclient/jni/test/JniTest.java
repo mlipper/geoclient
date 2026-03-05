@@ -146,8 +146,6 @@ public class JniTest {
         System.exit(jniTest.runTest());
     }
 
-    // TODO InputStream is not closed!!
-    // FIXME
     public static List<TestConfig> getTestCaseData(String fileOption) throws IOException {
         InputStream fileStream = null;
         if (fileOption == null) {

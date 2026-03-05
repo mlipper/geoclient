@@ -4,6 +4,11 @@ plugins {
     id 'geoclient.test-conventions'
 }
 
+//dependencies {
+//    api platform(project(':platform'))
+//    implementation('org.springframework.boot:spring-boot-starter-logging')
+//
+//}
 Provider<Directory> generatedResourcesDirectory = layout.buildDirectory.dir("generated-resources/main")
 File generatedResources = generatedResourcesDirectory.get().asFile
 def libPath = file('/opt/geosupport/current/lib')

@@ -19,10 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JacksonXmlRootElement(localName = "geoclient")
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+@JsonRootName("geoclient")
 public class GeoclientXml {
 
     @JacksonXmlProperty(localName = "filters")
