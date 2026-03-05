@@ -18,11 +18,12 @@ package gov.nyc.doitt.gis.geoclient.parser.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JacksonXmlRootElement(localName = "specs")
+import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+@JsonRootName("specs")
 public class UnparsedSpecs {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "spec")

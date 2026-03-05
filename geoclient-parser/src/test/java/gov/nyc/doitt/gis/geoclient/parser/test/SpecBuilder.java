@@ -18,9 +18,8 @@ package gov.nyc.doitt.gis.geoclient.parser.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import gov.nyc.doitt.gis.geoclient.parser.util.ResourceLoader;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 public class SpecBuilder {
     private static final String PARSER_TEST_DATA_FILE = "specs.xml";
@@ -28,7 +27,7 @@ public class SpecBuilder {
     private final UnparsedSpecs unparsedTokenSpecs;
 
     public SpecBuilder() {
-        xmlMapper = new XmlMapper();
+        xmlMapper = XmlMapper.builder().build();
         try {
             this.unparsedTokenSpecs = xmlMapper.readValue(new ResourceLoader().classpathResource(PARSER_TEST_DATA_FILE),
                 UnparsedSpecs.class);

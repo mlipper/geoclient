@@ -15,8 +15,8 @@
  */
 package gov.nyc.doitt.gis.geoclient.parser.test;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 public class UnparsedSpec {
     @JacksonXmlProperty(isAttribute = true)

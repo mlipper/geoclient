@@ -26,7 +26,7 @@ public class TextUtils {
         }
         // Remove leading and trailing spaces or punctuation (except for trailing
         //period characters (eg, N.Y.)
-        String clean = RegExUtils.removePattern(s, "^(?:\\s|\\p{Punct})+|(?:\\s|[\\p{Punct}&&[^.]])+$");
+        String clean = RegExUtils.removePattern((CharSequence) s, "^(?:\\s|\\p{Punct})+|(?:\\s|[\\p{Punct}&&[^.]])+$");
         // Make sure ampersand is surrounded by spaces but allow double ampersand
         clean = clean.replaceAll("([^\\s&])\\&", "$1 &");
         clean = clean.replaceAll("\\&([^\\s&])", "& $1");

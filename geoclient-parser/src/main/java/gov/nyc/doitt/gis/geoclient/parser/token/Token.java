@@ -16,15 +16,16 @@
 package gov.nyc.doitt.gis.geoclient.parser.token;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Bean class representing a token within a chunk of parsed text.
  *
  * @author mlipper
  */
-@JacksonXmlRootElement(localName = "token")
+@JsonRootName("token")
 @JsonPropertyOrder({ "value", "type", "start", "end" })
 public class Token {
     private final String value;
