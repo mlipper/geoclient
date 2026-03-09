@@ -76,7 +76,7 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawTypes"})
     @Test
     public void testAddress_xmlFileExtension(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".xml").queryParam("houseNumber", "100").queryParam(
