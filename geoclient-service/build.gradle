@@ -1,21 +1,26 @@
 plugins {
-    id 'geoclient.java-conventions'
+    id 'geoclient.jar-conventions'
     id 'geoclient.test-conventions'
     alias(libs.plugins.boot)
 }
 
 dependencies {
+    // Include platform for dependency versions because can't use 
+    // geoclient.java-conventions or geoclient.java-library-conventions
+    // plugins which conflict with the spring-boot plugin
+    implementation platform(project(':platform'))
     implementation project(':geoclient-jni')
     implementation project(':geoclient-core')
     implementation project(':geoclient-parser')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.boot:spring-boot-starter-jackson')
+    implementation('tools.jackson.dataformat:jackson-dataformat-xml')
+    implementation('com.fasterxml.jackson.core:jackson-annotations')
     implementation('org.springframework.boot:spring-boot-starter-tomcat')
     implementation('org.springframework.boot:spring-boot-starter-validation')
     implementation('org.springframework.boot:spring-boot-starter-webmvc')
     implementation('org.springframework:spring-oxm') { exclude(module: 'commons-lang') }
     implementation(libs.commons.text)
-    //implementation(libs.jackson.dataformat.xml)
     testImplementation('org.springframework.boot:spring-boot-starter-jackson-test')
     testImplementation('org.springframework.boot:spring-boot-starter-restclient-test')
     testImplementation('org.springframework.boot:spring-boot-starter-webmvc-test')
@@ -86,5 +91,25 @@ configurations {
 artifacts {
     apiServer(bootJar.archiveFile) {
         builtBy(bootJar)
+    }
+}
+
+tasks.named("test") {
+
+    testLogging {
+        events "failed", "skipped", "passed"
+        exceptionFormat = "full"
+        showStandardStreams = true
+
+        debug {
+            events "failed", "skipped", "passed"
+            exceptionFormat = "full"
+            showStandardStreams = true
+        }
+
+        info {
+            events "failed", "skipped", "passed"
+            showStandardStreams = true
+        }
     }
 }

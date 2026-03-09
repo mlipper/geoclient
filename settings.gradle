@@ -4,6 +4,12 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'geoclient'
 
 include 'platform'
@@ -11,7 +17,7 @@ include 'geoclient-jni'
 include 'geoclient-xml'
 include 'geoclient-core'
 include 'geoclient-parser'
-//include 'documentation'
-//include 'geoclient-cli'
-//include 'geoclient-service'
+include 'geoclient-service'
+include 'documentation'
+include 'geoclient-cli'
 include 'geoclient-test'

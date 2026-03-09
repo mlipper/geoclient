@@ -22,7 +22,7 @@ import java.util.Map;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,16 +38,12 @@ public class JacksonXmlMarshaller implements Marshaller, Unmarshaller {
     private final XmlMapper xmlMapper;
 
     public JacksonXmlMarshaller() {
-        this.xmlMapper = new XmlMapper();
-        // Note: Default Map serialization may not match XStream exactly
-        // SimpleModule module = new SimpleModule();
-        // module.addSerializer(Map.class, new MapSerializer());
-        // this.xmlMapper.registerModule(module);
+        this.xmlMapper = XmlMapper.builder().build();
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return true; // Assume all classes are supported
+        return true;
     }
 
     @Override

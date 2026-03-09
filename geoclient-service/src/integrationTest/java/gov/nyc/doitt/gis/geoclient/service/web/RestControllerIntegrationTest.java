@@ -23,9 +23,9 @@ import static gov.nyc.doitt.gis.geoclient.function.Function.FDG;
 import static gov.nyc.doitt.gis.geoclient.service.web.RestController.ADDRESS_URI;
 import static gov.nyc.doitt.gis.geoclient.service.web.RestController.STREETCODE_URI;
 import static gov.nyc.doitt.gis.geoclient.service.web.RestController.VERSION_URI;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
@@ -33,129 +33,137 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
+import org.springframework.test.web.servlet.client.EntityExchangeResult;
+import org.springframework.test.web.servlet.client.RestTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import gov.nyc.doitt.gis.geoclient.service.domain.Version;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureRestTestClient
 public class RestControllerIntegrationTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestControllerIntegrationTest.class);
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    // TODO replace with environment variable
+    private static final String BASE_URI = "/geoclient/v2";
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
-    public void testAddress_jsonFileExtension() {
-        URI uri = UriComponentsBuilder.fromPath(ADDRESS_URI + ".json").queryParam("houseNumber", "100").queryParam(
+    public void testAddress_jsonFileExtension(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".json").queryParam("houseNumber", "100").queryParam(
             "street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawtypes")
-        ResponseEntity<Map> response = this.restTemplate.getForEntity(uri, Map.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
-        assertThat(MediaType.APPLICATION_JSON).isEqualTo(response.getHeaders().getContentType());
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        @SuppressWarnings("rawTypes")
+        EntityExchangeResult<Map> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .expectBody(Map.class).returnResult();
+        Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);
-        Map<String, Object> result = (Map<String, Object>) body.get("address");
-        assertThat(result.containsKey(GEOSUPPORT_RETURN_CODE));
-        assertThat(result.get("geosupportReturnCode").equals(SUCCESS));
-        assertThat(result.containsKey("geosupportFunctionCode"));
-        assertThat(result.get("geosupportFunctionCode").equals(F1B));
+        Map<String, Object> address = (Map<String, Object>) body.get("address");
+        assertThat(address.containsKey(GEOSUPPORT_RETURN_CODE));
+        assertThat(address.get("geosupportReturnCode").equals(SUCCESS));
+        assertThat(address.containsKey("geosupportFunctionCode"));
+        assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testAddress_xmlFileExtension() {
-        URI uri = UriComponentsBuilder.fromPath(ADDRESS_URI + ".xml").queryParam("houseNumber", "100").queryParam(
+    public void testAddress_xmlFileExtension(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".xml").queryParam("houseNumber", "100").queryParam(
             "street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawtypes")
-        ResponseEntity<Map> response = this.restTemplate.getForEntity(uri, Map.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
-        assertThat(MediaType.APPLICATION_XML).isEqualTo(response.getHeaders().getContentType());
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        @SuppressWarnings("rawTypes")
+        EntityExchangeResult<Map> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_XML)
+                            .expectBody(Map.class).returnResult();
+        Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);
-        Map<String, Object> result = (Map<String, Object>) body.get("address");
-        assertThat(result.containsKey(GEOSUPPORT_RETURN_CODE));
-        assertThat(result.get("geosupportReturnCode").equals(SUCCESS));
-        assertThat(result.containsKey("geosupportFunctionCode"));
-        assertThat(result.get("geosupportFunctionCode").equals(F1B));
+        Map<String, Object> address = (Map<String, Object>) body.get("address");
+        assertThat(address.containsKey(GEOSUPPORT_RETURN_CODE));
+        assertThat(address.get("geosupportReturnCode").equals(SUCCESS));
+        assertThat(address.containsKey("geosupportFunctionCode"));
+        assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testAddress_noFileExtension() {
-        URI uri = UriComponentsBuilder.fromPath(ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
+    public void testAddress_noFileExtension(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
             "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
         @SuppressWarnings("rawtypes")
-        ResponseEntity<Map> response = this.restTemplate.getForEntity(uri, Map.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
-        // Assert that the application/json is the default ContentType
-        assertThat(MediaType.APPLICATION_JSON).isEqualTo(response.getHeaders().getContentType());
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        EntityExchangeResult<Map> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .expectBody(Map.class).returnResult();
+        Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);
-        Map<String, Object> result = (Map<String, Object>) body.get("address");
-        assertThat(result.containsKey(GEOSUPPORT_RETURN_CODE));
-        assertThat(result.get("geosupportReturnCode").equals(SUCCESS));
-        assertThat(result.containsKey("geosupportFunctionCode"));
-        assertThat(result.get("geosupportFunctionCode").equals(F1B));
+        Map<String, Object> address = (Map<String, Object>) body.get("address");
+        assertThat(address.containsKey(GEOSUPPORT_RETURN_CODE));
+        assertThat(address.get("geosupportReturnCode").equals(SUCCESS));
+        assertThat(address.containsKey("geosupportFunctionCode"));
+        assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testStreetcode_FDG() {
-        String streetCodeUriTemplate = String.format("%s.%s?%s={%s}", STREETCODE_URI, "json", STREET_CODE, STREET_CODE);
-        LOGGER.info("URI=" + streetCodeUriTemplate);
-        Map<String, Object> body = (Map<String, Object>) this.restTemplate.getForObject(streetCodeUriTemplate,
-            Map.class, "110610");
+    public void testStreetcode_FDG(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + STREETCODE_URI).queryParam(STREET_CODE, "110610").build().toUri();
+        LOGGER.info("URI={}", uri);
+        @SuppressWarnings("rawtypes")
+        EntityExchangeResult<Map> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .expectBody(Map.class).returnResult();
+        Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", STREETCODE_URI, body);
-        Map<String, Object> result = (Map<String, Object>) body.get(STREET_CODE.toLowerCase());
-        assertThat(result.containsKey(GEOSUPPORT_RETURN_CODE));
-        assertThat(result.get("geosupportReturnCode").equals(SUCCESS));
-        assertThat(result.containsKey("geosupportFunctionCode"));
-        assertThat(result.get("geosupportFunctionCode").equals(FDG));
+        Map<String, Object> streetcode = (Map<String, Object>) body.get(STREET_CODE.toLowerCase());
+        assertThat(streetcode.containsKey(GEOSUPPORT_RETURN_CODE));
+        assertThat(streetcode.get("geosupportReturnCode").equals(SUCCESS));
+        assertThat(streetcode.containsKey("geosupportFunctionCode"));
+        assertThat(streetcode.get("geosupportFunctionCode").equals(FDG));
     }
 
     @Test
-    public void testVersion() throws IOException {
-        URI uri = jsonResource(VERSION_URI);
-        ResponseEntity<Version> httpResponse = restTemplate.exchange(uri, HttpMethod.GET, jsonRequest(), Version.class);
-        assertThat(httpResponse.getStatusCode() == HttpStatusCode.valueOf(200));
-        Version actual = httpResponse.getBody();
+    public void testVersion(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + VERSION_URI).build().toUri();
+        LOGGER.info("URI={}", uri);
+        EntityExchangeResult<Version> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .expectBody(Version.class).returnResult();
+        Version actual = result.getResponseBody();
         LOGGER.info("{} -> {}", uri.toASCIIString(), actual);
         assertThat(actual.getAccessMethod()).isNotEmpty();
         assertThat(actual.getGeoclientJniVersion()).isNotEmpty();
         assertThat(actual.getGeoclientParserVersion()).isNotEmpty();
         assertThat(actual.getGeoclientServiceVersion()).isNotEmpty();
-    }
-
-    protected HttpEntity<?> jsonRequest() {
-        return new HttpEntity<>(jsonHeaders());
-    }
-
-    protected URI jsonResource(String pathWithoutMediaType) {
-        return uriComponentsBuilder(pathWithoutMediaType + ".json").build().toUri();
-    }
-
-    protected HttpHeaders jsonHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        return headers;
-    }
-
-    protected UriComponentsBuilder uriComponentsBuilder(@NonNull String path) {
-        return UriComponentsBuilder.fromPath(path);
     }
 }

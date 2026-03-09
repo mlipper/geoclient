@@ -19,7 +19,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class Response {
     private final ResponseStatus responseStatus;
@@ -35,7 +35,7 @@ public class Response {
 
     public boolean messageAppliesTo(String streetName) {
         GeosupportReturnCode grc = this.responseStatus.getGeosupportReturnCode();
-        return StringUtils.containsIgnoreCase(grc.getMessage(), streetName);
+        return Strings.CI.contains((CharSequence)grc.getMessage(), streetName);
     }
 
     public boolean isCompassDirectionRequired() {

@@ -15,9 +15,9 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.domain;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JacksonXmlRootElement(localName = "error")
+@JsonRootName("error")
 public class BadRequest {
     private String httpStatus;
     private String message;

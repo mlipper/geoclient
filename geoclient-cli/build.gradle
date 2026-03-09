@@ -1,11 +1,17 @@
 plugins {
+    id 'geoclient.jar-conventions'
+    id 'geoclient.test-conventions'
     id 'application'
-    id 'geoclient.java-conventions'
 }
 
 dependencies {
+    // Include platform for dependency versions because can't use 
+    // geoclient.java-conventions or geoclient.java-library-conventions
+    // plugins which conflict with gradle's application plugin
+    implementation platform(project(':platform'))
     implementation project(':geoclient-jni')
     implementation project(':geoclient-core')
+    implementation('org.springframework.boot:spring-boot-starter-logging')
 }
 
 // Note: using the 'application' plugin's run task does not work,

@@ -15,8 +15,6 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.configuration;
 
-import java.util.List;
-
 import org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository;
 import org.springframework.boot.actuate.web.exchanges.InMemoryHttpExchangeRepository;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +22,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverters;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -60,12 +58,12 @@ public class WebConfig implements WebMvcConfigurer {
      * strategy that will eventually be deprecated since it is insecure.
      */
     @Override
-    public void addCorsMappings(@NonNull CorsRegistry registry) {
+    public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET");
     }
 
     @Override
-    public void addFormatters(@NonNull FormatterRegistry registry) {
+    public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(searchResultConverter());
     }
 
@@ -75,7 +73,7 @@ public class WebConfig implements WebMvcConfigurer {
      * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurer#configureContentNegotiation(org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer)
      */
     @Override
-    public void configureContentNegotiation(@NonNull ContentNegotiationConfigurer configurer) {
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer
                 // Enable the query parameter strategy
                 .favorParameter(true)
@@ -91,7 +89,7 @@ public class WebConfig implements WebMvcConfigurer {
      * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurer#configureDefaultServletHandling(org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer)
      */
     @Override
-    public void configureDefaultServletHandling(@NonNull DefaultServletHandlerConfigurer configurer) {
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable("geoclientDispatcherServlet");
     }
 
@@ -99,16 +97,16 @@ public class WebConfig implements WebMvcConfigurer {
      * Adds JSON and XML message converters.
      */
     @Override
-    public void configureMessageConverters(@NonNull List<HttpMessageConverter<?>> converters) {
-        converters.add(jsonMessageConverter());
-        converters.add(xmlMessageConverter());
+    public void configureMessageConverters(HttpMessageConverters.ServerBuilder builder) {
+        builder.addCustomConverter(jsonMessageConverter());
+        builder.addCustomConverter(xmlMessageConverter());
     }
 
     // Beans //
 
     @Bean
     public HttpMessageConverter<?> jsonMessageConverter() {
-        return new MappingJackson2HttpMessageConverter();
+        return new JacksonJsonHttpMessageConverter();
     }
 
     @Bean

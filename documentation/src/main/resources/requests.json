@@ -5,7 +5,7 @@
         { "id": "300",  "type": "bbl", "parameters": { "borough": "manhattan", "block": "186", "lot": "1" } },
         { "id": "400",  "type": "bin", "parameters": { "bin": "1234567" } },
         { "id": "500",  "type": "blockface", "parameters": { "onStreet": "broadway", "crossStreetOne": "w 100 st", "crossStreetTwo": "w 101 st", "borough": "manhattan" } },
-        { "id": "600",  "type": "intersection", "parameters": { "crossStreetOne": "w 100 st", "crossStreetTwo": "amstersdam ave", "borough": "manhattan" } },
+        { "id": "600",  "type": "intersection", "parameters": { "crossStreetOne": "w 100 st", "crossStreetTwo": "amsterdam ave", "borough": "manhattan" } },
         { "id": "700",  "type": "normalize", "parameters": { "name": "east 158th Street" } },
         { "id": "800",  "type": "place", "parameters": { "name": "empire state building", "borough": "manhattan" } },
         { "id": "801",  "type": "place", "parameters": { "name": "empire state building", "zip": "10001" } },

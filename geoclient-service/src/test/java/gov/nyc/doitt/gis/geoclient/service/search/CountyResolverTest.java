@@ -34,7 +34,7 @@ import gov.nyc.doitt.gis.geoclient.parser.token.Token;
 import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
 
 public class CountyResolverTest {
-    @SuppressWarnings("serial")
+
     private Map<String, String> boroughNames = new HashMap<String, String>() {
         {
             put("Bk", "BROOKLYN");

@@ -15,23 +15,21 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.search.web;
 
+import static gov.nyc.doitt.gis.geoclient.service.search.web.SingleFieldSearchController.SEARCH_URI;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.net.URI;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
-import org.springframework.web.util.UriComponents;
+import org.springframework.test.web.servlet.client.EntityExchangeResult;
+import org.springframework.test.web.servlet.client.RestTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.MatchStatus;
@@ -39,36 +37,31 @@ import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResponse;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.Status;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureRestTestClient
 public class SingleFieldSearchControllerIntegrationTest {
 
     private final Logger logger = LoggerFactory.getLogger(SingleFieldSearchController.class);
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    // TODO replace with environment variable
+    private static final String BASE_URI = "/geoclient/v2";
 
     @Test
-    public void testSearch() {
-        UriComponents uriComponents = UriComponentsBuilder.fromPath("/search.json").queryParam("input",
-            "120 broadway").build();
-        ResponseEntity<SearchResponse> httpResponse = restTemplate.exchange(uriComponents.toUri(), HttpMethod.GET,
-            getRequest(), SearchResponse.class);
-        SearchResponse searchResponse = httpResponse.getBody();
+    public void testSearch(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + SEARCH_URI).queryParam("input", "120 broadway").build().toUri();
+        logger.info("URI={}", uri);
+        EntityExchangeResult<SearchResponse> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .expectBody(SearchResponse.class).returnResult();
+        SearchResponse searchResponse = result.getResponseBody();
         logger.debug("Response: {}", searchResponse);
-        assertThat(httpResponse.getStatusCode() == HttpStatusCode.valueOf(200));
         Status status = searchResponse.getStatus();
         assertThat(status.equals(Status.OK));
         assertThat(
             searchResponse.getResults().stream().anyMatch(s -> s.getStatus().equals(MatchStatus.POSSIBLE_MATCH)));
-    }
-
-    private HttpEntity<?> getRequest() {
-        return new HttpEntity<>(getHeaders());
-    }
-
-    @NonNull
-    private HttpHeaders getHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        return headers;
     }
 }

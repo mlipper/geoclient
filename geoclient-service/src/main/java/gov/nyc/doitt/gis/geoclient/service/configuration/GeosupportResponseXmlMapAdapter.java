@@ -18,9 +18,9 @@ package gov.nyc.doitt.gis.geoclient.service.configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JacksonXmlRootElement(localName = "geosupportResponse")
+@JsonRootName("geosupportResponse")
 public class GeosupportResponseXmlMapAdapter extends HashMap<String, Object> {
 
     public GeosupportResponseXmlMapAdapter(Map<? extends String, ? extends Object> m) {

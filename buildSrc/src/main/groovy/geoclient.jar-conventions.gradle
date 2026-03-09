@@ -1,0 +1,45 @@
+plugins {
+    id('java')
+    id('geoclient.build-conventions')
+}
+
+ext {
+    // Default Manifest for Jar tasks. Referenced by the default Jar task
+    // configuration defined in the geoclient.library-conventions script.
+    // Declared here because geoclient-service does not apply the
+    // geoclient.library-conventions plugin but does apply this one.
+    // This allows the bootJar task to merge this manifest with the one
+    // created by the Sping Boot plugin.
+    // Note:
+    // 'Automatic-Module-Name' is for Jigsaw.
+    // 'Include-Resource' refers to files in licenseFileSpec below.
+    sharedManifest = java.manifest {
+           attributes(
+               'Implementation-Title': project.name,
+               'Implementation-Version': project.version,
+               'Automatic-Module-Name': project.name.replace('-', '.'),
+               'Build-Jdk-Spec': "${System.getProperty("java.specification.version")}",
+               'Built-Gradle': gradle.gradleVersion,
+               'Include-Resource': 'META-INF/notice.txt=notice.txt,META-INF/license.txt=license.txt')
+    }
+
+    // License for published artifacts.
+    // Note:
+    // The spotless plugin is responsible for adding the license as a
+    // comment to java source files.
+    jarLicenseFilesSpec = copySpec {
+        into 'META-INF'
+        with(project.licenseFilesSpec)
+    }
+}
+
+def jarTaskCollection = tasks.withType(Jar).matching {
+    it.name in ['jar', 'javadocJar', 'sourcesJar']
+}
+
+jarTaskCollection.all {
+    manifest = java.manifest {
+        from project.sharedManifest
+    }
+    with(project.jarLicenseFilesSpec)
+}

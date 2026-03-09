@@ -17,7 +17,7 @@ package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class SearchSummary {
     @JacksonXmlProperty(isAttribute = true)

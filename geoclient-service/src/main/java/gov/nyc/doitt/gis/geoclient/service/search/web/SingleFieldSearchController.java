@@ -34,6 +34,8 @@ import jakarta.validation.Valid;
 @RestController
 public class SingleFieldSearchController {
 
+    public static final String SEARCH_URI = "/search";
+    
     @Autowired
     private SingleFieldSearchHandler singleFieldSearchHandler;
 
