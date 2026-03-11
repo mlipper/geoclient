@@ -1,9 +1,10 @@
 {
     "requests": [
         { "id": "100",  "type": "address", "parameters": { "houseNumber": "280", "street": "riverside drive", "borough": "manhattan" } },
+        { "id": "101",  "type": "address", "parameters": { "houseNumber": "46-012A", "street": "189 St", "borough": "queens" } },
         { "id": "200",  "type": "addresspoint", "parameters": { "houseNumber": "280", "street": "riverside drive", "borough": "manhattan" } },
-        { "id": "300",  "type": "bbl", "parameters": { "borough": "manhattan", "block": "186", "lot": "1" } },
-        { "id": "400",  "type": "bin", "parameters": { "bin": "1234567" } },
+        { "id": "300",  "type": "bbl", "parameters": { "borough": "manhattan", "block": "67", "lot": "1" } },
+        { "id": "400",  "type": "bin", "parameters": { "bin": "1079043" } },
         { "id": "500",  "type": "blockface", "parameters": { "onStreet": "broadway", "crossStreetOne": "w 100 st", "crossStreetTwo": "w 101 st", "borough": "manhattan" } },
         { "id": "600",  "type": "intersection", "parameters": { "crossStreetOne": "w 100 st", "crossStreetTwo": "amsterdam ave", "borough": "manhattan" } },
         { "id": "700",  "type": "normalize", "parameters": { "name": "east 158th Street" } },
