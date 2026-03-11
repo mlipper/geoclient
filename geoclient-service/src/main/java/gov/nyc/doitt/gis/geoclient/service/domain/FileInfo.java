@@ -15,6 +15,9 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"tag", "date", "release", "recordCount", "recordType", "formattedDate"})
 public class FileInfo extends BaseFileInfo {
 
     private String recordType;

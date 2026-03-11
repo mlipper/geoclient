@@ -19,11 +19,14 @@ import java.util.List;
 
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 
-@JsonRootName("searchResponse")
+@JsonPropertyOrder(value = {"id", "status", "input", "results", "parseTree", "policy"})
+@JsonRootName(namespace = "", value = "searchResponse")
 public class SearchResponse {
     @JacksonXmlProperty(isAttribute = true)
     private String id;

@@ -17,6 +17,8 @@ package gov.nyc.doitt.gis.geoclient.service.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
@@ -30,6 +32,7 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author mlipper
  * @since 1.00
  */
+@JsonPropertyOrder({"tag", "date", "release", "recordCount", "recordTypes"})
 public class ThinFileInfo extends BaseFileInfo {
     @JacksonXmlElementWrapper(localName = "recordTypes")
     @JacksonXmlProperty(localName = "recordType")

@@ -12,14 +12,17 @@ dependencies {
     implementation project(':geoclient-jni')
     implementation project(':geoclient-core')
     implementation project(':geoclient-parser')
-    implementation('org.springframework.boot:spring-boot-starter-actuator')
+
     implementation('org.springframework.boot:spring-boot-starter-jackson')
     implementation('tools.jackson.dataformat:jackson-dataformat-xml')
+    //implementation('com.fasterxml.woodstox:woodstox-core')
     implementation('com.fasterxml.jackson.core:jackson-annotations')
+
     implementation('org.springframework.boot:spring-boot-starter-tomcat')
     implementation('org.springframework.boot:spring-boot-starter-validation')
     implementation('org.springframework.boot:spring-boot-starter-webmvc')
     implementation('org.springframework:spring-oxm') { exclude(module: 'commons-lang') }
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation(libs.commons.text)
     testImplementation('org.springframework.boot:spring-boot-starter-jackson-test')
     testImplementation('org.springframework.boot:spring-boot-starter-restclient-test')

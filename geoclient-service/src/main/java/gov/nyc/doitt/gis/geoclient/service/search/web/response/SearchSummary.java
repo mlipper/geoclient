@@ -17,8 +17,11 @@ package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+@JsonPropertyOrder({"level", "status", "request", "response"})
 public class SearchSummary {
     @JacksonXmlProperty(isAttribute = true)
     private String level;
