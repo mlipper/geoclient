@@ -102,7 +102,7 @@ public class RestControllerIntegrationTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testAddress_noFileExtension(@Autowired RestTestClient client) {
+    public void testAddress_noFileExtensionNoParam(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
             "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
@@ -114,6 +114,54 @@ public class RestControllerIntegrationTest {
                             .is2xxSuccessful()
                             .expectHeader()
                             .contentType(MediaType.APPLICATION_JSON)
+                            .expectBody(Map.class).returnResult();
+        Map<String, Object> body = result.getResponseBody();
+        LOGGER.info("{} response body: {}", ADDRESS_URI, body);
+        Map<String, Object> address = (Map<String, Object>) body.get("address");
+        assertThat(address.containsKey(GEOSUPPORT_RETURN_CODE));
+        assertThat(address.get("geosupportReturnCode").equals(SUCCESS));
+        assertThat(address.containsKey("geosupportFunctionCode"));
+        assertThat(address.get("geosupportFunctionCode").equals(F1B));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testAddress_noFileExtensionJsonParam(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
+            "Centre St").queryParam("borough", "Manhattan").queryParam("f", "json").build().toUri();
+        LOGGER.info("URI={}", uri);
+        @SuppressWarnings("rawtypes")
+        EntityExchangeResult<Map> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .expectBody(Map.class).returnResult();
+        Map<String, Object> body = result.getResponseBody();
+        LOGGER.info("{} response body: {}", ADDRESS_URI, body);
+        Map<String, Object> address = (Map<String, Object>) body.get("address");
+        assertThat(address.containsKey(GEOSUPPORT_RETURN_CODE));
+        assertThat(address.get("geosupportReturnCode").equals(SUCCESS));
+        assertThat(address.containsKey("geosupportFunctionCode"));
+        assertThat(address.get("geosupportFunctionCode").equals(F1B));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testAddress_noFileExtensionXmlParam(@Autowired RestTestClient client) {
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
+            "Centre St").queryParam("borough", "Manhattan").queryParam("f", "xml").build().toUri();
+        LOGGER.info("URI={}", uri);
+        @SuppressWarnings("rawtypes")
+        EntityExchangeResult<Map> result = client.get()
+                            .uri(uri)
+                            .exchange()
+                            .expectStatus()
+                            .is2xxSuccessful()
+                            .expectHeader()
+                            .contentType(MediaType.APPLICATION_XML)
                             .expectBody(Map.class).returnResult();
         Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);

@@ -82,13 +82,25 @@ public class LegacyFileExtensionFilter extends GenericFilterBean {
             newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { "xml" });
         }
         else {
-            // No file extension in the request URI, default to f=json only if "f"
-            // query string parameter has not been specified.
-            // Use "putIfAbsent" to default to JSON if no format has been specified
-            newQueryParams.putIfAbsent(QUERY_PARAM_FORMAT, new String[] { "json" });
+            String format = requestedFormat(httpRequest);
+            logger.info("f={}", format);
+            if(format != null) {
+                newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { format });
+            }
         }
         LegacyFileExtensionRequestWrapper wrappedRequest = new LegacyFileExtensionRequestWrapper(httpRequest, newUri,
             newQueryParams);
         chain.doFilter(wrappedRequest, response);
+    }
+
+    private String requestedFormat(HttpServletRequest httpRequest) {
+        Map<String, String[]> params = httpRequest.getParameterMap();
+        if (params.containsKey(QUERY_PARAM_FORMAT)) {
+            String[] formatArray = httpRequest.getParameterValues(QUERY_PARAM_FORMAT);
+            if (formatArray != null && formatArray.length > 0) {
+                return formatArray[0];
+            }
+        }
+        return null;
     }
 }
