@@ -43,9 +43,9 @@ public class SanitizeParametersFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        logger.info("Filtering request {} to sanitize request parameters.", request.getRequestId());
+        logger.debug("Filtering request {} to sanitize request parameters.", request.getRequestId());
         HttpServletRequest httpReq = (HttpServletRequest) request;
         chain.doFilter(new SanitizeParametersRequestWrapper(httpReq), response);
-        logger.info("Request {} sanitization filter complete.", request.getRequestId());
+        logger.debug("Request {} sanitization filter complete.", request.getRequestId());
     }
 }

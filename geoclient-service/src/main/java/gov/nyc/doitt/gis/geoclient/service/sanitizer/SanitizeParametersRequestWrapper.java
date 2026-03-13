@@ -44,12 +44,12 @@ public class SanitizeParametersRequestWrapper extends HttpServletRequestWrapper 
 
     public SanitizeParametersRequestWrapper(HttpServletRequest request) {
         super(request);
-        logger.info("Sanitizing request {}.", request.getRequestId());
+        logger.debug("Sanitizing request {}.", request.getRequestId());
         sanitizedMap = Collections.unmodifiableMap(
             request.getParameterMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
                 entry -> Arrays.stream(entry.getValue()).map(TextUtils::sanitize).toArray(String[]::new))));
 
-        logger.info("Request {} sanitized.", request.getRequestId());
+        logger.debug("Request {} sanitized.", request.getRequestId());
     }
 
     @Override
