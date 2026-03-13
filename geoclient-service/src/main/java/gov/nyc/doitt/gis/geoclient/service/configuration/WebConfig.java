@@ -21,10 +21,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverters;
-import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -93,21 +89,7 @@ public class WebConfig implements WebMvcConfigurer {
         configurer.enable("geoclientDispatcherServlet");
     }
 
-    /**
-     * Adds JSON and XML message converters.
-     */
-    @Override
-    public void configureMessageConverters(HttpMessageConverters.ServerBuilder builder) {
-        builder.addCustomConverter(jsonMessageConverter());
-        builder.addCustomConverter(xmlMessageConverter());
-    }
-
     // Beans //
-
-    @Bean
-    public HttpMessageConverter<?> jsonMessageConverter() {
-        return new JacksonJsonHttpMessageConverter();
-    }
 
     @Bean
     public HttpExchangeRepository httpExchangeRepository() {
@@ -115,18 +97,8 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public JacksonXmlMarshaller marshaller() {
-        return new JacksonXmlMarshaller();
-    }
-
-    @Bean
     public SearchResultConverter searchResultConverter() {
         return new SearchResultConverter();
-    }
-
-    @Bean
-    public HttpMessageConverter<?> xmlMessageConverter() {
-        return new MarshallingHttpMessageConverter(marshaller());
     }
 
 }

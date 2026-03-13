@@ -20,21 +20,28 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * {@link HashMap} subclass used to allow jackson-dataformat-xml to use "geosupportResponse"
+ * instead of "Map" when serializing controller responses as XML.
+ * 
+ * @author mlipper
+ * @since 2.0.4
+ */
 @JsonRootName("geosupportResponse")
-public class GeosupportResponseXmlMapAdapter extends HashMap<String, Object> {
+public class GeosupportResponse extends HashMap<String, Object> {
 
-    public GeosupportResponseXmlMapAdapter(Map<? extends String, ? extends Object> m) {
+    public GeosupportResponse(Map<? extends String, ? extends Object> m) {
         super(m);
     }
 
-    public GeosupportResponseXmlMapAdapter() {
+    public GeosupportResponse() {
     }
 
-    public GeosupportResponseXmlMapAdapter(int initialCapacity) {
+    public GeosupportResponse(int initialCapacity) {
         super(initialCapacity);
     }
 
-    public GeosupportResponseXmlMapAdapter(int initialCapacity, float loadFactor) {
+    public GeosupportResponse(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);
     }
 

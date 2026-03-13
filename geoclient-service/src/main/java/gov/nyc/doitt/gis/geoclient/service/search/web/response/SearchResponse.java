@@ -17,11 +17,12 @@ package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
 import java.util.List;
 
-import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;
+
+import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 
@@ -40,10 +41,12 @@ public class SearchResponse {
     private List<SearchSummary> results;
 
     @JacksonXmlElementWrapper(localName = "parseTree")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JacksonXmlProperty(localName = "chunk")
     private List<Chunk> parseTree;
 
     @JacksonXmlElementWrapper(useWrapping = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JacksonXmlProperty(localName = "policy")
     private List<PolicySummary> policy;
 

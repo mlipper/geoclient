@@ -68,7 +68,7 @@ public class LegacyFileExtensionFilter extends GenericFilterBean {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String originalUri = httpRequest.getRequestURI();
-        logger.debug("Examining request URI: {}", originalUri);
+        logger.info("Examining request URI: {}", originalUri);
         String newUri = originalUri;
         Map<String, String[]> newQueryParams = new HashMap<>();
         if (originalUri.endsWith(FILE_EXT_JSON.toLowerCase())) {

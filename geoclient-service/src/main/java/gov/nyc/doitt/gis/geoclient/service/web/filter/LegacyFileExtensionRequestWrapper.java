@@ -67,9 +67,9 @@ public class LegacyFileExtensionRequestWrapper extends HttpServletRequestWrapper
         // but with the new URI. This is crucial if other components rely on
         // getRequestURL().
         StringBuffer originalUrl = request.getRequestURL();
-        logger.debug("Original URL: {}", originalUrl);
+        logger.info("Original URL: {}", originalUrl);
         String originalUri = request.getRequestURI();
-        logger.debug("Original URI: {}", originalUri);
+        logger.info("Original URI: {}", originalUri);
         this.newUrl = new StringBuffer(originalUrl.toString().replace(originalUri, newUri));
         this.newQueryParams = newQueryParams;
     }
@@ -81,7 +81,7 @@ public class LegacyFileExtensionRequestWrapper extends HttpServletRequestWrapper
      */
     @Override
     public String getRequestURI() {
-        logger.debug("Returning request URI: {}", newUri);
+        logger.info("Returning request URI: {}", newUri);
         return newUri;
     }
 
@@ -92,19 +92,19 @@ public class LegacyFileExtensionRequestWrapper extends HttpServletRequestWrapper
      */
     @Override
     public StringBuffer getRequestURL() {
-        logger.debug("Returning request URL: {}", newUrl);
+        logger.info("Returning request URL: {}", newUrl);
         return newUrl;
     }
 
     /*
      * (non-Javadoc)
      * Overriding getServletPath() is unnecessary.
-     * This is for debugging purposes.
+     * This is for infoging purposes.
      */
     @Override
     public String getServletPath() {
         String servletPath = super.getServletPath();
-        logger.debug("Returning servlet path: {}", servletPath);
+        logger.info("Returning servlet path: {}", servletPath);
         return servletPath;
     }
 
@@ -115,7 +115,7 @@ public class LegacyFileExtensionRequestWrapper extends HttpServletRequestWrapper
     @Override
     public String getPathInfo() {
         String pathInfo = super.getPathInfo();
-        logger.debug("Returning path info: {}", pathInfo);
+        logger.info("Returning path info: {}", pathInfo);
         return pathInfo;
     }
 
@@ -183,7 +183,7 @@ public class LegacyFileExtensionRequestWrapper extends HttpServletRequestWrapper
                 List<String> list = List.of(value);
                 valString = String.join(",", list);
             }
-            logger.debug(message, key + ": " + valString);
+            logger.info(message, key + ": " + valString);
         });
     }
 }

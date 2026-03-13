@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import gov.nyc.doitt.gis.geoclient.api.InvalidStreetCodeException;
+import gov.nyc.doitt.gis.geoclient.service.configuration.GeosupportResponse;
 import gov.nyc.doitt.gis.geoclient.service.domain.BadRequest;
 import gov.nyc.doitt.gis.geoclient.service.domain.ServiceType;
 import gov.nyc.doitt.gis.geoclient.service.domain.Version;
@@ -79,7 +80,7 @@ public class RestController {
 
     @RequestMapping(value = ADDRESS_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> address(@RequestParam(required = false) String houseNumber,
+    public @ResponseBody GeosupportResponse address(@RequestParam(required = false) String houseNumber,
             @RequestParam String street, @RequestParam(required = false) String borough,
             @RequestParam(required = false) String zip, @RequestParam(required = false) String f) throws Exception {
         logger.debug("address[houseNumber='{}', street='{}', borough='{}', zip='{}']", houseNumber, street, borough,
@@ -94,12 +95,12 @@ public class RestController {
         }
         Map<String, Object> addressMap = new HashMap<String, Object>();
         addressMap.put(ADDRESS_OBJ, this.geosupportService.callFunction1B(houseNumber, street, borough, zip));
-        return addressMap;
+        return new GeosupportResponse(addressMap);
     }
 
     @RequestMapping(value = ADDRESSPOINT_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> addresspoint(@RequestParam(required = false) String houseNumber,
+    public @ResponseBody GeosupportResponse addresspoint(@RequestParam(required = false) String houseNumber,
             @RequestParam String street, @RequestParam(required = false) String borough,
             @RequestParam(required = false) String zip) throws Exception {
         logger.debug("addresspoint[houseNumber='{}', street='{}', borough='{}', zip='{}']", houseNumber, street,
@@ -109,12 +110,12 @@ public class RestController {
         }
         Map<String, Object> addressPointMap = new HashMap<String, Object>();
         addressPointMap.put(ADDRESSPOINT_OBJ, this.geosupportService.callFunctionAP(houseNumber, street, borough, zip));
-        return addressPointMap;
+        return new GeosupportResponse(addressPointMap);
     }
 
     @RequestMapping(value = PLACE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> place(@RequestParam String name,
+    public @ResponseBody GeosupportResponse place(@RequestParam String name,
             @RequestParam(required = false) String borough, @RequestParam(required = false) String zip)
             throws Exception {
         logger.debug("place[name='{}', borough='{}', zip='{}']", name, borough, zip);
@@ -123,12 +124,12 @@ public class RestController {
         }
         Map<String, Object> placeMap = new HashMap<String, Object>();
         placeMap.put(PLACE_OBJ, this.geosupportService.callFunction1B(null, name, borough, zip));
-        return placeMap;
+        return new GeosupportResponse(placeMap);
     }
 
     @RequestMapping(value = INTERSECTION_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> intersection(@RequestParam String crossStreetOne,
+    public @ResponseBody GeosupportResponse intersection(@RequestParam String crossStreetOne,
             @RequestParam String crossStreetTwo, @RequestParam String borough,
             @RequestParam(required = false) String boroughCrossStreetTwo,
             @RequestParam(required = false) String compassDirection) {
@@ -138,12 +139,12 @@ public class RestController {
         Map<String, Object> intersectionMap = new HashMap<String, Object>();
         intersectionMap.put(INTERSECTION_OBJ, this.geosupportService.callFunction2(crossStreetOne, borough,
             crossStreetTwo, boroughCrossStreetTwo, compassDirection));
-        return intersectionMap;
+        return new GeosupportResponse(intersectionMap);
     }
 
     @RequestMapping(value = BLOCKFACE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> blockface(@RequestParam String onStreet,
+    public @ResponseBody GeosupportResponse blockface(@RequestParam String onStreet,
             @RequestParam String crossStreetOne, @RequestParam String crossStreetTwo, @RequestParam String borough,
             @RequestParam(required = false) String boroughCrossStreetOne,
             @RequestParam(required = false) String boroughCrossStreetTwo,
@@ -155,42 +156,42 @@ public class RestController {
         Map<String, Object> blockfaceMap = new HashMap<String, Object>();
         blockfaceMap.put(BLOCKFACE_OBJ, this.geosupportService.callFunction3(onStreet, borough, crossStreetOne,
             boroughCrossStreetOne, crossStreetTwo, boroughCrossStreetTwo, compassDirection));
-        return blockfaceMap;
+        return new GeosupportResponse(blockfaceMap);
     }
 
     @RequestMapping(value = BBL_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> bbl(@RequestParam String borough, @RequestParam String block,
+    public @ResponseBody GeosupportResponse bbl(@RequestParam String borough, @RequestParam String block,
             @RequestParam String lot) {
         logger.debug("bbl[borough='{}',block='{}', lot='{}']", borough, block, lot);
         Map<String, Object> bblMap = new HashMap<String, Object>();
         bblMap.put(BBL_OBJ, this.geosupportService.callFunctionBL(borough, block, lot));
-        return bblMap;
+        return new GeosupportResponse(bblMap);
     }
 
     @RequestMapping(value = BIN_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> bin(@RequestParam String bin) {
+    public @ResponseBody GeosupportResponse bin(@RequestParam String bin) {
         logger.debug("bin[bin='{}']", bin);
         Map<String, Object> binMap = new HashMap<String, Object>();
         binMap.put(BIN_OBJ, this.geosupportService.callFunctionBN(bin));
-        return binMap;
+        return new GeosupportResponse(binMap);
     }
 
     @RequestMapping(value = NORMALIZE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> normalize(@RequestParam String name,
+    public @ResponseBody GeosupportResponse normalize(@RequestParam String name,
             @RequestParam(required = false, defaultValue = "32") Integer length,
             @RequestParam(required = false, defaultValue = "S") String format) {
         logger.debug("normalize[name='{}',length='{}',format='{}']", name, length, format);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put(NORMALIZE_OBJ, this.geosupportService.callFunctionN(name, length, format));
-        return resultMap;
+        return new GeosupportResponse(resultMap);
     }
 
     @RequestMapping(value = STREETCODE_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> streetcode(@RequestParam String streetCode,
+    public @ResponseBody GeosupportResponse streetcode(@RequestParam String streetCode,
             @RequestParam(required = false) String streetCodeTwo,
             @RequestParam(required = false) String streetCodeThree,
             @RequestParam(required = false, defaultValue = "32") Integer length,
@@ -200,12 +201,12 @@ public class RestController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put(STREETCODE_OBJ,
             this.geosupportService.callStreetNameFunction(streetCode, streetCodeTwo, streetCodeThree, length, format));
-        return resultMap;
+        return new GeosupportResponse(resultMap);
     }
 
     @RequestMapping(value = STREETCODE_B5SC_URI, method = RequestMethod.GET, produces = {
             MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> streetcodeB5sc(@RequestParam String streetCode,
+    public @ResponseBody GeosupportResponse streetcodeB5sc(@RequestParam String streetCode,
             @RequestParam(required = false) String streetCodeTwo,
             @RequestParam(required = false) String streetCodeThree,
             @RequestParam(required = false, defaultValue = "32") Integer length,
@@ -215,14 +216,14 @@ public class RestController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put(STREETCODE_B5SC_OBJ,
             this.geosupportService.callFunctionD(streetCode, streetCodeTwo, streetCodeThree, length, format));
-        return resultMap;
+        return new GeosupportResponse(resultMap);
     }
 
     @RequestMapping(value = GEOSUPPORT_URI, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody Map<String, Object> geosupport(@RequestParam Map<String, Object> params) {
+    public @ResponseBody GeosupportResponse geosupport(@RequestParam Map<String, Object> params) {
         logger.debug("geosupport[{}]", params);
-        return this.geosupportService.callGeosupport(params);
+        return new GeosupportResponse(this.geosupportService.callGeosupport(params));
     }
 
     @RequestMapping(value = "/meta/{action}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE,
