@@ -28,9 +28,9 @@ public enum ServiceType {
     PLACE("place"),
     STREETCODE("streetcode"),
     STREETCODE_B5SC("response"), // Special case for D* streetcode response in StreetCodeController
-    UNKNOWN("unknown"),
-    VERSION("version"), // Currently unused
-    SEARCH("service");  // Currently unused
+    UNKNOWN("unknown");
+    //VERSION("version"), // Currently unused
+    //SEARCH("service");  // Currently unused
 
     private final String elementName;
 
