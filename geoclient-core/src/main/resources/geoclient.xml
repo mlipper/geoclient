@@ -1110,7 +1110,7 @@
         <field id="filler4" start="203" length="1"></field>
         <field id="communitySchoolDistrict" start="204" length="2"></field>
         <field id="dynamicBlock" start="206" length="3" outputAlias="atomicPolygon"></field>
-        <field id="instructionalRegion" start="209" length="2"></field>
+        <field id="instructionalRegion" start="209" length="2" outputAlias="policePatrolBorough"></field>
         <field id="featureTypeCode" start="211" length="1"></field>
         <field id="segmentTypeCode" start="212" length="1"></field>
         <field id="alleyCrossStreetsFlag" start="213" length="1"></field>
