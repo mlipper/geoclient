@@ -58,7 +58,6 @@ public class RestControllerIntegrationTest {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".json").queryParam("houseNumber", "100").queryParam(
             "street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawTypes")
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -76,13 +75,12 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
-    @SuppressWarnings({"unchecked", "rawTypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     public void testAddress_xmlFileExtension(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".xml").queryParam("houseNumber", "100").queryParam(
             "street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawTypes")
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -100,13 +98,12 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_noFileExtensionNoParam(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
             "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawtypes")
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -124,13 +121,12 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_noFileExtensionJsonParam(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
             "Centre St").queryParam("borough", "Manhattan").queryParam("f", "json").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawtypes")
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -148,13 +144,12 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_noFileExtensionXmlParam(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
             "Centre St").queryParam("borough", "Manhattan").queryParam("f", "xml").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawtypes")
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -172,12 +167,11 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testStreetcode_FDG(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + STREETCODE_URI).queryParam(STREET_CODE, "110610").build().toUri();
         LOGGER.info("URI={}", uri);
-        @SuppressWarnings("rawtypes")
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
