@@ -36,6 +36,12 @@ import gov.nyc.doitt.gis.geoclient.function.WorkArea;
 import gov.nyc.doitt.gis.geoclient.jni.GeoclientJni;
 import gov.nyc.doitt.gis.geoclient.util.OperatingSystemUtils;
 
+/**
+ * Implements CLI for using geoclient directly from the command line.
+ * 
+ * NOTE: functions AP, DN, BF, BB are not implemented yet.
+ * 
+ */
 public class GeosupportClient {
     private static final Logger log = LoggerFactory.getLogger(GeosupportClient.class);
     private static final String CONFIG_CHOICE = "c";
@@ -57,7 +63,6 @@ public class GeosupportClient {
         FUNCTIONS.put(Function.F3, 10);
         FUNCTIONS.put(Function.FDG, 11);
         FUNCTIONS.put(Function.FHR, 12);
-        // TODO: Add functions N*, D, DN
         SortedSet<String> functionNames = new TreeSet<String>();
         functionNames.addAll(FUNCTIONS.keySet());
         for (Iterator<String> iterator = functionNames.iterator(); iterator.hasNext();) {
@@ -195,6 +200,7 @@ public class GeosupportClient {
         try {
             client = new GeosupportClient();
             String action = null;
+            System.out.println();
             while (!(action = client.chooseFunction()).equalsIgnoreCase(QUIT_CHOICE)) {
                 action = action.toUpperCase();
                 if (CONFIG_CHOICE.equalsIgnoreCase(action)) {
