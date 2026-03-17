@@ -14,13 +14,30 @@ sourceSets {
 configurations {
     integrationTestImplementation.extendsFrom(implementation, testImplementation)
     integrationTestRuntimeOnly.extendsFrom(runtimeOnly, testRuntimeOnly)
+    mockitoAgent
 }
 
 dependencies {
+    //
+    // The special configuration for mockito-core is necessary to avoid a
+    // warning on JDK 21 due to restrictions on instrumentation.
+    // For more details see:
+    // https://javadoc.io/static/org.mockito/mockito-core/5.23.0/org.mockito/org/mockito/Mockito.html#mockito-instrumentation
+    //
+    // NOTE: the mockito version is set in gradle/libs.versions.toml even
+    // though it is part of the spring-boot-starter-test BOM.
+    //
+    // IMPORTANT: when upgrading spring-boot, this dependency must be manually
+    // configured to use the proper version. 
+    //
     testImplementation platform(project(':platform'))
+    testImplementation(libs.mockito.core) 
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testFixturesImplementation 'org.springframework.boot:spring-boot-starter-logging'
+    mockitoAgent(libs.mockito.core){
+        transitive = false
+    }
 }
 
 tasks.named('test', Test) {
@@ -29,6 +46,7 @@ tasks.named('test', Test) {
         events "failed", "skipped"
         exceptionFormat = "short"
     }
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
 }
 
 tasks.register('integrationTest', Test) {
