@@ -124,6 +124,7 @@
     "numberOfTotalLanesOnTheStreet" : "3",
     "numberOfTravelLanesOnTheStreet" : "1",
     "physicalId" : "0181278",
+    "policePatrolBorough" : "MN",
     "policePatrolBoroughCommand" : "2",
     "policePrecinct" : "024",
     "policeSector" : "24A",

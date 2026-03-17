@@ -1,28 +1,11 @@
 // tag::user_guide[]
 {
-  "id" : "5d0f18325890-2-1773085778741",
+  "id" : "4745a6a15afc-2-1773768807369",
+  "status" : "OK",
   "input" : "280 riverside drive 10025",
-  "parseTree" : [ {
-    "text" : "280 riverside drive 10025",
-    "tokens" : [ {
-      "value" : "10025",
-      "type" : "ZIP"
-    } ],
-    "type" : "COUNTY"
-  }, {
-    "text" : "280 riverside drive",
-    "tokens" : [ {
-      "value" : "280",
-      "type" : "HOUSE_NUMBER"
-    }, {
-      "value" : "riverside drive",
-      "type" : "STREET_NAME"
-    } ],
-    "type" : "ADDRESS"
-  } ],
-  "policy" : null,
   "results" : [ {
     "level" : "0",
+    "status" : "EXACT_MATCH",
     "request" : "address [houseNumber=280, street=riverside drive, borough=null, zip=10025]",
     "response" : {
       "alleyCrossStreetsFlag" : "X",
@@ -147,6 +130,7 @@
       "numberOfTotalLanesOnTheStreet" : "3",
       "numberOfTravelLanesOnTheStreet" : "1",
       "physicalId" : "0181278",
+      "policePatrolBorough" : "MN",
       "policePatrolBoroughCommand" : "2",
       "policePrecinct" : "024",
       "policeSector" : "24A",
@@ -208,9 +192,25 @@
       "yCoordinateOfCenterofCurvature" : "0000000",
       "zipCode" : "10025",
       "zipCodeIn" : "10025"
-    },
-    "status" : "EXACT_MATCH"
+    }
   } ],
-  "status" : "OK"
+  "parseTree" : [ {
+    "text" : "280 riverside drive 10025",
+    "tokens" : [ {
+      "value" : "10025",
+      "type" : "ZIP"
+    } ],
+    "type" : "COUNTY"
+  }, {
+    "text" : "280 riverside drive",
+    "tokens" : [ {
+      "value" : "280",
+      "type" : "HOUSE_NUMBER"
+    }, {
+      "value" : "riverside drive",
+      "type" : "STREET_NAME"
+    } ],
+    "type" : "ADDRESS"
+  } ]
 }
 // end::user_guide[]

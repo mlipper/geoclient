@@ -7,212 +7,212 @@
   "geosupportVersion" : {
     "dsNames" : [ "edequiv", "GRID1", "GRID2", "GRID3", "PAD", "san", "snd", "STRETCH", "thined", "GRID1R", "AUXSEG", "TPAD", "apequiv", "AP", "UPAD", "STAT", "STT1", "STT1A", "STT2", "STT3", "STT3S", "STTAP", "STTBL", "STTBN", "STTD", "snequiv" ],
     "geoFileInfo" : [ {
-      "recordType" : "0000",
       "tag" : "GEO",
       "date" : "260209",
       "release" : "2610",
       "recordCount" : "00000001",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-09"
     }, {
-      "recordType" : "0000",
       "tag" : "EDEQ",
       "date" : "200221",
       "release" : "20A",
       "recordCount" : "00000001",
+      "recordType" : "0000",
       "formattedDate" : "2020-02-21"
     }, {
-      "recordType" : "0000",
       "tag" : "GRD1",
       "date" : "260210",
       "release" : "26A",
       "recordCount" : "00234997",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-10"
     }, {
-      "recordType" : "0000",
       "tag" : "GRD2",
       "date" : "260212",
       "release" : "26A",
       "recordCount" : "00079258",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-12"
     }, {
-      "recordType" : "0000",
       "tag" : "GRD3",
       "date" : "260210",
       "release" : "26A",
       "recordCount" : "00245496",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-10"
     }, {
-      "recordType" : "0000",
       "tag" : "PAD",
       "date" : "260210",
       "release" : "26A",
       "recordCount" : "01291774",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-10"
     }, {
-      "recordType" : "0000",
       "tag" : "SAN",
       "date" : "240903",
       "release" : "24C1",
       "recordCount" : "00000750",
+      "recordType" : "0000",
       "formattedDate" : "2024-09-03"
     }, {
-      "recordType" : "0000",
       "tag" : "SND",
       "date" : "260206",
       "release" : "26A",
       "recordCount" : "00120864",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-06"
     }, {
-      "recordType" : "0000",
       "tag" : "STCH",
       "date" : "260210",
       "release" : "26A",
       "recordCount" : "00030386",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-10"
     } ],
     "thinFileInfo" : {
-      "recordTypes" : [ "0000", "0001", "0002" ],
       "tag" : "THIN",
-      "date" : "260212",
-      "release" : "26A",
-      "recordCount" : "00004341",
+      "date" : "260309",
+      "release" : "26A1",
+      "recordCount" : "00004288",
+      "recordTypes" : [ "0000", "0001", "0002" ],
       "fillerFields" : null,
-      "formattedDate" : "2026-02-12"
+      "formattedDate" : "2026-03-09"
     },
     "apFileInfo" : {
-      "recordType" : "0000",
       "tag" : "AP",
       "date" : "260130",
       "release" : "26A",
       "recordCount" : "00968843",
+      "recordType" : "0000",
       "formattedDate" : "2026-01-30"
     },
     "apequivFileInfo" : {
-      "recordType" : "0000",
       "tag" : "APEQ",
-      "date" : "260212",
-      "release" : "26A",
-      "recordCount" : "00000001",
-      "formattedDate" : "2026-02-12"
+      "date" : "260310",
+      "release" : "26A1",
+      "recordCount" : "00069802",
+      "recordType" : "0000",
+      "formattedDate" : "2026-03-10"
     },
     "auxsegFileInfo" : {
-      "recordType" : "0000",
       "tag" : "SAUX",
       "date" : "260210",
       "release" : "26A",
       "recordCount" : "00041374",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-10"
     },
     "grid1RFileInfo" : {
-      "recordType" : "0000",
       "tag" : "GR1R",
       "date" : "260210",
       "release" : "26A",
       "recordCount" : "00235000",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-10"
     },
     "sneqFileInfo" : {
-      "recordType" : "0000",
       "tag" : "SNEQ",
       "date" : "250417",
       "release" : "25B",
       "recordCount" : "00000023",
+      "recordType" : "0000",
       "formattedDate" : "2025-04-17"
     },
     "stat1AFileInfo" : {
-      "recordType" : "STT1",
       "tag" : "A***",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STT1",
       "formattedDate" : "******"
     },
     "stat1FileInfo" : {
-      "recordType" : "STT1",
       "tag" : "****",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STT1",
       "formattedDate" : "******"
     },
     "stat2FileInfo" : {
-      "recordType" : "STT2",
       "tag" : "****",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STT2",
       "formattedDate" : "******"
     },
     "stat3FileInfo" : {
-      "recordType" : "STT3",
       "tag" : "****",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STT3",
       "formattedDate" : "******"
     },
     "stat3SFileInfo" : {
-      "recordType" : "STT3",
       "tag" : "S***",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STT3",
       "formattedDate" : "******"
     },
     "statAPFileInfo" : {
-      "recordType" : "STTA",
       "tag" : "P***",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STTA",
       "formattedDate" : "******"
     },
     "statBLFileInfo" : {
-      "recordType" : "STTB",
       "tag" : "L***",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STTB",
       "formattedDate" : "******"
     },
     "statBNFileInfo" : {
-      "recordType" : "STTB",
       "tag" : "N***",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STTB",
       "formattedDate" : "******"
     },
     "statDFileInfo" : {
-      "recordType" : "STTD",
       "tag" : "****",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STTD",
       "formattedDate" : "******"
     },
     "statFileInfo" : {
-      "recordType" : "STAT",
       "tag" : "****",
       "date" : "******",
       "release" : "****",
       "recordCount" : "********",
+      "recordType" : "STAT",
       "formattedDate" : "******"
     },
     "tpadFileInfo" : {
-      "recordType" : "0000",
       "tag" : "TPAD",
-      "date" : "260131",
-      "release" : "25D",
+      "date" : "260301",
+      "release" : "26A",
       "recordCount" : "00000000",
-      "formattedDate" : "2026-01-31"
+      "recordType" : "0000",
+      "formattedDate" : "2026-03-01"
     },
     "upadFileInfo" : {
-      "recordType" : "0000",
       "tag" : "UPAD",
       "date" : "260210",
       "release" : "26A",
       "recordCount" : "00000001",
+      "recordType" : "0000",
       "formattedDate" : "2026-02-10"
     },
     "geofilesDirectory" : "/opt/geosupport/current/fls/",

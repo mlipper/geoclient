@@ -1,11 +1,11 @@
 // tag::user_guide[]
 {
-  "id" : "5d0f18325890-1-1773085778696",
+  "id" : "4745a6a15afc-1-1773768807310",
+  "status" : "OK",
   "input" : "280 riverside drive manhattan",
-  "parseTree" : null,
-  "policy" : null,
   "results" : [ {
     "level" : "0",
+    "status" : "EXACT_MATCH",
     "request" : "address [houseNumber=280, street=riverside drive, borough=MANHATTAN, zip=null]",
     "response" : {
       "alleyCrossStreetsFlag" : "X",
@@ -131,6 +131,7 @@
       "numberOfTotalLanesOnTheStreet" : "3",
       "numberOfTravelLanesOnTheStreet" : "1",
       "physicalId" : "0181278",
+      "policePatrolBorough" : "MN",
       "policePatrolBoroughCommand" : "2",
       "policePrecinct" : "024",
       "policeSector" : "24A",
@@ -191,9 +192,7 @@
       "yCoordinateLowAddressEnd" : "0229944",
       "yCoordinateOfCenterofCurvature" : "0000000",
       "zipCode" : "10025"
-    },
-    "status" : "EXACT_MATCH"
-  } ],
-  "status" : "OK"
+    }
+  } ]
 }
 // end::user_guide[]

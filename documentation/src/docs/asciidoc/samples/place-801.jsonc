@@ -172,6 +172,7 @@
     "numberOfTotalLanesOnTheStreet" : "5",
     "numberOfTravelLanesOnTheStreet" : "4",
     "physicalId" : "0001934",
+    "policePatrolBorough" : "MS",
     "policePatrolBoroughCommand" : "1",
     "policePrecinct" : "014",
     "policeSector" : "14B",
