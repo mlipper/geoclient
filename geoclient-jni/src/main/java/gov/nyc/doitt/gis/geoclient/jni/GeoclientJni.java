@@ -21,6 +21,12 @@ import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation class of the {@link Geoclient} interface.
+ * @see Geoclient 
+ * @author mlipper
+ * @since 1.0
+ */
 //@formatter:off
 public class GeoclientJni implements Geoclient {
 

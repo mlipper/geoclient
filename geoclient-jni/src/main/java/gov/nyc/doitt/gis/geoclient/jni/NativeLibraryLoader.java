@@ -26,8 +26,10 @@ import gov.nyc.doitt.gis.geoclient.jni.util.NativeLibraryLocator;
 import gov.nyc.doitt.gis.geoclient.jni.util.Platform;
 
 /**
- * Loads native shared libraries for use with the JNI API a using simple,
- * operating system-specific logic.
+ * Loads native shared libraries for use with the JNI API using
+ * platform-specific logic.
+ * 
+ * @author mlipper
  */
 public class NativeLibraryLoader {
 

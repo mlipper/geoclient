@@ -58,6 +58,13 @@ import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.jni.JniContext;
 
+/**
+ * Used to locate a platform-specific geoclient native library via the classpath
+ * and copy it to a directory for use with System.load() which requires the
+ * absolute path.
+ *
+ * @author mlipper
+ */
 public class NativeLibraryLocator {
 
     final static Logger logger = LoggerFactory.getLogger(NativeLibraryLocator.class);

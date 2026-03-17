@@ -15,6 +15,12 @@
  */
 package gov.nyc.doitt.gis.geoclient.jni.util;
 
+/**
+ * Used to determine the platform-specific name of a native library. Provides
+ * a <code>Builder</code> for fluid-style construction.
+ * 
+ * @author mlipper
+ */
 public class JniLibrary {
 
     private final String name;

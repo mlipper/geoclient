@@ -18,6 +18,12 @@ package gov.nyc.doitt.gis.geoclient.jni;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Acts as a read-only context object for accessing runtime properties and
+ * platform-specific constants.
+ * 
+ * @author mlipper 
+ */
 public class JniContext {
 
     static final Logger logger = LoggerFactory.getLogger(JniContext.class);

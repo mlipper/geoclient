@@ -21,9 +21,11 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
+ * Constants and interrogative methods for determining platform and whether it
+ * is supported.
+ *
  * @author mlipper
  */
-//@Brittle // TODO Create this Annotation
 public class Platform {
 
     public static final String ARCH_X64 = "x64";
