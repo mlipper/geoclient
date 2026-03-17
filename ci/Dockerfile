@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM gradle:jdk17 AS builder
+FROM gradle:jdk21 AS builder
 
 # Default for JARFILE assumes Docker context is the root project directory.
 ARG JARFILE
@@ -53,7 +53,7 @@ rm -rf "${tmp_dir}"
 EOF
 
 ### Run
-FROM eclipse-temurin:17-jre AS runner
+FROM eclipse-temurin:21-jre AS runner
 
 RUN set -ex \
   && apt-get update \
