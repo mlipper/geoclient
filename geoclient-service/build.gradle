@@ -78,7 +78,7 @@ tasks.named('build') {
 }
 
 tasks.named('bootRun') {
-    args '--spring.profiles.active=docsamples'
+    args '--spring.profiles.active=bootrun'
 }
 
 // Uses simple sharing strategy. See:
@@ -87,32 +87,11 @@ configurations {
     apiServer {
         canBeConsumed = true
         canBeResolved = false
-        //extendsFrom implementation, runtimeOnly
     }
 }
 
 artifacts {
     apiServer(bootJar.archiveFile) {
         builtBy(bootJar)
-    }
-}
-
-tasks.named("test") {
-
-    testLogging {
-        events "failed", "skipped", "passed"
-        exceptionFormat = "full"
-        showStandardStreams = true
-
-        debug {
-            events "failed", "skipped", "passed"
-            exceptionFormat = "full"
-            showStandardStreams = true
-        }
-
-        info {
-            events "failed", "skipped", "passed"
-            showStandardStreams = true
-        }
     }
 }

@@ -74,7 +74,7 @@ logging:
 spring:
     config:
         activate:
-            on-profile: "bootRun"
+            on-profile: "bootrun"
     mvc:
         log-request-details: true
 logging:
@@ -82,8 +82,11 @@ logging:
         spring-all: "INFO"
         geoclient-service: "INFO"
     file:
-        name: "build/bootrun/logs/geoclient.log"
+        name: "build/bootrun.log"
 management:
+  endpoint:
+    shutdown:
+        access: unrestricted
   endpoints:
     web:
       exposure:
@@ -105,7 +108,7 @@ logging:
         spring-all: "WARN"
         geoclient-all: "INFO"
     file:
-        name: "docsamples.log"
+        name: "build/docsamples.log"
 management:
   endpoint:
     shutdown:
