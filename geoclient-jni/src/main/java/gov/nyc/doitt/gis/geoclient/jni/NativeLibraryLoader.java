@@ -28,7 +28,7 @@ import gov.nyc.doitt.gis.geoclient.jni.util.Platform;
 /**
  * Loads native shared libraries for use with the JNI API using
  * platform-specific logic.
- * 
+ *
  * @author mlipper
  */
 public class NativeLibraryLoader {
@@ -42,6 +42,15 @@ public class NativeLibraryLoader {
         this.baseLibraryName = baseLibraryName;
     }
 
+    /**
+     * Creates a {@link NativeLibraryLocator} using given extract path to
+     * call {@link System#load(String)} with absolute, platform-dependent path
+     * to the located native library.
+     *
+     * @param extractDir full path to directory or classpath resource with the library
+     * @throws IOException if the locator encounters an I/O error. 
+     *
+    */
     public void loadLibrary(String extractDir) throws IOException {
         NativeLibraryLocator locator = new NativeLibraryLocator(extractDir);
         File libFile = locator.find(getJniLibrary());
