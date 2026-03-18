@@ -35,8 +35,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import gov.nyc.doitt.gis.geoclient.api.InvalidStreetCodeException;
-import gov.nyc.doitt.gis.geoclient.service.configuration.GeosupportResponse;
 import gov.nyc.doitt.gis.geoclient.service.domain.BadRequest;
+import gov.nyc.doitt.gis.geoclient.service.domain.GeosupportResponse;
 import gov.nyc.doitt.gis.geoclient.service.domain.ServiceType;
 import gov.nyc.doitt.gis.geoclient.service.domain.Version;
 import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
