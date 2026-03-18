@@ -18,7 +18,7 @@ package gov.nyc.doitt.gis.geoclient.jni.util;
 /**
  * Umbrella unchecked {@link RuntimeException} for indicating problems loading
  * a native library.
- * 
+ *
  * @author mlipper
  */
 public class JniLibraryException extends RuntimeException {

@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Acts as a read-only context object for accessing runtime properties and
  * platform-specific constants.
- * 
- * @author mlipper 
+ *
+ * @author mlipper
  */
 public class JniContext {
 

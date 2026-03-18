@@ -26,9 +26,9 @@ import java.nio.charset.CoderResult;
 /**
  * Low level utility for checking the Geosupport return code directly from a
  * {@link java.nio.ByteBuffer}.
- * 
+ *
  * Used primarily in tests.
- * 
+ *
  * @author mlipper
  */
 public class ByteBufferUtils {
