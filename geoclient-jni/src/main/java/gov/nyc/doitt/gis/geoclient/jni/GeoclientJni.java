@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation class of the {@link Geoclient} interface.
- * @see Geoclient 
+ * @see Geoclient
  * @author mlipper
  * @since 1.0
  */
@@ -167,22 +167,6 @@ public class GeoclientJni implements Geoclient {
             logger.error(ioe.getMessage());
             throw new RuntimeException(ioe);
         }
-        //
-        // System.loadLibrary(String): uses the paths specified in Java System variable
-        // 'java.library.path'
-        // System.load(String): uses platform-dependant absolute path
-        //
-        // Loads
-        // libgeoclientjni.so (on Linux)
-        // geoclientjni.dll (on Windows)
-        //
-        // TODO: Confirm the following:
-        // Both methods add any paths defined by the standard platform-specific lib paths
-        // (LD_LIBRARY, PATH, etc.)
-        // to the overall library path that were defined by the environment owning the
-        // parent Java process.
-        //
-        // System.loadLibrary("geoclientjni");
     }
     // ---- End CustomJavaCode .cfg declarations
 
