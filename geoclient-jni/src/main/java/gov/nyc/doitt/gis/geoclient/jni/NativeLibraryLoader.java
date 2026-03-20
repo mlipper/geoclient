@@ -48,7 +48,7 @@ public class NativeLibraryLoader {
      * to the located native library.
      *
      * @param extractDir full path to directory or classpath resource with the library
-     * @throws IOException if the locator encounters an I/O error. 
+     * @throws IOException if the locator encounters an I/O error.
      *
     */
     public void loadLibrary(String extractDir) throws IOException {
