@@ -15,7 +15,6 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.web;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -25,11 +24,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
 
-import gov.nyc.doitt.gis.geoclient.service.domain.BadRequest;
 import gov.nyc.doitt.gis.geoclient.service.domain.Version;
 import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
 
@@ -82,7 +77,7 @@ public class RestControllerTest {
 
     @Test
     public void testAddress_withoutBoroughOrZip() throws Exception {
-        assertThrows(MissingAnyOfOptionalServletRequestParametersException.class, () -> {
+        assertThrows(MissingBoroughAndZipRequestParameters.class, () -> {
             this.restController.address("59", "Maiden Ln", null, null, null);
         });
     }
@@ -128,7 +123,7 @@ public class RestControllerTest {
 
     @Test
     public void testPlace_withoutBoroughOrZip() throws Exception {
-        assertThrows(MissingAnyOfOptionalServletRequestParametersException.class, () -> {
+        assertThrows(MissingBoroughAndZipRequestParameters.class, () -> {
             this.restController.place("GWB", null, null);
         });
     }
@@ -198,21 +193,6 @@ public class RestControllerTest {
         Version version = new Version();
         Mockito.when(this.geosupportServiceMock.version()).thenReturn(version);
         assertSame(version, this.restController.version(null));
-    }
-
-    @Test
-    public void testHandleMissingRequestParameter() {
-        MockHttpServletRequest req = new MockHttpServletRequest();
-        String requestUri = "/foo";
-        String queryString = "bar=1";
-        req.setRequestURI(requestUri);
-        req.setQueryString(queryString);
-        MissingAnyOfOptionalServletRequestParametersException e = new MissingAnyOfOptionalServletRequestParametersException(
-            "dog", "cat");
-        ResponseEntity<BadRequest> result = this.restController.handleMissingRequestParameter(e, req);
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        assertEquals(String.format("%s?%s", requestUri, queryString), result.getBody().getRequestUri());
-        assertEquals(e.getMessage(), result.getBody().getMessage());
     }
 
 }

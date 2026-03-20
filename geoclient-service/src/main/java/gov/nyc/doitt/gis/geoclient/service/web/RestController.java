@@ -20,27 +20,20 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import gov.nyc.doitt.gis.geoclient.api.InvalidStreetCodeException;
-import gov.nyc.doitt.gis.geoclient.service.domain.BadRequest;
 import gov.nyc.doitt.gis.geoclient.service.domain.GeosupportResponse;
 import gov.nyc.doitt.gis.geoclient.service.domain.ServiceType;
 import gov.nyc.doitt.gis.geoclient.service.domain.Version;
 import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Handles RESTful requests for Geosupport data.
@@ -91,7 +84,7 @@ public class RestController {
         }
         logger.warn("address[{} {} {} {}]{}", houseNumber, street, borough, zip, format);
         if (borough == null && zip == null) {
-            throw new MissingAnyOfOptionalServletRequestParametersException("borough", "zip");
+            throw new MissingBoroughAndZipRequestParameters();
         }
         Map<String, Object> addressMap = new HashMap<String, Object>();
         addressMap.put(ADDRESS_OBJ, this.geosupportService.callFunction1B(houseNumber, street, borough, zip));
@@ -106,7 +99,7 @@ public class RestController {
         logger.debug("addresspoint[houseNumber='{}', street='{}', borough='{}', zip='{}']", houseNumber, street,
             borough, zip);
         if (borough == null && zip == null) {
-            throw new MissingAnyOfOptionalServletRequestParametersException("borough", "zip");
+            throw new MissingBoroughAndZipRequestParameters();
         }
         Map<String, Object> addressPointMap = new HashMap<String, Object>();
         addressPointMap.put(ADDRESSPOINT_OBJ, this.geosupportService.callFunctionAP(houseNumber, street, borough, zip));
@@ -120,7 +113,7 @@ public class RestController {
             throws Exception {
         logger.debug("place[name='{}', borough='{}', zip='{}']", name, borough, zip);
         if (borough == null && zip == null) {
-            throw new MissingAnyOfOptionalServletRequestParametersException("borough", "zip");
+            throw new MissingBoroughAndZipRequestParameters();
         }
         Map<String, Object> placeMap = new HashMap<String, Object>();
         placeMap.put(PLACE_OBJ, this.geosupportService.callFunction1B(null, name, borough, zip));
@@ -236,30 +229,6 @@ public class RestController {
             MediaType.APPLICATION_XML_VALUE })
     public @ResponseBody Version version(@RequestParam(required = false) String f) {
         return this.geosupportService.version();
-    }
-
-    // TODO refactor to ControllerAdvice
-    private BadRequest handleBadRequest(Exception exception, HttpServletRequest req) {
-        BadRequest badRequest = new BadRequest();
-        badRequest.setHttpStatus(HttpStatus.BAD_REQUEST.toString());
-        badRequest.setMessage(exception.getMessage());
-        badRequest.setRequestUri(String.format("%s?%s", req.getRequestURI(), req.getQueryString()));
-        return badRequest;
-    }
-
-    // TODO refactor to ControllerAdvice
-    @ExceptionHandler(value = { MissingAnyOfOptionalServletRequestParametersException.class,
-            MissingServletRequestParameterException.class })
-    public @ResponseBody ResponseEntity<BadRequest> handleMissingRequestParameter(
-            ServletRequestBindingException exception, HttpServletRequest req) {
-        return new ResponseEntity<BadRequest>(handleBadRequest(exception, req), HttpStatus.BAD_REQUEST);
-    }
-
-    // TODO refactor to ControllerAdvice
-    @ExceptionHandler
-    public @ResponseBody ResponseEntity<BadRequest> handleInvalidStreetCodeRequestParameter(
-            InvalidStreetCodeException exception, HttpServletRequest req) {
-        return new ResponseEntity<BadRequest>(handleBadRequest(exception, req), HttpStatus.BAD_REQUEST);
     }
 
     public void setGeosupportService(GeosupportService geosupportService) {

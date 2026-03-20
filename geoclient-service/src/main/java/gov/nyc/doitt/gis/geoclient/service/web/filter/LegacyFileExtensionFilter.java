@@ -71,21 +71,28 @@ public class LegacyFileExtensionFilter extends GenericFilterBean {
         logger.info("Examining request URI: {}", originalUri);
         String newUri = originalUri;
         Map<String, String[]> newQueryParams = new HashMap<>();
-        if (originalUri.endsWith(FILE_EXT_JSON.toLowerCase())) {
-            // .json requested, add f=json
+        
+        String lowerUri = originalUri.toLowerCase();
+        boolean hasSuffix = false;
+        if (lowerUri.endsWith(FILE_EXT_JSON)) {
             newUri = originalUri.substring(0, originalUri.length() - FILE_EXT_JSON.length());
-            newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { "json" });
+            hasSuffix = true;
         }
-        else if (originalUri.endsWith(FILE_EXT_XML.toLowerCase())) {
-            // .xml requested, add f=xml
+        else if (lowerUri.endsWith(FILE_EXT_XML)) {
             newUri = originalUri.substring(0, originalUri.length() - FILE_EXT_XML.length());
-            newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { "xml" });
+            hasSuffix = true;
         }
-        else {
-            String format = requestedFormat(httpRequest);
-            logger.info("f={}", format);
-            if(format != null) {
-                newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { format });
+        
+        String existingFormat = requestedFormat(httpRequest);
+        if (existingFormat != null) {
+            logger.info("f={}", existingFormat);
+            newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { existingFormat });
+        } else if (hasSuffix) {
+            if (lowerUri.endsWith(FILE_EXT_JSON)) {
+                newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { "json" });
+            }
+            else if (lowerUri.endsWith(FILE_EXT_XML)) {
+                newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { "xml" });
             }
         }
         LegacyFileExtensionRequestWrapper wrappedRequest = new LegacyFileExtensionRequestWrapper(httpRequest, newUri,
