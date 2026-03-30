@@ -48,6 +48,8 @@ paths:
           required: false
           schema:
             type: string
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /addresspoint:
     get:
       description: >
@@ -75,6 +77,8 @@ paths:
           required: false
           schema:
             type: string
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /bbl:
     get:
       description: Returns property-level data associated with a BBL
@@ -96,6 +100,8 @@ paths:
           required: true
           schema:
             type: string
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /bin:
     get:
       description: Returns property-level data associated with a BIN
@@ -109,6 +115,8 @@ paths:
           required: true
           schema:
             type: string
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /blockface:
     get:
       description: >
@@ -188,12 +196,8 @@ paths:
           schema:
             type: string
             enum: ['N', 'S', 'E', 'W']
-  /doc:
-    get:
-      description: Geoclient HTML documentation
-      responses:
-        '200':
-          description: OK
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /intersection:
     get:
       description: >
@@ -245,6 +249,8 @@ paths:
           schema:
             type: string
             enum: ['N', 'S', 'E', 'W']
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /normalize:
     get:
       description: Normalizes a street name using Geosupport conventions.
@@ -273,6 +279,8 @@ paths:
           schema:
             type: string
             enum: ['S', 'C']
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /place:
     get:
       description: >
@@ -296,6 +304,8 @@ paths:
           required: false
           schema:
             type: string
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /search:
     get:
       description: Single-field search for address, bbl, bin, blockface, intersection or place locations
@@ -366,6 +376,8 @@ paths:
           required: false
           schema:
             type: string
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /streetcode:
     get:
       description: Find the the street name for a B5SC, B7SC, or B10SC street code
@@ -407,14 +419,29 @@ paths:
           schema:
             type: string
             enum: ['S', 'C']
+        - name: format
+          $ref: "#/components/parameters/formatParam"
   /version:
     get:
       description: Geoclient and Geosupport version information
       responses:
         '200':
           description: Version information for this service
+      parameters:
+        - name: format
+          $ref: "#/components/parameters/formatParam"
 components:
   parameters:
+    formatParam:
+      name: f
+      description: Specifies the desired content format for the response. If not specified, the service will return use accept headers to determine the response format. If accept headers are not present, the service will default to JSON format.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - json
+          - xml
     boroughParam:
       name: borough
       description: Borough of NYC
@@ -467,14 +494,10 @@ components:
       type: apiKey
       in: header
       name: Ocp-Apim-Subscription-Key
-#    appIdAuth:
-#      type: apiKey
-#      in: query
-#      name: app_id
-#    appKeyAuth:
-#      type: apiKey
-#      in: query
-#      name: app_key
+    queryStringAuth:
+      type: apiKey
+      in: query
+      name: key
 #  responses:
 #    '200':
 #      description: OK
@@ -490,3 +513,4 @@ components:
 #      description: Internal Server Error
 security:
   - apiKeyAuth: []
+  - queryStringAuth: []
