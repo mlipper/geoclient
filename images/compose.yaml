@@ -1,5 +1,6 @@
 services:
   geoclient:
+    platform: ${TARGETPLATFORM:-linux/amd64}
   # Assumes run.Dockerfile has been built, tagged and pushed to
   # an accessible registry.
     image: ${GEOCLIENT_IMAGE}
