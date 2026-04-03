@@ -23,6 +23,17 @@ sourceSets {
 //  }
 }
 
+tasks.named('integrationTest') {
+    // See "GeoclientJniIntegrationTest crashes the JVM on full clean build"
+    // in the "Known Issues" section of the User Guide for rationale:
+    testLogging {
+        events = ["failed", "skipped"]
+        debug.events = ["failed", "skipped"]
+        info.events = ["failed", "skipped"]
+    }
+}
+
+
 // Exclude from spotless (gradle plugin) license header check because of custom header.
 spotless.java {
     targetExclude 'src/main/java/gov/nyc/doitt/gis/geoclient/jni/util/NativeLibraryLocator.java'

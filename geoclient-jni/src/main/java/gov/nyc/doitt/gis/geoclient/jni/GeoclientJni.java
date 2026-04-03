@@ -118,11 +118,13 @@ public class GeoclientJni implements Geoclient {
     }
 
     private void logBufferType(WorkArea workArea, BufferType bufferType, boolean isNull) {
-        if (isNull) {
-            logger.debug("{} buffer type: {}, however it is null ", workArea, bufferType);
-        }
-        else {
-            logger.debug("{} buffer type: {}", workArea, bufferType);
+        if(logger.isDebugEnabled()) {
+            if (isNull) {
+                logger.debug("{} buffer type: {}, however it is null ", workArea, bufferType);
+            }
+            else {
+                logger.debug("{} buffer type: {}", workArea, bufferType);
+            }
         }
     }
 

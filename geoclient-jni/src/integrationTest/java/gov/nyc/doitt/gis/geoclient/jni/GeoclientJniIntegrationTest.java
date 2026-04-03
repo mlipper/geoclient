@@ -90,27 +90,35 @@ class GeoclientJniIntegrationTest {
     }
 
     private void logFunctionCall(TestConfig conf, String message) {
-        int i = 0;
-        int len = message.length() + 5 + 7 + 2;
-        StringBuffer sb = new StringBuffer();
-        while (i < len) {
-            sb.append("-");
-            i++;
+        if (logger.isDebugEnabled()) {
+            int i = 0;
+            int len = message.length() + 5 + 7 + 2;
+            StringBuffer sb = new StringBuffer();
+            while (i < len) {
+                sb.append("-");
+                i++;
+            }
+            logger.debug(sb.toString());
+            logger.debug("{} {} request", lpad(conf.getFunctionName()), message);
         }
-        logger.debug(sb.toString());
-        logger.debug("{} {} request", lpad(conf.getFunctionName()), message);
     }
 
     private void logReturnCode(TestConfig conf, String message, String returnCode) {
-        logger.debug("{} resp:{} {}", lpad(conf.getFunctionName()), returnCode, message);
+        if (logger.isDebugEnabled()) {
+            logger.debug("{} resp:{} {}", lpad(conf.getFunctionName()), returnCode, message);
+        }
     }
 
     private void logWorkArea(String workAreaName, String workAreaData) {
-        logger.debug("[WA{}]:<{}>", workAreaName, workAreaData);
+        if (logger.isDebugEnabled()) {
+            logger.debug("[WA{}]:<{}>", workAreaName, workAreaData);
+        }
     }
 
     private void logByteBuffer(String workAreaName, ByteBuffer buffer) {
-        logger.trace("[WA{}]: ByteBuffer[capacity: {}, position: {}, limit: {}]", workAreaName, buffer.capacity(),
-            buffer.position(), buffer.limit());
+        if (logger.isTraceEnabled()) {
+            logger.trace("[WA{}]: ByteBuffer[capacity: {}, position: {}, limit: {}]", workAreaName, buffer.capacity(),
+                buffer.position(), buffer.limit());
+        }
     }
 }
