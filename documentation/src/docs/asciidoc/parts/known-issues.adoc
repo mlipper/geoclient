@@ -1,0 +1,52 @@
+== Known Issues
+
+=== GeoclientJniIntegrationTest crashes the JVM on full clean build
+
+Executing the JNI integration tests as part of a full project
+`./gradlew clean build` has frequently resulted in JVM crashes:
+`SIGSEGV` triggered by Logback logging after JNI call to native code.
+
+Seemingly, after the upgrade from spring-boot `3.0.3` to `3.0.5`,
+this started happening on every full-project clean build. Copilot
+suggested converting the `ByteBuffer` to/from `byte[]` arrays before/after
+invoking native code. This fixed the issue, but pending further
+research, GeoclientJni will remain as is.
+
+Copilot had claimed to have fixed the issue several times before
+arriving at this solution. This is not unusual, but all solutions
+were based on the false conclusion that misconfigured `ByteBuffer`
+lengths were problem. Given that this issue has never shown up in
+in other integration tests or production in the last 10+ years,
+it seems prudent to simply disable standard output/error logging
+for the moment until the root cause can be conclusively identified.
+
+Note that `ByteBuffer` is not used in direct mode by other Geoclient components,
+which would have been one obvious potential cause.
+
+According to the Gradle documentation:
+
+[,groovy]
+----
+integrationTest {
+    testLogging {
+        // set options for log level LIFECYCLE
+        events("failed")
+        exceptionFormat = "short"
+
+        // set options for log level DEBUG
+        debug {
+            events("started", "skipped", "failed")
+            exceptionFormat = "full"
+        }
+
+// -->
+// Current fix used in geoclient-jni/build.gradle:
+        // remove standard output/error logging from --info builds
+        // by assigning only 'failed' and 'skipped' events
+        info.events = ["failed", "skipped"]
+// <--
+    }
+}
+----
+
+See: {gradle-test-logging}[TestLoggingContainer] for more details.
