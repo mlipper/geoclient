@@ -3,12 +3,25 @@ plugins {
     id 'java-gradle-plugin'
     id 'checkstyle'
     id 'project-report'
-    id("org.springframework.boot") version "4.0.3"
+    id 'org.springframework.boot' version '4.0.5'
     alias(libs.plugins.spotless)
     // Note: usage of versions plugin dependencyUpdates task emits
     // deprecation warnings.
     alias(libs.plugins.versions)
 }
+
+//
+// The version of spring-boot specified here must match the versions
+// specified in files:
+//   - gradle/libs.versions.toml
+//   - platform/build.gradle
+//
+// 2026-04-01: this duplication seems to be necessary due to resolution
+// resolution conflicts between buildSrc/build.gradle application of the
+// boot plugin, dependency configuration of boot plugin's BOM as a platform
+// and platform/build.gradle specification of the spring-boot BOM as a
+// gradle platform.
+//
 
 repositories {
     gradlePluginPortal()

@@ -7,5 +7,9 @@ javaPlatform {
 }
 
 dependencies {
-    api platform('org.springframework.boot:spring-boot-dependencies:4.0.3')
+    // The version of spring-boot specified here must match the versions
+    // specified in files:
+    //   buildSrc/build.gradle
+    //   gradle/libs.versions.toml
+    api platform('org.springframework.boot:spring-boot-dependencies:4.0.5')
 }

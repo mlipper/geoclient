@@ -9,16 +9,14 @@ jopt-simple = "5.0.4"
 mockito-core = "5.20.0"
 shadow-plugin = "9.2.2"
 spotless-plugin = "6.25.0"
-# Used by geoclient-service because of gradle platform and boot plugin complications
-# The spring-boot plugin is also used by buildSrc/build.gradle bu the version
-# is hardcoded due to restrictions on using a version catalogs in buildSrc. 
-spring-boot = "4.0.3"
+# Must match version set in buildSrc/build.gradle and platform/build.gradle
+# See comment in buildSrc/build.gradle for details
+spring-boot = "4.0.5"
 versions-plugin = "0.52.0"
 
 [plugins]
 asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor-plugins" }
 asciidoctorPdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor-plugins" }
-# See note above
 boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow-plugin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin" }
