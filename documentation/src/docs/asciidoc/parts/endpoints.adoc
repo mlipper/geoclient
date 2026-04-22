@@ -339,7 +339,7 @@ include::../samples/place-800.jsonc[tags=user_guide]
 
 === Search
 
-The `/search` endpoint provides a way to search for an address, BBL, BIN, blockface, or place using a single unparsed location string. Assuming that the Geoclient parser can guess the location type requested and the given single-field input parameter contains contains enough information to generate a successful Geosupport call, the service will return one or more sets of geocodes corresponding to the type of request that was made.
+The `/search` endpoint provides a way to search for an address, BBL, BIN, blockface, intersection, or place using a single unparsed location string. Assuming that the Geoclient parser can guess the location type requested and the given single-field input parameter contains contains enough information to generate a successful Geosupport call, the service will return one or more sets of geocodes corresponding to the type of request that was made.
 
 The single-field search will attempt to recognize the type of request being made using the following (simplified) parsing strategies which are listed in the order they are executed:
 
