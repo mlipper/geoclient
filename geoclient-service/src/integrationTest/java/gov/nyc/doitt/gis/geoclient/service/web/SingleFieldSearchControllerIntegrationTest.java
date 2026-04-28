@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.search.web;
+package gov.nyc.doitt.gis.geoclient.service.web;
 
-import static gov.nyc.doitt.gis.geoclient.service.search.web.SingleFieldSearchController.SEARCH_URI;
+import static gov.nyc.doitt.gis.geoclient.service.web.SingleFieldSearchController.SEARCH_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
@@ -40,7 +40,7 @@ import gov.nyc.doitt.gis.geoclient.service.search.web.response.Status;
 @AutoConfigureRestTestClient
 public class SingleFieldSearchControllerIntegrationTest {
 
-    private final Logger logger = LoggerFactory.getLogger(SingleFieldSearchController.class);
+    private final Logger logger = LoggerFactory.getLogger(gov.nyc.doitt.gis.geoclient.service.web.SingleFieldSearchController.class);
 
     // TODO replace with environment variable
     private static final String BASE_URI = "/geoclient/v2";

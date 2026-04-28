@@ -15,7 +15,7 @@
  */
 
 /**
- * Response package.
+ * Search web response package.
  *
  * @author Matthew Lipper
  */
