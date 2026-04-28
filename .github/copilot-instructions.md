@@ -95,14 +95,14 @@ Spring Boot version **must be kept in sync** across three places: `gradle/libs.v
 The `geoclientjni` shared library is bundled inside the `geoclient-jni` jar and unpacked at runtime to `${java.io.tmpdir}/${gc.jni.version}/`. The property `gc.jni.version` defaults to `geoclient-jni-2` (set in `gradle.properties`). `NativeLibraryLoader` handles the unpacking; `JniContext` provides the paths.
 
 ### Service REST endpoints
-Endpoints are defined as constants in `RestController` (e.g., `ADDRESS_URI = "/address"`) and in `SingleFieldSearchController` (e.g., `SEARCH_URI = "/search"`). Each endpoint in  `RestController` maps to a `ServiceType` enum entry that also names the JSON wrapper element.
+Endpoints are defined as constants in `RestController` (e.g., `ADDRESS_URI = "/address"`) and in `SingleFieldSearchController` (e.g., `SEARCH_URI = "/search"`). Each endpoint in `RestController` maps to a `ServiceType` enum entry that also names the JSON wrapper element.
 
-The `/search` endpoint in `SingleFieldSearchController` is used for single-field searches, while other endpoints in `RestController` handle location-related queries with discrete input parameters that map to specific Geosupport functions. Single-field search relies heavily on the `geoclient-parser` module to parse and validate input parameters before invoking the appropriate Geosupport function.
+The `/search` endpoint in `SingleFieldSearchController` is used for single-field searches, while other endpoints in `RestController` handle location-related queries with discrete input parameters that map to specific Geosupport functions. Single-field search relies heavily on the `geoclient-parser` module to parse and validate input parameters before invoking the appropriate Geosupport function. Both controllers are organized in `geoclient-service/src/main/java/gov/nyc/doitt/gis/geoclient/service/web/`.
 
 ## TODO
-- Move endpoints exposed by `SingleFieldSearchController` to `RestController` to consolidate all REST endpoints in a single controller.
-- Refactor single-field search handling (except for web or Spring aware classes) into a separate standalone module that can be used in other types of applications. E.g., from `geoclient-cli`.
-- Begin using the `testcontainers` library for integration tests to allow for development without requiring DevContainers on macOS which is not currently supported by the native Geosupport libraries.
-- Create API documentation (Javadoc) for all public and protected classes and methods.
-- Create metadata to begin using GitHub Actions for CI/CD.
-- Update the `geoclient-parser` project to recognize apartment/suite/floor information in single-field search queries. This will improve the accuracy of single-field searches by discarding this information when not needed for calling Geosupport functions and ensuring that the correct Geosupport function is invoked based on the relevant address components.
+1. Move `SingleFieldSearchController` to the same package as `RestController` to consolidate the organization of REST endpoint controllers while maintaining separate concerns.
+2. Refactor single-field search handling (except for web or Spring aware classes) into a separate standalone module that can be used in other types of applications. E.g., from `geoclient-cli`.
+3. Begin using the `testcontainers` library for integration tests to allow for development without requiring DevContainers on macOS which is not currently supported by the native Geosupport libraries.
+4. Create API documentation (Javadoc) for all public and protected classes and methods.
+5. Create metadata to begin using GitHub Actions for CI/CD.
+6. Update the `geoclient-parser` project to recognize apartment/suite/floor information in single-field search queries. This will improve the accuracy of single-field searches by discarding this information when not needed for calling Geosupport functions and ensuring that the correct Geosupport function is invoked based on the relevant address components.
