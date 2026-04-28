@@ -26,8 +26,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResultConverter;
-
 /**
  * Customizes the default web configuration by implementing the Spring
  * {@link WebMvcConfigurer} interface.

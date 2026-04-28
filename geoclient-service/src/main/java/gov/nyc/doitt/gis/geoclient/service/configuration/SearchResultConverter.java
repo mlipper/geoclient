@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.search.web.response;
+package gov.nyc.doitt.gis.geoclient.service.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,13 @@ import gov.nyc.doitt.gis.geoclient.service.search.Search;
 import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
 import gov.nyc.doitt.gis.geoclient.service.search.policy.Policy;
 import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+import gov.nyc.doitt.gis.geoclient.service.search.web.response.MatchStatus;
+import gov.nyc.doitt.gis.geoclient.service.search.web.response.ParamsAndResult;
+import gov.nyc.doitt.gis.geoclient.service.search.web.response.PolicySummary;
+import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchParameters;
+import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResponse;
+import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchSummary;
+import gov.nyc.doitt.gis.geoclient.service.search.web.response.Status;
 
 public class SearchResultConverter implements Converter<ParamsAndResult, SearchResponse> {
     @Override
