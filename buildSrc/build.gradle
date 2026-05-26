@@ -3,7 +3,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'checkstyle'
     id 'project-report'
-    id 'org.springframework.boot' version '4.0.5'
+    id 'org.springframework.boot' version '4.0.6'
     alias(libs.plugins.spotless)
     // Note: usage of versions plugin dependencyUpdates task emits
     // deprecation warnings.
