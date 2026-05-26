@@ -44,6 +44,7 @@ The `check` task runs both `test` and `integrationTest`. Use `test` alone when G
 | `geoclient-service` | Spring Boot 4 REST service — the deployable artifact |
 | `geoclient-cli` | Command-line tool for direct JNI testing |
 | `geoclient-test` | Shared test infrastructure (`GeosupportIntegrationTest`, `NativeIntegrationTest`) |
+| `documentation` | AsciiDoc-based user guide and API docs, built with the Asciidoctor Gradle plugin |
 | `buildSrc` | Convention plugins + build tooling (Groovy + Java) |
 
 ## Architecture
@@ -63,7 +64,11 @@ HTTP GET /geoclient/v2/address
 
 **Geosupport work areas**: Geosupport communicates through two fixed-length byte buffers (`WA1`, `WA2`). The field layout (position, length, alias, input flag) for every function is declared in `geoclient-core/src/main/resources/geoclient.xml` and loaded by `GeoclientXmlReader` at startup into `WorkArea`/`Field` objects. Adding or changing Geosupport function support means editing this XML file.
 
-**Spring profiles**: `bootrun` (local dev), `quiet`, `accesslog`, `docsamples`. The `bootrun` profile enables actuator endpoints and file logging to `build/bootrun.log`.
+**Request sanitization**: All incoming HTTP parameters pass through `SanitizeParametersFilter` (in `geoclient-service/.../sanitizer/`) before reaching controllers. This wraps the request in `SanitizeParametersRequestWrapper` to clean input values.
+
+**Single-field search pipeline**: `SingleFieldSearchController` → `SingleFieldSearchHandler` → `LocationTokenizer` (parser module) → parallel `SearchTask` execution via a fixed thread pool of 4 → `SearchResult`. The search package (`geoclient-service/.../search/`) owns the orchestration; `geoclient-parser` owns tokenization and NLP.
+
+**Spring profiles**: `bootrun` (local dev, enables actuator + file logging to `build/bootrun.log`), `quiet` (suppresses most logging), `accesslog` (enables Tomcat access log to `/workspaces/tomcat/logs/`), `docsamples` (pretty-prints JSON + enables actuator, used for generating documentation samples).
 
 **Context path**: `/geoclient/v2` (configurable in `application.yml`).
 
@@ -87,9 +92,10 @@ Convention plugins are applied by name, not by class:
 - `geoclient.library-conventions` — extends java-conventions, adds `java-library` + Maven publishing
 - `geoclient.test-conventions` — adds `integrationTest` source set, JaCoCo, JUnit 5, Mockito agent
 - `geoclient.jar-conventions` — shared JAR manifest
+- `geoclient.build-conventions` — provides `licenseFilesSpec` (copies `src/dist/license.txt` and `notice.txt` into archives)
 
 ### Spring Boot version
-Spring Boot version **must be kept in sync** across three places: `gradle/libs.versions.toml`, `buildSrc/build.gradle`, and `platform/build.gradle`. See comments in each file.
+Spring Boot version **must be kept in sync** across three places: `gradle/libs.versions.toml`, `buildSrc/build.gradle`, and `platform/build.gradle`. See comments in each file. When upgrading Spring Boot, also manually verify the `mockito-core` version in `libs.versions.toml` matches what `spring-boot-starter-test` pulls in.
 
 ### JNI native library loading
 The `geoclientjni` shared library is bundled inside the `geoclient-jni` jar and unpacked at runtime to `${java.io.tmpdir}/${gc.jni.version}/`. The property `gc.jni.version` defaults to `geoclient-jni-2` (set in `gradle.properties`). `NativeLibraryLoader` handles the unpacking; `JniContext` provides the paths.
@@ -100,6 +106,9 @@ Both `RestController` and `SingleFieldSearchController` are located in `gov.nyc.
 The `/search` endpoint in `SingleFieldSearchController` is used for single-field searches, while other endpoints in `RestController` handle location-related queries with discrete input parameters that map to specific Geosupport functions. Single-field search relies heavily on the `geoclient-parser` module to parse and validate input parameters before invoking the appropriate Geosupport function. Both controllers are organized in `geoclient-service/src/main/java/gov/nyc/doitt/gis/geoclient/service/web/`.
 
 **Design Note:** `RestController` and `SingleFieldSearchController` are kept as separate classes despite being in the same package to maintain clear separation of concerns—they handle fundamentally different input patterns and processing strategies (discrete parameters vs. free-form string parsing).
+
+### DevContainer
+The repo ships a `.devcontainer/devcontainer.json` targeting **linux/amd64** only — macOS users must set `--platform=linux/amd64` in Docker. The container mounts a Docker volume named `geosupport-latest` at `/opt/geosupport`; this volume must be pre-populated with a Geosupport installation before integration tests or `bootRun` will work. The `GEOFILES` env var is pre-set in the container to `/opt/geosupport/current/fls/`.
 
 ## TODO
 1. Refactor single-field search handling (except for web or Spring aware classes) into a separate standalone module that can be used in other types of applications. E.g., from `geoclient-cli`.
