@@ -8,11 +8,11 @@
     "dsNames" : [ "edequiv", "GRID1", "GRID2", "GRID3", "PAD", "san", "snd", "STRETCH", "thined", "GRID1R", "AUXSEG", "TPAD", "apequiv", "AP", "UPAD", "STAT", "STT1", "STT1A", "STT2", "STT3", "STT3S", "STTAP", "STTBL", "STTBN", "STTD", "snequiv" ],
     "geoFileInfo" : [ {
       "tag" : "GEO",
-      "date" : "260209",
-      "release" : "2610",
+      "date" : "260428",
+      "release" : "2620",
       "recordCount" : "00000001",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-09"
+      "formattedDate" : "2026-04-28"
     }, {
       "tag" : "EDEQ",
       "date" : "200221",
@@ -22,32 +22,32 @@
       "formattedDate" : "2020-02-21"
     }, {
       "tag" : "GRD1",
-      "date" : "260210",
-      "release" : "26A",
-      "recordCount" : "00234997",
+      "date" : "260424",
+      "release" : "26B",
+      "recordCount" : "00235215",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-10"
+      "formattedDate" : "2026-04-24"
     }, {
       "tag" : "GRD2",
-      "date" : "260212",
-      "release" : "26A",
-      "recordCount" : "00079258",
+      "date" : "260424",
+      "release" : "26B",
+      "recordCount" : "00079259",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-12"
+      "formattedDate" : "2026-04-24"
     }, {
       "tag" : "GRD3",
-      "date" : "260210",
-      "release" : "26A",
-      "recordCount" : "00245496",
+      "date" : "260424",
+      "release" : "26B",
+      "recordCount" : "00245153",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-10"
+      "formattedDate" : "2026-04-24"
     }, {
       "tag" : "PAD",
-      "date" : "260210",
-      "release" : "26A",
-      "recordCount" : "01291774",
+      "date" : "260427",
+      "release" : "26B",
+      "recordCount" : "01292123",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-10"
+      "formattedDate" : "2026-04-27"
     }, {
       "tag" : "SAN",
       "date" : "240903",
@@ -57,18 +57,18 @@
       "formattedDate" : "2024-09-03"
     }, {
       "tag" : "SND",
-      "date" : "260206",
-      "release" : "26A",
-      "recordCount" : "00120864",
+      "date" : "260417",
+      "release" : "26B",
+      "recordCount" : "00121550",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-06"
+      "formattedDate" : "2026-04-17"
     }, {
       "tag" : "STCH",
-      "date" : "260210",
-      "release" : "26A",
-      "recordCount" : "00030386",
+      "date" : "260423",
+      "release" : "26B",
+      "recordCount" : "00030366",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-10"
+      "formattedDate" : "2026-04-23"
     } ],
     "thinFileInfo" : {
       "tag" : "THIN",
@@ -81,35 +81,35 @@
     },
     "apFileInfo" : {
       "tag" : "AP",
-      "date" : "260130",
-      "release" : "26A",
-      "recordCount" : "00968843",
+      "date" : "260415",
+      "release" : "26B",
+      "recordCount" : "00968881",
       "recordType" : "0000",
-      "formattedDate" : "2026-01-30"
+      "formattedDate" : "2026-04-15"
     },
     "apequivFileInfo" : {
       "tag" : "APEQ",
-      "date" : "260310",
-      "release" : "26A1",
-      "recordCount" : "00069802",
+      "date" : "260414",
+      "release" : "26B",
+      "recordCount" : "00000001",
       "recordType" : "0000",
-      "formattedDate" : "2026-03-10"
+      "formattedDate" : "2026-04-14"
     },
     "auxsegFileInfo" : {
       "tag" : "SAUX",
-      "date" : "260210",
-      "release" : "26A",
-      "recordCount" : "00041374",
+      "date" : "260424",
+      "release" : "26B",
+      "recordCount" : "00041375",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-10"
+      "formattedDate" : "2026-04-24"
     },
     "grid1RFileInfo" : {
       "tag" : "GR1R",
-      "date" : "260210",
-      "release" : "26A",
-      "recordCount" : "00235000",
+      "date" : "260424",
+      "release" : "26B",
+      "recordCount" : "00235218",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-10"
+      "formattedDate" : "2026-04-24"
     },
     "sneqFileInfo" : {
       "tag" : "SNEQ",
@@ -201,23 +201,23 @@
     },
     "tpadFileInfo" : {
       "tag" : "TPAD",
-      "date" : "260301",
+      "date" : "260423",
       "release" : "26A",
       "recordCount" : "00000000",
       "recordType" : "0000",
-      "formattedDate" : "2026-03-01"
+      "formattedDate" : "2026-04-23"
     },
     "upadFileInfo" : {
       "tag" : "UPAD",
-      "date" : "260210",
-      "release" : "26A",
+      "date" : "260427",
+      "release" : "26B",
       "recordCount" : "00000001",
       "recordType" : "0000",
-      "formattedDate" : "2026-02-10"
+      "formattedDate" : "2026-04-27"
     },
     "geofilesDirectory" : "/opt/geosupport/current/fls/",
-    "release" : "26A",
-    "version" : "26.1"
+    "release" : "26B",
+    "version" : "26.2"
   },
   "accessMethod" : "Local/JNI"
 }
