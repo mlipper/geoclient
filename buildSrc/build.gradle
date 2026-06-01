@@ -73,6 +73,10 @@ tasks.named('test', Test) {
 
 gradlePlugin {
     plugins {
+        aggregateJavadocPlugin {
+            id = 'geoclientbuild.aggregate-javadoc'
+            implementationClass = 'geoclientbuild.docs.AggregateJavadocPlugin'
+        }
         apiserver {
             id = 'geoclientbuild.apiserver'
             implementationClass = 'geoclientbuild.server.ApiServerPlugin'
