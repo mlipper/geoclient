@@ -36,8 +36,8 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
  *
  * @author mlipper
  * @since 2.0.4
- * @see the documentation for {@link jakarta.servlet.http.HttpServletRequestWrapper}
- * @see the documentation for {@link jakarta.servlet.http.HttpServletRequest}
+ * @see jakarta.servlet.http.HttpServletRequestWrapper
+ * @see jakarta.servlet.http.HttpServletRequest
  */
 public class LegacyFileExtensionRequestWrapper extends HttpServletRequestWrapper {
 

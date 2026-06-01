@@ -23,10 +23,10 @@ import org.springframework.web.ErrorResponseException;
  * Exception indicating both the borough and zip request parameters are missing
  * from the request. Uses HTTP {@code 400 Bad Request} create parent class.
  *
- * For use with Spring's support for <a hraf="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457</a>
+ * For use with Spring's support for <a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457</a>
  * support.
  *
- * @mlipper 
+ * @author mlipper 
  * @see ErrorResponseException 
  */
 public class MissingBoroughAndZipRequestParameters extends ErrorResponseException {

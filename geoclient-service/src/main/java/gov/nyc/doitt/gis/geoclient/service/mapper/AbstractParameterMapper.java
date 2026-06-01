@@ -23,6 +23,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract base class for mapping between a Map of parameters and an object of type T. Subclasses must implement the
+ * fromParameters and toParameters methods to define the specific mapping logic for their respective types.
+ *
+ * @author mlipper
+ * @param <T> the type of object being mapped
+ * @see Mapper
+ */
 public abstract class AbstractParameterMapper<T> implements Mapper<T> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractParameterMapper.class);

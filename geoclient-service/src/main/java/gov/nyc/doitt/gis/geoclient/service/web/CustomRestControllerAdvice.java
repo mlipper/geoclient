@@ -22,7 +22,7 @@ import gov.nyc.doitt.gis.geoclient.api.InvalidStreetCodeException;
  * <a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457</a>
  * support.
  *
- * @mlipper 
+ * @author mlipper 
  * @see ResponseEntityExceptionHandler
  */
 @RestControllerAdvice
