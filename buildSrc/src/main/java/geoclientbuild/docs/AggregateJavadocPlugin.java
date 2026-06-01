@@ -22,6 +22,7 @@ import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.javadoc.Javadoc;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.external.javadoc.JavadocMemberLevel;
 import org.gradle.external.javadoc.StandardJavadocDocletOptions;
 
@@ -32,6 +33,7 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
 
     public static final String PLUGIN_NAME = "geoclientbuild.aggregate-javadoc";
     public static final String AGGREGATE_JAVADOC_TASK_NAME = "aggregateJavadoc";
+    public static final String CLEAN_AGGREGATE_JAVADOC_TASK_NAME = "cleanAggregateJavadoc";
     public static final String AGGREGATE_JAVADOC_EXTENSION_NAME = "aggregateJavadocOptions";
     public static final String AGGREGATE_JAVADOC_OUTPUT_DIR = "docs/javadoc-aggregate";
 
@@ -39,11 +41,13 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
     public void apply(Project project) {
         AggregateJavadocExtension extension = project.getExtensions().create(AGGREGATE_JAVADOC_EXTENSION_NAME,
             AggregateJavadocExtension.class);
+        extension.getOutputDirectory().convention(project.getLayout().getBuildDirectory().dir(AGGREGATE_JAVADOC_OUTPUT_DIR));
 
-        project.getTasks().register(AGGREGATE_JAVADOC_TASK_NAME, Javadoc.class, task -> {
+        TaskProvider<Javadoc> aggregateJavadocTaskProvider = project.getTasks().register(AGGREGATE_JAVADOC_TASK_NAME, Javadoc.class,
+            task -> {
             task.setGroup(DOCUMENTATION_GROUP);
             task.setDescription("Generates unified Javadoc for all Java subprojects.");
-            task.setDestinationDir(project.getLayout().getBuildDirectory().dir(AGGREGATE_JAVADOC_OUTPUT_DIR).get().getAsFile());
+            task.setDestinationDir(extension.getOutputDirectory().get().getAsFile());
 
             if (task.getOptions() instanceof StandardJavadocDocletOptions options) {
                 options.setEncoding("UTF-8");
@@ -53,6 +57,12 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
             }
         });
 
+        project.getTasks().register(CLEAN_AGGREGATE_JAVADOC_TASK_NAME, task -> {
+            task.setGroup(DOCUMENTATION_GROUP);
+            task.setDescription("Deletes the aggregate Javadoc output directory.");
+            task.doLast(t -> project.delete(extension.getOutputDirectory()));
+        });
+
         if (project.getState().getExecuted()) {
             configureTaskOptions(project, extension);
         } else {
@@ -60,7 +70,7 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
         }
 
         project.getSubprojects().forEach(subproject -> subproject.getPluginManager().withPlugin("java", p -> {
-            project.getTasks().named(AGGREGATE_JAVADOC_TASK_NAME, Javadoc.class).configure(task -> {
+            aggregateJavadocTaskProvider.configure(task -> {
                 JavaPluginExtension javaExtension = subproject.getExtensions().getByType(JavaPluginExtension.class);
                 SourceSet mainSourceSet = javaExtension.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
@@ -72,6 +82,7 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
 
     private void configureTaskOptions(Project project, AggregateJavadocExtension extension) {
         project.getTasks().named(AGGREGATE_JAVADOC_TASK_NAME, Javadoc.class).configure(task -> {
+            task.setDestinationDir(extension.getOutputDirectory().get().getAsFile());
             task.setFailOnError(extension.isFailOnError());
 
             if (task.getOptions() instanceof StandardJavadocDocletOptions options) {

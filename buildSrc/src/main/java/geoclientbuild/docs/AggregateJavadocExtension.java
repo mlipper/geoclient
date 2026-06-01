@@ -15,13 +15,17 @@
  */
 package geoclientbuild.docs;
 
-public class AggregateJavadocExtension {
+import org.gradle.api.file.DirectoryProperty;
+
+public abstract class AggregateJavadocExtension {
 
     private boolean quiet = true;
 
     private boolean disableDoclint = true;
 
     private boolean failOnError = true;
+
+    public abstract DirectoryProperty getOutputDirectory();
 
     public boolean isQuiet() {
         return quiet;
@@ -46,4 +50,5 @@ public class AggregateJavadocExtension {
     public void setFailOnError(boolean failOnError) {
         this.failOnError = failOnError;
     }
+
 }
