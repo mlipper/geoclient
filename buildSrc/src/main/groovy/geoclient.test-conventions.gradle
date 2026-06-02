@@ -85,7 +85,7 @@ tasks.named('check') {
 }
 
 tasks.named('jacocoTestReport') {
-    dependsOn check
+    dependsOn(test, integrationTest)
     // Will include test.exec and integrationTest.exec so integration
     // tests contribute to coverage statistics.
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
@@ -93,6 +93,7 @@ tasks.named('jacocoTestReport') {
     sourceDirectories.setFrom files(project.sourceSets.main.allSource.srcDirs)
     reports {
         xml.required = true
+        //xml.outputLocation = project.file("${commonDistDir}/test-results/coverage/${project.name}-coverage.xml")
         xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/${project.name}-coverage.xml")
     }
 }
@@ -125,7 +126,18 @@ tasks.register('testAll', Exec) {
     shouldRunAfter(tasks.named('assemble'))
 }
 
-// Turn off class data sharing to avoid JDK warning
 tasks.withType(Test).configureEach {
+    // Turn off class data sharing to avoid JDK warning
     jvmArgs "-Xshare:off"
+    // Configure JUnit XML reports to be output to the dist directory for CI collection.
+    //reports {
+    //    junitXml {
+    //        outputLocation = project.file("${commonDistDir}/test-results/junit")
+    //        includeSystemOutLog = true // defaults to true
+    //        includeSystemErrLog = true // defaults to true
+    //        outputPerTestCase = true   // defaults to false
+    //        mergeReruns = true         // defaults to false
+    //    }
+    //}
+    finalizedBy(tasks.named('jacocoTestReport'))
 }
