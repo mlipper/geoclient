@@ -40,6 +40,7 @@ tasks.named('startServer') {
 
 asciidoctor {
 
+    dependsOn(tasks.named('build'))
     dependsOn(rootProject.tasks.named('docsPrereqs'))
     dependsOn(rootProject.tasks.named('aggregateJavadoc'))
 
@@ -91,7 +92,6 @@ asciidoctor {
 tasks.register('verifyAsciidoctorApiOutput') {
     group = 'verification'
     description = 'Verifies Asciidoctor output contains aggregate API docs at api/index.html.'
-    dependsOn(tasks.named('asciidoctor'))
 
     doLast {
         File apiIndex = layout.buildDirectory.file('docs/asciidoc/api/index.html').get().asFile
@@ -101,8 +101,8 @@ tasks.register('verifyAsciidoctorApiOutput') {
     }
 }
 
-tasks.named('check') {
-    dependsOn(tasks.named('verifyAsciidoctorApiOutput'))
+tasks.named('asciidoctor') {
+    finalizedBy(tasks.named('verifyAsciidoctorApiOutput'))
 }
 
 tasks.register('showBootJarFile') {

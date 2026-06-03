@@ -27,3 +27,7 @@ tasks.named('distZip') {
 tasks.named('distTar') {
     dependsOn(':geoclient-service:dockerJar', ':documentation:asciidoctor')
 }
+
+tasks.named('build') {
+    setDependsOn([tasks.named('check')])
+}
