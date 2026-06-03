@@ -1,0 +1,26 @@
+plugins {
+    id 'geoclient.build-conventions'
+    id 'geoclientbuild.aggregate-javadoc'
+}
+
+aggregateJavadocOptions {
+    quiet = true
+    disableDoclint = true
+    failOnError = true
+    outputDirectory.set(rootProject.aggregateJavadocOutputDir)
+}
+
+tasks.register('docsPrereqs') {
+    group = 'documentation'
+    description = 'Builds non-documentation subprojects and aggregate Javadoc required for documentation generation.'
+
+    dependsOn(provider {
+        rootProject.subprojects
+            .findAll { it.path != ':documentation' && it.path != ':distribution' }
+            .collect { it.tasks.named('build') }
+    })
+}
+
+tasks.named('docsPrereqs') {
+    dependsOn(tasks.named('aggregateJavadoc'))
+}

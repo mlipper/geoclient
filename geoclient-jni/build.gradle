@@ -26,6 +26,10 @@ sourceSets {
 tasks.named('integrationTest') {
     // See "GeoclientJniIntegrationTest crashes the JVM on full clean build"
     // in the "Known Issues" section of the User Guide for rationale:
+    // Keep this at 1: concurrent forks increase noisy test-event serialization
+    // pressure and have triggered intermittent JVM crashes in this module.
+    // See hs_err_pid files under geoclient-jni/ from 2026-06-03 investigation.
+    maxParallelForks = 1
     testLogging {
         events = ["failed", "skipped"]
         debug.events = ["failed", "skipped"]

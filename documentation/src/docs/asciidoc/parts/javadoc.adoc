@@ -1,0 +1,7 @@
+[[java-api-docs]]
+== link:api/index.html[Java API Documentation]
+== Java API Documentation
+
+This section provides a link to Geoclient's Java API documentation.
+
+'''

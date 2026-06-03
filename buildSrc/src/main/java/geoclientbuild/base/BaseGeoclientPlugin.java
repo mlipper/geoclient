@@ -13,12 +13,6 @@ public class BaseGeoclientPlugin implements Plugin<Project> {
         // Apply the base plugin configuration
         project.getPlugins().apply("java");
 
-        project.getTasks().register("exportEnvironment", EnvironmentExporter.class, task -> {
-        });
-
-        project.getTasks().register("setSystemProperties", SystemPropertiesSetter.class, task -> {
-        });
-
         // Log the application of the base plugin
         logger.lifecycle("BaseGeoclientPlugin applied to project: {}", project.getName());
     }

@@ -22,22 +22,26 @@ dependencies {
 
 defaultTasks = ['clean', 'asciidoctor']
 
-//tasks.named('build') {
-//    dependsOn tasks.named('asciidoctor')
-//}
-
-// java.io.File
-def bootJarFile = project.configurations.apiServerClasspath.getFiles().toArray()[0]
+def bootJarFile = layout.file(provider {
+    project.configurations.apiServerClasspath.singleFile
+})
 
 // Configure the ApiServerPlugin which is applied by the DocumentationPlugin
 apiserver {
     baseUri = new URI('http://localhost:9090/geoclient/v2')
-    serverJar = bootJarFile
+    serverJar.set(bootJarFile)
     sleepSecondsAfterStart = 12;
     sleepSecondsAfterStop = 2;
 }
 
+tasks.named('startServer') {
+    dependsOn(':geoclient-service:dockerJar')
+}
+
 asciidoctor {
+
+    dependsOn(rootProject.tasks.named('docsPrereqs'))
+    dependsOn(rootProject.tasks.named('aggregateJavadoc'))
 
     baseDirFollowsSourceDir()
 
@@ -51,6 +55,9 @@ asciidoctor {
     resources {
         from(sourceDir) {
             include 'images/**', 'js/**'
+        }
+        from(rootProject.tasks.named('aggregateJavadoc')) {
+            into 'api'
         }
     }
 
@@ -81,10 +88,27 @@ asciidoctor {
     notCompatibleWithConfigurationCache("https://github.com/asciidoctor/asciidoctor-gradle-plugin/issues/564")
 }
 
+tasks.register('verifyAsciidoctorApiOutput') {
+    group = 'verification'
+    description = 'Verifies Asciidoctor output contains aggregate API docs at api/index.html.'
+    dependsOn(tasks.named('asciidoctor'))
+
+    doLast {
+        File apiIndex = layout.buildDirectory.file('docs/asciidoc/api/index.html').get().asFile
+        if (!apiIndex.exists()) {
+            throw new GradleException("Missing expected API docs output: ${apiIndex}. Ensure aggregateJavadoc produces output and is wired into asciidoctor resources.")
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn(tasks.named('verifyAsciidoctorApiOutput'))
+}
+
 tasks.register('showBootJarFile') {
     Directory projectDirectory = layout.projectDirectory
     doLast {
-        def theFiles = files(bootJarFile)
+        def theFiles = files(bootJarFile.get().asFile)
         theFiles.collect { projectDirectory.asFile.relativePath(it) }.sort().each { println it }
     }
 }

@@ -6,17 +6,6 @@ plugins {
     id 'geoclient.jar-conventions'
 }
 
-// Configure aggregate Javadoc once at the root project, even though this convention
-// plugin is applied in subprojects.
-if (!rootProject.pluginManager.hasPlugin('geoclientbuild.aggregate-javadoc')) {
-    rootProject.pluginManager.apply('geoclientbuild.aggregate-javadoc')
-    rootProject.extensions.configure('aggregateJavadocOptions') { extension ->
-        extension.quiet = true
-        extension.disableDoclint = true
-        extension.failOnError = true
-    }
-}
-
 dependencies {
     // Platforms
     api platform(project(':platform'))
@@ -53,6 +42,14 @@ javadoc {
     logging.captureStandardError LogLevel.INFO
     logging.captureStandardOutput LogLevel.INFO  // suppress "## warnings" message
 }
+
+//
+//tasks.register('generateDocumentation', Copy) {
+//    dependsOn('asciidoctor','aggregateJavadoc')
+//    into(layout.buildDirectory.dir("docs/asciidoc/javadoc")){
+//        from tasks.named('aggregateJavadoc')
+//    }
+//}
 
 checkstyle {
     configDirectory = rootProject.layout.projectDirectory.dir("gradle/config/checkstyle")

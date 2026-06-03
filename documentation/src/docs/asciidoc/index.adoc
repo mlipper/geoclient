@@ -16,6 +16,8 @@ include::parts/geosupport-docs.adoc[]
 
 include::parts/development.adoc[]
 
+include::parts/javadoc.adoc[]
+
 include::parts/public-endpoint.adoc[]
 
 //include::parts/changes.adoc[]

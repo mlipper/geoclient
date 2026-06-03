@@ -11,5 +11,6 @@ ext {
             expand(copyright: new Date().format('yyyy'), version: project.version)
         }
     }
-    //commonDistDir = "${project.rootDir}/build/dist"
+    commonDistDir = rootProject.layout.buildDirectory.dir("dist")
+    aggregateJavadocOutputDir = rootProject.layout.buildDirectory.dir("dist/docs/javadoc")
 }
