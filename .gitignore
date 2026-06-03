@@ -53,3 +53,7 @@
 
 # Scratch files
 **/gc-xml
+
+# VS Code: this file can be added to git but, for now, ignore it to take advantage
+# of latest devcontainer features.
+devcontainer-lock.json
