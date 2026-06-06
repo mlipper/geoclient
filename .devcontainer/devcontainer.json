@@ -1,6 +1,11 @@
 {
 	"name": "geoclient",
-	"image": "mcr.microsoft.com/devcontainers/java:21",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"options": [
+			"--platform=linux/amd64"
+		]
+	},
 	"forwardPorts": [
 		"8080:8080",
 		"8000:8000",
@@ -12,13 +17,7 @@
 	"runArgs": [
 		"--platform=linux/amd64"
 	],
-	"features": {
-		"ghcr.io/devcontainers/features/java:1": {
-			"version": "21",
-			"installMaven": "true",
-			"installGradle": "true"
-		}
-	},
+	"features": {},
 	"customizations": {
 		"vscode": {
 			"settings": {
