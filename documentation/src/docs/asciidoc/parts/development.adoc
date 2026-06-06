@@ -235,7 +235,7 @@ A complete Geosupport installation is approximately 2.3 GB in size and adding it
 +
 [,sh]
 ----
- docker build -t geoclient:latest -f images/build.Dockerfile .
+ docker build -t geoclient:latest --platform linux/amd64 -f images/build.Dockerfile .
 ----
 
 . Create and run a temporary container in the background, mapping the container port `8080` to your host port `8080`.
@@ -255,7 +255,7 @@ Runs geoclient using the exploded contents of the https://docs.spring.io/spring-
 +
 [,sh]
 ----
- docker build -t geoclient:latest -f images/run.Dockerfile .
+ docker build -t geoclient:latest --platform linux/amd64 -f images/run.Dockerfile .
 ----
 +
 This assumes you are using the `geoclient.jar` jar artifact produced by the `geoclient/geoclient-service` subproject's Gradle `build` task. If the the default geoclient-service bootJar artifact `<root project>/geoclient-service/libs/geoclient.jar` is somewhere else, add a Docker build argument with the path to jar file:
