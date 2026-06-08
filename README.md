@@ -27,6 +27,11 @@ See the [website](https://mlipper.github.io/geoclient/):
 
 Geoclient is written in `Java` and Geosupport is written in `C`. Geoclient uses the Java Native Interface (`JNI`) to call Geosupport's `C` shared libraries.
 
+Native build split:
+
+* `geoclient-native` builds and publishes the host-native JNI shared library artifact.
+* `geoclient-jni` packages Java JNI classes and consumes that native artifact.
+
 ## License
 
 [Apache 2.0](src/dist/license.txt)

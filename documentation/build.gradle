@@ -1,6 +1,4 @@
-import java.nio.file.*
 import java.net.URI
-import org.asciidoctor.gradle.jvm.AbstractAsciidoctorTask
 
 plugins {
 	alias(libs.plugins.asciidoctor)
@@ -30,8 +28,8 @@ def bootJarFile = layout.file(provider {
 apiserver {
     baseUri = new URI('http://localhost:9090/geoclient/v2')
     serverJar.set(bootJarFile)
-    sleepSecondsAfterStart = 12;
-    sleepSecondsAfterStop = 2;
+    sleepSecondsAfterStart = 12
+    sleepSecondsAfterStop = 2
 }
 
 tasks.named('startServer') {
@@ -42,7 +40,6 @@ asciidoctor {
 
     dependsOn(tasks.named('build'))
     dependsOn(rootProject.tasks.named('docsPrereqs'))
-    dependsOn(rootProject.tasks.named('aggregateJavadoc'))
 
     baseDirFollowsSourceDir()
 

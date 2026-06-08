@@ -19,12 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
@@ -33,6 +35,8 @@ import org.slf4j.LoggerFactory;
 import gov.nyc.doitt.gis.geoclient.jni.test.ConfigInitializer;
 import gov.nyc.doitt.gis.geoclient.jni.test.TestConfig;
 import gov.nyc.doitt.gis.geoclient.jni.util.ByteBufferUtils;
+import gov.nyc.doitt.gis.geoclient.jni.util.JniLibrary;
+import gov.nyc.doitt.gis.geoclient.jni.util.Platform;
 
 class GeoclientJniIntegrationTest {
     final static Logger logger = LoggerFactory.getLogger(GeoclientJniIntegrationTest.class);
@@ -41,6 +45,17 @@ class GeoclientJniIntegrationTest {
 
     static Stream<TestConfig> getFixtures() throws FileNotFoundException, IOException {
         return ConfigInitializer.defaultTestConfigs().stream();
+    }
+
+    @Test
+    void testNativeLibraryExtractsToConfiguredDirectory() {
+        JniLibrary library = JniLibrary.builder().name(JniContext.getSharedLibraryBaseName()).platform(
+            new Platform()).version(JniContext.getGeoclientJniVersion()).build();
+        String relativeNativeLibraryPath = String.format("%s/%s/%s", library.getVersion(),
+            JniContext.getJavaPackagePath(), library.getResourceName());
+        File extractedLibrary = new File(JniContext.getNativeExtractDir(), relativeNativeLibraryPath);
+        assertTrue(extractedLibrary.isFile(),
+            String.format("Expected extracted JNI library at %s", extractedLibrary.getAbsolutePath()));
     }
 
     @ParameterizedTest

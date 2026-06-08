@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.condition.OS.WINDOWS;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.URL;
 
 import org.junit.jupiter.api.AfterEach;
@@ -30,6 +31,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.nyc.doitt.gis.geoclient.jni.JniContext;
 
 @EnabledOnOs({ LINUX, WINDOWS })
 class NativeLibraryLocatorTest {
@@ -65,6 +68,38 @@ class NativeLibraryLocatorTest {
         File result = locator.find(getJniLibrary());
         assertNotNull(result);
         assertTrue(result.exists());
+    }
+
+    @Test
+    void testFindReextractsWhenLockFileExistsButLibraryFileIsEmpty() throws IOException {
+        NativeLibraryLocator locator = new NativeLibraryLocator(testTmpDir.getCanonicalPath()) {
+
+            @Override
+            protected URL resolveClassLoaderUrlResource(String resourceName) {
+                return NativeLibraryLocatorTest.class.getResource("NativeLibraryLocatorTest.class");
+            }
+        };
+        JniLibrary jniLibrary = getJniLibrary();
+        String relativePath = String.format("%s/%s/%s", jniLibrary.getVersion(), JniContext.getJavaPackagePath(),
+            jniLibrary.getResourceName());
+        File libFile = new File(testTmpDir, relativePath);
+        libFile.getParentFile().mkdirs();
+        if (!libFile.exists()) {
+            assertTrue(libFile.createNewFile());
+        }
+        try (RandomAccessFile emptyFileWriter = new RandomAccessFile(libFile, "rw")) {
+            emptyFileWriter.setLength(0);
+        }
+        File lockFile = new File(libFile.getParentFile(), libFile.getName() + ".lock");
+        try (RandomAccessFile lockFileAccess = new RandomAccessFile(lockFile, "rw")) {
+            lockFileAccess.writeBoolean(true);
+        }
+
+        File result = locator.find(jniLibrary);
+
+        assertNotNull(result);
+        assertTrue(result.exists());
+        assertTrue(result.length() > 0);
     }
 
     private JniLibrary getJniLibrary() throws IOException {

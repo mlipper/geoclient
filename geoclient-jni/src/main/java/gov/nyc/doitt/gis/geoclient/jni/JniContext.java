@@ -29,12 +29,17 @@ public class JniContext {
     static final Logger logger = LoggerFactory.getLogger(JniContext.class);
 
     public static final String DEFAULT_GC_JNI_VERSION = "geoclient-jni-2";
+    public static final String GC_JNI_EXTRACT_DIR_PROPERTY = "gc.jni.extract.dir";
+    public static final String GC_JNI_EXTRACT_DIR_ENV_VAR = "GC_JNI_EXTRACT_DIR";
     private static final String GC_SHAREDLIB_BASENAME = "geoclientjni";
     private static final String GC_PACKAGE_PATH = JniContext.class.getPackage().getName().replaceAll("\\.", "\\/");
 
     private enum SystemProperty {
 
-        GC_JNI_VERSION("gc.jni.version"), JAVA_IO_TMPDIR("java.io.tmpdir"), JAVA_LIBRARY_PATH("java.library.path");
+        GC_JNI_VERSION("gc.jni.version"),
+        GC_JNI_EXTRACT_DIR(GC_JNI_EXTRACT_DIR_PROPERTY),
+        JAVA_IO_TMPDIR("java.io.tmpdir"),
+        JAVA_LIBRARY_PATH("java.library.path");
 
         private final String key;
 
@@ -67,6 +72,31 @@ public class JniContext {
         return null;
     }
 
+    static String getEnvironmentVariable(String envVar, String defaultValue) {
+        String value = System.getenv(envVar);
+        if (value != null) {
+            logger.info("Using environment variable {} with value {}.", envVar, value);
+            return value;
+        }
+        if (defaultValue != null) {
+            logger.info("Environment variable {} is not set. Using default value {}.", envVar, defaultValue);
+            return defaultValue;
+        }
+        logger.warn("Environment variable {} is not set and has no default value.", envVar);
+        return null;
+    }
+
+    static String resolveNativeExtractDir(String extractDirSystemProperty, String extractDirEnvironmentVariable,
+            String javaIoTmpDir) {
+        if (extractDirSystemProperty != null) {
+            return extractDirSystemProperty;
+        }
+        if (extractDirEnvironmentVariable != null) {
+            return extractDirEnvironmentVariable;
+        }
+        return javaIoTmpDir;
+    }
+
     public static String getGeoclientJniVersion() {
         return JniContext.getSystemProperty(SystemProperty.GC_JNI_VERSION, DEFAULT_GC_JNI_VERSION);
     }
@@ -77,6 +107,16 @@ public class JniContext {
 
     public static String getJvmLibraryPath() {
         return JniContext.getSystemProperty(SystemProperty.JAVA_LIBRARY_PATH, null);
+    }
+
+    public static String getNativeExtractDir() {
+        String extractDirSystemProperty = JniContext.getSystemProperty(SystemProperty.GC_JNI_EXTRACT_DIR, null);
+        String extractDirEnvironmentVariable = JniContext.getEnvironmentVariable(GC_JNI_EXTRACT_DIR_ENV_VAR, null);
+        String javaIoTmpDir = JniContext.getJvmTempDir();
+        String extractDir = JniContext.resolveNativeExtractDir(extractDirSystemProperty, extractDirEnvironmentVariable,
+            javaIoTmpDir);
+        logger.info("Resolved native library extract directory to {}.", extractDir);
+        return extractDir;
     }
 
     public static String getSharedLibraryBaseName() {

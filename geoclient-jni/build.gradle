@@ -1,29 +1,57 @@
+import org.gradle.nativeplatform.MachineArchitecture
+import org.gradle.nativeplatform.OperatingSystemFamily
+
 plugins {
-    id 'c'
     id 'geoclient.library-conventions'
     id 'geoclient.test-conventions'
 }
 
-//dependencies {
-//    api platform(project(':platform'))
-//    implementation('org.springframework.boot:spring-boot-starter-logging')
-//
-//}
-Provider<Directory> generatedResourcesDirectory = layout.buildDirectory.dir("generated-resources/main")
-File generatedResources = generatedResourcesDirectory.get().asFile
-def libPath = file('/opt/geosupport/current/lib')
+Provider<Directory> generatedResourcesDirectory = layout.buildDirectory.dir('generated-resources/main')
+def hostIsWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+def nativeVariantName = hostIsWindows ? 'windows-x64' : 'linux-x64'
+def integrationTestExtractDir = layout.buildDirectory.dir('jni-extract/integrationTest')
+
+def syncJniLibTask = tasks.register('syncJniLib', Sync)
+
+// Resolved host-native JNI binary produced by :geoclient-native.
+def nativeBinaryClasspath = configurations.create('nativeBinaryClasspath') {
+    canBeConsumed = false
+    canBeResolved = true
+    attributes {
+        attribute(OperatingSystemFamily.OPERATING_SYSTEM_ATTRIBUTE,
+            objects.named(OperatingSystemFamily, hostIsWindows ? OperatingSystemFamily.WINDOWS : OperatingSystemFamily.LINUX))
+        attribute(MachineArchitecture.ARCHITECTURE_ATTRIBUTE,
+            objects.named(MachineArchitecture, MachineArchitecture.X86_64))
+    }
+}
+
+dependencies {
+    add('nativeBinaryClasspath', project(path: ':geoclient-native', configuration: 'nativeBinaryElements'))
+}
 
 sourceSets {
-  main {
-    output.dir(generatedResources, builtBy: 'syncJniLib')
-  }
-//// This is a workaround: see the comment for the syncJniTestConf task below.
-//  integrationTest {
-//    output.dir(builtBy: 'syncJniTestConf', layout.buildDirectory.dir('resources/integrationTest'))
-//  }
+    main {
+        output.dir(generatedResourcesDirectory, builtBy: syncJniLibTask)
+    }
+}
+
+syncJniLibTask.configure {
+    // Preserve runtime layout expected by NativeLibraryLoader.
+    dependsOn(nativeBinaryClasspath)
+    from(nativeBinaryClasspath)
+    into(generatedResourcesDirectory.map {
+        it.dir("gov/nyc/doitt/gis/geoclient/jni/${nativeVariantName}")
+    })
 }
 
 tasks.named('integrationTest') {
+    systemProperty 'gc.jni.extract.dir',
+        integrationTestExtractDir.get().asFile.absolutePath
+
+    doFirst {
+        delete(integrationTestExtractDir)
+    }
+
     // See "GeoclientJniIntegrationTest crashes the JVM on full clean build"
     // in the "Known Issues" section of the User Guide for rationale:
     // Keep this at 1: concurrent forks increase noisy test-event serialization
@@ -31,179 +59,13 @@ tasks.named('integrationTest') {
     // See hs_err_pid files under geoclient-jni/ from 2026-06-03 investigation.
     maxParallelForks = 1
     testLogging {
-        events = ["failed", "skipped"]
-        debug.events = ["failed", "skipped"]
-        info.events = ["failed", "skipped"]
+        events = ['failed', 'skipped']
+        debug.events = ['failed', 'skipped']
+        info.events = ['failed', 'skipped']
     }
 }
-
 
 // Exclude from spotless (gradle plugin) license header check because of custom header.
 spotless.java {
     targetExclude 'src/main/java/gov/nyc/doitt/gis/geoclient/jni/util/NativeLibraryLocator.java'
 }
-
-//// This is a workaround for an apparent Gradle or JUnit issue:
-//// After moving the gov.nyc.doitt.gis.geoclient.test.GeoclientStub from the
-//// "main" SourceSet to "testFixtures", the JUnit ParameterizedTest
-//// src/integrationTest/gov/nyc/doitt/gis/geoclient/jni/GeoclientJniIntegrationTest
-//// began failing because it couldn't load '/jni-test.conf' using packaged
-//// jar file syntax:
-//// "file:/<path>/build/libs/geoclient-jni-2.0.1-beta.jar!/jni-test.conf"
-//// Perhaps because debugging showed the testFixtures jar first in the
-//// classpath?
-//// If the classes in the "main" SourceSet package
-//// gov.nyc.doitt.gis.geoclient.jni.test are moved to their own subproject,
-//// it's possible this workaround can be removed.
-//tasks.register('syncJniTestConf', Sync) {
-//    dependsOn('processResources')
-//    from layout.buildDirectory.dir('resources/main')
-//    into layout.buildDirectory.dir('resources/integrationTest')
-//}
-
-// Must be configured lazily because 'from' and 'destinationDir' properties are
-// created dynamically by SharedLibraryBinarySpec
-task syncJniLib(type: Sync)
-
-// High-level build definitions
-model {
-
-    platforms {
-        linux_x64 {
-            architecture "x86_64"
-            operatingSystem "linux"
-        }
-        windows_x64 {
-            architecture 'x86_64'
-            operatingSystem 'windows'
-        }
-    }
-
-    toolChains {
-        gcc(Gcc)
-        visualCpp(VisualCpp)
-    }
-
-    components {
-        geoclient(NativeLibrarySpec) {
-            targetPlatform 'linux_x64'
-            targetPlatform 'windows_x64'
-            sources {
-                c {
-                    source {
-                        srcDir 'src/main/c'
-                        include '**/geoclient.c'
-                    }
-                    exportedHeaders {
-                        srcDir 'src/main/headers'
-                        include '**/*.h'
-                    }
-                    lib library: 'libgeo', linkage: 'api'
-                }
-            } // sources
-        } // geoclient
-
-        geoclientjni(NativeLibrarySpec) {
-            targetPlatform 'linux_x64'
-            targetPlatform 'windows_x64'
-            baseName 'geoclientjni'
-            sources {
-                c {
-                    source {
-                        srcDir 'src/main/c'
-                        include '**/*_JNI.c'
-                    }
-                    lib library: 'libgeo', linkage: 'api'
-                    lib library: 'geoclient',  linkage: 'static'
-                }
-            } // sources
-        } // geoclientjni
-
-        // All buildable native binaries (shared, static and executable)
-        all {
-            // Compiler/linker customizations
-            binaries.all {
-                if (targetPlatform.operatingSystem.linux && toolChain in Gcc) {
-                    cCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                    cCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
-                    cCompiler.args "-o0", "-g3", "-Wall", "-std=c99"
-                    // Platform independent code flag:
-                    //  Still required for shared libs?
-                    //  Required for static libs and executables?
-                    cCompiler.args "-fPIC"
-                    // Ordering of library linkage is different than on Windows/MSYS2/MINGW64
-                    linker.args "-Wl,--no-as-needed", "-L${libPath}", "-lc", "-lgeo", "-lm", "-ledequiv", "-lapequiv", "-lsan", "-lsnd", "-lstExcpt", "-lStdLast", "-lStdUniv", "-lstEnder", "-lstretch", "-lthined"
-
-                } else if (targetPlatform.operatingSystem.windows && toolChain in VisualCpp) {
-                    // MSVC (Windows x64)
-                    cCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                    cCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include/win32"
-                    linker.args "/LIBPATH:${libPath}"
-                    linker.args 'NYCgeo.lib'
-                }
-            }
-
-            // When building our project's shared libraries on Windows, insure
-            // that we enable the Microsoft macros to export our dlls
-            binaries.withType(SharedLibraryBinarySpec) { binary ->
-                logger.info("Configuring ${displayName}")
-                if(targetPlatform.operatingSystem == "windows") {
-                    cCompiler.define 'DLL_EXPORT'
-                }
-            }
-
-            binaries.withType(SharedLibraryBinarySpec) { binary ->
-
-                if(!buildable) {
-                    return
-                }
-
-                if(component.baseName != "geoclientjni") {
-                    // Skip packaging/publishing tasks for all native binaries
-                    // NOTE: geoclientjni statically links its dependency on
-                    // the geoclient native binary component. Thus, the geoclient
-                    // component does not need to be published.
-                    return
-                }
-
-                def syncTask = project.tasks.findByName('syncJniLib')
-                if (syncTask == null) {
-                    logger.error("Task 'syncJniLib' was not found")
-                    return
-                }
-
-                def variantName = targetPlatform.name.replace('_', '-')
-                def syncDir = project.file("${generatedResources}/gov/nyc/doitt/gis/geoclient/jni/${variantName}")
-                binary.tasks.withType(LinkSharedLibrary) { builderTask ->
-                    def jniLib = builderTask.linkedFile
-                    logger.info("Syncing JNI shared library file\n  from: ${jniLib?.getAsFile()?.get()}\n    to: ${syncDir}")
-                    syncTask.from(jniLib)
-                    syncTask.destinationDir = syncDir
-                }
-            }
-
-            // Static libraries
-            binaries.withType(StaticLibraryBinarySpec) { binary ->
-                if(!buildable) {
-                    return
-                }
-                cCompiler.define 'DLL_IMPORT'
-            }
-
-        } // all
-    } // components
-
-    // Third-party binaries and header files
-    repositories {
-        libs(PrebuiltLibraries) {
-            libgeo {
-                //headers.srcDir(geosupport.includePath.getAsFile())
-                headers.srcDir(project.file('lib/geosupport/headers'))
-                binaries.withType(SharedLibraryBinary) {
-                    sharedLibraryFile = new File("${libPath}/NYCgeo.dll")
-                    sharedLibraryLinkFile = new File("${libPath}/NYCgeo.lib")
-                }
-            }
-        }
-    } // repositories
-} // model

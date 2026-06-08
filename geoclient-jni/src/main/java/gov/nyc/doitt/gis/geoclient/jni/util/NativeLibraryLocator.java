@@ -119,8 +119,12 @@ public class NativeLibraryLocator {
             assert lock.isValid();
             if (lockFile.length() > 0 && lockFileAccess.readBoolean()) {
                 // Library has already been extracted
-                logger.debug("Located existing library File {} using FileLock {}", libFile, lock.toString());
-                return libFile;
+                if (libFile.isFile() && libFile.length() > 0) {
+                    logger.debug("Located existing library File {} using FileLock {}", libFile, lock.toString());
+                    return libFile;
+                }
+                logger.warn("Lock file {} indicated extracted library, but {} was missing or empty. Re-extracting.",
+                        lockFile.getCanonicalPath(), libFile.getCanonicalPath());
             }
             URL resource = resolveClassLoaderUrlResource(resourceName);
             if (resource != null) {
