@@ -1,152 +1,78 @@
+import org.gradle.api.attributes.Attribute
+import org.gradle.api.attributes.Category
+import org.gradle.api.attributes.LibraryElements
+import org.gradle.api.attributes.Usage
 import org.gradle.nativeplatform.MachineArchitecture
 import org.gradle.nativeplatform.OperatingSystemFamily
 
 plugins {
-    id 'c'
+    id 'base'
     id 'maven-publish'
 }
 
-def libPath = file('/opt/geosupport/current/lib')
-def javaHome = System.getProperty('java.home')
+def linkageAttr = Attribute.of('gov.nyc.geoclient.native.linkage', String)
 def hostIsWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+def hostOperatingSystem = hostIsWindows ? OperatingSystemFamily.WINDOWS : OperatingSystemFamily.LINUX
 def nativeVariantName = hostIsWindows ? 'windows-x64' : 'linux-x64'
-def nativeLibraryFilename = hostIsWindows ? 'geoclientjni.dll' : 'libgeoclientjni.so'
-def nativeOutputDir = layout.buildDirectory.dir("native/${nativeVariantName}")
-def nativeLinkOutputDir = layout.buildDirectory.dir("native-link/${nativeVariantName}")
-def nativeBinaryFile = nativeOutputDir.map { it.file(nativeLibraryFilename) }
-def syncNativeBinaryTask = tasks.register('syncNativeBinary', Sync)
+def nativeLinkage = providers.gradleProperty('nativeLinkage').orElse('shared').get()
+def buildShared = nativeLinkage == 'shared' || nativeLinkage == 'both'
+def buildStatic = nativeLinkage == 'static' || nativeLinkage == 'both'
+
+if (!(nativeLinkage in ['shared', 'static', 'both'])) {
+    throw new GradleException("Invalid -PnativeLinkage='${nativeLinkage}'. Supported values: shared, static, both.")
+}
+
+def sharedLibraryFilename = hostIsWindows ? 'geoclientjni.dll' : 'libgeoclientjni.so'
+def staticLibraryFilename = hostIsWindows ? 'geoclient.lib' : 'libgeoclient.a'
+def geosupportLibDir = file('/opt/geosupport/current/lib')
+def javaHome = System.getProperty('java.home')
 
 def geoclientSource = layout.projectDirectory.file('src/main/c/geoclient.c')
 def jniSources = fileTree('src/main/c') {
     include '**/*_JNI.c'
 }
-def geoclientObjectFile = nativeOutputDir.map { it.file('objs/geoclient.o') }
-def geoclientStaticLib = nativeOutputDir.map {
-    it.file(hostIsWindows ? 'lib/geoclient.lib' : 'lib/libgeoclient.a')
+
+def nativeOutputDir = layout.buildDirectory.dir("native/${nativeVariantName}")
+def nativeObjectDir = layout.buildDirectory.dir("native-obj/${nativeVariantName}")
+def nativeLinkOutputDir = layout.buildDirectory.dir("native-link/${nativeVariantName}")
+
+def geoclientObjectFile = nativeObjectDir.map {
+    it.file(hostIsWindows ? 'geoclient.obj' : 'geoclient.o')
 }
-def geoclientJniSharedLib = nativeLinkOutputDir.map { it.file(nativeLibraryFilename) }
+def stagedStaticLibrary = nativeLinkOutputDir.map {
+    it.file(staticLibraryFilename)
+}
+def stagedSharedLibrary = nativeLinkOutputDir.map {
+    it.file(sharedLibraryFilename)
+}
+def publishedStaticLibrary = nativeOutputDir.map {
+    it.file(staticLibraryFilename)
+}
+def publishedSharedLibrary = nativeOutputDir.map {
+    it.file(sharedLibraryFilename)
+}
 
-def compileGeoclientNativeTask
+def compileGeoclientObject = tasks.register('compileGeoclientObject', Exec) {
+    group = 'build'
+    description = 'Compiles geoclient.c into a native object file.'
+    inputs.file(geoclientSource)
+    outputs.file(geoclientObjectFile)
 
-def linkGeoclientJniSharedLibraryTask
-
-if (hostIsWindows) {
-    logger.lifecycle('geoclient-native: using legacy native model on Windows host.')
-
-    model {
-
-        platforms {
-            windows_x64 {
-                architecture 'x86_64'
-                operatingSystem 'windows'
-            }
-        }
-
-        toolChains {
-            visualCpp(VisualCpp)
-        }
-
-        components {
-            geoclient(NativeLibrarySpec) {
-                targetPlatform 'windows_x64'
-                sources {
-                    c {
-                        source {
-                            srcDir 'src/main/c'
-                            include '**/geoclient.c'
-                        }
-                        exportedHeaders {
-                            srcDir 'src/main/headers'
-                            include '**/*.h'
-                        }
-                        lib library: 'libgeo', linkage: 'api'
-                    }
-                }
-            }
-
-            geoclientjni(NativeLibrarySpec) {
-                targetPlatform 'windows_x64'
-                baseName 'geoclientjni'
-                sources {
-                    c {
-                        source {
-                            srcDir 'src/main/c'
-                            include '**/*_JNI.c'
-                        }
-                        lib library: 'libgeo', linkage: 'api'
-                        lib library: 'geoclient', linkage: 'static'
-                    }
-                }
-            }
-
-            all {
-                binaries.all {
-                    if (targetPlatform.operatingSystem.windows && toolChain in VisualCpp) {
-                        cCompiler.args "-I${javaHome}/include"
-                        cCompiler.args "-I${javaHome}/include/win32"
-                        linker.args "/LIBPATH:${libPath}"
-                        linker.args 'NYCgeo.lib'
-                    }
-                }
-
-                binaries.withType(SharedLibraryBinarySpec) { binary ->
-                    if (targetPlatform.operatingSystem == 'windows') {
-                        cCompiler.define 'DLL_EXPORT'
-                    }
-                }
-
-                binaries.withType(SharedLibraryBinarySpec) { binary ->
-                    if (!buildable || component.baseName != 'geoclientjni') {
-                        return
-                    }
-
-                    binary.tasks.withType(LinkSharedLibrary) { builderTask ->
-                        def jniLib = builderTask.linkedFile
-                        syncNativeBinaryTask.configure {
-                            dependsOn(builderTask)
-                            from(jniLib)
-                            into(nativeOutputDir)
-                            rename { nativeLibraryFilename }
-                        }
-                    }
-                }
-
-                binaries.withType(StaticLibraryBinarySpec) { binary ->
-                    if (!buildable) {
-                        return
-                    }
-                    cCompiler.define 'DLL_IMPORT'
-                }
-            }
-        }
-
-        repositories {
-            libs(PrebuiltLibraries) {
-                libgeo {
-                    headers.srcDir(project.file('lib/geosupport/headers'))
-                    binaries.withType(SharedLibraryBinary) {
-                        sharedLibraryFile = new File("${libPath}/NYCgeo.dll")
-                        sharedLibraryLinkFile = new File("${libPath}/NYCgeo.lib")
-                    }
-                }
-            }
-        }
+    doFirst {
+        geoclientObjectFile.get().asFile.parentFile.mkdirs()
     }
 
-    linkGeoclientJniSharedLibraryTask = syncNativeBinaryTask
-
-} else {
-
-    compileGeoclientNativeTask = tasks.register('compileGeoclientNative', Exec) {
-        group = 'build'
-        description = 'Compiles geoclient.c into a native object file.'
-        inputs.file(geoclientSource)
-        outputs.file(geoclientObjectFile)
-
-        doFirst {
-            geoclientObjectFile.get().asFile.parentFile.mkdirs()
-        }
-
+    if (hostIsWindows) {
+        commandLine 'cl',
+            '/nologo', '/c',
+            '/Od', '/Zi', '/W3', '/MD', '/TC', '/DDLL_IMPORT',
+            "/I${javaHome}/include",
+            "/I${javaHome}/include/win32",
+            '/Isrc/main/headers',
+            '/Ilib/geosupport/headers',
+            geoclientSource.asFile.absolutePath,
+            "/Fo${geoclientObjectFile.get().asFile.absolutePath}"
+    } else {
         commandLine 'gcc',
             "-I${javaHome}/include",
             "-I${javaHome}/include/linux",
@@ -156,37 +82,64 @@ if (hostIsWindows) {
             '-c', geoclientSource.asFile.absolutePath,
             '-o', geoclientObjectFile.get().asFile.absolutePath
     }
+}
 
-    def createGeoclientStaticLibraryTask = tasks.register('createGeoclientStaticLibrary', Exec) {
-        group = 'build'
-        description = 'Creates libgeoclient.a from the geoclient native object file.'
-        dependsOn(compileGeoclientNativeTask)
-        inputs.file(geoclientObjectFile)
-        outputs.file(geoclientStaticLib)
+def createGeoclientStaticLibrary = tasks.register('createGeoclientStaticLibrary', Exec) {
+    group = 'build'
+    description = 'Creates native static library for geoclient core C sources.'
+    dependsOn(compileGeoclientObject)
+    inputs.file(geoclientObjectFile)
+    outputs.file(stagedStaticLibrary)
 
-        doFirst {
-            geoclientStaticLib.get().asFile.parentFile.mkdirs()
-        }
-
-        commandLine 'ar', 'rcs', geoclientStaticLib.get().asFile.absolutePath, geoclientObjectFile.get().asFile.absolutePath
+    doFirst {
+        stagedStaticLibrary.get().asFile.parentFile.mkdirs()
     }
 
-    linkGeoclientJniSharedLibraryTask = tasks.register('linkGeoclientJniSharedLibrary', Exec) {
-        group = 'build'
-        description = 'Builds libgeoclientjni.so from JNI sources and libgeoclient.a.'
-        dependsOn(createGeoclientStaticLibraryTask)
-        inputs.files(jniSources)
-        inputs.file(geoclientStaticLib)
-        outputs.file(geoclientJniSharedLib)
+    if (hostIsWindows) {
+        commandLine 'lib', '/nologo',
+            "/OUT:${stagedStaticLibrary.get().asFile.absolutePath}",
+            geoclientObjectFile.get().asFile.absolutePath
+    } else {
+        commandLine 'ar', 'rcs',
+            stagedStaticLibrary.get().asFile.absolutePath,
+            geoclientObjectFile.get().asFile.absolutePath
+    }
+}
 
-        doFirst {
-            geoclientJniSharedLib.get().asFile.parentFile.mkdirs()
-            if (jniSources.files.isEmpty()) {
-                throw new GradleException('No JNI source files were found at src/main/c/**/*_JNI.c')
-            }
+def linkGeoclientJniSharedLibrary = tasks.register('linkGeoclientJniSharedLibrary', Exec) {
+    group = 'build'
+    description = 'Builds host JNI shared library from JNI C sources plus geoclient static library.'
+    dependsOn(createGeoclientStaticLibrary)
+    inputs.files(jniSources)
+    inputs.file(stagedStaticLibrary)
+    outputs.file(stagedSharedLibrary)
+
+    doFirst {
+        stagedSharedLibrary.get().asFile.parentFile.mkdirs()
+        if (jniSources.files.isEmpty()) {
+            throw new GradleException('No JNI source files were found at src/main/c/**/*_JNI.c')
         }
+    }
 
-        def jniSourcePaths = jniSources.files.collect { it.absolutePath }
+    def jniSourcePaths = jniSources.files.collect { it.absolutePath }
+    if (hostIsWindows) {
+        commandLine([
+            'cl',
+            '/nologo',
+            '/LD',
+            '/Od', '/Zi', '/W3', '/MD', '/TC', '/DDLL_EXPORT',
+            "/I${javaHome}/include",
+            "/I${javaHome}/include/win32",
+            '/Isrc/main/headers',
+            '/Ilib/geosupport/headers',
+            *jniSourcePaths,
+            stagedStaticLibrary.get().asFile.absolutePath,
+            '/link',
+            "/OUT:${stagedSharedLibrary.get().asFile.absolutePath}",
+            "/LIBPATH:${geosupportLibDir.absolutePath}",
+            'NYCgeo.lib'
+        ])
+    } else {
         commandLine([
             'gcc',
             "-I${javaHome}/include",
@@ -195,21 +148,31 @@ if (hostIsWindows) {
             '-Ilib/geosupport/headers',
             '-O0', '-g3', '-Wall', '-std=c99', '-fPIC',
             '-shared',
-            '-o', geoclientJniSharedLib.get().asFile.absolutePath,
+            '-o', stagedSharedLibrary.get().asFile.absolutePath,
             *jniSourcePaths,
-            geoclientStaticLib.get().asFile.absolutePath,
+            stagedStaticLibrary.get().asFile.absolutePath,
             '-Wl,--no-as-needed',
-            "-L${libPath}",
+            "-L${geosupportLibDir.absolutePath}",
             '-lc', '-lgeo', '-lm', '-ledequiv', '-lapequiv', '-lsan', '-lsnd',
             '-lstExcpt', '-lStdLast', '-lStdUniv', '-lstEnder', '-lstretch', '-lthined'
         ])
     }
+}
 
-    syncNativeBinaryTask.configure {
-        dependsOn(linkGeoclientJniSharedLibraryTask)
-        from(geoclientJniSharedLib)
-        into(nativeOutputDir)
-    }
+def syncStaticNativeBinary = tasks.register('syncStaticNativeBinary', Sync) {
+    group = 'build'
+    description = 'Copies staged static native artifact to the published native output directory.'
+    dependsOn(createGeoclientStaticLibrary)
+    from(stagedStaticLibrary)
+    into(nativeOutputDir)
+}
+
+def syncSharedNativeBinary = tasks.register('syncSharedNativeBinary', Sync) {
+    group = 'build'
+    description = 'Copies staged shared JNI native artifact to the published native output directory.'
+    dependsOn(linkGeoclientJniSharedLibrary)
+    from(stagedSharedLibrary)
+    into(nativeOutputDir)
 }
 
 configurations {
@@ -217,18 +180,44 @@ configurations {
         canBeConsumed = true
         canBeResolved = false
         attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, 'native-runtime'))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'shared-library'))
             attribute(OperatingSystemFamily.OPERATING_SYSTEM_ATTRIBUTE,
-                objects.named(OperatingSystemFamily, hostIsWindows ? OperatingSystemFamily.WINDOWS : OperatingSystemFamily.LINUX))
+                objects.named(OperatingSystemFamily, hostOperatingSystem))
             attribute(MachineArchitecture.ARCHITECTURE_ATTRIBUTE,
                 objects.named(MachineArchitecture, MachineArchitecture.X86_64))
+            attribute(linkageAttr, 'shared')
+        }
+    }
+    nativeStaticElements {
+        canBeConsumed = true
+        canBeResolved = false
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, 'native-link'))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'static-library'))
+            attribute(OperatingSystemFamily.OPERATING_SYSTEM_ATTRIBUTE,
+                objects.named(OperatingSystemFamily, hostOperatingSystem))
+            attribute(MachineArchitecture.ARCHITECTURE_ATTRIBUTE,
+                objects.named(MachineArchitecture, MachineArchitecture.X86_64))
+            attribute(linkageAttr, 'static')
         }
     }
 }
 
 artifacts {
-    nativeBinaryElements(nativeBinaryFile) {
-        builtBy(syncNativeBinaryTask)
-        classifier = nativeVariantName
+    if (buildShared) {
+        nativeBinaryElements(publishedSharedLibrary) {
+            builtBy(syncSharedNativeBinary)
+            classifier = nativeVariantName
+        }
+    }
+    if (buildStatic) {
+        nativeStaticElements(publishedStaticLibrary) {
+            builtBy(syncStaticNativeBinary)
+            classifier = "${nativeVariantName}-static"
+        }
     }
 }
 
@@ -236,9 +225,17 @@ publishing {
     publications {
         nativeBinary(MavenPublication) {
             artifactId = 'geoclient-native'
-            artifact(nativeBinaryFile) {
-                classifier = nativeVariantName
-                builtBy(syncNativeBinaryTask)
+            if (buildShared) {
+                artifact(publishedSharedLibrary) {
+                    classifier = nativeVariantName
+                    builtBy(syncSharedNativeBinary)
+                }
+            }
+            if (buildStatic) {
+                artifact(publishedStaticLibrary) {
+                    classifier = "${nativeVariantName}-static"
+                    builtBy(syncStaticNativeBinary)
+                }
             }
         }
     }
@@ -246,6 +243,15 @@ publishing {
 
 tasks.register('buildNative') {
     group = 'build'
-    description = 'Builds and exports the host-native JNI shared library.'
-    dependsOn(syncNativeBinaryTask)
+    description = "Builds host-native artifacts (nativeLinkage=${nativeLinkage})."
+    if (buildShared) {
+        dependsOn(syncSharedNativeBinary)
+    }
+    if (buildStatic) {
+        dependsOn(syncStaticNativeBinary)
+    }
+}
+
+tasks.named('assemble') {
+    dependsOn(tasks.named('buildNative'))
 }
