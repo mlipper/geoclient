@@ -89,6 +89,10 @@ gradlePlugin {
             id = 'geoclientbuild.documentation'
             implementationClass = 'geoclientbuild.docs.DocumentationPlugin'
         }
+        jniNativeConventionsPlugin {
+            id = 'geoclient.jni-native-conventions'
+            implementationClass = 'geoclientbuild.jni.JniNativeConventionsPlugin'
+        }
     }
 }
 
