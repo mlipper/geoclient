@@ -1,15 +1,4 @@
-# Jekyll build
-*.gem
-.jekyll-cache
-.jekyll-metadata
-.sass-cache
-Gemfile.lock
-_site
-vendor
-# Development
 .gradle
 .local
+bin
 build
-.vscode
-.vscode_site
-repo
