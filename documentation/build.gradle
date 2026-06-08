@@ -18,6 +18,10 @@ dependencies {
     apiServerClasspath(project(path: ':geoclient-service', configuration: 'apiServer'))
 }
 
+samples {
+    syncSamples = false
+}
+
 defaultTasks = ['clean', 'asciidoctor']
 
 def bootJarFile = layout.file(provider {
@@ -36,14 +40,42 @@ tasks.named('startServer') {
     dependsOn(':geoclient-service:dockerJar')
 }
 
+def stagedAsciidocSourceDir = layout.buildDirectory.dir('generated/docs/asciidoc-src')
+def stagedAsciidocAssetsDir = layout.buildDirectory.dir('generated/docs/asciidoc-assets')
+
+tasks.register('prepareAsciidocSource', Sync) {
+    group = 'documentation'
+    description = 'Stages AsciiDoc source under build/ and overlays generated samples.'
+    dependsOn(tasks.named('generateSamples'))
+    from('src/docs/asciidoc') {
+        exclude 'samples/**'
+    }
+    from(tasks.named('generateSamples')) {
+        into 'samples'
+    }
+    into(stagedAsciidocSourceDir)
+}
+
+tasks.register('prepareAsciidocAssets', Sync) {
+    group = 'documentation'
+    description = 'Stages generated documentation assets under build/ for AsciiDoctor.'
+    dependsOn(rootProject.tasks.named('aggregateJavadoc'))
+    from(rootProject.tasks.named('aggregateJavadoc')) {
+        into 'api'
+    }
+    into(stagedAsciidocAssetsDir)
+}
+
 asciidoctor {
 
     dependsOn(tasks.named('build'))
     dependsOn(rootProject.tasks.named('docsPrereqs'))
+    dependsOn(tasks.named('prepareAsciidocSource'))
+    dependsOn(tasks.named('prepareAsciidocAssets'))
 
     baseDirFollowsSourceDir()
 
-    sourceDir file('src/docs/asciidoc')
+    sourceDir stagedAsciidocSourceDir.get().asFile
 
     sources {
         include 'index.adoc'
@@ -54,9 +86,7 @@ asciidoctor {
         from(sourceDir) {
             include 'images/**', 'js/**'
         }
-        from(rootProject.tasks.named('aggregateJavadoc')) {
-            into 'api'
-        }
+        from(stagedAsciidocAssetsDir)
     }
 
     attributes docinfo: 'shared',
