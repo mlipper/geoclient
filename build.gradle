@@ -15,15 +15,22 @@ aggregateJavadocOptions {
     outputDirectory.set(rootProject.aggregateJavadocOutputDir)
 }
 
-def ciReportingProjects = [] as Set
+def aggregateReportingProjectPaths = [] as Set
 
 subprojects { subproject ->
-    plugins.withId('java') {
-        ciReportingProjects << subproject
+    def addAggregationDependency = {
+        if (aggregateReportingProjectPaths.add(subproject.path)) {
+            rootProject.dependencies.add('testReportAggregation', rootProject.dependencies.project(path: subproject.path))
+            rootProject.dependencies.add('jacocoAggregation', rootProject.dependencies.project(path: subproject.path))
+        }
     }
 
-    plugins.withId('org.springframework.boot') {
-        ciReportingProjects << subproject
+    subproject.pluginManager.withPlugin('java') {
+        addAggregationDependency()
+    }
+
+    subproject.pluginManager.withPlugin('org.springframework.boot') {
+        addAggregationDependency()
     }
 }
 
@@ -47,15 +54,6 @@ reporting {
     }
 }
 
-gradle.projectsEvaluated {
-    dependencies {
-        ciReportingProjects.each { depProject ->
-            testReportAggregation project(path: depProject.path)
-            jacocoAggregation project(path: depProject.path)
-        }
-    }
-}
-
 tasks.register('docsPrereqs') {
     group = 'documentation'
     description = 'Builds non-documentation subprojects and aggregate Javadoc required for documentation generation.'
@@ -69,4 +67,15 @@ tasks.register('docsPrereqs') {
 
 tasks.named('docsPrereqs') {
     dependsOn(tasks.named('aggregateJavadoc'))
+}
+
+tasks.register('continuousIntegrationReports') {
+    group = 'verification'
+    description = 'Generates aggregate test and coverage reports for CI.'
+    dependsOn(
+        tasks.named('testAggregateTestReport'),
+        tasks.named('integrationTestAggregateTestReport'),
+        tasks.named('testCodeCoverageReport'),
+        tasks.named('integrationTestCodeCoverageReport')
+    )
 }

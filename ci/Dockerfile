@@ -38,12 +38,14 @@ ENV GS_LIBRARY_PATH="${GEOSUPPORT_BASEDIR}/current/lib"
 ENV GS_INCLUDE_PATH="${GEOSUPPORT_BASEDIR}/current/include"
 
 RUN set -ex \
-  && gradle clean build --continue testAggregateTestReport integrationTestAggregateTestReport testCodeCoverageReport integrationTestCodeCoverageReport \
+  && gradle clean build testCodeCoverageReport integrationTestCodeCoverageReport --continue \
   && mkdir -p ./dist/ci/test-results ./dist/ci/coverage \
   && [ -f "${JARFILE}" ] || exit 1 \
   && cp -v "${JARFILE}" /app/dist/geoclient.jar \
-  && cp -R ./build/reports/tests/testAggregateTestReport /app/dist/ci/test-results/test \
-  && cp -R ./build/reports/tests/integrationTestAggregateTestReport /app/dist/ci/test-results/integrationTest \
+  # JUnit XML is copied directly from each module's build/test-results tree with
+  # parent paths preserved, so same-named TEST-*.xml files do not overwrite one
+  # another and separate JUnit aggregate report tasks are unnecessary.
+  && find . -type f -path './*/build/test-results/*/TEST-*.xml' -exec cp --parents {} /app/dist/ci/test-results/ \; \
   && cp -R ./build/reports/jacoco/testCodeCoverageReport /app/dist/ci/coverage/test \
   && cp -R ./build/reports/jacoco/integrationTestCodeCoverageReport /app/dist/ci/coverage/integrationTest
 

@@ -24,21 +24,51 @@ stages:
     - task: CmdLine@2
       inputs:
         script: |
-          docker build -f ./ci/Dockerfile -t mlipper/geoclient:$(tag) .
+          docker build --platform linux/amd64 -f ./ci/Dockerfile -t mlipper/geoclient:$(tag) .
           docker run --name geoclient --rm -d mlipper/geoclient:$(tag)
           docker cp geoclient:/app/ci $(System.DefaultWorkingDirectory)
           docker cp geoclient:/app/geoclient.jar $(System.DefaultWorkingDirectory)
           docker stop geoclient
+    - task: CmdLine@2
+      displayName: Verify JUnit XML artifacts
+      inputs:
+        script: |
+          set -eu
+          junitRoot="$(System.DefaultWorkingDirectory)/ci/test-results"
+          unitCount=$(find "$junitRoot" -type f -path '*/test/TEST-*.xml' | wc -l)
+          integrationCount=$(find "$junitRoot" -type f -path '*/integrationTest/TEST-*.xml' | wc -l)
+
+          [ "$unitCount" -gt 0 ] || { echo "Missing unit JUnit XML results under $junitRoot"; exit 1; }
+          [ "$integrationCount" -gt 0 ] || { echo "Missing integration JUnit XML results under $junitRoot"; exit 1; }
+
+          echo "Found JUnit XML files: unit=$unitCount integration=$integrationCount"
+          find "$junitRoot" -type f -name 'TEST-*.xml' | head -n 20
     - task: PublishTestResults@2
       inputs:
         mergeTestResults: true
         testRunner: JUnit
-        testResultsFiles: $(System.DefaultWorkingDirectory)/ci/test-results/TEST-*.xml
+        testResultsFiles: |
+          $(System.DefaultWorkingDirectory)/ci/test-results/**/TEST-*.xml
         failTaskOnFailedTests: true
+    - task: CmdLine@2
+      displayName: Verify aggregate coverage artifacts
+      inputs:
+        script: |
+          set -eu
+          testCoverage="$(System.DefaultWorkingDirectory)/ci/coverage/test/testCodeCoverageReport.xml"
+          integrationCoverage="$(System.DefaultWorkingDirectory)/ci/coverage/integrationTest/integrationTestCodeCoverageReport.xml"
+
+          [ -f "$testCoverage" ] || { echo "Missing coverage summary: $testCoverage"; exit 1; }
+          [ -f "$integrationCoverage" ] || { echo "Missing coverage summary: $integrationCoverage"; exit 1; }
+
+          echo "Found aggregate coverage summaries:"
+          ls -l "$testCoverage" "$integrationCoverage"
     - task: PublishCodeCoverageResults@2
       inputs:
-        summaryFileLocation: $(System.DefaultWorkingDirectory)/ci/coverage/*-coverage.xml
-        pathToSources: $(System.DefaultWorkingDirectory)/ci/src
+        summaryFileLocation: |
+          $(System.DefaultWorkingDirectory)/ci/coverage/test/testCodeCoverageReport.xml
+          $(System.DefaultWorkingDirectory)/ci/coverage/integrationTest/integrationTestCodeCoverageReport.xml
+        pathToSources: $(System.DefaultWorkingDirectory)
         failIfCoverageEmpty: false
     - task: PublishPipelineArtifact@1
       inputs:

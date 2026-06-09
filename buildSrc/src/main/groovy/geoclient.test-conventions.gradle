@@ -1,5 +1,6 @@
 import org.gradle.api.plugins.jvm.JvmTestSuite
 import org.gradle.api.tasks.testing.Test
+import org.gradle.testing.jacoco.tasks.JacocoReport
 
 plugins {
     id('java')
@@ -44,14 +45,10 @@ testing {
             targets {
                 all {
                     testTask.configure {
-                        // Disable class data sharing to avoid warnings on
-                        // JDK 21 due to restrictions on instrumentation.
-                        jvmArgs "-Xshare:off"
                         testLogging {
                             events "failed", "skipped"
-                            exceptionFormat "short"
+                            exceptionFormat = "short"
                         }
-                        jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
                     }
                 }
             }
@@ -69,26 +66,23 @@ testing {
             targets {
                 all {
                     testTask.configure {
-                        // Disable class data sharing to avoid warnings on
-                        // JDK 21 due to restrictions on instrumentation.
-                        jvmArgs "-Xshare:off"
                         shouldRunAfter(testing.suites.test)
                         environment("GEOFILES", '/opt/geosupport/current/fls/')
                         testLogging {
                             // options for log level LIFECYCLE
                             events "failed", "skipped"
-                            exceptionFormat "short"
+                            exceptionFormat = "short"
                             showStandardStreams = false
 
                             debug {
                                 events "failed", "skipped", "passed"
-                                exceptionFormat "full"
-                                showStandardStreams = true
+                                exceptionFormat = "full"
+                                showStandardStreams = false
                             }
 
                             info {
                                 events "failed", "skipped", "passed"
-                                showStandardStreams = true
+                                showStandardStreams = false
                             }
                         }
                     }
@@ -98,20 +92,40 @@ testing {
     }
 }
 
-//tasks.named('check') {
-//    dependsOn(testing.suites.integrationTest)
-//}
+tasks.named('check') {
+    dependsOn(testing.suites.integrationTest)
+    dependsOn(tasks.named('jacocoTestReport'))
+    dependsOn(tasks.named('jacocoIntegrationTestReport'))
+}
 
-//tasks.named('jacocoTestReport') {
-//    dependsOn(testing.suites.test, testing.suites.integrationTest)
-//    // Will include test.exec and integrationTest.exec so integration
-//    // tests contribute to coverage statistics.
-//    executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
-//    classDirectories.setFrom files(project.sourceSets.main.output)
-//    sourceDirectories.setFrom files(project.sourceSets.main.allSource.srcDirs)
-//    reports {
-//        xml.required = true
-//        //xml.outputLocation = project.file("${commonDistDir}/test-results/coverage/${project.name}-coverage.xml")
-//        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/${project.name}-coverage.xml")
-//    }
-//}
+tasks.named('jacocoTestReport') {
+    dependsOn(testing.suites.test)
+    reports {
+        xml.required = true
+    }
+}
+
+tasks.register('jacocoIntegrationTestReport', JacocoReport) {
+    group = 'verification'
+    description = 'Generates code coverage report for the integrationTest task.'
+    dependsOn(testing.suites.integrationTest)
+    executionData(layout.buildDirectory.file('jacoco/integrationTest.exec'))
+    classDirectories.setFrom(files(project.sourceSets.main.output))
+    sourceDirectories.setFrom(files(project.sourceSets.main.allSource.srcDirs))
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.withType(Test).configureEach {
+    // Disable class data sharing to avoid warnings on JDK 21 due to restrictions on instrumentation.
+    jvmArgs "-Xshare:off", "-javaagent:${configurations.mockitoAgent.asPath}"
+    reports {
+        junitXml {
+            required = true
+            outputPerTestCase = true
+            mergeReruns = true
+        }
+    }
+}
