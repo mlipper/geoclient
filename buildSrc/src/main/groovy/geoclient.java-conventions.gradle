@@ -76,3 +76,9 @@ spotless {
     }
     groovyGradle {}
 }
+
+tasks.named('spotlessGroovyGradle') {
+    doFirst {
+        outputDirectory.mkdirs()
+    }
+}

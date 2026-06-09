@@ -38,19 +38,14 @@ ENV GS_LIBRARY_PATH="${GEOSUPPORT_BASEDIR}/current/lib"
 ENV GS_INCLUDE_PATH="${GEOSUPPORT_BASEDIR}/current/include"
 
 RUN set -ex \
-    && gradle clean build tarCiReports
-
-RUN <<EOF
-#!/usr/bin/env bash
-set -eux -o pipefail
-tmp_dir=$(mktemp -d)
-mkdir -p ./dist
-[ -f "${JARFILE}" ] || exit 1
-cp -v "${JARFILE}" /app/dist/geoclient.jar
-find . -path '**/build/*' -type f -name '*-ci-reports.tgz' | xargs -I% tar xzvf % -C "${tmp_dir}"
-tar czvf /app/dist/geoclient-ci-reports.tgz -C "${tmp_dir}" .
-rm -rf "${tmp_dir}"
-EOF
+  && gradle clean build --continue testAggregateTestReport integrationTestAggregateTestReport testCodeCoverageReport integrationTestCodeCoverageReport \
+  && mkdir -p ./dist/ci/test-results ./dist/ci/coverage \
+  && [ -f "${JARFILE}" ] || exit 1 \
+  && cp -v "${JARFILE}" /app/dist/geoclient.jar \
+  && cp -R ./build/reports/tests/testAggregateTestReport /app/dist/ci/test-results/test \
+  && cp -R ./build/reports/tests/integrationTestAggregateTestReport /app/dist/ci/test-results/integrationTest \
+  && cp -R ./build/reports/jacoco/testCodeCoverageReport /app/dist/ci/coverage/test \
+  && cp -R ./build/reports/jacoco/integrationTestCodeCoverageReport /app/dist/ci/coverage/integrationTest
 
 ### Run
 FROM eclipse-temurin:21-jre AS runner
@@ -72,20 +67,15 @@ RUN set -eux \
 WORKDIR /app
 
 ENV CI_DIR=/app/ci
-ENV CI_TGZ=/app/geoclient-ci-reports.tgz
 ENV JARFILE=/app/geoclient.jar
 
 COPY --from=builder /app/dist/geoclient.jar ${JARFILE}
-COPY --from=builder /app/dist/geoclient-ci-reports.tgz ${CI_TGZ}
+COPY --from=builder /app/dist/ci ${CI_DIR}
 
 RUN set -ex \
-  && mkdir -p ${CI_DIR} \
-  && tar xzvf ${CI_TGZ} -C ${CI_DIR} \
-  && rm -f ${CI_TGZ} \
   && [ -f ${JARFILE} ] || (echo "ERROR: ${JARFILE} does not exist."; exit 1) \
   && [ -d ${CI_DIR} ] || (echo "ERROR: ${CI_DIR} does not exist."; exit 1) \
   && [ -d ${CI_DIR}/coverage ] || (echo "ERROR: ${CI_DIR}/coverage does not exist."; exit 1) \
-  && [ -d ${CI_DIR}/src ] || (echo "ERROR: ${CI_DIR}/src does not exist."; exit 1) \
   && [ -d ${CI_DIR}/test-results ] || (echo "ERROR: ${CI_DIR}/test-results does not exist."; exit 1)
 
 ENTRYPOINT ["java", "-Dgc.jni.version=geoclient-jni-2", "-Dspring.profiles.active=default", "-Xmx2048m", "-jar", "/app/geoclient.jar"]

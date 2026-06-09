@@ -14,7 +14,7 @@ public class BaseGeoclientPlugin implements Plugin<Project> {
         project.getPlugins().apply("java");
 
         // Log the application of the base plugin
-        logger.lifecycle("BaseGeoclientPlugin applied to project: {}", project.getName());
+        logger.debug("BaseGeoclientPlugin applied to project: {}", project.getName());
     }
 
 }

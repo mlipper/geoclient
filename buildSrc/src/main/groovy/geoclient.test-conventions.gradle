@@ -1,19 +1,13 @@
+import org.gradle.api.plugins.jvm.JvmTestSuite
+import org.gradle.api.tasks.testing.Test
+
 plugins {
     id('java')
     id('java-test-fixtures')
     id('jacoco')
 }
 
-sourceSets {
-    integrationTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
 configurations {
-    integrationTestImplementation.extendsFrom(implementation, testImplementation)
-    integrationTestRuntimeOnly.extendsFrom(runtimeOnly, testRuntimeOnly)
     mockitoAgent
 }
 
@@ -28,116 +22,96 @@ dependencies {
     // though it is part of the spring-boot-starter-test BOM.
     //
     // IMPORTANT: when upgrading spring-boot, this dependency must be manually
-    // configured to use the proper version. 
+    // configured to use the proper version.
     //
-    testImplementation platform(project(':platform'))
-    testImplementation(libs.mockito.core) 
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testFixturesImplementation 'org.springframework.boot:spring-boot-starter-logging'
-    mockitoAgent(libs.mockito.core){
+    mockitoAgent(libs.mockito.core) {
         transitive = false
     }
 }
 
-tasks.named('test', Test) {
-    useJUnitPlatform()
-    testLogging {
-        events "failed", "skipped"
-        exceptionFormat = "short"
-    }
-    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
-}
+testing {
+    suites {
+        test {
+            useJUnitJupiter()
 
-tasks.register('integrationTest', Test) {
-    description = 'Runs integration tests.'
-    group = 'verification'
+            dependencies {
+                implementation platform(project(':platform'))
+                implementation(libs.mockito.core)
+                runtimeOnly 'org.junit.platform:junit-platform-launcher'
+            }
 
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-
-    shouldRunAfter(tasks.named('test'))
-
-    useJUnitPlatform()
-
-    environment("GEOFILES", '/opt/geosupport/current/fls/');
-    testLogging {
-        // options for log level LIFECYCLE
-        events "failed", "skipped"
-        exceptionFormat = "short"
-        showStandardStreams = false
-
-        debug {
-            events "failed", "skipped", "passed"
-            exceptionFormat = "full"
-            showStandardStreams = true
+            targets {
+                all {
+                    testTask.configure {
+                        // Disable class data sharing to avoid warnings on
+                        // JDK 21 due to restrictions on instrumentation.
+                        jvmArgs "-Xshare:off"
+                        testLogging {
+                            events "failed", "skipped"
+                            exceptionFormat "short"
+                        }
+                        jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+                    }
+                }
+            }
         }
 
-        info {
-            events "failed", "skipped", "passed"
-            showStandardStreams = true
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+                implementation platform(project(':platform'))
+                implementation(libs.mockito.core)
+                implementation 'org.springframework.boot:spring-boot-starter-logging'
+                runtimeOnly 'org.junit.platform:junit-platform-launcher'
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        // Disable class data sharing to avoid warnings on
+                        // JDK 21 due to restrictions on instrumentation.
+                        jvmArgs "-Xshare:off"
+                        shouldRunAfter(testing.suites.test)
+                        environment("GEOFILES", '/opt/geosupport/current/fls/')
+                        testLogging {
+                            // options for log level LIFECYCLE
+                            events "failed", "skipped"
+                            exceptionFormat "short"
+                            showStandardStreams = false
+
+                            debug {
+                                events "failed", "skipped", "passed"
+                                exceptionFormat "full"
+                                showStandardStreams = true
+                            }
+
+                            info {
+                                events "failed", "skipped", "passed"
+                                showStandardStreams = true
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
-tasks.named('check') {
-    dependsOn(integrationTest)
-}
+//tasks.named('check') {
+//    dependsOn(testing.suites.integrationTest)
+//}
 
-tasks.named('jacocoTestReport') {
-    dependsOn(test, integrationTest)
-    // Will include test.exec and integrationTest.exec so integration
-    // tests contribute to coverage statistics.
-    executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
-    classDirectories.setFrom files(project.sourceSets.main.output)
-    sourceDirectories.setFrom files(project.sourceSets.main.allSource.srcDirs)
-    reports {
-        xml.required = true
-        //xml.outputLocation = project.file("${commonDistDir}/test-results/coverage/${project.name}-coverage.xml")
-        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/${project.name}-coverage.xml")
-    }
-}
-
-tasks.register('tarCiReports', Tar) {
-    into('src') {
-        from sourceSets.main.allJava.srcDirs
-    }
-    into('test-results') {
-        //from tasks.named('copyJunitXmlReports')
-        from tasks.named('test').map { it.outputs.files }
-        from tasks.named('integrationTest').map { it.outputs.files }
-        include 'TEST-*.xml'
-    }
-    into('coverage') {
-        //from tasks.named('copyJacocoTestReports')
-        from tasks.named('jacocoTestReport').map { it.outputs.files }
-        include '*-coverage.xml'
-    }
-    archiveFileName = "${project.name}-ci-reports.tgz"
-    compression = Compression.GZIP
-    destinationDirectory = layout.buildDirectory
-}
-
-def script = rootProject.file('src/scripts/test-all.sh')
-tasks.register('testAll', Exec) {
-    description = 'Starts geoclient-service using the built jar and runs all tests.'
-    group = 'verification'
-    commandLine '/bin/bash', '-c', "${script.absolutePath} start"
-    shouldRunAfter(tasks.named('assemble'))
-}
-
-tasks.withType(Test).configureEach {
-    // Turn off class data sharing to avoid JDK warning
-    jvmArgs "-Xshare:off"
-    // Configure JUnit XML reports to be output to the dist directory for CI collection.
-    //reports {
-    //    junitXml {
-    //        outputLocation = project.file("${commonDistDir}/test-results/junit")
-    //        includeSystemOutLog = true // defaults to true
-    //        includeSystemErrLog = true // defaults to true
-    //        outputPerTestCase = true   // defaults to false
-    //        mergeReruns = true         // defaults to false
-    //    }
-    //}
-    finalizedBy(tasks.named('jacocoTestReport'))
-}
+//tasks.named('jacocoTestReport') {
+//    dependsOn(testing.suites.test, testing.suites.integrationTest)
+//    // Will include test.exec and integrationTest.exec so integration
+//    // tests contribute to coverage statistics.
+//    executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
+//    classDirectories.setFrom files(project.sourceSets.main.output)
+//    sourceDirectories.setFrom files(project.sourceSets.main.allSource.srcDirs)
+//    reports {
+//        xml.required = true
+//        //xml.outputLocation = project.file("${commonDistDir}/test-results/coverage/${project.name}-coverage.xml")
+//        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/${project.name}-coverage.xml")
+//    }
+//}

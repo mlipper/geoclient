@@ -11,3 +11,15 @@ dependencies {
     implementation('org.apache.commons:commons-lang3')
     testImplementation(testFixtures(project(':geoclient-jni')))
 }
+
+testing {
+    suites {
+        integrationTest {
+            dependencies {
+                implementation(project(':geoclient-jni'))
+                implementation(project(':geoclient-xml'))
+                implementation(testFixtures(project(':geoclient-jni')))
+            }
+        }
+    }
+}

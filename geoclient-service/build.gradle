@@ -29,6 +29,18 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-webmvc-test')
 }
 
+testing {
+    suites {
+        integrationTest {
+            dependencies {
+                implementation('org.springframework.boot:spring-boot-starter-jackson-test')
+                implementation('org.springframework.boot:spring-boot-starter-restclient-test')
+                implementation('org.springframework.boot:spring-boot-starter-webmvc-test')
+            }
+        }
+    }
+}
+
 tasks.register('writeVersionProperties', WriteProperties) {
     properties(['jni.version': project.version, 'core.version': project.version, 'parser.version': project.version, 'service.version': project.version])
     destinationFile = file(new File(sourceSets.main.output.resourcesDir, 'version.properties'))
@@ -79,6 +91,17 @@ tasks.named('build') {
 
 tasks.named('bootRun') {
     args '--spring.profiles.active=bootrun'
+}
+
+testing {
+    suites {
+        integrationTest {
+            dependencies {
+                implementation(project(':geoclient-core'))
+                implementation(project(':geoclient-parser'))
+            }
+        }
+    }
 }
 
 // Uses simple sharing strategy. See:

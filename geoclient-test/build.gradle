@@ -8,7 +8,17 @@ dependencies {
     implementation 'org.junit.jupiter:junit-jupiter-api'
 }
 
-tasks.named('test', Test) {
-    environment('GEOCLIENT_SERVICE_STATUS', 'running')
-    systemProperty('geoclient.service.status', 'running')
+testing {
+    suites {
+        test {
+            targets {
+                all {
+                    testTask.configure {
+                        environment('GEOCLIENT_SERVICE_STATUS', 'running')
+                        systemProperty('geoclient.service.status', 'running')
+                    }
+                }
+            }
+        }
+    }
 }

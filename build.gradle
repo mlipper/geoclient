@@ -1,6 +1,11 @@
+import org.gradle.api.tasks.testing.AggregateTestReport
+import org.gradle.testing.jacoco.plugins.JacocoCoverageReport
+
 plugins {
     id 'geoclient.build-conventions'
     id 'geoclientbuild.aggregate-javadoc'
+    id 'test-report-aggregation'
+    id 'jacoco-report-aggregation'
 }
 
 aggregateJavadocOptions {
@@ -8,6 +13,47 @@ aggregateJavadocOptions {
     disableDoclint = true
     failOnError = true
     outputDirectory.set(rootProject.aggregateJavadocOutputDir)
+}
+
+def ciReportingProjects = [] as Set
+
+subprojects { subproject ->
+    plugins.withId('java') {
+        ciReportingProjects << subproject
+    }
+
+    plugins.withId('org.springframework.boot') {
+        ciReportingProjects << subproject
+    }
+}
+
+reporting {
+    reports {
+        testAggregateTestReport(AggregateTestReport) {
+            testSuiteName = 'test'
+        }
+
+        integrationTestAggregateTestReport(AggregateTestReport) {
+            testSuiteName = 'integrationTest'
+        }
+
+        testCodeCoverageReport(JacocoCoverageReport) {
+            testSuiteName = 'test'
+        }
+
+        integrationTestCodeCoverageReport(JacocoCoverageReport) {
+            testSuiteName = 'integrationTest'
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    dependencies {
+        ciReportingProjects.each { depProject ->
+            testReportAggregation project(path: depProject.path)
+            jacocoAggregation project(path: depProject.path)
+        }
+    }
 }
 
 tasks.register('docsPrereqs') {
