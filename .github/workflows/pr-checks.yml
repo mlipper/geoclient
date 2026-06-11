@@ -1,0 +1,22 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+      - pipeline
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/_ci-reusable.yml
+    with:
+      run_integration: false
+      publish_artifacts: true

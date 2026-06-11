@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - pipeline
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/_ci-reusable.yml
+    with:
+      run_integration: true
+      publish_artifacts: true
+
