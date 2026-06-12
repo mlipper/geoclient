@@ -60,12 +60,19 @@ jobs:
           echo "Found unit JUnit XML files: ${unitCount}"
           find "${junitRoot}" -type f -path '*/test/TEST-*.xml' | awk 'NR<=20 { print }'
 
+      - name: Stage unit test results for publish action
+        run: |
+          set -euo pipefail
+          mkdir -p "${GITHUB_WORKSPACE}/ci-test-results"
+          cp -r "${OUTDIR}/ci/test-results" "${GITHUB_WORKSPACE}/ci-test-results"
+          ls -la "${GITHUB_WORKSPACE}/ci-test-results"
+
       - name: Publish unit test results in GitHub checks
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@2ceeed2b8f26e15b06c3846719f75354febd9e7b # v2
         with:
           files: |
-            ${{ env.OUTDIR }}/ci/test-results/**/test/TEST-*.xml
+            ${{ github.workspace }}/ci-test-results/**/test/TEST-*.xml
           check_name: Unit JUnit Results
           fail_on: test failures
 
@@ -78,10 +85,16 @@ jobs:
           echo "UNIT_COVERAGE_DIR=${OUTDIR}/ci/coverage/test" >> "${GITHUB_ENV}"
           ls -l "${testCoverage}"
 
+      - name: Stage unit coverage file for action
+        run: |
+          set -euo pipefail
+          cp "${OUTDIR}/ci/coverage/test/testCodeCoverageReport.xml" "${GITHUB_WORKSPACE}/unit-testCodeCoverageReport.xml"
+          ls -l "${GITHUB_WORKSPACE}/unit-testCodeCoverageReport.xml"
+
       - name: Render unit JaCoCo coverage summary
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
-          filename: ${{ env.TEST_COVERAGE_XML }}
+          filename: ${{ github.workspace }}/unit-testCodeCoverageReport.xml
           badge: true
           format: markdown
           output: both
@@ -121,7 +134,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@2ceeed2b8f26e15b06c3846719f75354febd9e7b # v2
         with:
           files: |
-            ${{ env.OUTDIR }}/ci/test-results/**/integrationTest/TEST-*.xml
+            ${{ github.workspace }}/ci-test-results/**/integrationTest/TEST-*.xml
           check_name: Integration JUnit Results
           fail_on: test failures
 
@@ -135,11 +148,18 @@ jobs:
 
           ls -l "${integrationCoverage}"
 
+      - name: Stage integration coverage file for action
+        if: inputs.run_integration
+        run: |
+          set -euo pipefail
+          cp "${OUTDIR}/ci/coverage/integrationTest/integrationTestCodeCoverageReport.xml" "${GITHUB_WORKSPACE}/integration-integrationTestCodeCoverageReport.xml"
+          ls -l "${GITHUB_WORKSPACE}/integration-integrationTestCodeCoverageReport.xml"
+
       - name: Render integration JaCoCo coverage summary
         if: inputs.run_integration
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
-          filename: ${{ env.OUTDIR }}/ci/coverage/integrationTest/integrationTestCodeCoverageReport.xml
+          filename: ${{ github.workspace }}/integration-integrationTestCodeCoverageReport.xml
           badge: true
           format: markdown
           output: both
