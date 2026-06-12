@@ -94,7 +94,7 @@ jobs:
       - name: Render unit JaCoCo coverage summary
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
-          filename: ${{ github.workspace }}/unit-testCodeCoverageReport.xml
+          filename: unit-testCodeCoverageReport.xml
           badge: true
           format: markdown
           output: both
@@ -159,7 +159,7 @@ jobs:
         if: inputs.run_integration
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
-          filename: ${{ github.workspace }}/integration-integrationTestCodeCoverageReport.xml
+          filename: integration-integrationTestCodeCoverageReport.xml
           badge: true
           format: markdown
           output: both
