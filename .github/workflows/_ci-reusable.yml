@@ -19,105 +19,10 @@ permissions:
   checks: write
 
 jobs:
-  unit:
-    name: Unit Tests and Coverage
+  build:
+    name: Build, Test, and Coverage
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-
-      - name: Set up Java 21
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
-        with:
-          distribution: temurin
-          java-version: '21'
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d # v4
-
-      - name: Run unit test and coverage tasks
-        run: |
-          set -euxo pipefail
-          ./gradlew --no-daemon clean test testCodeCoverageReport --continue
-
-      - name: Verify unit JUnit XML artifacts
-        run: |
-          set -euo pipefail
-          junitRoot="${GITHUB_WORKSPACE}"
-          unitCount=$(find "${junitRoot}" -type f -path '*/build/test-results/test/TEST-*.xml' | wc -l)
-
-          [ "${unitCount}" -gt 0 ] || { echo "Missing unit JUnit XML results under ${junitRoot}"; exit 1; }
-
-          echo "Found unit JUnit XML files: ${unitCount}"
-          find "${junitRoot}" -type f -path '*/build/test-results/test/TEST-*.xml' | head -n 20
-
-      - name: Publish unit test results in GitHub checks
-        if: always()
-        uses: EnricoMi/publish-unit-test-result-action@2ceeed2b8f26e15b06c3846719f75354febd9e7b # v2
-        with:
-          files: |
-            **/build/test-results/test/TEST-*.xml
-          check_name: Unit JUnit Results
-          fail_on: test failures
-
-      - name: Verify unit coverage artifact
-        run: |
-          set -euo pipefail
-          defaultCoverage="${GITHUB_WORKSPACE}/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
-          coverageCandidates=$(find "${GITHUB_WORKSPACE}" -type f -name 'testCodeCoverageReport.xml')
-
-          if [ -f "${defaultCoverage}" ]; then
-            testCoverage="${defaultCoverage}"
-          elif [ -n "${coverageCandidates}" ]; then
-            testCoverage=$(printf '%s\n' "${coverageCandidates}" | head -n 1)
-          else
-            echo "Missing unit coverage summary. Expected ${defaultCoverage} or another testCodeCoverageReport.xml under ${GITHUB_WORKSPACE}."
-            find "${GITHUB_WORKSPACE}" -maxdepth 6 -type d -path '*/reports/jacoco*' | sort || true
-            exit 1
-          fi
-
-          unitCoverageDir="${RUNNER_TEMP}/ci-coverage/test"
-          mkdir -p "${unitCoverageDir}"
-          cp "${testCoverage}" "${unitCoverageDir}/testCodeCoverageReport.xml"
-
-          echo "TEST_COVERAGE_XML=${unitCoverageDir}/testCodeCoverageReport.xml" >> "${GITHUB_ENV}"
-          echo "UNIT_COVERAGE_DIR=${unitCoverageDir}" >> "${GITHUB_ENV}"
-          ls -l "${unitCoverageDir}/testCodeCoverageReport.xml"
-
-      - name: Render unit JaCoCo coverage summary
-        uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
-        with:
-          filename: ${{ env.TEST_COVERAGE_XML }}
-          badge: true
-          format: markdown
-          output: both
-
-      - name: Upload unit JUnit XML artifacts
-        if: always() && inputs.publish_artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: junit-xml-unit
-          path: '**/build/test-results/test'
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Upload unit coverage artifacts
-        if: always() && inputs.publish_artifacts && env.UNIT_COVERAGE_DIR != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: jacoco-xml-unit
-          path: ${{ env.UNIT_COVERAGE_DIR }}
-          if-no-files-found: error
-          retention-days: 14
-
-  integration:
-    if: inputs.run_integration
-    needs: unit
-    name: Integration Tests and Packaging
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -144,7 +49,63 @@ jobs:
 
           echo "OUTDIR=${outdir}" >> "${GITHUB_ENV}"
 
+      - name: Verify unit JUnit XML artifacts
+        run: |
+          set -euo pipefail
+          junitRoot="${OUTDIR}/ci/test-results"
+          unitCount=$(find "${junitRoot}" -type f -path '*/test/TEST-*.xml' | wc -l)
+
+          [ "${unitCount}" -gt 0 ] || { echo "Missing unit JUnit XML results under ${junitRoot}"; exit 1; }
+
+          echo "Found unit JUnit XML files: ${unitCount}"
+          find "${junitRoot}" -type f -path '*/test/TEST-*.xml' | head -n 20
+
+      - name: Publish unit test results in GitHub checks
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@2ceeed2b8f26e15b06c3846719f75354febd9e7b # v2
+        with:
+          files: |
+            ${{ env.OUTDIR }}/ci/test-results/**/test/TEST-*.xml
+          check_name: Unit JUnit Results
+          fail_on: test failures
+
+      - name: Verify unit coverage artifact
+        run: |
+          set -euo pipefail
+          testCoverage="${OUTDIR}/ci/coverage/test/testCodeCoverageReport.xml"
+          [ -f "${testCoverage}" ] || { echo "Missing unit coverage summary: ${testCoverage}"; exit 1; }
+          echo "TEST_COVERAGE_XML=${testCoverage}" >> "${GITHUB_ENV}"
+          echo "UNIT_COVERAGE_DIR=${OUTDIR}/ci/coverage/test" >> "${GITHUB_ENV}"
+          ls -l "${testCoverage}"
+
+      - name: Render unit JaCoCo coverage summary
+        uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
+        with:
+          filename: ${{ env.TEST_COVERAGE_XML }}
+          badge: true
+          format: markdown
+          output: both
+
+      - name: Upload unit JUnit XML artifacts
+        if: always() && inputs.publish_artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: junit-xml-unit
+          path: ${{ env.OUTDIR }}/ci/test-results/**/test/TEST-*.xml
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload unit coverage artifacts
+        if: always() && inputs.publish_artifacts && env.UNIT_COVERAGE_DIR != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: jacoco-xml-unit
+          path: ${{ env.UNIT_COVERAGE_DIR }}
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Verify integration JUnit XML artifacts
+        if: inputs.run_integration
         run: |
           set -euo pipefail
           junitRoot="${OUTDIR}/ci/test-results"
@@ -156,7 +117,7 @@ jobs:
           find "${junitRoot}" -type f -path '*/integrationTest/TEST-*.xml' | head -n 20
 
       - name: Publish integration test results in GitHub checks
-        if: always()
+        if: always() && inputs.run_integration
         uses: EnricoMi/publish-unit-test-result-action@2ceeed2b8f26e15b06c3846719f75354febd9e7b # v2
         with:
           files: |
@@ -165,6 +126,7 @@ jobs:
           fail_on: test failures
 
       - name: Verify integration coverage artifact
+        if: inputs.run_integration
         run: |
           set -euo pipefail
           integrationCoverage="${OUTDIR}/ci/coverage/integrationTest/integrationTestCodeCoverageReport.xml"
@@ -174,6 +136,7 @@ jobs:
           ls -l "${integrationCoverage}"
 
       - name: Render integration JaCoCo coverage summary
+        if: inputs.run_integration
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
           filename: ${{ env.OUTDIR }}/ci/coverage/integrationTest/integrationTestCodeCoverageReport.xml
@@ -191,16 +154,16 @@ jobs:
           retention-days: 14
 
       - name: Upload integration JUnit XML artifacts
-        if: always() && inputs.publish_artifacts
+        if: always() && inputs.publish_artifacts && inputs.run_integration
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: junit-xml-integration
-          path: ${{ env.OUTDIR }}/ci/test-results
+          path: ${{ env.OUTDIR }}/ci/test-results/**/integrationTest/TEST-*.xml
           if-no-files-found: error
           retention-days: 14
 
       - name: Upload integration coverage artifacts
-        if: always() && inputs.publish_artifacts
+        if: always() && inputs.publish_artifacts && inputs.run_integration
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: jacoco-xml-integration

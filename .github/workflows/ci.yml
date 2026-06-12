@@ -18,6 +18,8 @@ jobs:
   build:
     uses: ./.github/workflows/_ci-reusable.yml
     with:
+      # Keep full validation on this primary workflow.
+      # If CI volume grows later, callers can opt into a fast path by setting run_integration: false.
       run_integration: true
       publish_artifacts: true
 
