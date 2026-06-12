@@ -97,6 +97,7 @@ jobs:
         uses: madrapps/jacoco-report@e51ce1f46f7f8b5331593f935e59cbaf44b84920 # v1.8.0
         with:
           paths: unit-testCodeCoverageReport.xml
+          token: ${{ github.token }}
           comment-type: summary
           continue-on-error: false
 
@@ -163,6 +164,7 @@ jobs:
         uses: madrapps/jacoco-report@e51ce1f46f7f8b5331593f935e59cbaf44b84920 # v1.8.0
         with:
           paths: integration-integrationTestCodeCoverageReport.xml
+          token: ${{ github.token }}
           comment-type: summary
           continue-on-error: false
 
