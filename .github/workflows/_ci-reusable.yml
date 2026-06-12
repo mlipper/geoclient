@@ -65,14 +65,31 @@ jobs:
       - name: Verify unit coverage artifact
         run: |
           set -euo pipefail
-          testCoverage="${GITHUB_WORKSPACE}/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
-          [ -f "${testCoverage}" ] || { echo "Missing unit coverage summary: ${testCoverage}"; exit 1; }
-          ls -l "${testCoverage}"
+          defaultCoverage="${GITHUB_WORKSPACE}/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+          coverageCandidates=$(find "${GITHUB_WORKSPACE}" -type f -name 'testCodeCoverageReport.xml')
+
+          if [ -f "${defaultCoverage}" ]; then
+            testCoverage="${defaultCoverage}"
+          elif [ -n "${coverageCandidates}" ]; then
+            testCoverage=$(printf '%s\n' "${coverageCandidates}" | head -n 1)
+          else
+            echo "Missing unit coverage summary. Expected ${defaultCoverage} or another testCodeCoverageReport.xml under ${GITHUB_WORKSPACE}."
+            find "${GITHUB_WORKSPACE}" -maxdepth 6 -type d -path '*/reports/jacoco*' | sort || true
+            exit 1
+          fi
+
+          unitCoverageDir="${RUNNER_TEMP}/ci-coverage/test"
+          mkdir -p "${unitCoverageDir}"
+          cp "${testCoverage}" "${unitCoverageDir}/testCodeCoverageReport.xml"
+
+          echo "TEST_COVERAGE_XML=${unitCoverageDir}/testCodeCoverageReport.xml" >> "${GITHUB_ENV}"
+          echo "UNIT_COVERAGE_DIR=${unitCoverageDir}" >> "${GITHUB_ENV}"
+          ls -l "${unitCoverageDir}/testCodeCoverageReport.xml"
 
       - name: Render unit JaCoCo coverage summary
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
-          filename: ${{ github.workspace }}/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
+          filename: ${{ env.TEST_COVERAGE_XML }}
           badge: true
           format: markdown
           output: both
@@ -87,11 +104,11 @@ jobs:
           retention-days: 14
 
       - name: Upload unit coverage artifacts
-        if: always() && inputs.publish_artifacts
+        if: always() && inputs.publish_artifacts && env.UNIT_COVERAGE_DIR != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: jacoco-xml-unit
-          path: build/reports/jacoco/testCodeCoverageReport
+          path: ${{ env.UNIT_COVERAGE_DIR }}
           if-no-files-found: error
           retention-days: 14
 
