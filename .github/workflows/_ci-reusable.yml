@@ -88,16 +88,17 @@ jobs:
       - name: Stage unit coverage file for action
         run: |
           set -euo pipefail
+          # Docker-based actions resolve files from /github/workspace, so stage
+          # coverage XML into workspace and pass workspace-relative paths.
           cp "${OUTDIR}/ci/coverage/test/testCodeCoverageReport.xml" "${GITHUB_WORKSPACE}/unit-testCodeCoverageReport.xml"
           ls -l "${GITHUB_WORKSPACE}/unit-testCodeCoverageReport.xml"
 
       - name: Render unit JaCoCo coverage summary
-        uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
+        uses: madrapps/jacoco-report@e51ce1f46f7f8b5331593f935e59cbaf44b84920 # v1.8.0
         with:
-          filename: unit-testCodeCoverageReport.xml
-          badge: true
-          format: markdown
-          output: both
+          paths: unit-testCodeCoverageReport.xml
+          comment-type: summary
+          continue-on-error: false
 
       - name: Upload unit JUnit XML artifacts
         if: always() && inputs.publish_artifacts
@@ -152,17 +153,18 @@ jobs:
         if: inputs.run_integration
         run: |
           set -euo pipefail
+          # Keep integration coverage XML in workspace for Docker action path
+          # resolution (avoid host absolute paths like /home/runner/work/...).
           cp "${OUTDIR}/ci/coverage/integrationTest/integrationTestCodeCoverageReport.xml" "${GITHUB_WORKSPACE}/integration-integrationTestCodeCoverageReport.xml"
           ls -l "${GITHUB_WORKSPACE}/integration-integrationTestCodeCoverageReport.xml"
 
       - name: Render integration JaCoCo coverage summary
         if: inputs.run_integration
-        uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
+        uses: madrapps/jacoco-report@e51ce1f46f7f8b5331593f935e59cbaf44b84920 # v1.8.0
         with:
-          filename: integration-integrationTestCodeCoverageReport.xml
-          badge: true
-          format: markdown
-          output: both
+          paths: integration-integrationTestCodeCoverageReport.xml
+          comment-type: summary
+          continue-on-error: false
 
       - name: Upload geoclient jar artifact
         if: inputs.publish_artifacts
