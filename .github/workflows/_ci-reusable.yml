@@ -58,7 +58,7 @@ jobs:
           [ "${unitCount}" -gt 0 ] || { echo "Missing unit JUnit XML results under ${junitRoot}"; exit 1; }
 
           echo "Found unit JUnit XML files: ${unitCount}"
-          find "${junitRoot}" -type f -path '*/test/TEST-*.xml' | head -n 20
+          find "${junitRoot}" -type f -path '*/test/TEST-*.xml' | awk 'NR<=20 { print }'
 
       - name: Publish unit test results in GitHub checks
         if: always()
@@ -114,7 +114,7 @@ jobs:
           [ "${integrationCount}" -gt 0 ] || { echo "Missing integration JUnit XML results under ${junitRoot}"; exit 1; }
 
           echo "Found integration JUnit XML files: ${integrationCount}"
-          find "${junitRoot}" -type f -path '*/integrationTest/TEST-*.xml' | head -n 20
+          find "${junitRoot}" -type f -path '*/integrationTest/TEST-*.xml' | awk 'NR<=20 { print }'
 
       - name: Publish integration test results in GitHub checks
         if: always() && inputs.run_integration
