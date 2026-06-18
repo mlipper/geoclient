@@ -60,7 +60,7 @@ tasks.register('docsPrereqs') {
 
     dependsOn(provider {
         rootProject.subprojects
-            .findAll { it.path != ':documentation' && it.path != ':distribution' }
+            .findAll { it.path != ':documentation' }
             .collect { it.tasks.named('build') }
     })
 }
