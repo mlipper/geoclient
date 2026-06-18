@@ -36,6 +36,7 @@ javadoc {
     options.memberLevel = JavadocMemberLevel.PROTECTED
     options.noTimestamp = true
     options.use = true
+    options.header = '<div id="ug"><a href="https://mlipper.github.io/geoclient/">Geoclient User Guide</a></div>'
 
     // Suppress warnings due to cross-module @see and @link references.
     // Note that global "api" task does display all warnings.
