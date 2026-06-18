@@ -16,10 +16,7 @@ Benefits of using Geoclient include:
 
 ## Documentation
 
-See the [website](https://mlipper.github.io/geoclient/):
-
-* [Geoclient User Guide](https://mlipper.github.io/geoclient/docs/current/user-guide/)
-* [Javadoc](https://mlipper.github.io/geoclient/docs/current/api/gov/nyc/doitt/gis/geoclient/docs/package-summary.html)
+See the [Geoclient User Guide](https://mlipper.github.io/geoclient/):
 
 ## The big picture
 
