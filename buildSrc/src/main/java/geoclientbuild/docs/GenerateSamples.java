@@ -27,12 +27,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import tools.jackson.core.JacksonException;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.databind.SerializationFeature;
-
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.RegularFile;
@@ -47,12 +41,16 @@ import geoclientbuild.client.HttpClient;
 import geoclientbuild.client.Request;
 import geoclientbuild.client.Response;
 import geoclientbuild.client.RestClient;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 abstract public class GenerateSamples extends DefaultTask {
 
     public static final String ASCIIDOC_BEGIN_TAG = "// tag::user_guide[]";
     public static final String ASCIIDOC_END_TAG = "// end::user_guide[]";
-
 
     @Input
     abstract public Property<URI> getBaseUri();
@@ -78,9 +76,9 @@ abstract public class GenerateSamples extends DefaultTask {
                 getLogger().lifecycle("request: {}", request.toString());
                 Response response = restClient.call(request);
                 getLogger().lifecycle("response: {}", response.toString());
-                if(response.getHttpCode() != 200) {
+                if (response.getHttpCode() != 200) {
                     throw new RuntimeException(
-                            String.format("Non-200 response code received: %d", response.getHttpCode()));
+                        String.format("Non-200 response code received: %d", response.getHttpCode()));
                 }
                 buff.append(format(mapper, response.getBody()));
                 buff.append('\n');
@@ -114,7 +112,8 @@ abstract public class GenerateSamples extends DefaultTask {
         if (!uriStr.endsWith("/")) {
             try {
                 return new URI(uriStr + "/");
-            } catch (URISyntaxException e) {
+            }
+            catch (URISyntaxException e) {
                 throw new RuntimeException("Invalid URI: " + uriStr, e);
             }
         }

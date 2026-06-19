@@ -17,11 +17,10 @@ package geoclientbuild.client.shutdown;
 
 import java.io.File;
 
+import geoclientbuild.exec.settings.SettingsException;
 import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.json.JsonMapper;
-
-import geoclientbuild.exec.settings.SettingsException;
 
 /**
  * JSON-based configuration file loader for HTTP shutdown settings.

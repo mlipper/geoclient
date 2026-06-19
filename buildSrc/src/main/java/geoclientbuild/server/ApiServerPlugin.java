@@ -38,9 +38,7 @@ public class ApiServerPlugin implements Plugin<Project> {
     public static final String DEFAULT_JAVA_COMMAND = "java";
     public static final String DEFAULT_OUTPUT_DIRECTORY = "api-server";
     public static final String DEFAULT_PID_FILE = "api-server.pid";
-    public static final String DEFAULT_PID_FILE_PATH = DEFAULT_OUTPUT_DIRECTORY
-                                                            + File.separator
-                                                            + DEFAULT_PID_FILE;
+    public static final String DEFAULT_PID_FILE_PATH = DEFAULT_OUTPUT_DIRECTORY + File.separator + DEFAULT_PID_FILE;
     public static final String DEFAULT_PROFILE = "docsamples";
     public static final Long DEFAULT_SLEEP_AFTER_START_SECONDS = 8L;
     public static final Long DEFAULT_SLEEP_AFTER_STOP_SECONDS = 4L;
@@ -57,9 +55,9 @@ public class ApiServerPlugin implements Plugin<Project> {
             task.getServerJar().set(extension.getServerJar());
             task.getJavaCommand().set(extension.getJavaCommand());
             task.getUri().set(extension.getBaseUri().get());
-            List<String> args = new ArgumentsBuilder.BootArgumentsBuilder().host(extension.getBaseUri().get().getHost()).port(
-                extension.getBaseUri().get().getPort()).contextPath(extension.getBaseUri().get().getPath()).profile(
-                    DEFAULT_PROFILE).build();
+            List<String> args = new ArgumentsBuilder.BootArgumentsBuilder().host(
+                extension.getBaseUri().get().getHost()).port(extension.getBaseUri().get().getPort()).contextPath(
+                    extension.getBaseUri().get().getPath()).profile(DEFAULT_PROFILE).build();
             task.getArguments().set(args);
             task.getPidFile().set(extension.getPidFile());
             task.getSleepSecondsAfterStart().set(extension.getSleepSecondsAfterStart());
@@ -87,7 +85,8 @@ public class ApiServerPlugin implements Plugin<Project> {
         // Configure default base URI
         try {
             extension.getBaseUri().convention(new URI(DEFAULT_BASE_URI));
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e) {
             throw new RuntimeException("Invalid default base URI: " + DEFAULT_BASE_URI, e);
         }
 

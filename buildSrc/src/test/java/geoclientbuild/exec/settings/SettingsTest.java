@@ -40,8 +40,8 @@ public class SettingsTest extends BaseSettingsTest {
     void testBuilder() {
         Builder builder = Settings.builder();
         Settings settings = builder.withJarFile(jarFile).withJavaCommand(javaCommand).withArguments(
-            arguments).withEnvironment(environment)
-                .withSleepSecondsAfterStart(sleepSecondsAfterStart).withSleepSecondsAfterStop(sleepSecondsAfterStop).build();
+            arguments).withEnvironment(environment).withSleepSecondsAfterStart(
+                sleepSecondsAfterStart).withSleepSecondsAfterStop(sleepSecondsAfterStop).build();
         Settings fixture = settingsFixture();
         assertEquals(fixture.getJarFile(), settings.getJarFile(), "Jar files should match");
         assertEquals(fixture.getJavaCommand(), settings.getJavaCommand(), "Java command should match");

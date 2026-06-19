@@ -83,7 +83,8 @@ public class HttpClient implements RestClient {
                     addHeaders(httpGet, request.getHeaders());
                 }
             }
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid URI: " + request.getUri(), e);
         }
         return httpGet;
@@ -105,7 +106,8 @@ public class HttpClient implements RestClient {
                     addHeaders(httpHead, request.getHeaders());
                 }
             }
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid URI: " + request.getUri(), e);
         }
         return httpHead;
@@ -127,7 +129,8 @@ public class HttpClient implements RestClient {
                     addHeaders(httpPost, request.getHeaders());
                 }
             }
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid URI: " + request.getUri(), e);
         }
         return httpPost;
@@ -146,7 +149,8 @@ public class HttpClient implements RestClient {
                 });
                 return response;
             }
-        } catch (URISyntaxException | IOException e) {
+        }
+        catch (URISyntaxException | IOException e) {
             throw new RuntimeException("Error executing HTTP request: ", e);
         }
     }

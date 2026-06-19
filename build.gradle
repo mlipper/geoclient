@@ -13,6 +13,7 @@ aggregateJavadocOptions {
     disableDoclint = true
     failOnError = true
     outputDirectory.set(rootProject.aggregateJavadocOutputDir)
+    copyOptionsFrom.set(project.provider { project(':geoclient-core').tasks.getByName('javadoc') })
 }
 
 def aggregateReportingProjectPaths = [] as Set

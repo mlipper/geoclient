@@ -24,11 +24,18 @@ import org.gradle.api.provider.Property;
 
 public interface ApiServerExtension {
     ListProperty<String> getArguments();
+
     MapProperty<String, String> getEnvironment();
+
     Property<Long> getSleepSecondsAfterStart();
+
     Property<Long> getSleepSecondsAfterStop();
+
     Property<String> getJavaCommand();
+
     Property<URI> getBaseUri();
+
     RegularFileProperty getPidFile();
+
     RegularFileProperty getServerJar();
 }

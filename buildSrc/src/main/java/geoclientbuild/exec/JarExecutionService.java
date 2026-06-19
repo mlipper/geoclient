@@ -45,7 +45,7 @@ public class JarExecutionService {
     }
 
     public void stop(Process process) throws Exception {
-        if(process == null) {
+        if (process == null) {
             throw new IllegalArgumentException("ProcessHandle argument cannot be null.");
         }
         Long pid = process.pid();
@@ -55,7 +55,7 @@ public class JarExecutionService {
     }
 
     public void stop(ProcessHandle handle) throws Exception {
-        if(handle == null) {
+        if (handle == null) {
             throw new IllegalArgumentException("ProcessHandle argument cannot be null.");
         }
         Long pid = handle.pid();
@@ -90,17 +90,19 @@ public class JarExecutionService {
     }
 
     private void destroyProcess(ProcessHandle handle) {
-        if(isProcessAlive(handle)) {
+        if (isProcessAlive(handle)) {
             logger.info("Sending SIGTERM to process: {}", handle.pid());
-            if(!handle.destroy()) {
+            if (!handle.destroy()) {
                 try {
                     Thread.sleep(Duration.ofSeconds(10));
-                } catch (InterruptedException e) {
+                }
+                catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    String msg = String.format("Thread interrupted waiting for PID %d to stop: %s", handle.pid(), e.getMessage());
+                    String msg = String.format("Thread interrupted waiting for PID %d to stop: %s", handle.pid(),
+                        e.getMessage());
                     logger.warn(msg);
                 }
-                if(!handle.destroyForcibly()) {
+                if (!handle.destroyForcibly()) {
                     String msg = String.format("Failed to forcibly destroy process %d.", handle.pid());
                     logger.error(msg);
                     throw new IllegalStateException(msg);

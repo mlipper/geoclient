@@ -49,24 +49,26 @@ public class DocumentationPlugin implements Plugin<Project> {
     public void apply(Project project) {
         logger.info("Applying DocumentationPlugin...");
         SamplesExtension extension = registerExtension(project);
-        TaskProvider<GenerateSamples> generateSamplesProvider = project.getTasks().register(GENERATE_SAMPLES_TASK_NAME, GenerateSamples.class, t -> {
-            t.setGroup(DOCUMENTATION_GROUP);
-            t.setDescription("Write JSON responses to geoclient REST calls as files in an output folder.");
-            t.getRequestsFile().convention(extension.getSampleRequestsFile());
-            t.getDestinationDirectory().convention(extension.getSamplesResponseDirectory());
-            project.getPluginManager().withPlugin(ApiServerPlugin.APISERVER_PLUGIN_NAME, p -> {
-            // If the ApiServerPlugin is applied, ensure the API server is running
-            // before generating samples, and stop it afterwards.
-                logger.info("The {} plugin has been applied.", p.getClass().getSimpleName());
-                logger.info("Configuring {} task to depend on API server tasks.", GENERATE_SAMPLES_TASK_NAME);
-                t.dependsOn(StartServer.TASK_NAME);
-                t.finalizedBy(StopServer.TASK_NAME);
-                ApiServerExtension apiServerExtension = project.getExtensions().findByType(ApiServerExtension.class);
-                if (apiServerExtension != null) {
-                    t.getBaseUri().set(apiServerExtension.getBaseUri().get());
-                }
+        TaskProvider<GenerateSamples> generateSamplesProvider = project.getTasks().register(GENERATE_SAMPLES_TASK_NAME,
+            GenerateSamples.class, t -> {
+                t.setGroup(DOCUMENTATION_GROUP);
+                t.setDescription("Write JSON responses to geoclient REST calls as files in an output folder.");
+                t.getRequestsFile().convention(extension.getSampleRequestsFile());
+                t.getDestinationDirectory().convention(extension.getSamplesResponseDirectory());
+                project.getPluginManager().withPlugin(ApiServerPlugin.APISERVER_PLUGIN_NAME, p -> {
+                    // If the ApiServerPlugin is applied, ensure the API server is running
+                    // before generating samples, and stop it afterwards.
+                    logger.info("The {} plugin has been applied.", p.getClass().getSimpleName());
+                    logger.info("Configuring {} task to depend on API server tasks.", GENERATE_SAMPLES_TASK_NAME);
+                    t.dependsOn(StartServer.TASK_NAME);
+                    t.finalizedBy(StopServer.TASK_NAME);
+                    ApiServerExtension apiServerExtension = project.getExtensions().findByType(
+                        ApiServerExtension.class);
+                    if (apiServerExtension != null) {
+                        t.getBaseUri().set(apiServerExtension.getBaseUri().get());
+                    }
+                });
             });
-        });
         project.getTasks().register(SYNC_GENERATED_SOURCE_TASK_NAME, Sync.class, t -> {
             t.setGroup(DOCUMENTATION_GROUP);
             t.setDescription("Copy generated samples to the main source set.");
@@ -76,7 +78,7 @@ public class DocumentationPlugin implements Plugin<Project> {
         });
         project.getPluginManager().withPlugin(ASCIIDOCTOR_PLUGIN_NAME, (plugin) -> {
             project.getTasks().named(ASCIIDOCTOR_TASK_NAME, task -> {
-                if(extension.getSyncSamples().getOrElse(false)) {
+                if (extension.getSyncSamples().getOrElse(false)) {
                     task.dependsOn(SYNC_GENERATED_SOURCE_TASK_NAME);
                 }
             });
@@ -86,9 +88,12 @@ public class DocumentationPlugin implements Plugin<Project> {
     private SamplesExtension registerExtension(Project project) {
         SamplesExtension extension = project.getExtensions().create(SAMPLES_EXTENSION_NAME, SamplesExtension.class);
         extension.getDocumentationTaskName().set(DEFAULT_DOCUMENTATION_TASK_NAME);
-        extension.getSampleRequestsFile().convention(project.getLayout().getProjectDirectory().file(DEFAULT_SAMPLE_REQUESTS_FILE));
-        extension.getSamplesResponseDirectory().convention(project.getLayout().getBuildDirectory().dir(DEFAULT_SAMPLES_RESPONSE_DIR));
-        extension.getSamplesSourceDirectory().convention(project.getLayout().getProjectDirectory().dir(DEFAULT_SAMPLES_SOURCE_DIR));
+        extension.getSampleRequestsFile().convention(
+            project.getLayout().getProjectDirectory().file(DEFAULT_SAMPLE_REQUESTS_FILE));
+        extension.getSamplesResponseDirectory().convention(
+            project.getLayout().getBuildDirectory().dir(DEFAULT_SAMPLES_RESPONSE_DIR));
+        extension.getSamplesSourceDirectory().convention(
+            project.getLayout().getProjectDirectory().dir(DEFAULT_SAMPLES_SOURCE_DIR));
         extension.getSyncSamples().convention(true);
         return extension;
     }

@@ -95,6 +95,11 @@ gradlePlugin {
 // TODO: Refactor to avoid duplication with main build.gradle
 import java.nio.file.Paths
 def parentPath = Paths.get(rootDir.toString()).getParent().toString()
+
+checkstyle {
+    configDirectory = rootProject.layout.projectDirectory.dir("../gradle/config/checkstyle")
+}
+
 spotless {
     java {
         // Based on JUnit5 project's spotless config
