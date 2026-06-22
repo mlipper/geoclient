@@ -1,6 +1,3 @@
-import org.gradle.api.tasks.testing.AggregateTestReport
-import org.gradle.testing.jacoco.plugins.JacocoCoverageReport
-
 plugins {
     id 'geoclient.build-conventions'
     id 'geoclientbuild.aggregate-javadoc'
