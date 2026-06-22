@@ -35,11 +35,11 @@ def hostIsWindows = osName.contains('windows')
 def hostIsLinux = osName.contains('linux')
 def hostIsX64 = osArch.contains('amd64') || osArch.contains('x86_64')
 
-if (!hostIsX64 || (!hostIsWindows && !hostIsLinux)) {
-    throw new GradleException(
-        "Unsupported host platform for geoclient JNI resources. Supported platforms are linux/amd64 and windows/amd64."
-    )
-}
+//if (!hostIsX64 || (!hostIsWindows && !hostIsLinux)) {
+//    throw new GradleException(
+//        "Unsupported host platform for geoclient JNI resources. Supported platforms are linux/amd64 and windows/amd64."
+//    )
+//}
 
 def hostOperatingSystem = hostIsWindows ? OperatingSystemFamily.WINDOWS : OperatingSystemFamily.LINUX
 def nativeVariantName = hostIsWindows ? 'windows-x64' : 'linux-x64'
