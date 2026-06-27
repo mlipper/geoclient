@@ -17,7 +17,14 @@
 	"runArgs": [
 		"--platform=linux/amd64"
 	],
-	"features": {},
+	"features": {
+	  "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "jdkDistro": "tem",
+      "installMaven": true,
+      "installGradle": true
+    }
+	},
 	"customizations": {
 		"vscode": {
 			"settings": {

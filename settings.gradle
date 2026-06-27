@@ -12,7 +12,6 @@ dependencyResolutionManagement {
 
 rootProject.name = 'geoclient'
 
-include 'platform'
 include 'geoclient-native'
 include 'geoclient-jni'
 include 'geoclient-xml'

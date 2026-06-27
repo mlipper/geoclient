@@ -4,9 +4,11 @@ plugins {
 }
 
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-jackson')
-    implementation('tools.jackson.dataformat:jackson-dataformat-xml')
-    implementation('com.fasterxml.jackson.core:jackson-annotations')
+    implementation(platform(libs.spring.boot.dependencies))
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.dataformat.xml)
+    implementation(libs.spring.boot.starter.jackson)
+    implementation(libs.spring.boot.starter.logging)
     // Needed to put the geoclient.xml file on the classpath for testing
     testImplementation(testFixtures(project(':geoclient-core')))
 }

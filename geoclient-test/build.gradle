@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-    // Version specified by catalog platform libs.junit-bom
+    implementation(platform(libs.spring.boot.dependencies))
+    implementation(libs.spring.boot.starter.logging)
     implementation 'org.junit.jupiter:junit-jupiter-api'
 }
 

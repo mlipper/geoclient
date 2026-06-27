@@ -1,0 +1,12 @@
+plugins {
+    id 'geoclient.jar-conventions'
+    id 'geoclient.test-conventions'
+    id 'org.springframework.boot'
+}
+
+def catalogs = project.extensions.getByType(VersionCatalogsExtension)
+def libs = catalogs.named("libs")
+
+dependencies {
+    implementation(platform(libs.findLibrary("spring-boot-dependencies").get()))
+}

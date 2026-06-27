@@ -8,40 +8,38 @@ plugins {
     id('jacoco')
 }
 
-configurations {
-    mockitoAgent
-}
+import org.gradle.api.plugins.jvm.JvmTestSuite
 
-dependencies {
-    //
-    // The special configuration for mockito-core is necessary to avoid a
-    // warning on JDK 21 due to restrictions on instrumentation.
-    // For more details see:
-    // https://javadoc.io/static/org.mockito/mockito-core/5.23.0/org.mockito/org/mockito/Mockito.html#mockito-instrumentation
-    //
-    // NOTE: the mockito version is set in gradle/libs.versions.toml even
-    // though it is part of the spring-boot-starter-test BOM.
-    //
-    // IMPORTANT: when upgrading spring-boot, this dependency must be manually
-    // configured to use the proper version.
-    //
-    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-logging'
-    mockitoAgent(libs.mockito.core) {
-        transitive = false
+void configureMockitoAgent(JvmTestSuite suite) {
+    String artifactName = libs.mockito.core.get().module.name
+
+    suite.targets.all {
+        testTask.configure {
+            doFirst {
+                def mockitoJar = classpath.find { file -> 
+                    file.name.startsWith("${artifactName}-") && file.name.endsWith(".jar")
+                }
+                
+                if (mockitoJar) {
+                    jvmArgs  "-Xshare:off", "-javaagent:${mockitoJar.absolutePath}"
+                }
+            }
+        }
     }
 }
 
 testing {
     suites {
-        test {
+        configureEach { 
             useJUnitJupiter()
-
-            dependencies {
-                implementation platform(project(':platform'))
+            dependencies { 
+                implementation(platform(libs.spring.boot.dependencies))
+                implementation(libs.spring.boot.starter.logging)
                 implementation(libs.mockito.core)
-                runtimeOnly 'org.junit.platform:junit-platform-launcher'
             }
-
+            
+        }
+        test {
             targets {
                 all {
                     testTask.configure {
@@ -57,10 +55,6 @@ testing {
         integrationTest(JvmTestSuite) {
             dependencies {
                 implementation project()
-                implementation platform(project(':platform'))
-                implementation(libs.mockito.core)
-                implementation 'org.springframework.boot:spring-boot-starter-logging'
-                runtimeOnly 'org.junit.platform:junit-platform-launcher'
             }
 
             targets {
@@ -90,6 +84,10 @@ testing {
             }
         }
     }
+
+    suites.all { JvmTestSuite suite ->
+        configureMockitoAgent(suite)
+    }
 }
 
 tasks.named('check') {
@@ -115,17 +113,5 @@ tasks.register('jacocoIntegrationTestReport', JacocoReport) {
     reports {
         xml.required = true
         html.required = true
-    }
-}
-
-tasks.withType(Test).configureEach {
-    // Disable class data sharing to avoid warnings on JDK 21 due to restrictions on instrumentation.
-    jvmArgs "-Xshare:off", "-javaagent:${configurations.mockitoAgent.asPath}"
-    reports {
-        junitXml {
-            required = true
-            outputPerTestCase = true
-            mergeReruns = true
-        }
     }
 }

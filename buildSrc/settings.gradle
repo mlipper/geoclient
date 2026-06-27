@@ -15,4 +15,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name='geoclient-conventions'
+rootProject.name='buildSrc'

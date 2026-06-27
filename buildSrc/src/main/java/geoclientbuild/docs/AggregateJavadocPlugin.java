@@ -19,6 +19,8 @@ import static org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskProvider;
@@ -36,6 +38,8 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
     public static final String CLEAN_AGGREGATE_JAVADOC_TASK_NAME = "cleanAggregateJavadoc";
     public static final String AGGREGATE_JAVADOC_EXTENSION_NAME = "aggregateJavadocOptions";
     public static final String AGGREGATE_JAVADOC_OUTPUT_DIR = "docs/javadoc-aggregate";
+
+    private Logger logger = Logging.getLogger(AggregateJavadocPlugin.class);
 
     @Override
     public void apply(Project project) {
@@ -79,6 +83,8 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
                 task.source(mainSourceSet.getAllJava());
                 task.setClasspath(task.getClasspath().plus(
                     subproject.files(mainSourceSet.getCompileClasspath(), mainSourceSet.getOutput())));
+                logger.lifecycle("Added sources and classpath from subproject '{}' to aggregate Javadoc task '{}'.",
+                    subproject.getName(), task.getName());
             });
         }));
     }
@@ -156,6 +162,10 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
                         aggOptions.setGroups(subOptions.getGroups());
                     }
                 }
+                logger.lifecycle("Configured aggregate Javadoc task '{}' from project '{}' with options copied from subproject Javadoc task '{}'.",
+                    task.getName(), project.getName(), subprojectJavadoc.getName());
+
+                logger.lifecycle("Overview for aggregate Javadoc task '{}': {}", task.getName(), task.getOptions().getOverview());
             });
         });
     }

@@ -4,11 +4,12 @@ plugins {
 }
 
 dependencies {
+    implementation(platform(libs.spring.boot.dependencies))
+    implementation(libs.spring.boot.starter.logging)
     implementation(project(':geoclient-jni'))
     implementation(project(':geoclient-xml'))
-    // Version specified by catalog platform libs.spring.boot.dependencies
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation('org.apache.commons:commons-lang3')
+    testImplementation(libs.spring.boot.starter.test)
     testImplementation(testFixtures(project(':geoclient-jni')))
 }
 

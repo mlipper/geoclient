@@ -3,25 +3,11 @@ plugins {
     id 'java-gradle-plugin'
     id 'checkstyle'
     id 'project-report'
-    id 'org.springframework.boot' version '4.0.6'
     alias(libs.plugins.spotless)
     // Note: usage of versions plugin dependencyUpdates task emits
     // deprecation warnings.
     alias(libs.plugins.versions)
 }
-
-//
-// The version of spring-boot specified here must match the versions
-// specified in files:
-//   - gradle/libs.versions.toml
-//   - platform/build.gradle
-//
-// 2026-04-01: this duplication seems to be necessary due to resolution
-// resolution conflicts between buildSrc/build.gradle application of the
-// boot plugin, dependency configuration of boot plugin's BOM as a platform
-// and platform/build.gradle specification of the spring-boot BOM as a
-// gradle platform.
-//
 
 repositories {
     gradlePluginPortal()
@@ -39,8 +25,9 @@ def libs = catalogs.named("libs")
 
 dependencies {
     // Platforms
-    implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+    implementation(platform(libs.findLibrary("spring-boot-dependencies").get()))
     // Dependencies
+    implementation libs.findLibrary("spring-boot-gradle-plugin").get()
     implementation libs.findLibrary("guava").get()
     implementation libs.findLibrary("jopt-simple").get()
     implementation plugin(libs.findPlugin("spotless").get())

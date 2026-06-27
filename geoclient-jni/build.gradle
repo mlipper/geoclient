@@ -70,6 +70,11 @@ configurations {
 
 // Explicit dependency on geoclient-native's shared binary configuration.
 dependencies {
+    implementation(platform(libs.spring.boot.dependencies))
+    implementation(libs.spring.boot.starter.logging)
+    testImplementation(libs.spring.boot.starter.test)
+    testFixturesImplementation(platform(libs.spring.boot.dependencies))
+    testFixturesImplementation(libs.spring.boot.starter.logging)
     nativeBinaryClasspath project(path: ':geoclient-native', configuration: 'nativeBinaryElements')
 }
 
