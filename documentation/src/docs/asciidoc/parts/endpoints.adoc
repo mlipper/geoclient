@@ -493,7 +493,7 @@ include::../samples/search-900.jsonc[tags=user_guide]
 Request:
 
 ....
-/geoclient/v2/streetcode?streetCode=11061004010
+/geoclient/v2/streetcode?streetCode=11061001
 ....
 
 Response:
@@ -504,6 +504,67 @@ Response:
 [source,json,indent=0]
 ----
 include::../samples/streetcode-1000.jsonc[tags=user_guide]
+----
+====
+
+=== Street Code - B5SC
+
+[NOTE]
+====
+The `/streetcode/b5sc` endpoint provides the same functionality as `/streetcode` except for the following difference:
+
+* `/streetcode/b5sc` returns results in a top-level *`response`* property/element.
+* `/streetcode` returns results in a top-level *`streetcode`* property/element.
+
+This is for backward compatibility with older versions of the Geoclient API which returned results in a top-level `response` property/element at the request of an Agency partner.
+====
+
+*Path:* `/v2/streetcode/b5sc`
+
+*Parameters:*
+
+.`/streetcode/b5sc` arguments
+[cols="1a,1a,2a"]
+|===
+|Parameter Name |Required/Optional |Comments
+
+|`streetCode`
+|required
+|`B5SC`, `B7SC`, or `B10SC` street code.
+
+|`streetCodeTwo`
+|optional
+|`B5SC`, `B7SC`, or `B10SC` street code.
+
+|`streetCodeThree`
+|optional
+|`B5SC`, `B7SC`, or `B10SC` street code.
+
+|`length`
+|optional
+|The length of the normalized street name that is returned. Valid values are from 4 through 32. If no parameter is given, defaults to 32.
+
+|`format`
+|optional
+|`S` for sort format or `C` for compact format. Defaults to sort format.
+|===
+
+*Example Requests:*
+
+Request:
+
+....
+/geoclient/v2/streetcode/b5sc?streetCode=110610
+....
+
+Response:
+
+.Show JSON
+[%collapsible]
+====
+[source,json,indent=0]
+----
+include::../samples/streetcode-b5sc-1100.jsonc[tags=user_guide]
 ----
 ====
 
