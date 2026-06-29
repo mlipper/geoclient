@@ -92,7 +92,7 @@ spotless {
         // Based on JUnit5 project's spotless config
         eclipse().configFile(project.file("${parentPath}/gradle/config/eclipse/geoclient-eclipse-formatter-settings.xml"))
         importOrderFile(project.file("${parentPath}/gradle/config/eclipse/geoclient-eclipse.importorder"))
-        indentWithSpaces()
+        leadingTabsToSpaces()
         licenseHeaderFile(project.file("${parentPath}/gradle/config/spotless/apache-license-2.0.java"))
         removeUnusedImports()
         target 'src/*/java/**/*.java'

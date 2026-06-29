@@ -72,7 +72,7 @@ spotless {
     java {
         eclipse().configFile rootProject.file('gradle/config/eclipse/geoclient-eclipse-formatter-settings.xml')
         importOrderFile(rootProject.file('gradle/config/eclipse/geoclient-eclipse.importorder'))
-        indentWithSpaces()
+        leadingTabsToSpaces()
         licenseHeaderFile(rootProject.file('gradle/config/spotless/apache-license-2.0.java'))
         removeUnusedImports()
         trimTrailingWhitespace()
@@ -86,8 +86,8 @@ spotless {
     groovyGradle {}
 }
 
-tasks.named('spotlessGroovyGradle') {
-    doFirst {
-        outputDirectory.mkdirs()
-    }
-}
+//tasks.named('spotlessGroovyGradle') {
+//    doFirst {
+//        outputDirectory.mkdirs()
+//    }
+//}
