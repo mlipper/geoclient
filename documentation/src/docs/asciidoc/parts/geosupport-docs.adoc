@@ -1,7 +1,83 @@
 == Geosupport Documentation
 
-This section provides links to Department of City Planning's documentation for Geosupport.
+This section provides notes on how Geoclient interacts with the Geosupport function API. This section also provides links to the Department of City Planning's documentation for Geosupport.
+
+{dcp-upg}[Geosupport System - Universal Programming Guide (UPG)] is the official, authoritative reference for Geosupport.
 
 '''
 
 === Geosupport Return Codes
+
+As a developer using Geoclient to geocode New York City locations, it is important to understand how Geosupport handles warnings and errors. Geosupport functions return a variety of codes, reasons, and messages that indicate the success or failure of a request. These codes are essential for diagnosing issues with your geocoding requests.
+
+Geosupport return codes can be categorized as follows:
+
+[cols="1,1",options="header"]
+|===
+| Return Code | Description
+
+| 00
+| Successful request
+
+| 01
+| Successful request with warnings
+
+| Anything else
+| Unsuccessful request or error
+|===
+
+This is only the highest level of abstraction. In practice, effective geocoding with Geosupport requires a more detailed understanding of return codes. Although sometimes cryptic or highly specifc, knowing where to look for these codes and how to interpret them can save you time and effort when troubleshooting geocoding issues.
+
+* {dcp-upg}/appendices/appendix04/[Geosupport Return Codes, Reasons Codes and Messages] summarizes return codes, reason codes, and messages. 
+* {dcp-upg}/chapters/chapterII/section02/[Geosupport Return Codes and Reject Handling] provides a detailed overview of how Geosupport handles errors and returns codes.
+
+=== Support for Geosupport Street Codes
+
+For historical reasons, Geoclient supports two endpoints for retrieving street names from street codes. Functionally, both endpoints are equivalent (see the table below), but they return results in different top-level JSON properties/XML elements:
+
+* `/streetcode/b5sc` returns results in a top-level `response` property/element.
+* `/streetcode` returns results in a top-level `streetcode` property/element.
+
+Other than the top-level property/element, the two endpoints accept the same arguments and use the same logic when calling Geosupport:
+
+* Both endpoints use different Geosupport functions based on input (see the table below).
+* Both endpoints accept up to three `B5SC`, `B7SC`, and `B10SC` arguments.
+* Both endpoints assume that all arguments are of the same streetcode type (`B5SC`, `B7SC`, or `B10SC`). If they are not, the returned values will reflect only one arbitrarily chosen type and the data may be invalid for any other types returned in the response.
+
+For example, the address "2019 7th Avenue, Manhattan" is north of Central Park. In this location, a more "appropriate" name for 7th Avenue is (as reflected by street signs) "Adam Clayton Powell JR Boulevard" although both are considered valid.
+
+.Geosupport `streetcode` functions 
+[cols="1a,1a,1a,1a,3a"]
+|===
+| Input | Geosupport Function | Name Returned | Example Code | Example Name
+
+| `B5SC`
+| `D`
+| Primary street name
+| 110610
+| 7 AVENUE
+
+| `B7SC`
+| `DG`
+| Principle street name
+| 11061001
+| ADAM CLAYTON POWELL JR BOULEVARD
+
+| `B10SC`
+| `DN`
+| Principle street name
+| 11061001100
+| ADAM CLAYTON POWELL JR BOULEVARD
+|===
+
+See <<street-code-b5sc,`/streetcode/b5sc`>> and <<street-code,`/streetcode`>> for the requests and responses used in this example.
+
+[NOTE]
+====
+Some Geosupport geocoding functions (e.g., functions `1E` and `1B`) return a "BOE preferred street name" which is the name for the street that the Board of Elections uses for the address of voting sites. This is different than the "primary", "principle", and "preferred" street names returned by functions `D`, `DG`, `DN`.
+====
+
+For detailed information on Geosupport streetcodes and the differences between primary, principle, and preferred street names, see the following documentation:
+
+* {dcp-upg}/chapters/chapterIV/section01/[Introduction: Street Codes and Geographic Retrieval Consistency]
+* {dcp-upg}/chapters/chapterIV/section06/[Functions D, DG and DN; Primary, Principal and Preferred Street Names]

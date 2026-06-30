@@ -458,6 +458,11 @@ include::../samples/search-900.jsonc[tags=user_guide]
 
 === Street Code
 
+[NOTE]
+====
+See <<support-for-geosupport-street-codes,Support for Geosupport Street Codes>> for a discussion of the differences between the `/streetcode` and `/streetcode/b5sc` endpoints.
+====
+
 *Path:* `/v2/streetcode`
 
 *Parameters:*
@@ -511,12 +516,7 @@ include::../samples/streetcode-1000.jsonc[tags=user_guide]
 
 [NOTE]
 ====
-The `/streetcode/b5sc` endpoint provides the same functionality as `/streetcode` except for the following difference:
-
-* `/streetcode/b5sc` returns results in a top-level *`response`* property/element.
-* `/streetcode` returns results in a top-level *`streetcode`* property/element.
-
-This is for backward compatibility with older versions of the Geoclient API which returned results in a top-level `response` property/element at the request of an Agency partner.
+See <<support-for-geosupport-street-codes,Support for Geosupport Street Codes>> for a discussion of the differences between the `/streetcode` and `/streetcode/b5sc` endpoints.
 ====
 
 *Path:* `/v2/streetcode/b5sc`
