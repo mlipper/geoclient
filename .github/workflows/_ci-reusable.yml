@@ -17,6 +17,7 @@ on:
 permissions:
   contents: read
   checks: write
+  pull-requests: write
 
 jobs:
   build:
@@ -72,8 +73,9 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@2ceeed2b8f26e15b06c3846719f75354febd9e7b # v2
         with:
           files: |
-            ${{ github.workspace }}/ci-test-results/**/test/TEST-*.xml
+            ci-test-results/**/test/TEST-*.xml
           check_name: Unit JUnit Results
+          action_fail: true
           fail_on: test failures
 
       - name: Verify unit coverage artifact
@@ -136,8 +138,9 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@2ceeed2b8f26e15b06c3846719f75354febd9e7b # v2
         with:
           files: |
-            ${{ github.workspace }}/ci-test-results/**/integrationTest/TEST-*.xml
+            ci-test-results/**/integrationTest/TEST-*.xml
           check_name: Integration JUnit Results
+          action_fail: true
           fail_on: test failures
 
       - name: Verify integration coverage artifact
