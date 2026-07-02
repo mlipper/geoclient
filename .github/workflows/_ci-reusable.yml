@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Build Docker image and extract build outputs
         run: |
@@ -105,7 +105,7 @@ jobs:
 
       - name: Upload unit JUnit XML artifacts
         if: always() && inputs.publish_artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: junit-xml-unit
           path: ${{ env.OUTDIR }}/ci/test-results/**/test/TEST-*.xml
@@ -114,7 +114,7 @@ jobs:
 
       - name: Upload unit coverage artifacts
         if: always() && inputs.publish_artifacts && env.UNIT_COVERAGE_DIR != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: jacoco-xml-unit
           path: ${{ env.UNIT_COVERAGE_DIR }}
@@ -173,7 +173,7 @@ jobs:
 
       - name: Upload geoclient jar artifact
         if: inputs.publish_artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: geoclient-jar
           path: ${{ env.OUTDIR }}/geoclient.jar
@@ -182,7 +182,7 @@ jobs:
 
       - name: Upload integration JUnit XML artifacts
         if: always() && inputs.publish_artifacts && inputs.run_integration
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: junit-xml-integration
           path: ${{ env.OUTDIR }}/ci/test-results/**/integrationTest/TEST-*.xml
@@ -191,7 +191,7 @@ jobs:
 
       - name: Upload integration coverage artifacts
         if: always() && inputs.publish_artifacts && inputs.run_integration
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: jacoco-xml-integration
           path: ${{ env.OUTDIR }}/ci/coverage/integrationTest
