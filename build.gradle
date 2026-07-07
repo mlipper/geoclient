@@ -5,12 +5,25 @@ plugins {
     id 'jacoco-report-aggregation'
 }
 
+ext {
+
+    aggregateJavadocOutputDir = rootProject.layout.buildDirectory.dir("docs/javadoc-aggregate")
+    javadocStringOptPosition = 'top'
+    javadocStringOptContent = """<div style="margin:0.75rem 0 1rem 0;padding:0.5rem 0.75rem;
+            background:var(--section-background-color);border:1px solid var(--border-color);
+            border-left:4px solid var(--navbar-background-color);color:var(--block-text-color);">
+            <strong style="color:var(--title-color);">New to Geoclient?</strong> 
+            <a href="https://mlipper.github.io/geoclient/" target="_top">Open the Geoclient User Guide</a>
+            </div>"""
+}
+
 aggregateJavadocOptions {
     quiet = true
     disableDoclint = true
     failOnError = true
-    outputDirectory.set(rootProject.aggregateJavadocOutputDir)
-    copyOptionsFrom.set(project.provider { project(':geoclient-core').tasks.getByName('javadoc') })
+    outputDirectory.set(aggregateJavadocOutputDir)
+    javadocStringOptionPosition.set(javadocStringOptPosition)
+    javadocStringOptionContent.set(javadocStringOptContent)
 }
 
 def aggregateReportingProjectPaths = [] as Set

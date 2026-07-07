@@ -59,6 +59,8 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
                     options.setMemberLevel(JavadocMemberLevel.PROTECTED);
                     options.author(true);
                     options.version(true);
+                } else {
+                    throw new IllegalStateException("The AggregateJavadocPlugin only works with options of type StandardJavadocDocletOptions.");
                 }
             });
 
@@ -94,78 +96,19 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
             project.getTasks().named(AGGREGATE_JAVADOC_TASK_NAME, Javadoc.class).configure(task -> {
                 task.setDestinationDir(extension.getOutputDirectory().get().getAsFile());
                 task.setFailOnError(extension.isFailOnError());
-
-                if (task.getOptions() instanceof StandardJavadocDocletOptions options) {
-                    if (extension.isQuiet()) {
-                        options.addBooleanOption("quiet", true);
-                    }
-                    if (extension.isDisableDoclint()) {
-                        options.addBooleanOption("Xdoclint:none", true);
-                    }
+                StandardJavadocDocletOptions options = (StandardJavadocDocletOptions) task.getOptions();
+                if (extension.isQuiet()) {
+                    options.addBooleanOption("quiet", true);
                 }
-                if (!extension.getCopyOptionsFrom().isPresent()) {
-                    throw new org.gradle.api.GradleException(
-                        "The 'aggregateJavadocOptions.copyOptionsFrom' property is required. "
-                                + "Please configure it to specify the source Javadoc task to copy options and configurations from.");
+                if (extension.isDisableDoclint()) {
+                    options.addBooleanOption("Xdoclint:none", true);
                 }
-                Javadoc subprojectJavadoc = extension.getCopyOptionsFrom().get();
-
-                // Copy logging configuration from the source subproject's Javadoc task.
-                // We copy the configurations individually to keep the tasks isolated and avoid
-                // shared mutability side-effects (e.g. root overrides modifying the subproject task).
-                task.getLogging().captureStandardError(subprojectJavadoc.getLogging().getStandardErrorCaptureLevel());
-                task.getLogging().captureStandardOutput(subprojectJavadoc.getLogging().getStandardOutputCaptureLevel());
-
-                // Copy Javadoc options from the source task to the aggregate task.
-                // We perform a property-by-property copy to ensure task isolation and prevent
-                // aggregate Javadoc-specific options (like 'quiet' or 'disableDoclint') from
-                // leaking back to and modifying the source subproject's Javadoc task.
-                if (subprojectJavadoc.getOptions() instanceof StandardJavadocDocletOptions subOptions
-                        && task.getOptions() instanceof StandardJavadocDocletOptions aggOptions) {
-
-                    aggOptions.setAuthor(subOptions.isAuthor());
-                    aggOptions.setVersion(subOptions.isVersion());
-                    aggOptions.setUse(subOptions.isUse());
-                    aggOptions.setNoTimestamp(subOptions.isNoTimestamp());
-
-                    if (subOptions.getEncoding() != null) {
-                        aggOptions.setEncoding(subOptions.getEncoding());
-                    }
-                    if (subOptions.getMemberLevel() != null) {
-                        aggOptions.setMemberLevel(subOptions.getMemberLevel());
-                    }
-                    if (subOptions.getHeader() != null) {
-                        aggOptions.setHeader(subOptions.getHeader());
-                    }
-                    if (subOptions.getDocTitle() != null) {
-                        aggOptions.setDocTitle(subOptions.getDocTitle());
-                    }
-                    if (subOptions.getFooter() != null) {
-                        aggOptions.setFooter(subOptions.getFooter());
-                    }
-                    if (subOptions.getWindowTitle() != null) {
-                        aggOptions.setWindowTitle(subOptions.getWindowTitle());
-                    }
-                    if (subOptions.getLocale() != null) {
-                        aggOptions.setLocale(subOptions.getLocale());
-                    }
-                    if (subOptions.getCharSet() != null) {
-                        aggOptions.setCharSet(subOptions.getCharSet());
-                    }
-                    if (subOptions.getLinks() != null) {
-                        aggOptions.setLinks(subOptions.getLinks());
-                    }
-                    if (subOptions.getLinksOffline() != null) {
-                        aggOptions.setLinksOffline(subOptions.getLinksOffline());
-                    }
-                    if (subOptions.getGroups() != null) {
-                        aggOptions.setGroups(subOptions.getGroups());
-                    }
+                if (extension.getJavadocStringOptionPosition().isPresent() && extension.getJavadocStringOptionContent().isPresent()) {
+                    String position = extension.getJavadocStringOptionPosition().get();
+                    String content = extension.getJavadocStringOptionContent().get();
+                    options.addStringOption(position, content);
+                    logger.lifecycle("Added custom Javadoc option: {}={}", position, content);
                 }
-                logger.lifecycle("Configured aggregate Javadoc task '{}' from project '{}' with options copied from subproject Javadoc task '{}'.",
-                    task.getName(), project.getName(), subprojectJavadoc.getName());
-
-                logger.lifecycle("Overview for aggregate Javadoc task '{}': {}", task.getName(), task.getOptions().getOverview());
             });
         });
     }

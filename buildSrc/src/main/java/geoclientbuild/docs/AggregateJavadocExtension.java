@@ -17,19 +17,17 @@ package geoclientbuild.docs;
 
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.javadoc.Javadoc;
 
 public abstract class AggregateJavadocExtension {
 
-    public abstract Property<Javadoc> getCopyOptionsFrom();
+    public abstract Property<String> getJavadocStringOptionPosition();
+    public abstract Property<String> getJavadocStringOptionContent();
+    public abstract DirectoryProperty getOutputDirectory();
 
     private boolean quiet = true;
-
     private boolean disableDoclint = true;
-
     private boolean failOnError = true;
 
-    public abstract DirectoryProperty getOutputDirectory();
 
     public boolean isQuiet() {
         return quiet;
