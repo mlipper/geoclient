@@ -85,7 +85,7 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
                 task.source(mainSourceSet.getAllJava());
                 task.setClasspath(task.getClasspath().plus(
                     subproject.files(mainSourceSet.getCompileClasspath(), mainSourceSet.getOutput())));
-                logger.lifecycle("Added sources and classpath from subproject '{}' to aggregate Javadoc task '{}'.",
+                logger.info("Added sources and classpath from subproject '{}' to aggregate Javadoc task '{}'.",
                     subproject.getName(), task.getName());
             });
         }));
@@ -107,7 +107,7 @@ public class AggregateJavadocPlugin implements Plugin<Project> {
                     String position = extension.getJavadocStringOptionPosition().get();
                     String content = extension.getJavadocStringOptionContent().get();
                     options.addStringOption(position, content);
-                    logger.lifecycle("Added custom Javadoc option: {}={}", position, content);
+                    logger.info("Added custom Javadoc option: {}={}", position, content);
                 }
             });
         });

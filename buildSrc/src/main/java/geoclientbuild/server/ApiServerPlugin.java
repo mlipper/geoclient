@@ -71,8 +71,8 @@ public class ApiServerPlugin implements Plugin<Project> {
         project.getTasks().register(APISERVER_INFO_TASK_NAME, task -> {
             Provider<File> jarfile = extension.getServerJar().getAsFile();
             task.doLast(s -> {
-                logger.lifecycle("ApiServer base URI: " + extension.getBaseUri().get().toString());
-                logger.lifecycle("ApiServer JAR: " + jarfile.get().getAbsolutePath());
+                logger.info("ApiServer base URI: " + extension.getBaseUri().get().toString());
+                logger.info("ApiServer JAR: " + jarfile.get().getAbsolutePath());
             });
         });
     }

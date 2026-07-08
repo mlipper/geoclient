@@ -56,7 +56,7 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
         int port = getParameters().getPort().get();
         String contextPath = getParameters().getContextPath().get();
         uri = new URI(String.format("%s://%s:%d/%s", scheme, host, port, contextPath));
-        logger.lifecycle("API server URI: " + uri.toString());
+        logger.info("API server URI: " + uri.toString());
     }
 
     public File getApiServerJarFile() {
@@ -64,7 +64,7 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
     }
 
     public URI getUri() throws URISyntaxException {
-        logger.lifecycle("API server URI: " + uri.toString());
+        logger.info("API server URI: " + uri.toString());
         return uri;
     }
 
@@ -73,11 +73,4 @@ public abstract class ApiServer implements BuildService<ApiServer.Params>, AutoC
         // Implement any necessary cleanup logic here
     }
 
-    //    private void configureApiServerConventions() {
-    //        // Set default values for parameters if not provided
-    //        getParameters().getPort().convention(DEFAULT_PORT);
-    //        getParameters().getHost().convention(DEFAULT_HOST);
-    //        getParameters().getScheme().convention(DEFAULT_SCHEME);
-    //        getParameters().getContextPath().convention(DEFAULT_CONTEXT_PATH);
-    //    }
 }

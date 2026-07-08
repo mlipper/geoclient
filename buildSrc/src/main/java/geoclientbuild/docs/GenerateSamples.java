@@ -73,9 +73,9 @@ abstract public class GenerateSamples extends DefaultTask {
             try {
                 StringBuffer buff = new StringBuffer(ASCIIDOC_BEGIN_TAG);
                 buff.append('\n');
-                getLogger().lifecycle("request: {}", request.toString());
+                getLogger().info("request: {}", request.toString());
                 Response response = restClient.call(request);
-                getLogger().lifecycle("response: {}", response.toString());
+                getLogger().info("response: {}", response.toString());
                 if (response.getHttpCode() != 200) {
                     throw new RuntimeException(
                         String.format("Non-200 response code received: %d", response.getHttpCode()));
@@ -97,10 +97,10 @@ abstract public class GenerateSamples extends DefaultTask {
 
     private List<HttpRequestAdapter> adapt(List<HttpRequestAdapter> requests) {
         final URI uri = insureEndsWithSlash(getBaseUri().get());
-        getLogger().lifecycle("Using service base URI: {}", uri.toString());
+        getLogger().info("Using service base URI: {}", uri.toString());
         return requests.stream().map(r -> {
             String serviceUrl = uri.resolve(r.getType()).toString();
-            getLogger().lifecycle("Using service endpoint URL: {}", serviceUrl);
+            getLogger().info("Using service endpoint URL: {}", serviceUrl);
             r.setUri(serviceUrl);
             r.setMethod(Request.HTTP_GET_METHOD);
             return r;

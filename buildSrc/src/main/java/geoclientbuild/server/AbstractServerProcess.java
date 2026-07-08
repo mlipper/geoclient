@@ -36,7 +36,7 @@ public abstract class AbstractServerProcess extends DefaultTask {
     protected boolean deletePidFile(RegularFileProperty pidFile) throws IOException {
         Path pidFilePath = pidFileAsFile(pidFile).toPath();
         if (Files.deleteIfExists(pidFilePath)) {
-            getLogger().lifecycle("Deleted PID file {}.", pidFilePath.toAbsolutePath());
+            getLogger().info("Deleted PID file {}.", pidFilePath.toAbsolutePath());
             return true;
         }
         getLogger().warn("Failed to delete PID file {} because it does not exist.", pidFilePath.toAbsolutePath());
@@ -66,7 +66,7 @@ public abstract class AbstractServerProcess extends DefaultTask {
     protected long readPidFile(RegularFileProperty pidFile) throws IOException {
         Path pidFilePath = pidFileAsFile(pidFile).toPath();
         String pid = Files.readString(pidFilePath);
-        getLogger().lifecycle("Read PID {} from file {}.", pid, pidFilePath.toAbsolutePath());
+        getLogger().info("Read PID {} from file {}.", pid, pidFilePath.toAbsolutePath());
         return Long.valueOf(pid);
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractServerProcess extends DefaultTask {
         try (FileWriter writer = new FileWriter(pidFilePath)) {
             String pidString = String.valueOf(pid);
             writer.write(pidString);
-            getLogger().lifecycle("PID file created {} with value {}.", pidFilePath.getAbsolutePath(), pidString);
+            getLogger().info("PID file created {} with value {}.", pidFilePath.getAbsolutePath(), pidString);
         }
     }
 }
