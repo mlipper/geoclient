@@ -33,13 +33,13 @@ testing {
     }
 }
 
-tasks.register('writeVersionProperties', WriteProperties) {
+def writeVersionPropertiesTaskProvider = tasks.register('writeVersionProperties', WriteProperties) {
     properties(['jni.version': project.version, 'core.version': project.version, 'parser.version': project.version, 'service.version': project.version])
-    destinationFile = file(new File(sourceSets.main.output.resourcesDir, 'version.properties'))
+    destinationFile = layout.buildDirectory.file('generated-resources/versionProperties/version.properties')
 }
 
 processResources {
-    dependsOn('writeVersionProperties')
+    from(writeVersionPropertiesTaskProvider)
 }
 
 springBoot {

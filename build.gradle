@@ -36,6 +36,15 @@ subprojects { subproject ->
         }
     }
 
+    subproject.pluginManager.withPlugin('base') {
+        def cleanTaskProvider = subproject.tasks.named('clean')
+        subproject.tasks.configureEach { task ->
+            if (task.name != 'clean') {
+                task.mustRunAfter(cleanTaskProvider)
+            }
+        }
+    }
+
     subproject.pluginManager.withPlugin('java') {
         addAggregationDependency()
     }
