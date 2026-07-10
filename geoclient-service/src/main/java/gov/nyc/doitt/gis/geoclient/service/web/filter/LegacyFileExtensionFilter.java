@@ -35,10 +35,10 @@ import jakarta.servlet.http.HttpServletRequest;
 /**
  * Intercepts all requests to check whether they need to be modified to
  * support legacy use of file extensions allowing clients to request supported
- * <code>ContentType</code>s.
+ * {@code ContentType}s.
  * <p>
- * This class uses a Spring API to receive callbacks from requests per the standard
- * <code>Servlet</code> filter API.
+ * This class uses a Spring API to receive callbacks from requests per the
+ * standard {@code Servlet} filter API.
  *
  * @author mlipper
  * @since 2.0.4
@@ -53,10 +53,30 @@ public class LegacyFileExtensionFilter extends GenericFilterBean {
     /**
      * Implements the following logic based on the requested URI:
      * <ul>
-     * <li>If: the URI string ends with <code>.json</code>, remove it and add <code>f=json</code> as a query parameter.</li>
-     * <li>Else If: the URI string ends with <code></code>, remove it and add <code>f=</code> as a query parameter.</li>
-     * <li>Else: </li>
+     * <li>If the URI string ends with {@code .json}, remove it and add
+     * {@code f=json} as a query parameter.</li>
+     * <li>Else if the URI string ends with {@code .xml}, remove it and add
+     * {@code f=xml} as a query parameter.</li>
+     * <li>Else use the accept header to determine the content type.</li>
      * </ul>
+     * <p>
+     * Before Geoclient {@code 2.0.4}, the default was to return
+     * {@code application/json} if the endpoint did not specify a file
+     * extension. Starting with {@code 2.0.4}, use of file extensions is
+     * deprecated and the default is to use the accept header to
+     * determine the content type.
+     * <p>
+     * This logic usually produces the preferred result, which is that if the
+     * {@code f} parameter is not specified, it is the responsibility of the
+     * client to specify the desired format. Given that {@code application/json}
+     * is returned for the <code>*&#47;*</code> accept header, this change will
+     * (hopefully) not break existing clients that do not specify a format.
+     * <p>
+     * However, {@code GET} requests from a browser will usually be
+     * {@code text/html,application/xhtml+xml,application/xml} so
+     * {@code application/xml} will be returned. This may be unexpected but
+     * acceptable given the manual nature of using browser this way. 
+     *
      * @param request the {@link jakarta.servlet.ServletRequest}
      * @param response the {@link jakarta.servlet.ServletResponse}
      * @param chain the {@link jakarta.servlet.FilterChain}
