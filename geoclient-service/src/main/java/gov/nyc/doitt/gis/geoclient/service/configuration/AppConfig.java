@@ -54,7 +54,6 @@ import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportServiceImpl;
 import gov.nyc.doitt.gis.geoclient.service.mapper.GeosupportVersionMapper;
 import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
 import gov.nyc.doitt.gis.geoclient.service.mapper.ResponseStatusMapper;
-import gov.nyc.doitt.gis.geoclient.service.search.adapter.SearchSpiAdapters;
 
 /**
  * Java-based configuration for the <code>geoclient-service</code> application.
