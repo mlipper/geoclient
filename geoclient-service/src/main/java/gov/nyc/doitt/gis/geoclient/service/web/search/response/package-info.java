@@ -13,22 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
-import java.util.List;
+/**
+ * Search web response package.
+ *
+ * @author Matthew Lipper
+ */
 
-import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
-
-public class ParseTree {
-
-    private List<Chunk> chunks;
-
-    public List<Chunk> getChunks() {
-        return chunks;
-    }
-
-    public void setChunks(List<Chunk> chunks) {
-        this.chunks = chunks;
-    }
-
-}
+package gov.nyc.doitt.gis.geoclient.service.web.search.response;

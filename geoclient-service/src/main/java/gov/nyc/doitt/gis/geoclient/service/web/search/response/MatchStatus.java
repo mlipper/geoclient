@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.search.web.response;
+package gov.nyc.doitt.gis.geoclient.service.web.search.response;
 
-public enum Status {
-    OK, REJECTED
+public enum MatchStatus {
+    EXACT_MATCH, POSSIBLE_MATCH, REJECTED
 }

@@ -13,8 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.search.web.response;
+package gov.nyc.doitt.gis.geoclient.service.web.search.response;
 
-public enum MatchStatus {
-    EXACT_MATCH, POSSIBLE_MATCH, REJECTED
+import java.util.List;
+
+import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
+
+public class ParseTree {
+
+    private List<Chunk> chunks;
+
+    public List<Chunk> getChunks() {
+        return chunks;
+    }
+
+    public void setChunks(List<Chunk> chunks) {
+        this.chunks = chunks;
+    }
+
 }

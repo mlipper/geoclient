@@ -24,13 +24,13 @@ import gov.nyc.doitt.gis.geoclient.search.Search;
 import gov.nyc.doitt.gis.geoclient.search.SearchResult;
 import gov.nyc.doitt.gis.geoclient.search.policy.Policy;
 import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.MatchStatus;
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.ParamsAndResult;
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.PolicySummary;
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchParameters;
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResponse;
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchSummary;
-import gov.nyc.doitt.gis.geoclient.service.search.web.response.Status;
+import gov.nyc.doitt.gis.geoclient.service.web.search.response.MatchStatus;
+import gov.nyc.doitt.gis.geoclient.service.web.search.response.ParamsAndResult;
+import gov.nyc.doitt.gis.geoclient.service.web.search.response.PolicySummary;
+import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchParameters;
+import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchResponse;
+import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchSummary;
+import gov.nyc.doitt.gis.geoclient.service.web.search.response.Status;
 
 public class SearchResultConverter implements Converter<ParamsAndResult, SearchResponse> {
     @Override
