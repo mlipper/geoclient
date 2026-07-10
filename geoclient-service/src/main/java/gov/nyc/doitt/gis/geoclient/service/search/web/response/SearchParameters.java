@@ -15,10 +15,10 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
-import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultExactMatchPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultSearchDepthPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultSimilarNamesPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.DefaultExactMatchPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSearchDepthPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSimilarNamesPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;

@@ -27,8 +27,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import gov.nyc.doitt.gis.geoclient.service.search.GeosupportReturnCode;
-import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+import gov.nyc.doitt.gis.geoclient.search.GeosupportReturnCode;
+import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
 
 class ResponseStatusMapperTest {
 

@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultExactMatchPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultSearchDepthPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.DefaultSimilarNamesPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.DefaultExactMatchPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSearchDepthPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSimilarNamesPolicy;
+import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
 
 public class SearchParametersTest {
     private SearchParameters params;

@@ -1,0 +1,50 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package gov.nyc.doitt.gis.geoclient.search.task;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
+import gov.nyc.doitt.gis.geoclient.search.Search;
+import gov.nyc.doitt.gis.geoclient.search.SearchResult;
+import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
+import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
+
+public class DefaultSpawnedTaskBuilder extends TaskBuilderSupport implements SpawnedSearchTaskBuilder {
+    private final SimilarNamesTaskBuilder similarNamesTaskBuilder;
+    private final CompassDirectionTaskBuilder compassDirectionTaskBuilder;
+
+    public DefaultSpawnedTaskBuilder(CountyResolver countyResolver, GeosupportInvoker geosupport,
+            ResponseStatusReader statusReader) {
+        super(countyResolver, geosupport, statusReader);
+        this.similarNamesTaskBuilder = new SimilarNamesTaskBuilder(countyResolver, geosupport, statusReader);
+        this.compassDirectionTaskBuilder = new CompassDirectionTaskBuilder(countyResolver, geosupport, statusReader);
+    }
+
+    @Override
+    public List<SearchTask> getSearchTasks(SearchResult searchResult) {
+        List<Search> previousSearches = searchResult.inputForSubSearches();
+        if (previousSearches.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<SearchTask> tasks = new ArrayList<>();
+        tasks.addAll(similarNamesTaskBuilder.getSearchTasks(searchResult));
+        tasks.addAll(compassDirectionTaskBuilder.getSearchTasks(searchResult));
+        return tasks;
+    }
+
+}

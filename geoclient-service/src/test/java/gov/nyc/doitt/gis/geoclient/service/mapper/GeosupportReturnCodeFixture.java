@@ -17,7 +17,7 @@ package gov.nyc.doitt.gis.geoclient.service.mapper;
 
 import java.util.Map;
 
-import gov.nyc.doitt.gis.geoclient.service.search.GeosupportReturnCode;
+import gov.nyc.doitt.gis.geoclient.search.GeosupportReturnCode;
 
 public class GeosupportReturnCodeFixture {
     private final GeosupportReturnCode grc;

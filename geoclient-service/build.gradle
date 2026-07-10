@@ -6,6 +6,7 @@ dependencies {
     implementation project(':geoclient-jni')
     implementation project(':geoclient-core')
     implementation project(':geoclient-parser')
+    implementation project(':geoclient-search')
 
     implementation(libs.commons.text)
     implementation(libs.jackson.annotations)
@@ -25,6 +26,7 @@ testing {
     suites {
         integrationTest {
             dependencies {
+                implementation project(':geoclient-search')
                 implementation(libs.spring.boot.starter.jackson.test)
                 implementation(libs.spring.boot.starter.restclient.test)
                 implementation(libs.spring.boot.starter.webmvc.test)

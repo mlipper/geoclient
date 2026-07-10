@@ -25,8 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
-import gov.nyc.doitt.gis.geoclient.service.search.request.AddressRequest;
+import gov.nyc.doitt.gis.geoclient.search.SearchResult;
+import gov.nyc.doitt.gis.geoclient.search.Search;
+import gov.nyc.doitt.gis.geoclient.search.SingleFieldSearchHandler;
+import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
+import gov.nyc.doitt.gis.geoclient.search.request.AddressRequest;
 
 @SpringBootTest
 public class SingleFieldSearchHandlerTest {

@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
-import gov.nyc.doitt.gis.geoclient.service.search.SingleFieldSearchHandler;
+import gov.nyc.doitt.gis.geoclient.search.SearchResult;
+import gov.nyc.doitt.gis.geoclient.search.SingleFieldSearchHandler;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.ParamsAndResult;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchParameters;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.SearchResponse;

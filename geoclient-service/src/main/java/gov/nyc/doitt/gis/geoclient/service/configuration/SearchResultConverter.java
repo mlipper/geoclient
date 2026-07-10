@@ -20,10 +20,10 @@ import java.util.List;
 
 import org.springframework.core.convert.converter.Converter;
 
-import gov.nyc.doitt.gis.geoclient.service.search.Search;
-import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.Policy;
-import gov.nyc.doitt.gis.geoclient.service.search.policy.SearchPolicy;
+import gov.nyc.doitt.gis.geoclient.search.Search;
+import gov.nyc.doitt.gis.geoclient.search.SearchResult;
+import gov.nyc.doitt.gis.geoclient.search.policy.Policy;
+import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.MatchStatus;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.ParamsAndResult;
 import gov.nyc.doitt.gis.geoclient.service.search.web.response.PolicySummary;

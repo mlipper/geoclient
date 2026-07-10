@@ -15,7 +15,7 @@
  */
 package gov.nyc.doitt.gis.geoclient.service.search.web.response;
 
-import gov.nyc.doitt.gis.geoclient.service.search.SearchResult;
+import gov.nyc.doitt.gis.geoclient.search.SearchResult;
 
 public class ParamsAndResult {
     private final SearchParameters searchParameters;

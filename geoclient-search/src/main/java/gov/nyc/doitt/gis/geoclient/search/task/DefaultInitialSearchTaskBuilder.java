@@ -1,0 +1,97 @@
+/*
+ * Copyright 2013-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package gov.nyc.doitt.gis.geoclient.search.task;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.reflect.ConstructorUtils;
+
+import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
+import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
+import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
+import gov.nyc.doitt.gis.geoclient.search.InputValue;
+import gov.nyc.doitt.gis.geoclient.search.ValueResolution;
+import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
+import gov.nyc.doitt.gis.geoclient.search.request.AddressRequest;
+import gov.nyc.doitt.gis.geoclient.search.request.BblRequest;
+import gov.nyc.doitt.gis.geoclient.search.request.BinRequest;
+import gov.nyc.doitt.gis.geoclient.search.request.BlockfaceRequest;
+import gov.nyc.doitt.gis.geoclient.search.request.IntersectionRequest;
+import gov.nyc.doitt.gis.geoclient.search.request.PlaceRequest;
+import gov.nyc.doitt.gis.geoclient.search.request.Request;
+import gov.nyc.doitt.gis.geoclient.search.request.RequestUtils;
+import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
+import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
+
+public class DefaultInitialSearchTaskBuilder extends TaskBuilderSupport implements InitialSearchTaskBuilder {
+    public DefaultInitialSearchTaskBuilder(CountyResolver countyResolver, GeosupportInvoker geosupport,
+            ResponseStatusReader statusReader) {
+        super(countyResolver, geosupport, statusReader);
+    }
+
+    @Override
+    public List<SearchTask> getSearchTasks(SearchPolicy searchPolicy, LocationTokens locationTokens) {
+        List<SearchTask> searches = new ArrayList<>();
+        for (Chunk chunk : locationTokens.getChunks()) {
+            switch (chunk.getType()) {
+                case ADDRESS:
+                    return initialSearchTasks(AddressRequest.class, AddressSearchTask.class, locationTokens);
+                case BBL:
+                    return initialSearchTasks(BblRequest.class, BblSearchTask.class, locationTokens);
+                case BIN:
+                    return initialSearchTasks(BinRequest.class, BinSearchTask.class, locationTokens);
+                case BLOCKFACE:
+                    return initialSearchTasks(BlockfaceRequest.class, BlockfaceSearchTask.class, locationTokens);
+                case INTERSECTION:
+                    return initialSearchTasks(IntersectionRequest.class, IntersectionSearchTask.class, locationTokens);
+                case PLACE:
+                    return initialSearchTasks(PlaceRequest.class, PlaceSearchTask.class, locationTokens);
+                default:
+                    break;
+            }
+        }
+        return searches;
+    }
+
+    protected <R extends Request, T extends SearchTask> List<SearchTask> initialSearchTasks(Class<R> requestType,
+            Class<T> taskType, LocationTokens locationTokens) {
+        List<SearchTask> tasks = new ArrayList<>();
+        if (requestType.equals(BinRequest.class)) {
+            // BIN request which does not require a borough
+            tasks.add(new BinSearchTask(RequestUtils.initialRequest(requestType, locationTokens, null), geosupport,
+                statusReader));
+
+        }
+        else {
+            // All other requests
+            try {
+                ValueResolution countyResolution = this.countyResolver.resolve(locationTokens);
+                for (InputValue countyInputValue : countyResolution.resolved()) {
+                    tasks.add(ConstructorUtils.invokeConstructor(taskType,
+                        RequestUtils.initialRequest(requestType, locationTokens, countyInputValue), geosupport,
+                        statusReader));
+                }
+            }
+            catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException
+                    | InstantiationException e) {
+                throw new RuntimeException(e.getCause());
+            }
+        }
+        return tasks;
+    }
+}

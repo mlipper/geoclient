@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import gov.nyc.doitt.gis.geoclient.api.OutputParam;
-import gov.nyc.doitt.gis.geoclient.service.search.GeosupportReturnCode;
-import gov.nyc.doitt.gis.geoclient.service.search.ResponseStatus;
+import gov.nyc.doitt.gis.geoclient.search.GeosupportReturnCode;
+import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
 
 public class ResponseStatusMapper extends AbstractParameterMapper<ResponseStatus> {
 
