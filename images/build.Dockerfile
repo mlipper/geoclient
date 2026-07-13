@@ -43,7 +43,7 @@ RUN set -ex \
 RUN set -ex \
   && [ -f "${JARFILE}" ] || exit 1 \
   && cp -v "${JARFILE}" ./geoclient.jar \
-  && java -Djarmode=layertools -jar ./geoclient.jar extract
+  && java -Djarmode=tools -jar ./geoclient.jar extract --layers --launcher --destination ./extracted
 
 ### Run
 FROM eclipse-temurin:21-jre AS runner
@@ -63,10 +63,10 @@ RUN set -eux \
   && "${GEOSUPPORT_HOME}/bin/geosupport" install
 
 WORKDIR /app
-COPY --from=builder /app/dependencies/ ./
-COPY --from=builder /app/spring-boot-loader/ ./
-COPY --from=builder /app/snapshot-dependencies/ ./
-COPY --from=builder /app/application/ ./
+COPY --from=builder /app/extracted/dependencies/ ./
+COPY --from=builder /app/extracted/spring-boot-loader/ ./
+COPY --from=builder /app/extracted/snapshot-dependencies/ ./
+COPY --from=builder /app/extracted/application/ ./
 
 ENTRYPOINT ["java", "-Dgc.jni.version=geoclient-jni-2", "-Dspring.profiles.active=default", "-Xmx2048m", "org.springframework.boot.loader.launch.JarLauncher"]
 EXPOSE 8080

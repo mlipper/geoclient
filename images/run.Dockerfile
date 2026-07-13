@@ -11,7 +11,7 @@ COPY "${JARFILE}" geoclient.jar
 COPY --chmod=755 images/run.sh .
 
 RUN set -ex \
-  && java -Djarmode=layertools -jar ./geoclient.jar extract
+  && java -Djarmode=tools -jar ./geoclient.jar extract --layers --launcher --destination ./extracted
 
 FROM eclipse-temurin:21-jre
 
@@ -22,10 +22,10 @@ RUN set -ex \
 
 WORKDIR /app
 COPY --from=builder app/run.sh .
-COPY --from=builder app/dependencies/ ./
-COPY --from=builder app/spring-boot-loader/ ./
-COPY --from=builder app/snapshot-dependencies/ ./
-COPY --from=builder app/application/ ./
+COPY --from=builder app/extracted/dependencies/ ./
+COPY --from=builder app/extracted/spring-boot-loader/ ./
+COPY --from=builder app/extracted/snapshot-dependencies/ ./
+COPY --from=builder app/extracted/application/ ./
 
 # Assumes a Geosupport installation has been mounted to /opt/geosupport.
 ENV GEOSUPPORT_BASEDIR=/opt/geosupport
