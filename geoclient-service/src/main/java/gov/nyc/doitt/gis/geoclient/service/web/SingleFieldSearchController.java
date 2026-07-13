@@ -28,7 +28,6 @@ import gov.nyc.doitt.gis.geoclient.search.SingleFieldSearchHandler;
 import gov.nyc.doitt.gis.geoclient.service.web.search.response.ParamsAndResult;
 import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchParameters;
 import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchResponse;
-import jakarta.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -43,7 +42,8 @@ public class SingleFieldSearchController {
     private ConversionService conversionService;
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public @ResponseBody SearchResponse search(@Valid SearchParameters params) {
+    public @ResponseBody SearchResponse search(SearchParameters params) {
+        params.validate();
         ParamsAndResult paramsAndResult = new ParamsAndResult(params,
             this.singleFieldSearchHandler.findLocation(params.buildSearchPolicy(), params.getInput()));
         SearchResponse searchResponse = this.conversionService.convert(paramsAndResult, SearchResponse.class);

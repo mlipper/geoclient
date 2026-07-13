@@ -19,16 +19,11 @@ import gov.nyc.doitt.gis.geoclient.search.policy.DefaultExactMatchPolicy;
 import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSearchDepthPolicy;
 import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSimilarNamesPolicy;
 import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
+import gov.nyc.doitt.gis.geoclient.service.web.InvalidSearchParametersException;
 
 public class SearchParameters {
     public static final int MAX_CONFIGURABLE_DEPTH = 6;
-    @NotEmpty
     private String input;
-    @Min(value = 0)
-    @Max(value = MAX_CONFIGURABLE_DEPTH)
     private int maxDepth = DefaultSearchDepthPolicy.DEFAULT_MAX_DEPTH;
     private int similarNamesDistance = DefaultSimilarNamesPolicy.DEFAULT_SIMILAR_NAMES_DISTANCE;
     private int exactMatchMaxLevel = DefaultExactMatchPolicy.DEFAULT_EXACT_MATCH_MAX_LEVEL;
@@ -45,6 +40,26 @@ public class SearchParameters {
     public SearchParameters(String input) {
         super();
         this.input = input;
+    }
+
+    /**
+     * Validates that required fields are populated and that bounded fields
+     * fall within their supported ranges.
+     *
+     * @throws InvalidSearchParametersException if {@code input} is {@code null}
+     *         or empty, or if {@code maxDepth} is outside the range
+     *         {@code [0, }{@value #MAX_CONFIGURABLE_DEPTH}{@code ]}.
+     */
+    public void validate() {
+        if (input == null || input.isEmpty()) {
+            throw new InvalidSearchParametersException(
+                "'input' request parameter is required and must not be empty");
+        }
+        if (maxDepth < 0 || maxDepth > MAX_CONFIGURABLE_DEPTH) {
+            throw new InvalidSearchParametersException(
+                "'maxDepth' must be between 0 and " + MAX_CONFIGURABLE_DEPTH
+                        + " (inclusive); got " + maxDepth);
+        }
     }
 
     public int getMaxDepth() {

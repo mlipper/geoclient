@@ -40,6 +40,5 @@ spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-s
 spring-boot-starter-restclient-test = { module = "org.springframework.boot:spring-boot-starter-restclient-test" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-tomcat = { module = "org.springframework.boot:spring-boot-starter-tomcat" }
-spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
 spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test" }

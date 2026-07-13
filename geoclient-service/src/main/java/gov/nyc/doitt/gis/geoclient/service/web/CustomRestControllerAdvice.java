@@ -46,6 +46,13 @@ public class CustomRestControllerAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, problemDetail, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler(InvalidSearchParametersException.class)
+    public ResponseEntity<Object> handleInvalidSearchParameters(
+            InvalidSearchParametersException exception, WebRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return handleExceptionInternal(exception, problemDetail, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     @Override
     protected ResponseEntity<Object> createResponseEntity(@Nullable Object body, HttpHeaders headers,
             HttpStatusCode statusCode, WebRequest request) {

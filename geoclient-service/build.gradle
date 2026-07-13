@@ -14,7 +14,6 @@ dependencies {
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jackson)
     implementation(libs.spring.boot.starter.tomcat)
-    implementation(libs.spring.boot.starter.validation)
     implementation(libs.spring.boot.starter.webmvc)
 
     testImplementation(libs.spring.boot.starter.jackson.test)
