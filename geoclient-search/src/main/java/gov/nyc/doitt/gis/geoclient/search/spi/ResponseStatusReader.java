@@ -23,13 +23,13 @@ import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
  * Framework-neutral SPI for producing a {@link ResponseStatus} from a raw
  * Geosupport work-area parameter map. Hosts adapt this contract to whichever
  * mapping strategy they use (reflection-based bean mapper, hand-written
- * converter, test fake, etc.).
+ * converter, test stub, etc.).
  * <p>
  * This is the single mapping operation that the single-field search pipeline
  * needs; declaring it explicitly avoids a dependency on any generic
  * {@code Mapper} abstraction from the enclosing application.
  *
- * @since 3.0
+ * @since 2.0.4
  */
 @FunctionalInterface
 public interface ResponseStatusReader {
