@@ -34,7 +34,7 @@ import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 
-import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportService;
 import gov.nyc.doitt.gis.geoclient.service.web.filter.LegacyFileExtensionFilter;
 
 public class RestControllerErrorContentNegotiationTest {

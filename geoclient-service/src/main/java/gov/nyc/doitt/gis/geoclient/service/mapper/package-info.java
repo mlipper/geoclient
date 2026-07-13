@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the original author or authors.
+ * Copyright 2013-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Mapper package.
- *
- * @author Matthew Lipper
+ * Service-tier mappers scoped to {@code geoclient-service}.
+ * <p>
+ * Only {@link ResponseStatusMapper} remains here because it depends on
+ * {@code gov.nyc.doitt.gis.geoclient.search} types and cannot move to
+ * {@code geoclient-core} without introducing a cyclic module dependency.
+ * The framework-neutral {@code Mapper} abstraction and its general-purpose
+ * implementations live in
+ * {@code gov.nyc.doitt.gis.geoclient.api.mapper} in {@code geoclient-core}.
  */
-
 package gov.nyc.doitt.gis.geoclient.service.mapper;

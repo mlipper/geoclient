@@ -25,8 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import gov.nyc.doitt.gis.geoclient.service.domain.Version;
-import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+import gov.nyc.doitt.gis.geoclient.api.version.Version;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportService;
 
 public class RestControllerTest {
     private GeosupportService geosupportServiceMock;

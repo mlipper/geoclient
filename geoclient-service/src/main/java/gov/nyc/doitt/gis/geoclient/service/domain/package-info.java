@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the original author or authors.
+ * Copyright 2013-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Domain package.
- *
- * @author Matthew Lipper
+ * Service-tier types that remain scoped to {@code geoclient-service}
+ * because they carry Jackson wire-format metadata bound to the REST API
+ * (e.g. {@code @JsonRootName} on {@link GeosupportResponse}).
+ * <p>
+ * Framework-neutral response value objects previously in this package have
+ * been moved to {@code gov.nyc.doitt.gis.geoclient.api.version} in the
+ * {@code geoclient-core} module.
  */
-
 package gov.nyc.doitt.gis.geoclient.service.domain;

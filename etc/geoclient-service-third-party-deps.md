@@ -41,16 +41,21 @@ Report of direct third-party library dependencies for source code in
 
 - **Jackson 2 annotations** (`com.fasterxml.jackson.*`)
   - `com.fasterxml.jackson.annotation`
-- **Jackson 3 XML annotations** (`tools.jackson.*`)
-  - `tools.jackson.dataformat.xml.annotation`
 
-## `gov.nyc.doitt.gis.geoclient.service.invoker`
-
-- *(no third-party imports)*
+Only `GeosupportResponse` (extends `HashMap`) remains in this package; its
+`@JsonRootName` annotation stays in-place. Framework-neutral HR-response
+value objects previously in this package have been moved to
+`gov.nyc.doitt.gis.geoclient.api.version` in `geoclient-core`.
 
 ## `gov.nyc.doitt.gis.geoclient.service.mapper`
 
 - *(no third-party imports)*
+
+Only `ResponseStatusMapper` remains in this package. The general-purpose
+`Mapper` abstraction and other implementations moved to
+`gov.nyc.doitt.gis.geoclient.api.mapper` in `geoclient-core`.
+`ResponseStatusMapper` stays here because it depends on `geoclient-search`
+types (moving it to core would create a cyclic module dependency).
 
 ## `gov.nyc.doitt.gis.geoclient.service.sanitizer`
 
@@ -83,6 +88,20 @@ Report of direct third-party library dependencies for source code in
   - `org.springframework.stereotype`
   - `org.springframework.web.filter`
 
+## `gov.nyc.doitt.gis.geoclient.service.web.jackson`
+
+- **Jackson 2 annotations** (`com.fasterxml.jackson.*`)
+  - `com.fasterxml.jackson.annotation`
+- **Jackson 3 XML annotations** (`tools.jackson.*`)
+  - `tools.jackson.dataformat.xml.annotation`
+- **Spring Boot Jackson** (`org.springframework.boot.jackson`)
+  - `org.springframework.boot.jackson` (Spring Boot 4 `@JacksonMixin`)
+
+Wire-format contract for the REST API. Concentrates all Jackson annotation
+metadata for framework-neutral domain classes from `geoclient-core` and
+`geoclient-parser` via `@JacksonMixin`-annotated abstract classes that
+Spring Boot 4 auto-registers.
+
 ## `gov.nyc.doitt.gis.geoclient.service.web.search.response`
 
 - **Jackson 2 annotations** (`com.fasterxml.jackson.*`)
@@ -94,21 +113,21 @@ Report of direct third-party library dependencies for source code in
 
 ## Summary — libraries used by the service module
 
-| Library grouping                       | Used in packages                                                  |
-| -------------------------------------- | ----------------------------------------------------------------- |
+| Library grouping                       | Used in packages                                                        |
+| -------------------------------------- | ----------------------------------------------------------------------- |
 | Spring Framework                       | `service.configuration`, `service.sanitizer`, `service.web`, `service.web.filter` |
-| Spring Boot                            | `service`                                                         |
-| Spring Boot Actuator                   | `service.configuration`                                           |
-| Jakarta Servlet API                    | `service.sanitizer`, `service.web.filter`                         |
-| Jackson 2 (annotations)                | `service.domain`, `service.web.search.response`                   |
-| Jackson 3 (XML dataformat annotations) | `service.domain`, `service.web.search.response`                   |
-| JSpecify                               | `service.web`                                                     |
+| Spring Boot                            | `service`                                                               |
+| Spring Boot Actuator                   | `service.configuration`                                                 |
+| Spring Boot Jackson                    | `service.web.jackson`                                                   |
+| Jakarta Servlet API                    | `service.sanitizer`, `service.web.filter`                               |
+| Jackson 2 (annotations)                | `service.domain`, `service.web.jackson`, `service.web.search.response`  |
+| Jackson 3 (XML dataformat annotations) | `service.web.jackson`, `service.web.search.response`                    |
+| JSpecify                               | `service.web`                                                           |
 
 ### Excluded — logging (`org.slf4j.*`)
 
 Directly imported by:
 
-- `gov.nyc.doitt.gis.geoclient.service.invoker`
 - `gov.nyc.doitt.gis.geoclient.service.mapper`
 - `gov.nyc.doitt.gis.geoclient.service.sanitizer`
 - `gov.nyc.doitt.gis.geoclient.service.web`

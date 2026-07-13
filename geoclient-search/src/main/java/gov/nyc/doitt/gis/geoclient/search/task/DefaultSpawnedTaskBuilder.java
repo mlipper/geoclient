@@ -18,10 +18,10 @@ package gov.nyc.doitt.gis.geoclient.search.task;
 import java.util.ArrayList;
 import java.util.List;
 
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
 import gov.nyc.doitt.gis.geoclient.search.Search;
 import gov.nyc.doitt.gis.geoclient.search.SearchResult;
-import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 public class DefaultSpawnedTaskBuilder extends TaskBuilderSupport implements SpawnedSearchTaskBuilder {

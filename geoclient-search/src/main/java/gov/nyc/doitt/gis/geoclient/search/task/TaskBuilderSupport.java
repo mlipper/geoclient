@@ -15,8 +15,8 @@
  */
 package gov.nyc.doitt.gis.geoclient.search.task;
 
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
-import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 public class TaskBuilderSupport {

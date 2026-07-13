@@ -20,10 +20,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.function.Function;
 import gov.nyc.doitt.gis.geoclient.search.request.PlaceRequest;
 import gov.nyc.doitt.gis.geoclient.search.request.Request;
-import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 public class PlaceSearchTask extends SearchTask {

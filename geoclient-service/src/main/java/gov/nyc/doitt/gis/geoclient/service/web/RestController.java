@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import gov.nyc.doitt.gis.geoclient.service.domain.GeosupportResponse;
-import gov.nyc.doitt.gis.geoclient.service.domain.ServiceType;
-import gov.nyc.doitt.gis.geoclient.service.domain.Version;
-import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
+import gov.nyc.doitt.gis.geoclient.api.version.ServiceType;
+import gov.nyc.doitt.gis.geoclient.api.version.Version;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportService;
 
 /**
  * Handles RESTful requests for Geosupport data.

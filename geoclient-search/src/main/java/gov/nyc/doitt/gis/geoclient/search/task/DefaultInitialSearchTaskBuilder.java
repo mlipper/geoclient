@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.parser.LocationTokens;
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
@@ -35,7 +36,6 @@ import gov.nyc.doitt.gis.geoclient.search.request.IntersectionRequest;
 import gov.nyc.doitt.gis.geoclient.search.request.PlaceRequest;
 import gov.nyc.doitt.gis.geoclient.search.request.Request;
 import gov.nyc.doitt.gis.geoclient.search.request.RequestUtils;
-import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 public class DefaultInitialSearchTaskBuilder extends TaskBuilderSupport implements InitialSearchTaskBuilder {

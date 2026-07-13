@@ -28,6 +28,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
+import gov.nyc.doitt.gis.geoclient.api.invoker.DoubleFieldSetConverter;
+import gov.nyc.doitt.gis.geoclient.api.invoker.FieldSetConverter;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportInvoker;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportService;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportServiceContext;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportServiceImpl;
+import gov.nyc.doitt.gis.geoclient.api.mapper.GeosupportVersionMapper;
+import gov.nyc.doitt.gis.geoclient.api.mapper.Mapper;
+import gov.nyc.doitt.gis.geoclient.api.version.FieldSet;
+import gov.nyc.doitt.gis.geoclient.api.version.GeosupportVersion;
+import gov.nyc.doitt.gis.geoclient.api.version.Version;
 import gov.nyc.doitt.gis.geoclient.config.GeosupportConfig;
 import gov.nyc.doitt.gis.geoclient.function.Function;
 import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
@@ -37,22 +48,12 @@ import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
 import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
 import gov.nyc.doitt.gis.geoclient.search.SearchId;
 import gov.nyc.doitt.gis.geoclient.search.SingleFieldSearchHandler;
-import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 import gov.nyc.doitt.gis.geoclient.search.task.DefaultInitialSearchTaskBuilder;
 import gov.nyc.doitt.gis.geoclient.search.task.DefaultSpawnedTaskBuilder;
 import gov.nyc.doitt.gis.geoclient.search.task.InitialSearchTaskBuilder;
 import gov.nyc.doitt.gis.geoclient.search.task.SearchTaskFactory;
 import gov.nyc.doitt.gis.geoclient.search.task.SpawnedSearchTaskBuilder;
-import gov.nyc.doitt.gis.geoclient.service.domain.FieldSet;
-import gov.nyc.doitt.gis.geoclient.service.domain.GeosupportVersion;
-import gov.nyc.doitt.gis.geoclient.service.domain.Version;
-import gov.nyc.doitt.gis.geoclient.service.invoker.DoubleFieldSetConverter;
-import gov.nyc.doitt.gis.geoclient.service.invoker.FieldSetConverter;
-import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportService;
-import gov.nyc.doitt.gis.geoclient.service.invoker.GeosupportServiceImpl;
-import gov.nyc.doitt.gis.geoclient.service.mapper.GeosupportVersionMapper;
-import gov.nyc.doitt.gis.geoclient.service.mapper.Mapper;
 import gov.nyc.doitt.gis.geoclient.service.mapper.ResponseStatusMapper;
 
 /**
@@ -65,7 +66,7 @@ import gov.nyc.doitt.gis.geoclient.service.mapper.ResponseStatusMapper;
 @PropertySource(value = "classpath:version.properties")
 @ComponentScan(basePackages = { "gov.nyc.doitt.gis.geoclient.service",
         "gov.nyc.doitt.gis.geoclient.parser.configuration" })
-public class AppConfig {
+public class AppConfig implements GeosupportServiceContext {
 
     @Autowired
     private Environment env;
@@ -78,6 +79,7 @@ public class AppConfig {
     }
 
     @Bean
+    @Override
     public FieldSetConverter latLongFieldSetConverter() {
         return new DoubleFieldSetConverter(latLongConversions());
     }
@@ -126,7 +128,7 @@ public class AppConfig {
 
     @Bean
     public GeosupportInvoker geosupportInvoker() {
-        return SearchSpiAdapters.asInvoker(geosupportService());
+        return geosupportService();
     }
 
     @Bean
@@ -170,52 +172,9 @@ public class AppConfig {
     }
 
     // Regular methods
+    @Override
     public Function geosupportFunction(String id) {
         return geosupportConfiguration().getFunction(id);
-    }
-
-    public Function functionAP() {
-        return geosupportFunction(Function.FAP);
-    }
-
-    public Function function1B() {
-        return geosupportFunction(Function.F1B);
-    }
-
-    public Function functionBL() {
-        return geosupportFunction(Function.FBL);
-    }
-
-    public Function functionBN() {
-        return geosupportFunction(Function.FBN);
-    }
-
-    public Function function3() {
-        return geosupportFunction(Function.F3);
-    }
-
-    public Function function2W() {
-        return geosupportFunction(Function.F2W);
-    }
-
-    public Function functionHR() {
-        return geosupportFunction(Function.FHR);
-    }
-
-    public Function functionD() {
-        return geosupportFunction(Function.FD);
-    }
-
-    public Function functionDG() {
-        return geosupportFunction(Function.FDG);
-    }
-
-    public Function functionDN() {
-        return geosupportFunction(Function.FDN);
-    }
-
-    public Function functionN() {
-        return geosupportFunction(Function.FN);
     }
 
     public Mapper<GeosupportVersion> geosupportVersionMapper() {
@@ -224,6 +183,7 @@ public class AppConfig {
 
     // Do not declare as @Bean, but as a regular method
     // since we don't want proxies generated for incoming args
+    @Override
     public Version version(Map<String, Object> functionHrData) {
 
         Version version = new Version();

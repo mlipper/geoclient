@@ -21,6 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.parser.token.TokenType;
 import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
 import gov.nyc.doitt.gis.geoclient.search.InputValue;
@@ -32,7 +33,6 @@ import gov.nyc.doitt.gis.geoclient.search.request.BlockfaceRequest;
 import gov.nyc.doitt.gis.geoclient.search.request.IntersectionRequest;
 import gov.nyc.doitt.gis.geoclient.search.request.PlaceRequest;
 import gov.nyc.doitt.gis.geoclient.search.request.Request;
-import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 public class SimilarNamesTaskBuilder extends TaskBuilderSupport {

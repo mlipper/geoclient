@@ -3,6 +3,11 @@ plugins {
     id 'geoclient.test-conventions'
 }
 
+// Framework-neutral module: no Spring, Jackson, jakarta.servlet, or
+// jakarta.validation types are permitted on the public API or in the
+// compiled bytecode. The Spring Boot BOM is imported below purely to
+// keep SLF4J/Logback versions aligned with the rest of the codebase --
+// no Spring classes are compiled or exposed.
 dependencies {
     implementation(platform(libs.spring.boot.dependencies))
     implementation(libs.spring.boot.starter.logging)

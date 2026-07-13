@@ -41,7 +41,7 @@ import org.springframework.test.web.servlet.client.EntityExchangeResult;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import gov.nyc.doitt.gis.geoclient.service.domain.Version;
+import gov.nyc.doitt.gis.geoclient.api.version.Version;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient

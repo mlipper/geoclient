@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import gov.nyc.doitt.gis.geoclient.api.OutputParam;
+import gov.nyc.doitt.gis.geoclient.api.mapper.AbstractParameterMapper;
+import gov.nyc.doitt.gis.geoclient.api.mapper.MappingException;
 import gov.nyc.doitt.gis.geoclient.search.GeosupportReturnCode;
 import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
 

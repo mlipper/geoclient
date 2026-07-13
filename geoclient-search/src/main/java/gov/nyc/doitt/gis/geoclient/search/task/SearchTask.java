@@ -21,11 +21,11 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.Response;
 import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
 import gov.nyc.doitt.gis.geoclient.search.Search;
 import gov.nyc.doitt.gis.geoclient.search.request.Request;
-import gov.nyc.doitt.gis.geoclient.search.spi.GeosupportInvoker;
 import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 public abstract class SearchTask implements Callable<Search> {

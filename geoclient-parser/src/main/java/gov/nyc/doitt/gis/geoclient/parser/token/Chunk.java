@@ -18,21 +18,11 @@ package gov.nyc.doitt.gis.geoclient.parser.token;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import gov.nyc.doitt.gis.geoclient.parser.util.TextUtils;
-import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@JsonRootName("chunk")
-@JsonPropertyOrder({ "text", "chunkType", "tokens" })
 public class Chunk {
     private final String text;
-    @JacksonXmlProperty(localName = "chunkType")
     private ChunkType chunkType;
-    @JacksonXmlElementWrapper(localName = "tokens")
-    @JacksonXmlProperty(localName = "token")
     private List<Token> tokens;
 
     public Chunk(ChunkType chunkType, String text) {
@@ -73,7 +63,6 @@ public class Chunk {
         return text;
     }
 
-    @JacksonXmlProperty(localName = "chunkType")
     public ChunkType getType() {
         return chunkType;
     }
