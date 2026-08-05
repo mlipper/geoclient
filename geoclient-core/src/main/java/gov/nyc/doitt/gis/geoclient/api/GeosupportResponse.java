@@ -13,31 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.domain;
+package gov.nyc.doitt.gis.geoclient.api;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * {@link HashMap} subclass used to allow jackson-dataformat-xml to use "geosupportResponse"
- * instead of "Map" when serializing controller responses as XML.
- * 
+ * Geoclient response value object.  This class is a simple subclass of {@link HashMap} that:
+ * <ul>
+ * <li>Provides an explicit type for Geoclient responses instead of using {@code Map<String, Object>}</li>
+ * <li>Allows Jackson to serialize/deserialize controller responses as JSON with the root element name
+ * "geosupportResponse" instead of "Map"</li>
+ * </ul>
+ *
  * @author mlipper
  * @since 2.0.4
  */
 public class GeosupportResponse extends HashMap<String, Object> {
 
+    /**
+     * Constructs a new GeosupportResponse with the same mappings as the specified map.
+     */
     public GeosupportResponse(Map<? extends String, ? extends Object> m) {
         super(m);
     }
 
+    /**
+     * Constructs an empty GeosupportResponse.
+     */
     public GeosupportResponse() {
     }
 
+    /**
+     * Constructs a new GeosupportResponse with the specified initial capacity.
+     */
     public GeosupportResponse(int initialCapacity) {
         super(initialCapacity);
     }
 
+    /**
+     * Constructs a new GeosupportResponse with the specified initial capacity and load factor.
+     */
     public GeosupportResponse(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);
     }
