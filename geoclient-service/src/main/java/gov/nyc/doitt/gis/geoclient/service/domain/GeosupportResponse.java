@@ -18,8 +18,6 @@ package gov.nyc.doitt.gis.geoclient.service.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 /**
  * {@link HashMap} subclass used to allow jackson-dataformat-xml to use "geosupportResponse"
  * instead of "Map" when serializing controller responses as XML.
@@ -27,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  * @author mlipper
  * @since 2.0.4
  */
-@JsonRootName("geosupportResponse")
 public class GeosupportResponse extends HashMap<String, Object> {
 
     public GeosupportResponse(Map<? extends String, ? extends Object> m) {
