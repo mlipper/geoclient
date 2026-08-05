@@ -53,6 +53,16 @@ spotless {
         removeUnusedImports()
         trimTrailingWhitespace()
         toggleOffOn()
+        // Known issue with spotless v8.x and gradle 9.x:
+        // Spotless's custom classloader is being closed or disrupted
+        // prematurely mid-build, leaving the underlying formatter
+        // (like google-java-format) unable to find its required Guava
+        // dependencies (com.google.common.base.Predicate).
+        // It is a known concurrency and class-loading lifecycle bug in
+        // Spotless, often triggered when running a heavy task graph
+        // (like ./gradlew clean build) with parallel execution or caching
+        // enabled.
+        targetExclude '**/geoclient-test/src/**'
     }
     groovy {
         target '**/*.groovy'
