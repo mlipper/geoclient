@@ -6,30 +6,82 @@ This section provides notes on how Geoclient interacts with the Geosupport funct
 
 '''
 
+[#geosupport-return-codes]
 === Geosupport Return Codes
 
 As a developer using Geoclient to geocode New York City locations, it is important to understand how Geosupport handles warnings and errors. Geosupport functions return a variety of codes, reasons, and messages that indicate the success or failure of a request. These codes are essential for diagnosing issues with your geocoding requests.
 
 Geosupport return codes can be categorized as follows:
 
-[cols="1,1",options="header"]
+.Geosupport Return Codes
+[cols="2a,2a,2",options="header"]
 |===
-| Return Code | Description
+|Return Code
+|Description
+|Response Fields
 
-| 00
-| Successful request
+|`00`
+|Success
+|`geosupportReturnCode`, (`reasonCode` and `message` will be *blank*)
 
-| 01
-| Successful request with warnings
+|`01`
+|Success with warnings
+|`geosupportReturnCode`, `reasonCode`, `message`
 
-| Anything else
-| Unsuccessful request or error
+|GRC greater than `01`
+|Reject or error
+|`geosupportReturnCode`, `reasonCode`, `message`
 |===
 
-This is only the highest level of abstraction. In practice, effective geocoding with Geosupport requires a more detailed understanding of return codes. Although sometimes cryptic or highly specifc, knowing where to look for these codes and how to interpret them can save you time and effort when troubleshooting geocoding issues.
+Some Geosupport functions are actually just the combined results of two "sub-function" calls.
+At this time, function `1B` (exposed by the Geoclient `/address` endpoint) is the only case where this applies.
+
+Results returned by function `1B` are composed of calls to functions `1EX`(theoretical address that may or may not exist in reality computed using the house number range based off of segment information from the street's centerline) and `1AX` (real address and associated property-level information based on tax lot information).
+
+*Function 1B*
+
+Although it is uncommon, there are a significant number of locations where data is valid and/or available for only one of these two sub-function calls. Therefore, please check the following fields when calling Geoclient's `address` endpoint:
+
+.Function B Sub-functions
+[cols="2a,2a,1a"]
+|===
+|1B Sub-function
+|Field
+|Alias
+
+|`1EX`
+|`geosupportReturnCode`
+|`returnCode1e`
+
+|`1EX`
+|`reasonCode`
+|`reasonCode1e`
+
+|`1EX`
+|`message`
+|
+
+|`1AX`
+|`geosupportReturnCode2`
+|`returnCode1a`
+
+|`1AX`
+|`reasonCode2`
+|`reasonCode1a`
+
+|`1AX`
+|`message2`
+|
+|===
+
+This section coved only the most basic meaning of Geosupport return codes. In practice, effective geocoding with Geosupport often requires referencing the detailed documentation provided by the Department of City Planning directly.
+
+The following resources are invaluable for understanding the full range of return codes, reasons, and messages that Geosupport may produce:
 
 * {dcp-upg}/appendices/appendix04/[Geosupport Return Codes, Reasons Codes and Messages] summarizes return codes, reason codes, and messages. 
 * {dcp-upg}/chapters/chapterII/section02/[Geosupport Return Codes and Reject Handling] provides a detailed overview of how Geosupport handles errors and returns codes.
+
+Although sometimes cryptic or highly specifc, knowing where to look for these codes and how to interpret them can save you time and effort when troubleshooting geocoding issues.
 
 === Support for Geosupport Street Codes
 

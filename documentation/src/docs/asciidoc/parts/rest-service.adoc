@@ -258,79 +258,38 @@ In brief, here are the most commonly returned `HTTP` status codes:
 |The Geoclient service could not process the request due to an internal server error.
 |===
 
-[#geosupport-return-codes]
-==== Geosupport Return Codes
+[#introduction-to-geosupport-return-codes]
+==== Introduction to Geosupport Return Codes
 
-The Geosupport application uses return codes, reason codes, and messages to indicate the processing status of a given function call.
+As mentioned in the <<concepts,Concepts section>>, Geosupport is a separate application that has own logic and data. While Geoclient uses HTTP status codes to indicate the the success or failure of a REST request, Geosupport has its own API for communicating the status of a geocoding request.
 
-NOTE: Return codes come directly from the Geosupport application; as mentioned above, the Geoclient service uses standard `HTTP` status codes to report on it's own request processing.
+[IMPORTANT]
+====
+If Geosupport cannot geocode a location, Geoclient will still return an `HTTP 200` status code. In other words:
 
-These return codes are often highly specific to a given function or processing state and there are many of them. This section describes only a very high-level summary of their meaning.
+- *_Geoclient considers all requests to be successful as long as the request was properly formatted and the Geosupport service was reachable_*.
+- *_The actual success or failure of a geocoding request is determined by the Geosupport return codes_*.
+====
 
-Please see DCP's official {dcp-upg}/appendices/appendix04/[return code documentation] for a complete explanation.
+Geosupport function calls return a variety of codes, reasons, and messages that indicate the success or failure of the geocoding operation.
+These return codes are often highly specific to a given function or processing state and there are many of them. This section summarizes only the top-level codes.
 
-The following table summarizes the meaning of the codes returned by
-
-.Geosupport Return Codes
-[cols="2a,2a,2"]
+.Summary of Geosupport Return Codes
+[cols="1,1",options="header"]
 |===
-|Return Code
-|Description
-|Response Fields
+| Return Code | Description
 
-|`00`
-|Success
-|`geosupportReturnCode`, (`reasonCode` and `message` will be *blank*)
+| 00
+| Successful request
 
-|`01`
-|Success with warnings
-|`geosupportReturnCode`, `reasonCode`, `message`
+| 01
+| Successful request with warnings
 
-|GRC greater than `01`
-|Reject or error
-|`geosupportReturnCode`, `reasonCode`, `message`
+| Anything else
+| Unsuccessful request or error
 |===
 
-Some Geosupport functions are actually just the combined results of two "sub-function" calls.
-At this time, function `1B` (exposed by the Geoclient `/address` endpoint) is the only case where this applies.
-
-Results returned by function `1B` are composed of calls to functions `1EX`(theoretical address that may or may not exist in reality computed using the house number range based off of segment information from the street's centerline) and `1AX` (real address and associated property-level information based on tax lot information).
-
-*Function 1B*
-
-Although it is uncommon, there are a significant number of locations where data is valid and/or available for only one of these two sub-function calls. Therefore, please check the following fields when calling Geoclient's `address` endpoint:
-
-.Function B Sub-functions
-[cols="2a,2a,1a"]
-|===
-|1B Sub-function
-|Field
-|Alias
-
-|`1EX`
-|`geosupportReturnCode`
-|`returnCode1e`
-
-|`1EX`
-|`reasonCode`
-|`reasonCode1e`
-
-|`1EX`
-|`message`
-|
-
-|`1AX`
-|`geosupportReturnCode2`
-|`returnCode1a`
-
-|`1AX`
-|`reasonCode2`
-|`reasonCode1a`
-
-|`1AX`
-|`message2`
-|
-|===
+Understanding these codes is *essential* for diagnosing issues with your geocoding requests. The <<geosupport-return-codes,Geosupport Return Codes>> section provides a slightly more detailed discussion of these codes and how to interpret them. More importantly, it provides links to the Department of City Planning's official documentation for Geosupport which is the authoritative reference for all return codes, reason codes, and messages.
 
 === Geosupport Street Name Functions
 
