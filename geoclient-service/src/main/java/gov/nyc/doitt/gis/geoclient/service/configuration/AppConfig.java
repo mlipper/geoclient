@@ -48,7 +48,6 @@ import gov.nyc.doitt.gis.geoclient.search.CountyResolver;
 import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
 import gov.nyc.doitt.gis.geoclient.search.SearchId;
 import gov.nyc.doitt.gis.geoclient.search.SingleFieldSearchHandler;
-import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 import gov.nyc.doitt.gis.geoclient.search.task.DefaultInitialSearchTaskBuilder;
 import gov.nyc.doitt.gis.geoclient.search.task.DefaultSpawnedTaskBuilder;
 import gov.nyc.doitt.gis.geoclient.search.task.InitialSearchTaskBuilder;
@@ -118,22 +117,17 @@ public class AppConfig implements GeosupportServiceContext {
 
     @Bean
     public InitialSearchTaskBuilder initialSearchTaskBuilder() {
-        return new DefaultInitialSearchTaskBuilder(countyResolver(), geosupportInvoker(), responseStatusReader());
+        return new DefaultInitialSearchTaskBuilder(countyResolver(), geosupportInvoker(), responseStatusMapper());
     }
 
     @Bean
     public SpawnedSearchTaskBuilder spawnedSearchTaskBuilder() {
-        return new DefaultSpawnedTaskBuilder(countyResolver(), geosupportInvoker(), responseStatusReader());
+        return new DefaultSpawnedTaskBuilder(countyResolver(), geosupportInvoker(), responseStatusMapper());
     }
 
     @Bean
     public GeosupportInvoker geosupportInvoker() {
         return geosupportService();
-    }
-
-    @Bean
-    public ResponseStatusReader responseStatusReader() {
-        return SearchSpiAdapters.asStatusReader(responseStatusMapper());
     }
 
     @Bean
@@ -167,7 +161,7 @@ public class AppConfig implements GeosupportServiceContext {
     }
 
     @Bean
-    public Mapper<ResponseStatus> responseStatusMapper() {
+    public ResponseStatusMapper responseStatusMapper() {
         return new ResponseStatusMapper();
     }
 

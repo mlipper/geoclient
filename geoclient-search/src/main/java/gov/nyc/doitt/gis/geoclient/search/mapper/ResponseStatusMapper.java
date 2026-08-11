@@ -25,6 +25,7 @@ import gov.nyc.doitt.gis.geoclient.api.mapper.AbstractParameterMapper;
 import gov.nyc.doitt.gis.geoclient.api.mapper.MappingException;
 import gov.nyc.doitt.gis.geoclient.search.GeosupportReturnCode;
 import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
+import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 /**
  * Mapper for {@link ResponseStatus}.
@@ -35,10 +36,15 @@ import gov.nyc.doitt.gis.geoclient.search.ResponseStatus;
  * @see AbstractParameterMapper
  * @see GeosupportReturnCode
  */
-public class ResponseStatusMapper extends AbstractParameterMapper<ResponseStatus> {
+public class ResponseStatusMapper extends AbstractParameterMapper<ResponseStatus> implements ResponseStatusReader {
 
     public ResponseStatusMapper() {
         super();
+    }
+
+    @Override
+    public ResponseStatus read(Map<String, Object> parameters) {
+        return fromParameters(parameters, new ResponseStatus());
     }
 
     @Override
