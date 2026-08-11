@@ -29,6 +29,6 @@ Geoclient is written in `Java` and Geosupport is written in `C`. Geoclient uses 
 
 ## License
 
-[Apache 2.0](https://github.com/CityOfNewYork/geoclient/blob/master/src/dist/license.txt)
+[Apache 2.0](src/dist/license.txt)
 
 [^1]: Wikipedia [article about geocoding](https://en.wikipedia.org/wiki/Address_geocoding#Geocoding_process).
