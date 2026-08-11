@@ -13,24 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.web;
+package gov.nyc.doitt.gis.geoclient.search.response;
 
-/**
- * Exception indicating that one or more values on a
- * {@link gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchParameters}
- * instance are invalid.
- *
- * Mapped to HTTP {@code 400 Bad Request} by
- * {@link CustomRestControllerAdvice}.
- *
- * @author mlipper
- */
-public class InvalidSearchParametersException extends RuntimeException {
-
-    private static final long serialVersionUID = 1L;
-
-    public InvalidSearchParametersException(String message) {
-        super(message);
-    }
-
+public enum Status {
+    OK, REJECTED
 }

@@ -16,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import gov.nyc.doitt.gis.geoclient.api.InvalidStreetCodeException;
+import gov.nyc.doitt.gis.geoclient.search.response.InvalidSearchParametersException;
 
 /**
  * Provides a global exception handler that uses Spring's

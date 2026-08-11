@@ -29,7 +29,7 @@ import gov.nyc.doitt.gis.geoclient.search.spi.ResponseStatusReader;
 
 /**
  * Mapper for {@link ResponseStatus}.
- * 
+ *
  * @author mlipper
  * @since 2.0
  * @see ResponseStatus

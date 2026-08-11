@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.web.search.response;
+package gov.nyc.doitt.gis.geoclient.search.response;
 
-import java.util.List;
+import gov.nyc.doitt.gis.geoclient.search.SearchResult;
 
-import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
+public class ParamsAndResult {
+    private final SearchParameters searchParameters;
+    private final SearchResult searchResult;
 
-public class ParseTree {
-
-    private List<Chunk> chunks;
-
-    public List<Chunk> getChunks() {
-        return chunks;
+    public ParamsAndResult(SearchParameters searchParameters, SearchResult searchResult) {
+        super();
+        this.searchParameters = searchParameters;
+        this.searchResult = searchResult;
     }
 
-    public void setChunks(List<Chunk> chunks) {
-        this.chunks = chunks;
+    public SearchParameters getSearchParameters() {
+        return searchParameters;
+    }
+
+    public SearchResult getSearchResult() {
+        return searchResult;
     }
 
 }

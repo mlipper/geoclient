@@ -23,4 +23,5 @@
  *
  * @since 2.0
  */
+
 package gov.nyc.doitt.gis.geoclient.search.mapper;

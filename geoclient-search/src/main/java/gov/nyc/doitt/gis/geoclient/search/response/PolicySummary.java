@@ -13,8 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.web.search.response;
+package gov.nyc.doitt.gis.geoclient.search.response;
 
-public enum Status {
-    OK, REJECTED
+public class PolicySummary {
+    private String name;
+    private String description;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

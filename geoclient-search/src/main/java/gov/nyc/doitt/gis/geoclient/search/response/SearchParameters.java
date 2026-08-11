@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.web.search.response;
+package gov.nyc.doitt.gis.geoclient.search.response;
 
 import gov.nyc.doitt.gis.geoclient.search.policy.DefaultExactMatchPolicy;
 import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSearchDepthPolicy;
 import gov.nyc.doitt.gis.geoclient.search.policy.DefaultSimilarNamesPolicy;
 import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
-import gov.nyc.doitt.gis.geoclient.service.web.InvalidSearchParametersException;
 
 public class SearchParameters {
     public static final int MAX_CONFIGURABLE_DEPTH = 6;
@@ -52,13 +51,11 @@ public class SearchParameters {
      */
     public void validate() {
         if (input == null || input.isEmpty()) {
-            throw new InvalidSearchParametersException(
-                "'input' request parameter is required and must not be empty");
+            throw new InvalidSearchParametersException("'input' request parameter is required and must not be empty");
         }
         if (maxDepth < 0 || maxDepth > MAX_CONFIGURABLE_DEPTH) {
             throw new InvalidSearchParametersException(
-                "'maxDepth' must be between 0 and " + MAX_CONFIGURABLE_DEPTH
-                        + " (inclusive); got " + maxDepth);
+                "'maxDepth' must be between 0 and " + MAX_CONFIGURABLE_DEPTH + " (inclusive); got " + maxDepth);
         }
     }
 

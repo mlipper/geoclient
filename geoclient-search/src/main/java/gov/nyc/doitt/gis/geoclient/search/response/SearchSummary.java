@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.web.search.response;
+package gov.nyc.doitt.gis.geoclient.search.response;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-@JsonPropertyOrder({"level", "status", "request", "response"})
 public class SearchSummary {
-    @JacksonXmlProperty(isAttribute = true)
     private String level;
-    @JacksonXmlProperty(isAttribute = true)
     private MatchStatus status;
-    @JacksonXmlProperty(isAttribute = true)
     private String request;
-    @JacksonXmlProperty(localName = "geosupportResponse")
     private Map<String, Object> response;
 
     public MatchStatus getStatus() {

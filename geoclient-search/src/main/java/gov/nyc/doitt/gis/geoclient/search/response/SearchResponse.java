@@ -13,41 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nyc.doitt.gis.geoclient.service.web.search.response;
+package gov.nyc.doitt.gis.geoclient.search.response;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
-import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 
-@JsonPropertyOrder(value = {"id", "status", "input", "results", "parseTree", "policy"})
-@JsonRootName(namespace = "", value = "searchResponse")
 public class SearchResponse {
-    @JacksonXmlProperty(isAttribute = true)
     private String id;
 
     private Status status;
 
     private String input;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "result")
     private List<SearchSummary> results;
 
-    @JacksonXmlElementWrapper(localName = "parseTree")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JacksonXmlProperty(localName = "chunk")
     private List<Chunk> parseTree;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JacksonXmlProperty(localName = "policy")
     private List<PolicySummary> policy;
 
     public String getId() {

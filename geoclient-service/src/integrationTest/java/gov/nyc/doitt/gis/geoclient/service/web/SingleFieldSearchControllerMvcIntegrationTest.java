@@ -44,11 +44,11 @@ import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 import gov.nyc.doitt.gis.geoclient.search.SearchResult;
 import gov.nyc.doitt.gis.geoclient.search.SingleFieldSearchHandler;
 import gov.nyc.doitt.gis.geoclient.search.policy.SearchPolicy;
-import gov.nyc.doitt.gis.geoclient.service.web.search.response.MatchStatus;
-import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchParameters;
-import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchResponse;
-import gov.nyc.doitt.gis.geoclient.service.web.search.response.SearchSummary;
-import gov.nyc.doitt.gis.geoclient.service.web.search.response.Status;
+import gov.nyc.doitt.gis.geoclient.search.response.MatchStatus;
+import gov.nyc.doitt.gis.geoclient.search.response.SearchParameters;
+import gov.nyc.doitt.gis.geoclient.search.response.SearchResponse;
+import gov.nyc.doitt.gis.geoclient.search.response.SearchSummary;
+import gov.nyc.doitt.gis.geoclient.search.response.Status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
