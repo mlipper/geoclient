@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 /**
- * Service-tier mappers scoped to {@code geoclient-service}.
+ * Framework-neutral mappers for {@code geoclient-search} types.
  * <p>
- * Only {@link ResponseStatusMapper} remains here because it depends on
- * {@code gov.nyc.doitt.gis.geoclient.search} types and cannot move to
- * {@code geoclient-core} without introducing a cyclic module dependency.
- * The framework-neutral {@code Mapper} abstraction and its general-purpose
- * implementations live in
+ * {@link ResponseStatusMapper} converts between {@link gov.nyc.doitt.gis.geoclient.search.ResponseStatus}
+ * and a {@code Map&lt;String, Object&gt;} of Geosupport output parameters.
+ * The general-purpose mapper abstraction lives in
  * {@code gov.nyc.doitt.gis.geoclient.api.mapper} in {@code geoclient-core}.
+ *
+ * @since 2.0
  */
-package gov.nyc.doitt.gis.geoclient.service.mapper;
+package gov.nyc.doitt.gis.geoclient.search.mapper;

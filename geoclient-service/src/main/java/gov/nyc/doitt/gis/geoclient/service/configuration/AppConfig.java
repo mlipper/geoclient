@@ -54,7 +54,7 @@ import gov.nyc.doitt.gis.geoclient.search.task.DefaultSpawnedTaskBuilder;
 import gov.nyc.doitt.gis.geoclient.search.task.InitialSearchTaskBuilder;
 import gov.nyc.doitt.gis.geoclient.search.task.SearchTaskFactory;
 import gov.nyc.doitt.gis.geoclient.search.task.SpawnedSearchTaskBuilder;
-import gov.nyc.doitt.gis.geoclient.service.mapper.ResponseStatusMapper;
+import gov.nyc.doitt.gis.geoclient.search.mapper.ResponseStatusMapper;
 
 /**
  * Java-based configuration for the <code>geoclient-service</code> application.
