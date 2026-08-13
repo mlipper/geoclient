@@ -293,7 +293,20 @@ Understanding these codes is *essential* for diagnosing issues with your geocodi
 
 === Geosupport Street Name Functions
 
-Geosupport has a rich model for streets and provides many functions and flags to support street processing. Geoclient supports calls to functions `D`, `DG`, and `DN` with the `/streetcode` endpoint and function `N` with the `/normalize` function.
+Geosupport has a rich model for streets and provides many functions and flags to support street processing. Geoclient supports calls to functions `D`, `DG`, and `DN` and function `N` with the `/normalize` function.
+
+with the `/streetcode` and `/streetcode/b5sc` endpoints
+
+For historical reasons, Geoclient supports two endpoints for retrieving street names from street codes. Functionally, both endpoints are equivalent (see the table below), but they return results in different top-level JSON properties/XML elements:
+
+* `/streetcode/b5sc` returns results in a top-level `response` property/element.
+* `/streetcode` returns results in a top-level `streetcode` property/element.
+
+Other than the top-level property/element, the two endpoints accept the same arguments and use the same logic when calling Geosupport:
+
+* Both endpoints use different Geosupport functions based on input (see the table below).
+* Both endpoints accept up to three `B5SC`, `B7SC`, and `B10SC` arguments.
+* Both endpoints assume that all arguments are of the same streetcode type (`B5SC`, `B7SC`, or `B10SC`). If they are not, the returned values will reflect only one arbitrarily chosen type and the data may be invalid for any other types returned in the response.
 
 The `/streetcode` endpoint calls different Geosupport functions depending on the type of street code given for the `streetCode`, `streetCodeTwo`, `streetCodeThree` parameters:
 
@@ -312,19 +325,6 @@ The `/streetcode` endpoint calls different Geosupport functions depending on the
 |`B10SC`
 |Function `DN`
 |===
-
-For a high-level overview of street code handling in Geosupport see the `Street (Name / Code)` section on this {dcp-goat}/UserGuide[page].
-
-This document describes the Geoclient API for calling these functions but not a description of what they do and how to use them. For that, DCP provides the (_drum roll please..._) {dcp-upg}[*Geosupport System User Programming Guide*]. For working with the `/normalize` endpoint, the reading following sections is probably enough to get you started:
-
-* {dcp-upg}/chapters/chapterIII/section01/[Section 3.1]
-* {dcp-upg}/chapters/chapterIII/section02/[Section 3.2]
-* {dcp-upg}/chapters/chapterIII/section03/[Section 3.3]
-
-To work effectively with the `streetcode` endpoint (i.e., functions `D`, `DG`, `DN`), you'll probably want to look through the following chapters:
-
-* {dcp-upg}/chapters/chapterIII/chapterIII/[Chapter III: Street Name Processing]
-* {dcp-upg}/chapters/chapterIV/chapterIV/[Chapter IV: Street Codes]
 
 The Geosupport input API used by the Geoclient `/normalize` and `/streetcode` endpoints is documented {dcp-upg-cows}#character-only-work-area-1-cow-all-functions[here].
 

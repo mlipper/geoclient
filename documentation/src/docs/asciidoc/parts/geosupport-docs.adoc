@@ -84,17 +84,19 @@ The following resources are invaluable for understanding the full range of retur
 Although sometimes cryptic or highly specifc, knowing where to look for these codes and how to interpret them can save you time and effort when troubleshooting geocoding issues.
 
 === Support for Geosupport Street Codes
+ 
+A short, high-level overview of Geosupport street code handling is available in the `Street (Name / Code)` section on this {dcp-goat}/UserGuide[page]. This provides a great introduction but doesn't go into enough detail if you need to understand the differences between primary, principal, and preferred street names. For advanced use-cases, DCP provides the (_drum roll please..._) {dcp-upg}[*Geosupport System User Programming Guide*].
 
-For historical reasons, Geoclient supports two endpoints for retrieving street names from street codes. Functionally, both endpoints are equivalent (see the table below), but they return results in different top-level JSON properties/XML elements:
+Geosupport's street-related functions (i.e., functions `D`, `DG`, `DN`) are covered in full detail in the following chapters:
 
-* `/streetcode/b5sc` returns results in a top-level `response` property/element.
-* `/streetcode` returns results in a top-level `streetcode` property/element.
+* {dcp-upg}/chapters/chapterIII/chapterIII/[Chapter III: Street Name Processing]
+* {dcp-upg}/chapters/chapterIV/chapterIV/[Chapter IV: Street Codes]
 
-Other than the top-level property/element, the two endpoints accept the same arguments and use the same logic when calling Geosupport:
+For working with the `/normalize` endpoint, the reading following sections is probably enough to get you started:
 
-* Both endpoints use different Geosupport functions based on input (see the table below).
-* Both endpoints accept up to three `B5SC`, `B7SC`, and `B10SC` arguments.
-* Both endpoints assume that all arguments are of the same streetcode type (`B5SC`, `B7SC`, or `B10SC`). If they are not, the returned values will reflect only one arbitrarily chosen type and the data may be invalid for any other types returned in the response.
+* {dcp-upg}/chapters/chapterIII/section01/[Section 3.1]
+* {dcp-upg}/chapters/chapterIII/section02/[Section 3.2]
+* {dcp-upg}/chapters/chapterIII/section03/[Section 3.3]
 
 For example, the address "2019 7th Avenue, Manhattan" is north of Central Park. In this location, a more "appropriate" name for 7th Avenue is (as reflected by street signs) "Adam Clayton Powell JR Boulevard" although both are considered valid.
 
