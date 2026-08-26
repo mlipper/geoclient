@@ -17,9 +17,17 @@ package gov.nyc.doitt.gis.geoclient.config;
 
 /**
  * Runtime exception thrown when an error occurs loading the XML configuration file.
+ *
+ * @author mlipper
  */
 public class XmlConfigurationException extends ConfigurationException {
 
+    /**
+     * Constructs a new XmlConfigurationException with the specified file and cause.
+     *
+     * @param file the path to the XML configuration file
+     * @param cause the underlying cause of the exception
+     */
     public XmlConfigurationException(String file, Throwable cause) {
         super("Error loading configuration file: " + file + " cause: " + cause.getMessage());
     }

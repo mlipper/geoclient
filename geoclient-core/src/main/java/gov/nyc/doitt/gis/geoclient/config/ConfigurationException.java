@@ -15,12 +15,19 @@
  */
 package gov.nyc.doitt.gis.geoclient.config;
 
+/**
+ * Base RuntimeException for configuration-related errors.
+ *
+ * @author mlipper
+ */
 public abstract class ConfigurationException extends RuntimeException {
-
     private static final long serialVersionUID = 1L;
-
+    /**
+     * Constructs a new ConfigurationException with the specified detail message.
+     *
+     * @param message the detail message.
+     */
     public ConfigurationException(String message) {
         super(message);
     }
-
 }

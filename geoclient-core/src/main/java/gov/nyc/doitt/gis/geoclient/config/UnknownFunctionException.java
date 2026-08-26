@@ -15,10 +15,20 @@
  */
 package gov.nyc.doitt.gis.geoclient.config;
 
+/**
+ * Exception thrown when a requested Geosupport function is not found in the configuration.
+ *
+ * @author mlipper
+ */
 public class UnknownFunctionException extends ConfigurationException {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new UnknownFunctionException with the specified function ID.
+     *
+     * @param functionId the ID of the unknown function
+     */
     public UnknownFunctionException(String functionId) {
         super(String.format("Unknown function id '%s'", functionId));
     }

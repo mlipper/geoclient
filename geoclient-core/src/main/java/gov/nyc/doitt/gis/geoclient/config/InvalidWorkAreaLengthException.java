@@ -17,9 +17,20 @@ package gov.nyc.doitt.gis.geoclient.config;
 
 import gov.nyc.doitt.gis.geoclient.function.WorkArea;
 
+/**
+ * Exception thrown when a {@link WorkArea} has an invalid length.
+ *
+ * @author mlipper
+ */
 public class InvalidWorkAreaLengthException extends ConfigurationException {
     private static final long serialVersionUID = 2151574091751991095L;
 
+    /**
+     * Exception indicating that a {@link WorkArea} has an invalid length.
+     *
+     * @param workArea the {@link WorkArea} instance with the invalid length.
+     * @param expectedLength the expected length of the {@link WorkArea}.
+     */
     public InvalidWorkAreaLengthException(WorkArea workArea, int expectedLength) {
         super(String.format("Length of WorkArea [id=%s] is invalid: expected=%d, actual=%d", workArea.getId(),
             expectedLength, workArea.length()));
