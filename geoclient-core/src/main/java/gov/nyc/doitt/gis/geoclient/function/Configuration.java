@@ -24,5 +24,10 @@ import java.util.Map;
  * @since 1.0
  */
 public interface Configuration {
+    /**
+     * Returns the required arguments for a {@link Function}.
+     *
+     * @return a map of required argument names to their default values or settings
+     */
     Map<String, Object> requiredArguments();
 }

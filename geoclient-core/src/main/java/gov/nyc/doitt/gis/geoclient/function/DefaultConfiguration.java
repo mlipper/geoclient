@@ -27,6 +27,29 @@ import java.util.Map;
 public class DefaultConfiguration implements Configuration {
     private Map<String, Object> requiredArguments;
 
+    /**
+     * Constructs a DefaultConfiguration with no required arguments.
+     */
+    public DefaultConfiguration() {
+        this.requiredArguments = null;
+    }
+
+    /**
+     * Constructs a DefaultConfiguration with the specified required arguments.
+     *
+     * @param requiredArguments a map of required argument names to their default values or settings
+     * @see Configuration#requiredArguments()
+     */
+    public DefaultConfiguration(Map<String, Object> requiredArguments) {
+        this.requiredArguments = requiredArguments;
+    }
+
+    /**
+     * Returns the required arguments for this configuration.
+     *
+     * @return a map of required argument names to their default values or settings
+     * @see Configuration#requiredArguments()
+     */
     @Override
     public Map<String, Object> requiredArguments() {
         if (requiredArguments == null) {
@@ -35,6 +58,11 @@ public class DefaultConfiguration implements Configuration {
         return Collections.unmodifiableMap(this.requiredArguments);
     }
 
+    /**
+     * Sets the required arguments for this configuration.
+     *
+     * @param requiredArguments a map of required argument names to their default values or settings
+     */
     public void setRequiredArguments(Map<String, Object> requiredArguments) {
         this.requiredArguments = requiredArguments;
     }

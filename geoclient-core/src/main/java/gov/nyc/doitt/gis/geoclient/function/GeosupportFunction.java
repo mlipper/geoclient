@@ -90,7 +90,7 @@ public class GeosupportFunction implements Function {
      * @param parameters a map of parameter names to values
      * @return a map of result names to values
      * @throws IllegalStateException if the function cannot be executed with the given parameters
-     * @see {@link Function#call(java.util.Map)}
+     * @see Function#call(java.util.Map)
      */
     @Override
     public Map<String, Object> call(Map<String, Object> parameters) {

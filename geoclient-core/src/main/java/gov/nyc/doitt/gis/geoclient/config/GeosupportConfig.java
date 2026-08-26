@@ -30,7 +30,7 @@ import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
  * to classes outside of this package.
  *
  * @author mlipper
- * @see {@link XmlConfigurationLoader}
+ * @see XmlConfigurationLoader
  */
 public class GeosupportConfig {
 

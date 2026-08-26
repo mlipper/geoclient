@@ -306,14 +306,29 @@ public class Field implements Comparable<Field> {
         return true;
     }
 
+    /**
+     * Returns the length of this field.
+     *
+     * @return the length of the field
+     */
     public Integer getLength() {
         return length;
     }
 
+    /**
+     * Returns the identifier of this field.
+     *
+     * @return the field identifier
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Returns the start position of this field.
+     *
+     * @return the start position of the field
+     */
     public Integer getStart() {
         return start;
     }
