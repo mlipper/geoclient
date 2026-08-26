@@ -23,6 +23,16 @@ import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
 
+/**
+ * Default implementation of the {@link Function} interface that represents a Geosupport function.
+ * It manages the work areas, configuration, and interaction with the Geoclient JNI layer.
+ * <p>
+ * This class provides methods to execute the function with one or two work areas and to retrieve the results.
+ * It also includes logging for function calls and buffer states.
+ *
+ * @author mlipper
+ * @since 1.0
+ */
 public class GeosupportFunction implements Function {
     private static final Logger log = LoggerFactory.getLogger(GeosupportFunction.class);
     //private static final Logger JNI_BUFFER_LOGGER = LoggerFactory.getLogger("GC_JNI_BUFFER_LOGGER");
@@ -32,6 +42,15 @@ public class GeosupportFunction implements Function {
     private final Geoclient geoclient;
     private final Configuration configuration;
 
+    /**
+     * Constructs a GeosupportFunction with the specified parameters.
+     *
+     * @param id the function identifier
+     * @param workAreaOne the first work area
+     * @param workAreaTwo the second work area
+     * @param geoclient the Geoclient JNI instance
+     * @param configuration the configuration for this function
+     */
     public GeosupportFunction(String id, WorkArea workAreaOne, WorkArea workAreaTwo, Geoclient geoclient,
             Configuration configuration) {
         super();
@@ -42,18 +61,36 @@ public class GeosupportFunction implements Function {
         this.configuration = configuration;
     }
 
+    /**
+     * Constructs a GeosupportFunction without a configuration.
+     *
+     * @param id the function identifier
+     * @param workAreaOne the first work area
+     * @param workAreaTwo the second work area
+     * @param geoclient the Geoclient JNI instance
+     */
     public GeosupportFunction(String id, WorkArea workAreaOne, WorkArea workAreaTwo, Geoclient geoclient) {
         this(id, workAreaOne, workAreaTwo, geoclient, null);
     }
 
+    /**
+     * Constructs a GeosupportFunction with only the first work area.
+     *
+     * @param id the function identifier
+     * @param workAreaOne the first work area
+     * @param geoclient the Geoclient JNI instance
+     */
     public GeosupportFunction(String id, WorkArea workAreaOne, Geoclient geoclient) {
         this(id, workAreaOne, null, geoclient);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Executes the function with the given parameters.
      *
-     * @see gov.nyc.doitt.gis.geoclient.function.Function#call(java.util.Map)
+     * @param parameters a map of parameter names to values
+     * @return a map of result names to values
+     * @throws IllegalStateException if the function cannot be executed with the given parameters
+     * @see {@link Function#call(java.util.Map)}
      */
     @Override
     public Map<String, Object> call(Map<String, Object> parameters) {
@@ -63,18 +100,38 @@ public class GeosupportFunction implements Function {
         return doOneWorkAreaCall(parameters);
     }
 
+    /**
+     * Returns the identifier of this function.
+     *
+     * @return the function identifier
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Returns the first work area associated with this function.
+     *
+     * @return the first work area
+     */
     public WorkArea getWorkAreaOne() {
         return workAreaOne;
     }
 
+    /**
+     * Returns the second work area associated with this function.
+     *
+     * @return the second work area
+     */
     public WorkArea getWorkAreaTwo() {
         return workAreaTwo;
     }
 
+    /**
+     * Returns a string representation of this function.
+     *
+     * @return a string representation of this function
+     */
     @Override
     public String toString() {
         return "Function [id=" + id + "]";
@@ -102,23 +159,45 @@ public class GeosupportFunction implements Function {
         return result;
     }
 
+    /**
+     * Indicates whether this function uses two work areas.
+     *
+     * @return true if the function uses two work areas, false otherwise
+     */
     public boolean isTwoWorkAreas() {
         return this.workAreaTwo != null;
     }
 
+    /**
+     * Returns the configuration associated with this function.
+     *
+     * @return the configuration
+     */
     public Configuration getConfiguration() {
         return configuration;
     }
 
+    /**
+     * Logs the function call at the debug level.
+     */
     private void logFunctionCall() {
         log.debug("Calling {}", this);
     }
 
+    /**
+     * Logs the contents of a work area buffer at the trace level.
+     *
+     * @param workArea the work area identifier
+     * @param inputOutput indicates whether the buffer is for input or output
+     * @param buffer the ByteBuffer containing the work area data
+     */
     private void logBuffer(String workArea, String inputOutput, ByteBuffer buffer) {
-        final String bufferString = new String(buffer.array());
-        log.trace("{}[{}]:'{}'", String.format("F%6s", this.id + "." + workArea), String.format("%6s", inputOutput),
-            bufferString);
-        //JNI_BUFFER_LOGGER.trace("{}[{}]:'{}'", String.format("F%6s", this.id + "." + workArea), String.format("%6s", inputOutput), bufferString);
+        if (log.isTraceEnabled()) {
+            final String bufferString = new String(buffer.array());
+            log.trace("{}[{}]:'{}'", String.format("F%6s", this.id + "." + workArea), String.format("%6s", inputOutput),
+                bufferString);
+            //JNI_BUFFER_LOGGER.trace("{}[{}]:'{}'", String.format("F%6s", this.id + "." + workArea), String.format("%6s", inputOutput), bufferString);
+        }
     }
 
 }

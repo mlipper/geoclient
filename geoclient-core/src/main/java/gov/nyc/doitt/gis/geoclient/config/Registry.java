@@ -30,7 +30,7 @@ import gov.nyc.doitt.gis.geoclient.function.WorkArea;
  * Registry for threadsafe management of singleton instances of {@link Filter},
  * {@link Function} and {@link WorkArea} providing methods to add, retrieve,
  * check existence, and clear these components.
- * 
+ *
  * @author mlipper
  */
 public class Registry {

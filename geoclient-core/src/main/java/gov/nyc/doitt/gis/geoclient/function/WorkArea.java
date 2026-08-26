@@ -30,8 +30,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author mlipper
+ * Represents a work area used in Geosupport function calls.
+ * <p>
+ * Geosupport work areas are fixed-length character buffers composed of
+ * position-delimited fields. In the Geosupport C API, these work areas are
+ * defined as character arrays as {@code void geo(char *ptr_wa1, char *ptr_wa2)}.
+ * <p>
+ * The {@code geoclient-jni} project uses {@code JNI} to this Geosupport C API,
+ * and work areas are represented as {@link ByteBuffer} instances.
+ * This class along with the other classes in this package provide higher
+ * level abstractions for working with Geosupport work areas.
  *
+ * @author mlipper
+ * @since 1.0
  */
 public class WorkArea {
     private static final Logger log = LoggerFactory.getLogger(WorkArea.class);
@@ -41,10 +52,21 @@ public class WorkArea {
     private final int length;
     private final List<Filter> outputFilters;
 
+    /**
+     * Constructs a WorkArea with the specified ID and fields.
+     * @param id WorkArea identifier
+     * @param fields Sorted set of fields in this WorkArea
+     */
     public WorkArea(String id, SortedSet<Field> fields) {
         this(id, fields, Collections.<Filter> emptyList());
     }
 
+    /**
+     * Constructs a WorkArea with the specified ID, fields, and output filters.
+     * @param id WorkArea identifier
+     * @param fields Sorted set of fields in this WorkArea
+     * @param outputFilters List of output filters for this WorkArea
+     */
     public WorkArea(String id, SortedSet<Field> fields, List<Filter> outputFilters) {
         super();
         this.id = id;
@@ -84,6 +106,11 @@ public class WorkArea {
         return buffer;
     }
 
+    /**
+     * Parses the results from the specified ByteBuffer into a map of field IDs to values.
+     * @param buffer ByteBuffer containing the results
+     * @return Map of field IDs to their corresponding values
+     */
     public Map<String, Object> parseResults(ByteBuffer buffer) {
         Map<String, Object> results = new TreeMap<String, Object>();
         for (Field field : fields) {
@@ -98,20 +125,40 @@ public class WorkArea {
         return results;
     }
 
+    /**
+     * Retrieves the list of field IDs for this WorkArea.
+     * @return List of field IDs
+     */
     public List<String> getFieldIds() {
         return this.getFieldIds(null, false, true);
     }
 
+    /**
+     * Retrieves the list of field IDs for this WorkArea based on the specified criteria.
+     * @param comparator Comparator to sort the fields, or null for natural order
+     * @param includeFiltered Whether to include filtered fields
+     * @param includeInputFields Whether to include input fields
+     * @return List of field IDs
+     */
     public List<String> getFieldIds(Comparator<Field> comparator, boolean includeFiltered, boolean includeInputFields) {
 
         return this.getFields(comparator, includeFiltered, includeInputFields).stream().map(Field::getId).collect(
             Collectors.toList());
     }
 
+    /**
+     * Retrieves the length of this WorkArea.
+     * @return length of the WorkArea
+     */
     public int length() {
         return this.length;
     }
 
+    /**
+     * Finds a field by its ID.
+     * @param id Field ID
+     * @return Field with the specified ID, or null if not found
+     */
     public Field findField(String id) {
         for (Field field : fields) {
             if (field.getId().equals(id)) {
@@ -121,10 +168,19 @@ public class WorkArea {
         return null;
     }
 
+    /**
+     * Retrieves the ID of this WorkArea.
+     * @return WorkArea ID
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Checks if the specified field is filtered by any of the output filters.
+     * @param field Field to check
+     * @return true if the field is filtered, false otherwise
+     */
     public boolean isFiltered(Field field) {
         for (Filter filter : this.outputFilters) {
             boolean matches = filter.matches(field);
@@ -136,6 +192,13 @@ public class WorkArea {
         return false;
     }
 
+    /**
+     * Retrieves the list of fields for this WorkArea based on the specified criteria.
+     * @param comparator Comparator to sort the fields, or null for natural order
+     * @param includeFiltered Whether to include filtered fields
+     * @param includeInputFields Whether to include input fields
+     * @return List of fields matching the criteria
+     */
     public List<Field> getFields(Comparator<Field> comparator, boolean includeFiltered, boolean includeInputFields) {
         List<Field> result = new ArrayList<Field>(this.fields.size());
         SortedSet<Field> sorted = this.fields;
@@ -162,6 +225,12 @@ public class WorkArea {
         return result;
     }
 
+    /**
+     * Resolves the input value for the specified field from the given parameters.
+     * @param parameters Map of parameter names to values
+     * @param field Field for which to resolve the input value
+     * @return Resolved input value, or null if not found or not an input field
+     */
     protected Object resolveInputValue(Map<String, Object> parameters, Field field) {
         if (!field.isInput()) {
             return null;
@@ -182,6 +251,10 @@ public class WorkArea {
         return value;
     }
 
+    /**
+     * Computes the total length of this WorkArea by summing the lengths of its non-composite fields.
+     * @return Total length of the WorkArea
+     */
     private int computeLength() {
         int totalLength = 0;
         for (Field field : fields) {

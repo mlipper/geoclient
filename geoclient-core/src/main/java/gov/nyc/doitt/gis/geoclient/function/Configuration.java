@@ -21,7 +21,7 @@ import java.util.Map;
  * Configuration information of {@link Function} defaults and settings.
  *
  * @author mlipper
- *
+ * @since 1.0
  */
 public interface Configuration {
     Map<String, Object> requiredArguments();

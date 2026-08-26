@@ -24,8 +24,19 @@ import org.slf4j.LoggerFactory;
 
 import gov.nyc.doitt.gis.geoclient.util.Assert;
 
+/**
+ * Core domain class representing a {@link WorkArea} field within a fixed-length record.
+ * This class provides methods for reading from and writing to the underlying
+ * {@link ByteBuffer} as well as metadata about the field necessary for a
+ * {@link WorkArea} to work with the fixed-length record as a whole.
+ *
+ * @author mlipper
+ * @since 1.0
+ */
 public class Field implements Comparable<Field> {
+    /** Default comparator for sorting fields by start position and length. */
     public final static Comparator<Field> DEFAULT_SORT = new Field.StartLengthComparator();
+    /** Comparator for sorting fields by name. */
     public final static Comparator<Field> NAME_SORT = new Field.NameStartLengthComparator();
     private final static Logger log = LoggerFactory.getLogger(Field.class);
     private final String id;
@@ -37,23 +48,71 @@ public class Field implements Comparable<Field> {
     private final boolean whitespaceSignificant;
     private final String outputAlias;
 
+    /**
+     * Constructs a new Field with the specified id, start position, and length.
+     *
+     * @param id the field identifier.
+     * @param start the start position of the field within the record.
+     * @param length the length of the field.
+     */
     public Field(String id, Integer start, Integer length) {
         this(id, start, length, false);
     }
 
+    /**
+     * Constructs a new Field with the specified id, start position, length, and composite flag.
+     *
+     * @param id the field identifier.
+     * @param start the start position of the field within the record.
+     * @param length the length of the field.
+     * @param composite whether the field is composite.
+     */
     public Field(String id, Integer start, Integer length, boolean composite) {
         this(id, start, length, composite, false, null);
     }
 
+    /**
+     * Constructs a new Field with the specified id, start position, length, composite flag, input flag, and alias.
+     *
+     * @param id the field identifier.
+     * @param start the start position of the field within the record.
+     * @param length the length of the field.
+     * @param composite whether the field is composite.
+     * @param input whether the field is an input field.
+     * @param alias the alias for the field.
+     */
     public Field(String id, Integer start, Integer length, boolean composite, boolean input, String alias) {
         this(id, start, length, composite, input, alias, false);
     }
 
+    /**
+     * Constructs a new Field with the specified id, start position, length, composite flag, input flag, alias, and whitespace significance.
+     *
+     * @param id the field identifier.
+     * @param start the start position of the field within the record.
+     * @param length the length of the field.
+     * @param composite whether the field is composite.
+     * @param input whether the field is an input field.
+     * @param alias the alias for the field.
+     * @param whitespace whether whitespace is significant for the field.
+     */
     public Field(String id, Integer start, Integer length, boolean composite, boolean input, String alias,
             boolean whitespace) {
         this(id, start, length, composite, input, alias, whitespace, null);
     }
 
+    /**
+     * Constructs a new Field with the specified id, start position, length, composite flag, input flag, alias, whitespace significance, and output alias.
+     *
+     * @param id the field identifier.
+     * @param start the start position of the field within the record.
+     * @param length the length of the field.
+     * @param composite whether the field is composite.
+     * @param input whether the field is an input field.
+     * @param alias the alias for the field.
+     * @param whitespace whether whitespace is significant for the field.
+     * @param outputAlias the output alias for the field.
+     */
     public Field(String id, Integer start, Integer length, boolean composite, boolean input, String alias,
             boolean whitespace, String outputAlias) {
         Assert.notNull(id, "Parameter 'id' cannot be null");
@@ -69,16 +128,33 @@ public class Field implements Comparable<Field> {
         this.outputAlias = outputAlias;
     }
 
+    /**
+     * Writes the field value to the specified ByteBuffer.
+     *
+     * @param buffer the ByteBuffer to write to.
+     */
     public void write(ByteBuffer buffer) {
         write(null, buffer);
     }
 
+    /**
+     * Writes the specified value to the given ByteBuffer.
+     *
+     * @param value the value to write.
+     * @param buffer the ByteBuffer to write to.
+     */
     public void write(Object value, ByteBuffer buffer) {
         log.debug("Writing {} with value {}", this, value);
         buffer.position(this.start);
         buffer.put(getBytes(value));
     }
 
+    /**
+     * Reads the field value from the specified ByteBuffer.
+     *
+     * @param buffer the ByteBuffer to read from.
+     * @return the field value as a String.
+     */
     public String read(ByteBuffer buffer) {
         byte[] bytes = new byte[this.length];
         buffer.position(this.start);
@@ -92,34 +168,75 @@ public class Field implements Comparable<Field> {
         return fieldValue;
     }
 
+    /**
+     * Checks if the field is composite.
+     *
+     * @return true if the field is composite, false otherwise.
+     */
     public boolean isComposite() {
         return composite;
     }
 
+    /**
+     * Gets the alias of the field.
+     *
+     * @return the alias of the field.
+     */
     public String getAlias() {
         return alias;
     }
 
+    /**
+     * Checks if the field has an alias.
+     *
+     * @return true if the field has an alias, false otherwise.
+     */
     public boolean isAliased() {
         return this.alias != null;
     }
 
+    /**
+     * Checks if the field is an input field.
+     *
+     * @return true if the field is an input field, false otherwise.
+     */
     public boolean isInput() {
         return input;
     }
 
+    /**
+     * Checks if whitespace is significant for the field.
+     *
+     * @return true if whitespace is significant, false otherwise.
+     */
     public boolean isWhitespaceSignificant() {
         return whitespaceSignificant;
     }
 
+    /**
+     * Gets the output alias of the field.
+     *
+     * @return the output alias of the field.
+     */
     public String getOutputAlias() {
         return outputAlias;
     }
 
+    /**
+     * Checks if the field has an output alias.
+     *
+     * @return true if the field has an output alias, false otherwise.
+     */
     public boolean isOutputAliased() {
         return this.outputAlias != null;
     }
 
+    /**
+     * Converts the specified value to a byte array suitable for writing to a ByteBuffer.
+     *
+     * @param value the value to convert.
+     * @return the byte array representation of the value.
+     */
     protected byte[] getBytes(Object value) {
         // Allocate result array
         byte[] bytes = new byte[this.length];
@@ -208,6 +325,9 @@ public class Field implements Comparable<Field> {
                 + outputAlias + "]";
     }
 
+    /**
+     * Comparator that compares fields based on their start and length.
+     */
     public static class StartLengthComparator implements Comparator<Field> {
 
         @Override
@@ -222,6 +342,9 @@ public class Field implements Comparable<Field> {
         }
     }
 
+    /**
+     * Comparator that compares fields based on their name, start, and length.
+     */
     public static class NameStartLengthComparator implements Comparator<Field> {
 
         @Override

@@ -18,6 +18,12 @@ package gov.nyc.doitt.gis.geoclient.function;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Default implementation of the {@link Configuration} interface.
+ *
+ * @author mlipper
+ * @since 1.0
+ */
 public class DefaultConfiguration implements Configuration {
     private Map<String, Object> requiredArguments;
 
