@@ -1,4 +1,6 @@
+# Handle text files automatically and normalize them to LF on commit
 * text=auto eol=lf
-*.{cmd,[cC][mM][dD]} text eol=crlf
-*.{bat,[bB][aA][tT]} text eol=crlf
 
+# Explicitly preserve CRLF for Windows-specific batch scripts
+*.[bB][aA][tT] text eol=crlf
+*.[cC][mM][dD] text eol=crlf
