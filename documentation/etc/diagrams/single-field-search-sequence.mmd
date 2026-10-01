@@ -1,0 +1,80 @@
+sequenceDiagram
+    participant Client
+    participant Handler as SingleFieldSearchHandler
+    participant Tokenizer as LocationTokenizer
+    participant Factory as SearchTaskFactory
+    participant InitBuilder as InitialSearchTaskBuilder
+    participant Result as SearchResult
+    participant Task as SearchTask
+    participant Invoker as GeosupportInvoker
+    participant StatusReader as ResponseStatusReader
+    participant Policy as SearchPolicy
+    participant ExactPolicy as ExactMatchPolicy
+    participant DepthPolicy as SearchDepthPolicy
+    participant SpawnBuilder as SpawnedSearchTaskBuilder
+
+    Client->>Handler: findLocation(searchPolicy, inputString)
+    Handler->>Tokenizer: parse(input)
+    Tokenizer-->>Handler: locationTokens
+
+    Handler->>Handler: doInitialSearch(searchPolicy, locationTokens)
+    activate Handler
+    Handler->>Factory: buildInitialSearchTasks(searchPolicy, locationTokens)
+    Factory->>InitBuilder: getSearchTasks(searchPolicy, locationTokens)
+    InitBuilder-->>Factory: List<SearchTask>
+    Factory-->>Handler: List<SearchTask>
+
+    Handler->>Result: new SearchResult(searchPolicy, locationTokens)
+    activate Result
+    Result-->>Handler: searchResult
+
+    Handler->>Handler: doSearches(searchResult, searchTasks)
+    activate Handler
+    loop for each SearchTask
+        Handler->>Handler: doSearch(searchTask)
+        activate Handler
+        Handler->>Task: executorService.submit(searchTask) -> call()
+        activate Task
+        Task->>Task: doCall()
+        Task->>Invoker: invoke Geosupport function
+        Invoker-->>Task: result map
+        Task->>StatusReader: read(actualResult)
+        StatusReader-->>Task: responseStatus
+        Task-->>Handler: new Search(request, response)
+        deactivate Task
+        Handler-->>Handler: search
+        deactivate Handler
+        Handler->>Result: add(search)
+        Result-->>Result: update currentLevel
+    end
+    deactivate Handler
+    Handler-->>Handler: searchResult populated
+    deactivate Handler
+    deactivate Result
+
+    Handler->>Result: isExactMatch()
+    Result->>Policy: findExactMatch(searchResult)
+    Policy->>ExactPolicy: findExactMatch(searchResult)
+    ExactPolicy-->>Policy: Search or null
+    Policy-->>Result: Search or null
+    Result-->>Handler: true/false
+
+    alt exact match found
+        Handler-->>Client: return searchResult
+    else no exact match
+        loop while sub-searches exist and no exact match
+            Handler->>Handler: doSubSearches(searchResult)
+            activate Handler
+            Handler->>Factory: buildSubsearchTasks(searchResult)
+            Factory->>SpawnBuilder: getSearchTasks(searchResult)
+            SpawnBuilder-->>Factory: List<SearchTask>
+            Factory-->>Handler: List<SearchTask>
+            Handler->>Handler: doSearches(searchResult, subSearches)
+            Note over Handler,Result: Same per-task flow as initial search:<br/>submit to executor, call(), doCall(),<br/>read status, new Search, result.add()
+            Handler->>Result: isExactMatch()
+            Result->>Policy: findExactMatch(searchResult)
+            Policy->>DepthPolicy: inputForSubSearches(searchResult) [next iteration check]
+            deactivate Handler
+        end
+        Handler-->>Client: return searchResult
+    end

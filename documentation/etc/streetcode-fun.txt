@@ -1,0 +1,167 @@
+13617002
+13619001
+13621002
+https://a030-goat.nyc.gov/Goat/FunctionD?B10SC=13617002&B10SC2=13619001&B10SC3=13621002
+
+https://a030-goat.nyc.gov/Goat/FunctionD?B7SC=13617002&B7SC2=12123001&B7SC3=11061006
+
+https://a030-goat.nyc.gov/Goat/FunctionD?B10SC=13617002&B10SC2=12123001&B10SC3=11061001020
+
+https://a030-goat.nyc.gov/Goat/FunctionD?B10SC=13617002&B10SC2=110610&B10SC3=11061001020
+
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode?streetCode=13617002&streetcode2=13619001&streetCode3=13621002' | jq
+
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode/b5sc?streetCode=14560101&streetcode2=1061001&streetCode3=12969001010' | jq
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode?streetCode=13617002&streetcode2=13619001&streetCode3=13621002' | jq
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode/b5sc?streetCode=13617002&streetcode2=13619001&streetCode3=13621002' | jq
+
+# Works: /streetcode B7SC, B7SC, B10SC
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode?streetCode=13617002&streetCodeTwo=13621002&streetCodeThree=11061001020' | jq
+
+{
+  "streetcode": {
+    "boroughCode1In": "1",
+    "boroughCode2In": "1",
+    "boroughCode3In": "1",
+    "firstStreetCode": "13617002010",
+    "firstStreetNameNormalized": "WEST  120 STREET",
+    "geosupportFunctionCode": "DG",
+    "geosupportReturnCode": "00",
+    "secondStreetCode": "13621002010",
+    "secondStreetNameNormalized": "WEST  122 STREET",
+    "streetCode1In": "3617002",
+    "streetCode2In": "3621002",
+    "streetCode3In": "1061001020",
+    "streetNameNormalizationFormatFlagIn": "S",
+    "streetNameNormalizationLengthLimitIn": "32",
+    "thirdStreetCode": "11061001100",
+    "thirdStreetNameNormalized": "ADAM CLAYTON POWELL JR BOULEVARD",
+    "workAreaFormatIndicatorIn": "C"
+  }
+}
+
+# Works: /streetcode/b5sc B7SC, B7SC, B10SC
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode/b5sc?streetCode=13617002&streetCodeTwo=13621002&streetCodeThree=11061001020' | jq
+
+{
+  "response": {
+    "boroughCode1In": "1",
+    "boroughCode2In": "1",
+    "boroughCode3In": "1",
+    "firstStreetCode": "13617002010",
+    "firstStreetNameNormalized": "WEST  120 STREET",
+    "geosupportFunctionCode": "DG",
+    "geosupportReturnCode": "00",
+    "secondStreetCode": "13621002010",
+    "secondStreetNameNormalized": "WEST  122 STREET",
+    "streetCode1In": "3617002",
+    "streetCode2In": "3621002",
+    "streetCode3In": "1061001020",
+    "streetNameNormalizationFormatFlagIn": "S",
+    "streetNameNormalizationLengthLimitIn": "32",
+    "thirdStreetCode": "11061001100",
+    "thirdStreetNameNormalized": "ADAM CLAYTON POWELL JR BOULEVARD",
+    "workAreaFormatIndicatorIn": "C"
+  }
+}
+
+# Works: /streetcode B5SC, B7SC, B10SC
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode?streetCode=110610&streetCodeTwo=13621002&streetCodeThree=11061001020' | jq
+
+  "streetcode": {
+    "boroughCode1In": "1",
+    "boroughCode2In": "1",
+    "boroughCode3In": "1",
+    "firstStreetCode": "11061004010",
+    "firstStreetNameNormalized": "7 AVENUE",
+    "geosupportFunctionCode": "D",
+    "geosupportReturnCode": "00",
+    "secondStreetCode": "13621002010",
+    "secondStreetNameNormalized": "WEST  122 STREET",
+    "streetCode1In": "10610",
+    "streetCode2In": "3621002",
+    "streetCode3In": "1061001020",
+    "streetNameNormalizationFormatFlagIn": "S",
+    "streetNameNormalizationLengthLimitIn": "32",
+    "thirdStreetCode": "11061004010",
+    "thirdStreetNameNormalized": "7 AVENUE",
+    "workAreaFormatIndicatorIn": "C"
+  }
+}
+
+# Works: /streetcode/b5sc B5SC, B7SC, B10SC
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode/b5sc?streetCode=110610&streetCodeTwo=13621002&streetCodeThree=11061001020' | jq
+
+{
+  "response": {
+    "boroughCode1In": "1",
+    "boroughCode2In": "1",
+    "boroughCode3In": "1",
+    "firstStreetCode": "11061004010",
+    "firstStreetNameNormalized": "7 AVENUE",
+    "geosupportFunctionCode": "D",
+    "geosupportReturnCode": "00",
+    "secondStreetCode": "13621002010",
+    "secondStreetNameNormalized": "WEST  122 STREET",
+    "streetCode1In": "10610",
+    "streetCode2In": "3621002",
+    "streetCode3In": "1061001020",
+    "streetNameNormalizationFormatFlagIn": "S",
+    "streetNameNormalizationLengthLimitIn": "32",
+    "thirdStreetCode": "11061004010",
+    "thirdStreetNameNormalized": "7 AVENUE",
+    "workAreaFormatIndicatorIn": "C"
+  }
+}
+
+# Error: /streetcode B7SC, B5SC, B10SC
+# Only returns result for B7SC even though all response showed that all three were passed to Geosupport
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode?streetCode=13617002&streetCodeTwo=110610&streetCodeThree=11061001020' | jq
+
+{
+  "streetcode": {
+    "boroughCode1In": "1",
+    "boroughCode2In": "1",
+    "boroughCode3In": "1",
+    "firstStreetCode": "13617002010",
+    "firstStreetNameNormalized": "WEST  120 STREET",
+    "geosupportFunctionCode": "DG",
+    "geosupportReturnCode": "64",
+    "message": "STREET CODE NOT FOUND",
+    "secondStreetNameNormalized": "????????????????????????????????",
+    "streetCode1In": "3617002",
+    "streetCode2In": "10610",
+    "streetCode3In": "1061001020",
+    "streetNameNormalizationFormatFlagIn": "S",
+    "streetNameNormalizationLengthLimitIn": "32",
+    "thirdStreetCode": "11061001100",
+    "thirdStreetNameNormalized": "ADAM CLAYTON POWELL JR BOULEVARD",
+    "workAreaFormatIndicatorIn": "C"
+  }
+}
+
+# Error: /streetcode/b5sc B7SC, B5SC, B10SC
+# Only returns result for B7SC even though all response showed that all three were passed to Geosupport
+curl -k -s --get 'http://localhost:9090/geoclient/v2/streetcode/b5sc?streetCode=13617002&streetCodeTwo=110610&streetCodeThree=11061001020' | jq
+
+{
+  "response": {
+    "boroughCode1In": "1",
+    "boroughCode2In": "1",
+    "boroughCode3In": "1",
+    "firstStreetCode": "13617002010",
+    "firstStreetNameNormalized": "WEST  120 STREET",
+    "geosupportFunctionCode": "DG",
+    "geosupportReturnCode": "64",
+    "message": "STREET CODE NOT FOUND",
+    "secondStreetNameNormalized": "????????????????????????????????",
+    "streetCode1In": "3617002",
+    "streetCode2In": "10610",
+    "streetCode3In": "1061001020",
+    "streetNameNormalizationFormatFlagIn": "S",
+    "streetNameNormalizationLengthLimitIn": "32",
+    "thirdStreetCode": "11061001100",
+    "thirdStreetNameNormalized": "ADAM CLAYTON POWELL JR BOULEVARD",
+    "workAreaFormatIndicatorIn": "C"
+  }
+}
