@@ -78,13 +78,13 @@ This section coved only the most basic meaning of Geosupport return codes. In pr
 
 The following resources are invaluable for understanding the full range of return codes, reasons, and messages that Geosupport may produce:
 
-* {dcp-upg}/appendices/appendix04/[Geosupport Return Codes, Reasons Codes and Messages] summarizes return codes, reason codes, and messages. 
+* {dcp-upg}/appendices/appendix04/[Geosupport Return Codes, Reasons Codes and Messages] summarizes return codes, reason codes, and messages.
 * {dcp-upg}/chapters/chapterII/section02/[Geosupport Return Codes and Reject Handling] provides a detailed overview of how Geosupport handles errors and returns codes.
 
 Although sometimes cryptic or highly specifc, knowing where to look for these codes and how to interpret them can save you time and effort when troubleshooting geocoding issues.
 
 === Support for Geosupport Street Codes
- 
+
 A short, high-level overview of Geosupport street code handling is available in the `Street (Name / Code)` section on this {dcp-goat}/UserGuide[page]. This provides a great introduction but doesn't go into enough detail if you need to understand the differences between primary, principal, and preferred street names. For advanced use-cases, DCP provides the (_drum roll please..._) {dcp-upg}[*Geosupport System User Programming Guide*].
 
 Geosupport's street-related functions (i.e., functions `D`, `DG`, `DN`) are covered in full detail in the following chapters:
@@ -100,7 +100,7 @@ For working with the `/normalize` endpoint, the reading following sections is pr
 
 For example, the address "2019 7th Avenue, Manhattan" is north of Central Park. In this location, a more "appropriate" name for 7th Avenue is (as reflected by street signs) "Adam Clayton Powell JR Boulevard" although both are considered valid.
 
-.Geosupport `streetcode` functions 
+.Geosupport `streetcode` functions
 [cols="1a,1a,1a,1a,3a"]
 |===
 | Input | Geosupport Function | Name Returned | Example Code | Example Name
@@ -113,13 +113,13 @@ For example, the address "2019 7th Avenue, Manhattan" is north of Central Park. 
 
 | `B7SC`
 | `DG`
-| Principle street name
+| Principal street name
 | 11061001
 | ADAM CLAYTON POWELL JR BOULEVARD
 
 | `B10SC`
 | `DN`
-| Principle street name
+| Principal street name
 | 11061001100
 | ADAM CLAYTON POWELL JR BOULEVARD
 |===
