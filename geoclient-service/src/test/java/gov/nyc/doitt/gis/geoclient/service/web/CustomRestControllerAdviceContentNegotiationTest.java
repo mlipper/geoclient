@@ -39,6 +39,7 @@ import gov.nyc.doitt.gis.geoclient.api.InvalidStreetCodeException;
 import gov.nyc.doitt.gis.geoclient.service.web.filter.LegacyFileExtensionFilter;
 
 public class CustomRestControllerAdviceContentNegotiationTest {
+    // spotless:off
 
     private MockMvc mockMvc;
 
@@ -110,4 +111,5 @@ public class CustomRestControllerAdviceContentNegotiationTest {
             throw new InvalidStreetCodeException("xx");
         }
     }
+    // spotless:on
 }

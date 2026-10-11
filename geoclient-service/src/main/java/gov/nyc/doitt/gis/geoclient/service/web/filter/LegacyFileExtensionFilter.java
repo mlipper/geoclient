@@ -75,7 +75,7 @@ public class LegacyFileExtensionFilter extends GenericFilterBean {
      * However, {@code GET} requests from a browser will usually be
      * {@code text/html,application/xhtml+xml,application/xml} so
      * {@code application/xml} will be returned. This may be unexpected but
-     * acceptable given the manual nature of using browser this way. 
+     * acceptable given the manual nature of using browser this way.
      *
      * @param request the {@link jakarta.servlet.ServletRequest}
      * @param response the {@link jakarta.servlet.ServletResponse}
@@ -91,7 +91,7 @@ public class LegacyFileExtensionFilter extends GenericFilterBean {
         logger.info("Examining request URI: {}", originalUri);
         String newUri = originalUri;
         Map<String, String[]> newQueryParams = new HashMap<>();
-        
+
         String lowerUri = originalUri.toLowerCase();
         boolean hasSuffix = false;
         if (lowerUri.endsWith(FILE_EXT_JSON)) {
@@ -102,12 +102,13 @@ public class LegacyFileExtensionFilter extends GenericFilterBean {
             newUri = originalUri.substring(0, originalUri.length() - FILE_EXT_XML.length());
             hasSuffix = true;
         }
-        
+
         String existingFormat = requestedFormat(httpRequest);
         if (existingFormat != null) {
             logger.info("f={}", existingFormat);
             newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { existingFormat });
-        } else if (hasSuffix) {
+        }
+        else if (hasSuffix) {
             if (lowerUri.endsWith(FILE_EXT_JSON)) {
                 newQueryParams.put(QUERY_PARAM_FORMAT, new String[] { "json" });
             }

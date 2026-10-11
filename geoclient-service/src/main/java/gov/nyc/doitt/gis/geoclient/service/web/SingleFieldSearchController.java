@@ -34,7 +34,7 @@ import gov.nyc.doitt.gis.geoclient.search.response.SearchResponse;
 public class SingleFieldSearchController {
 
     public static final String SEARCH_URI = "/search";
-    
+
     @Autowired
     private SingleFieldSearchHandler singleFieldSearchHandler;
 

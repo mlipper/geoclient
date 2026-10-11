@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,9 +30,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import gov.nyc.doitt.gis.geoclient.api.GeosupportResponse;
+import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportService;
 import gov.nyc.doitt.gis.geoclient.api.version.ServiceType;
 import gov.nyc.doitt.gis.geoclient.api.version.Version;
-import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportService;
 
 /**
  * Handles RESTful requests for Geosupport data.

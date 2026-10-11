@@ -26,8 +26,8 @@ import org.springframework.web.ErrorResponseException;
  * For use with Spring's support for <a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457</a>
  * support.
  *
- * @author mlipper 
- * @see ErrorResponseException 
+ * @author mlipper
+ * @see ErrorResponseException
  */
 public class MissingBoroughAndZipRequestParameters extends ErrorResponseException {
 

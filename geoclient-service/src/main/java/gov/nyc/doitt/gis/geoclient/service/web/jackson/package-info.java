@@ -22,4 +22,5 @@
  * the metadata in this package keeps the domain classes free of Jackson
  * imports.
  */
+
 package gov.nyc.doitt.gis.geoclient.service.web.jackson;

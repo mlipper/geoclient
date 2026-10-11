@@ -23,7 +23,6 @@ import static gov.nyc.doitt.gis.geoclient.function.Function.FDG;
 import static gov.nyc.doitt.gis.geoclient.service.web.RestController.ADDRESS_URI;
 import static gov.nyc.doitt.gis.geoclient.service.web.RestController.STREETCODE_URI;
 import static gov.nyc.doitt.gis.geoclient.service.web.RestController.VERSION_URI;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
@@ -55,17 +54,12 @@ public class RestControllerIntegrationTest {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_jsonFileExtension(@Autowired RestTestClient client) {
-        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".json").queryParam("houseNumber", "100").queryParam(
-            "street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".json").queryParam("houseNumber",
+            "100").queryParam("street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
-        EntityExchangeResult<Map> result = client.get()
-                            .uri(uri)
-                            .exchange()
-                            .expectStatus()
-                            .is2xxSuccessful()
-                            .expectHeader()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .expectBody(Map.class).returnResult();
+        EntityExchangeResult<Map> result = client.get().uri(
+            uri).exchange().expectStatus().is2xxSuccessful().expectHeader().contentType(
+                MediaType.APPLICATION_JSON).expectBody(Map.class).returnResult();
         Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);
         Map<String, Object> address = (Map<String, Object>) body.get("address");
@@ -75,20 +69,15 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_xmlFileExtension(@Autowired RestTestClient client) {
-        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".xml").queryParam("houseNumber", "100").queryParam(
-            "street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI + ".xml").queryParam("houseNumber",
+            "100").queryParam("street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
-        EntityExchangeResult<Map> result = client.get()
-                            .uri(uri)
-                            .exchange()
-                            .expectStatus()
-                            .is2xxSuccessful()
-                            .expectHeader()
-                            .contentType(MediaType.APPLICATION_XML)
-                            .expectBody(Map.class).returnResult();
+        EntityExchangeResult<Map> result = client.get().uri(
+            uri).exchange().expectStatus().is2xxSuccessful().expectHeader().contentType(
+                MediaType.APPLICATION_XML).expectBody(Map.class).returnResult();
         Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);
         Map<String, Object> address = (Map<String, Object>) body.get("address");
@@ -101,9 +90,10 @@ public class RestControllerIntegrationTest {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_noFileExtensionNoParam(@Autowired RestTestClient client) {
-        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
-            "Centre St").queryParam("borough", "Manhattan").build().toUri();
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam(
+            "street", "Centre St").queryParam("borough", "Manhattan").build().toUri();
         LOGGER.info("URI={}", uri);
+        // spotless:off
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -119,14 +109,16 @@ public class RestControllerIntegrationTest {
         assertThat(address.get("geosupportReturnCode").equals(SUCCESS));
         assertThat(address.containsKey("geosupportFunctionCode"));
         assertThat(address.get("geosupportFunctionCode").equals(F1B));
+        // spotless:on
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_noFileExtensionJsonParam(@Autowired RestTestClient client) {
-        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
-            "Centre St").queryParam("borough", "Manhattan").queryParam("f", "json").build().toUri();
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam(
+            "street", "Centre St").queryParam("borough", "Manhattan").queryParam("f", "json").build().toUri();
         LOGGER.info("URI={}", uri);
+        // spotless:off
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -135,6 +127,7 @@ public class RestControllerIntegrationTest {
                             .expectHeader()
                             .contentType(MediaType.APPLICATION_JSON)
                             .expectBody(Map.class).returnResult();
+        // spotless:on
         Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);
         Map<String, Object> address = (Map<String, Object>) body.get("address");
@@ -147,9 +140,10 @@ public class RestControllerIntegrationTest {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testAddress_noFileExtensionXmlParam(@Autowired RestTestClient client) {
-        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam("street",
-            "Centre St").queryParam("borough", "Manhattan").queryParam("f", "xml").build().toUri();
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + ADDRESS_URI).queryParam("houseNumber", "100").queryParam(
+            "street", "Centre St").queryParam("borough", "Manhattan").queryParam("f", "xml").build().toUri();
         LOGGER.info("URI={}", uri);
+        // spotless:off
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -158,6 +152,7 @@ public class RestControllerIntegrationTest {
                             .expectHeader()
                             .contentType(MediaType.APPLICATION_XML)
                             .expectBody(Map.class).returnResult();
+        // spotless:on
         Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", ADDRESS_URI, body);
         Map<String, Object> address = (Map<String, Object>) body.get("address");
@@ -170,8 +165,10 @@ public class RestControllerIntegrationTest {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testStreetcode_FDG(@Autowired RestTestClient client) {
-        URI uri = UriComponentsBuilder.fromPath(BASE_URI + STREETCODE_URI).queryParam(STREET_CODE, "110610").build().toUri();
+        URI uri = UriComponentsBuilder.fromPath(BASE_URI + STREETCODE_URI).queryParam(STREET_CODE,
+            "110610").build().toUri();
         LOGGER.info("URI={}", uri);
+        // spotless:off
         EntityExchangeResult<Map> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -180,6 +177,7 @@ public class RestControllerIntegrationTest {
                             .expectHeader()
                             .contentType(MediaType.APPLICATION_JSON)
                             .expectBody(Map.class).returnResult();
+        // spotless:on
         Map<String, Object> body = result.getResponseBody();
         LOGGER.info("{} response body: {}", STREETCODE_URI, body);
         Map<String, Object> streetcode = (Map<String, Object>) body.get(STREET_CODE.toLowerCase());
@@ -193,6 +191,7 @@ public class RestControllerIntegrationTest {
     public void testVersion(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + VERSION_URI).build().toUri();
         LOGGER.info("URI={}", uri);
+        // spotless:off
         EntityExchangeResult<Version> result = client.get()
                             .uri(uri)
                             .exchange()
@@ -201,6 +200,7 @@ public class RestControllerIntegrationTest {
                             .expectHeader()
                             .contentType(MediaType.APPLICATION_JSON)
                             .expectBody(Version.class).returnResult();
+        // spotless:on
         Version actual = result.getResponseBody();
         LOGGER.info("{} -> {}", uri.toASCIIString(), actual);
         assertThat(actual.getAccessMethod()).isNotEmpty();

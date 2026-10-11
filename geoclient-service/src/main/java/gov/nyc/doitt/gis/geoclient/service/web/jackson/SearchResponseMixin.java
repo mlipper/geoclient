@@ -17,25 +17,24 @@ package gov.nyc.doitt.gis.geoclient.service.web.jackson;
 
 import java.util.List;
 
-import org.springframework.boot.jackson.JacksonMixin;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.springframework.boot.jackson.JacksonMixin;
 
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 import gov.nyc.doitt.gis.geoclient.search.response.PolicySummary;
 import gov.nyc.doitt.gis.geoclient.search.response.SearchResponse;
 import gov.nyc.doitt.gis.geoclient.search.response.SearchSummary;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Jackson mix-in that supplies wire-format metadata for {@link SearchResponse}.
  */
 @JacksonMixin(SearchResponse.class)
-@JsonPropertyOrder(value = {"id", "status", "input", "results", "parseTree", "policy"})
+@JsonPropertyOrder(value = { "id", "status", "input", "results", "parseTree", "policy" })
 @JsonRootName(namespace = "", value = "searchResponse")
 abstract class SearchResponseMixin {
 

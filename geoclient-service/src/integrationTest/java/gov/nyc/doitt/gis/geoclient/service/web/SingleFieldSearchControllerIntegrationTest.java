@@ -40,11 +40,12 @@ import gov.nyc.doitt.gis.geoclient.search.response.Status;
 @AutoConfigureRestTestClient
 public class SingleFieldSearchControllerIntegrationTest {
 
-    private final Logger logger = LoggerFactory.getLogger(gov.nyc.doitt.gis.geoclient.service.web.SingleFieldSearchController.class);
+    private final Logger logger = LoggerFactory.getLogger(
+        gov.nyc.doitt.gis.geoclient.service.web.SingleFieldSearchController.class);
 
-    // TODO replace with environment variable
     private static final String BASE_URI = "/geoclient/v2";
 
+    // spotless:off
     @Test
     public void testSearch(@Autowired RestTestClient client) {
         URI uri = UriComponentsBuilder.fromPath(BASE_URI + SEARCH_URI).queryParam("input", "120 broadway").build().toUri();
@@ -64,4 +65,5 @@ public class SingleFieldSearchControllerIntegrationTest {
         assertThat(
             searchResponse.getResults().stream().anyMatch(s -> s.getStatus().equals(MatchStatus.POSSIBLE_MATCH)));
     }
+    // spotless:on
 }

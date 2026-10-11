@@ -17,9 +17,9 @@ package gov.nyc.doitt.gis.geoclient.service.web.jackson;
 
 import java.util.List;
 
-import org.springframework.boot.jackson.JacksonMixin;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import org.springframework.boot.jackson.JacksonMixin;
 
 import gov.nyc.doitt.gis.geoclient.api.version.FileInfo;
 import gov.nyc.doitt.gis.geoclient.api.version.GeosupportVersion;

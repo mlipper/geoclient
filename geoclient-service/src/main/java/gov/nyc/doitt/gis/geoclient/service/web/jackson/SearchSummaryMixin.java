@@ -17,20 +17,19 @@ package gov.nyc.doitt.gis.geoclient.service.web.jackson;
 
 import java.util.Map;
 
-import org.springframework.boot.jackson.JacksonMixin;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.springframework.boot.jackson.JacksonMixin;
 
 import gov.nyc.doitt.gis.geoclient.search.response.MatchStatus;
 import gov.nyc.doitt.gis.geoclient.search.response.SearchSummary;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Jackson mix-in that supplies wire-format metadata for {@link SearchSummary}.
  */
 @JacksonMixin(SearchSummary.class)
-@JsonPropertyOrder({"level", "status", "request", "response"})
+@JsonPropertyOrder({ "level", "status", "request", "response" })
 abstract class SearchSummaryMixin {
 
     @JacksonXmlProperty(isAttribute = true)

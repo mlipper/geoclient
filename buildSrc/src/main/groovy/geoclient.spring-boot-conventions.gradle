@@ -1,6 +1,7 @@
 plugins {
     id 'geoclient.jar-conventions'
     id 'geoclient.test-conventions'
+    id 'geoclient.verification-conventions'
     id 'org.springframework.boot'
 }
 

@@ -38,7 +38,7 @@ import gov.nyc.doitt.gis.geoclient.api.invoker.GeosupportService;
 import gov.nyc.doitt.gis.geoclient.service.web.filter.LegacyFileExtensionFilter;
 
 public class RestControllerErrorContentNegotiationTest {
-
+    // spotless:off
     private MockMvc mockMvc;
     private GeosupportService geosupportService;
 
@@ -76,7 +76,8 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void addressXmlWithMissingRequiredStreetReturnsXmlProblemDetail() throws Exception {
-        this.mockMvc.perform(get("/address.xml").queryParam("borough", "manhattan"))
+        this.mockMvc.perform(get("/address.xml")
+            .queryParam("borough", "manhattan"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_XML))
             .andExpect(content().string(startsWith("<")));
@@ -86,7 +87,9 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void addressWithLegacyFormatParameterJsonReturnsJsonProblemDetail() throws Exception {
-        this.mockMvc.perform(get("/address").queryParam("borough", "manhattan").queryParam("f", "json"))
+        this.mockMvc.perform(get("/address")
+            .queryParam("borough", "manhattan")
+            .queryParam("f", "json"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(content().string(startsWith("{")));
@@ -96,7 +99,9 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void addressWithoutFormatParamWithAcceptXmlReturnsXmlProblemDetail() throws Exception {
-        this.mockMvc.perform(get("/address").queryParam("borough", "manhattan").accept(MediaType.APPLICATION_XML))
+        this.mockMvc.perform(get("/address")
+            .queryParam("borough", "manhattan")
+            .accept(MediaType.APPLICATION_XML))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_XML))
             .andExpect(content().string(startsWith("<")));
@@ -106,7 +111,9 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void addressWithoutFormatParamWithAcceptJsonReturnsJsonProblemDetail() throws Exception {
-        this.mockMvc.perform(get("/address").queryParam("borough", "manhattan").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get("/address")
+            .queryParam("borough", "manhattan")
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(content().string(startsWith("{")));
@@ -116,7 +123,8 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void addressWithCaseInsensitiveXmlSuffixReturnsXml() throws Exception {
-        this.mockMvc.perform(get("/address.XML").queryParam("street", "Broadway"))
+        this.mockMvc.perform(get("/address.XML")
+            .queryParam("street", "Broadway"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_XML))
             .andExpect(content().string(startsWith("<")));
@@ -126,7 +134,8 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void addressWithCaseInsensitiveJsonSuffixReturnsJson() throws Exception {
-        this.mockMvc.perform(get("/address.JSON").queryParam("street", "Broadway"))
+        this.mockMvc.perform(get("/address.JSON")
+            .queryParam("street", "Broadway"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(content().string(startsWith("{")));
@@ -136,7 +145,9 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void fParameterTakesPrecedenceOverXmlSuffix() throws Exception {
-        this.mockMvc.perform(get("/address.xml").queryParam("street", "Broadway").queryParam("f", "json"))
+        this.mockMvc.perform(get("/address.xml")
+            .queryParam("street", "Broadway")
+            .queryParam("f", "json"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(content().string(startsWith("{")));
@@ -146,7 +157,9 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void fParameterCaseInsensitiveJson() throws Exception {
-        this.mockMvc.perform(get("/address").queryParam("borough", "manhattan").queryParam("f", "JSON"))
+        this.mockMvc.perform(get("/address")
+            .queryParam("borough", "manhattan")
+            .queryParam("f", "JSON"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(content().string(startsWith("{")));
@@ -156,7 +169,8 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void defaultsToJsonWhenNeitherFormatNorAcceptSpecified() throws Exception {
-        this.mockMvc.perform(get("/address").queryParam("borough", "manhattan"))
+        this.mockMvc.perform(get("/address")
+            .queryParam("borough", "manhattan"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(content().string(startsWith("{")));
@@ -166,7 +180,9 @@ public class RestControllerErrorContentNegotiationTest {
 
     @Test
     void acceptHeaderFallbackWhenNoFormatParam() throws Exception {
-        this.mockMvc.perform(get("/address").queryParam("borough", "manhattan").accept(MediaType.APPLICATION_XML))
+        this.mockMvc.perform(get("/address")
+            .queryParam("borough", "manhattan")
+            .accept(MediaType.APPLICATION_XML))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_XML))
             .andExpect(content().string(startsWith("<")));
@@ -182,4 +198,5 @@ public class RestControllerErrorContentNegotiationTest {
         parameterStrategy.setParameterName("f");
         return new ContentNegotiationManager(parameterStrategy, new HeaderContentNegotiationStrategy());
     }
+    // spotless:on
 }

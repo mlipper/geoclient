@@ -17,10 +17,10 @@ package gov.nyc.doitt.gis.geoclient.service.web.jackson;
 
 import java.util.List;
 
-import org.springframework.boot.jackson.JacksonMixin;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;
+
+import org.springframework.boot.jackson.JacksonMixin;
 
 import gov.nyc.doitt.gis.geoclient.parser.token.Chunk;
 import gov.nyc.doitt.gis.geoclient.parser.token.ChunkType;

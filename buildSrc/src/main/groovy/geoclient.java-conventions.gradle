@@ -1,8 +1,7 @@
 plugins {
     id 'java'
-    id 'checkstyle'
     id 'project-report'
-    id 'com.diffplug.spotless'
+    id 'geoclient.verification-conventions'
     id 'geoclient.jar-conventions'
 }
 
@@ -34,40 +33,4 @@ javadoc {
     // Note that global "api" task does display all warnings.
     logging.captureStandardError LogLevel.INFO
     logging.captureStandardOutput LogLevel.INFO  // suppress "## warnings" message
-}
-
-checkstyle {
-    configDirectory = rootProject.layout.projectDirectory.dir("gradle/config/checkstyle")
-}
-
-tasks.withType(Checkstyle) {
-    group = org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
-}
-
-spotless {
-    java {
-        eclipse().configFile rootProject.file('gradle/config/eclipse/geoclient-eclipse-formatter-settings.xml')
-        importOrderFile(rootProject.file('gradle/config/eclipse/geoclient-eclipse.importorder'))
-        leadingTabsToSpaces()
-        licenseHeaderFile(rootProject.file('gradle/config/spotless/apache-license-2.0.java'))
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        toggleOffOn()
-        // Known issue with spotless v8.x and gradle 9.x:
-        // Spotless's custom classloader is being closed or disrupted
-        // prematurely mid-build, leaving the underlying formatter
-        // (like google-java-format) unable to find its required Guava
-        // dependencies (com.google.common.base.Predicate).
-        // It is a known concurrency and class-loading lifecycle bug in
-        // Spotless, often triggered when running a heavy task graph
-        // (like ./gradlew clean build) with parallel execution or caching
-        // enabled.
-        targetExclude '**/geoclient-test/src/**'
-    }
-    groovy {
-        target '**/*.groovy'
-        targetExclude '**/build/**'
-        licenseHeaderFile rootProject.file('gradle/config/spotless/apache-license-2.0.java')
-    }
-    groovyGradle {}
 }
