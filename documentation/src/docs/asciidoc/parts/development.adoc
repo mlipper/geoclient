@@ -242,7 +242,7 @@ A complete Geosupport installation is approximately 2.3 GB in size and adding it
 +
 [,sh]
 ----
- docker run --rm -t -p 8080:8080 geoclient:latest
+ docker run --rm -t --platform linux/amd64 -p 8080:8080 geoclient:latest
 ----
 
 . <<testing-the-container,Test the container>>.
@@ -262,7 +262,7 @@ This assumes you are using the `geoclient.jar` jar artifact produced by the `geo
 +
 [,sh]
 ----
- docker build --build-arg JARFILE=/path/to/geoclient-service.jar -t geoclient:latest -f images/run.Dockerfile .
+ docker build --build-arg JARFILE=/path/to/geoclient-service.jar --platform linux/amd64 -t geoclient:latest -f images/run.Dockerfile .
 ----
 
 . Follow the steps <<creating-a-named-geosupport-volume,below>> to create a local volume named `geosupport-latest`, pre-populated with the uncompressed Geosupport distribution.
@@ -270,7 +270,7 @@ This assumes you are using the `geoclient.jar` jar artifact produced by the `geo
 +
 [,sh]
 ----
- docker run --rm -t --mount source=geosupport-latest,target=/opt/geosupport -p 8080:8080 geoclient:latest
+ docker run --rm -t --platform linux/amd64 --mount source=geosupport-latest,target=/opt/geosupport -p 8080:8080 geoclient:latest
 ----
 
 . <<testing-the-container,Test the container>>.
@@ -282,7 +282,7 @@ Create a local, named volume containing a Geosupport installation, using the htt
 [,sh]
 ----
    docker volume create geosupport-latest
-   docker run --rm --mount source=geosupport-latest,target=/opt/geosupport mlipper/geosupport-docker:latest /bin/true
+   docker run --rm --platform linux/amd64 --mount source=geosupport-latest,target=/opt/geosupport mlipper/geosupport-docker:latest /bin/true
 ----
 
 _See the https://github.com/mlipper/geosupport-docker/blob/main/README.md[`README`] for <<about-geosupport-docker,geosupport-docker>> for a more detailed example._
@@ -340,7 +340,7 @@ This example uses existing Geoclient and Geosupport Docker images that are publi
 These are the public Docker Hub registries configured in the `kustomization.yaml` file:
 
 * {geoclient-registry}[`mlipper/geoclient`]
-* {geosupport-docker-registry}[`mlipper/geosupport-docker`] 
+* {geosupport-docker-registry}[`mlipper/geosupport-docker`]
 
 For information on configuring Minikube to use a local registry, see Minikube's documentation on {minikube}/docs/handbook/registry/[configuring registries] and {minikube}/docs/handbook/pushing/[pushing images].
 
@@ -456,7 +456,7 @@ In the configuration above, `A` will almost always need to change when `B` is ch
 
 ==== Bask in the glory of your handiwork
 
-Now, geoclient-v2 is running locally, listening on port (`<host port>`) `8081`. By default, geoclient-v2's base endpoint URL is `+http://localhost:8081/geoclient/v2+`. 
+Now, geoclient-v2 is running locally, listening on port (`<host port>`) `8081`. By default, geoclient-v2's base endpoint URL is `+http://localhost:8081/geoclient/v2+`.
 
 However, to do anything useful you need to call one of Geoclient's service <<endpoints,endpoints>>, adding any relevant arguments to the query string.
 
