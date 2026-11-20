@@ -1,0 +1,58 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      # Same Docker/Geosupport approach as CI: generating the sample responses
+      # used by the user guide requires the native Geosupport libraries.
+      - name: Build documentation site in Docker
+        env:
+          DOCKER_BUILDKIT: "1"
+        run: |
+          set -euxo pipefail
+          docker build --platform linux/amd64 -f ./ci/Dockerfile \
+            --target docs-dist \
+            --output "type=local,dest=${RUNNER_TEMP}/site" .
+          [ -f "${RUNNER_TEMP}/site/index.html" ] || { echo "Missing index.html"; exit 1; }
+          [ -f "${RUNNER_TEMP}/site/api/index.html" ] || { echo "Missing api/index.html"; exit 1; }
+          echo "SITE_DIR=${RUNNER_TEMP}/site" >> "${GITHUB_ENV}"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: ${{ env.SITE_DIR }}
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

@@ -9,6 +9,8 @@
 **/bin
 **/build
 **/images
+# User guide images are required by the documentation build (ci/Dockerfile docs stage)
+!documentation/src/docs/asciidoc/images
 **/docker-compose*
 **/compose*
 **/Dockerfile*
