@@ -15,12 +15,22 @@
  */
 package gov.nyc.doitt.gis.geoclient.api;
 
+/**
+ * Selected Geosupport return codes.
+ *
+ * @author mlipper
+ */
 public enum ReturnCodeValue {
 
+    /** The call succeeded. */
     SUCCESS("00"),
+    /** The call succeeded with a warning. */
     WARN("01"),
+    /** A compass direction is required to resolve the location. */
     COMPASS_DIRECTION_REQUIRED("02"),
+    /** A street name was not recognized and no similar names were found. */
     NOT_RECOGNIZED_NO_SIMILAR_NAMES("11"),
+    /** A street name was not recognized but similar names were found. */
     NOT_RECOGNIZED_WITH_SIMILAR_NAMES("EE");
 
     private final String value;
@@ -29,10 +39,21 @@ public enum ReturnCodeValue {
         this.value = value;
     }
 
+    /**
+     * Returns the Geosupport return code string.
+     *
+     * @return the return code
+     */
     public String value() {
         return this.value;
     }
 
+    /**
+     * Determines whether the given string is this return code.
+     *
+     * @param string a Geosupport return code
+     * @return <code>true</code> if the string equals this return code
+     */
     public boolean is(String string) {
         return this.value.equals(string);
     }

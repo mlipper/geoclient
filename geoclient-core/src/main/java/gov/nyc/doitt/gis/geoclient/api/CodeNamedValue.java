@@ -15,16 +15,37 @@
  */
 package gov.nyc.doitt.gis.geoclient.api;
 
+/**
+ * A value with a code and a name. Equality and hash codes are based on both
+ * fields and, if the value is not case sensitive, ignore case.
+ *
+ * @author mlipper
+ */
 public class CodeNamedValue implements Named, Coded {
 
     private final String code;
     private final String name;
     private final boolean caseSensitive;
 
+    /**
+     * Creates a case sensitive value.
+     *
+     * @param code the code (may be null)
+     * @param name the name (may be null)
+     */
     public CodeNamedValue(String code, String name) {
         this(code, name, true);
     }
 
+    /**
+     * Creates a value.
+     *
+     * @param code          the code (may be null)
+     * @param name          the name (may be null)
+     * @param caseSensitive whether the code and name are compared in a case
+     *                      sensitive manner by {@link #equals(Object)} and
+     *                      {@link #hashCode()}
+     */
     public CodeNamedValue(String code, String name, boolean caseSensitive) {
         super();
         this.code = code;
@@ -32,14 +53,30 @@ public class CodeNamedValue implements Named, Coded {
         this.caseSensitive = caseSensitive;
     }
 
+    /**
+     * Returns the code.
+     *
+     * @return the code (may be null)
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Returns the name.
+     *
+     * @return the name (may be null)
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Indicates whether the code and name are compared in a case sensitive manner
+     * by {@link #equals(Object)} and {@link #hashCode()}.
+     *
+     * @return <code>true</code> if comparisons are case sensitive
+     */
     public boolean isCaseSensitive() {
         return caseSensitive;
     }

@@ -22,6 +22,12 @@ import java.util.Map;
 
 import gov.nyc.doitt.gis.geoclient.function.Function;
 
+/**
+ * Fluent builders for assembling the argument map used to call a Geosupport
+ * {@link Function}. Each builder starts with the function's required arguments.
+ *
+ * @author mlipper
+ */
 public class CallBuilder {
 
     private static class NumberedParamNames {
@@ -55,6 +61,10 @@ public class CallBuilder {
         }
     }
 
+    /**
+     * Base class for call builders. The numbered methods (one, two, three) set the
+     * arguments for the first, second and third streets or boroughs, respectively.
+     */
     protected static abstract class Builder {
         protected final Arguments arguments = new Arguments();
         protected final NumberedParamNames boroughCodeParams = new NumberedParamNames(InputParam.BOROUGH_CODE,
@@ -68,20 +78,50 @@ public class CallBuilder {
             this.arguments.args(function.getConfiguration().requiredArguments());
         }
 
+        /**
+         * Returns the arguments assembled so far, including the function's required
+         * arguments.
+         *
+         * @return the argument map, keyed by parameter name
+         */
         public Map<String, Object> arguments() {
             return this.arguments.arguments();
         }
 
+        /**
+         * Sets the first borough using its name or alias.
+         *
+         * @param boroughName borough name or alias
+         * @return this builder
+         * @throws NullPointerException     if the name is null
+         * @throws IllegalArgumentException if the name is not recognized
+         */
         public Builder boroughNameOne(String boroughName) {
             addBoroughName(boroughName, 1);
             return this;
         }
 
+        /**
+         * Sets the second borough using its name or alias.
+         *
+         * @param boroughName borough name or alias
+         * @return this builder
+         * @throws NullPointerException     if the name is null
+         * @throws IllegalArgumentException if the name is not recognized
+         */
         public Builder boroughNameTwo(String boroughName) {
             addBoroughName(boroughName, 2);
             return this;
         }
 
+        /**
+         * Sets the third borough using its name or alias.
+         *
+         * @param boroughName borough name or alias
+         * @return this builder
+         * @throws NullPointerException     if the name is null
+         * @throws IllegalArgumentException if the name is not recognized
+         */
         public Builder boroughNameThree(String boroughName) {
             addBoroughName(boroughName, 3);
             return this;
@@ -98,16 +138,37 @@ public class CallBuilder {
             addBorough(borough, number);
         }
 
+        /**
+         * Sets the first borough.
+         *
+         * @param borough the borough
+         * @return this builder
+         * @throws NullPointerException if the borough is null
+         */
         public Builder boroughOne(Borough borough) {
             addBorough(borough, 1);
             return this;
         }
 
+        /**
+         * Sets the second borough.
+         *
+         * @param borough the borough
+         * @return this builder
+         * @throws NullPointerException if the borough is null
+         */
         public Builder boroughTwo(Borough borough) {
             addBorough(borough, 2);
             return this;
         }
 
+        /**
+         * Sets the third borough.
+         *
+         * @param borough the borough
+         * @return this builder
+         * @throws NullPointerException if the borough is null
+         */
         public Builder boroughThree(Borough borough) {
             addBorough(borough, 3);
             return this;
@@ -120,16 +181,37 @@ public class CallBuilder {
             addBoroughCode(borough.getCode(), number);
         }
 
+        /**
+         * Sets the first borough using its code.
+         *
+         * @param boroughCode borough code
+         * @return this builder
+         * @throws NullPointerException if the code is null
+         */
         public Builder boroughCodeOne(String boroughCode) {
             addBoroughCode(boroughCode, 1);
             return this;
         }
 
+        /**
+         * Sets the second borough using its code.
+         *
+         * @param boroughCode borough code
+         * @return this builder
+         * @throws NullPointerException if the code is null
+         */
         public Builder boroughCodeTwo(String boroughCode) {
             addBoroughCode(boroughCode, 2);
             return this;
         }
 
+        /**
+         * Sets the third borough using its code.
+         *
+         * @param boroughCode borough code
+         * @return this builder
+         * @throws NullPointerException if the code is null
+         */
         public Builder boroughCodeThree(String boroughCode) {
             addBoroughCode(boroughCode, 3);
             return this;
@@ -142,16 +224,46 @@ public class CallBuilder {
             this.arguments.arg(this.boroughCodeParams.nth(number), value);
         }
 
+        /**
+         * Sets the first street. The street's name is used if present, otherwise its
+         * code.
+         *
+         * @param street the street
+         * @return this builder
+         * @throws NullPointerException     if the street is null
+         * @throws IllegalArgumentException if the street's name and code are both
+         *                                  null
+         */
         public Builder streetOne(Street street) {
             addStreet(street, 1);
             return this;
         }
 
+        /**
+         * Sets the second street. The street's name is used if present, otherwise its
+         * code.
+         *
+         * @param street the street
+         * @return this builder
+         * @throws NullPointerException     if the street is null
+         * @throws IllegalArgumentException if the street's name and code are both
+         *                                  null
+         */
         public Builder streetTwo(Street street) {
             addStreet(street, 2);
             return this;
         }
 
+        /**
+         * Sets the third street. The street's name is used if present, otherwise its
+         * code.
+         *
+         * @param street the street
+         * @return this builder
+         * @throws NullPointerException     if the street is null
+         * @throws IllegalArgumentException if the street's name and code are both
+         *                                  null
+         */
         public Builder streetThree(Street street) {
             addStreet(street, 3);
             return this;
@@ -173,16 +285,34 @@ public class CallBuilder {
             }
         }
 
+        /**
+         * Sets the name of the first street.
+         *
+         * @param streetName street name
+         * @return this builder
+         */
         public Builder streetNameOne(String streetName) {
             addStreetName(streetName, 1);
             return this;
         }
 
+        /**
+         * Sets the name of the second street.
+         *
+         * @param streetName street name
+         * @return this builder
+         */
         public Builder streetNameTwo(String streetName) {
             addStreetName(streetName, 2);
             return this;
         }
 
+        /**
+         * Sets the name of the third street.
+         *
+         * @param streetName street name
+         * @return this builder
+         */
         public Builder streetNameThree(String streetName) {
             addStreetName(streetName, 3);
             return this;
@@ -192,16 +322,34 @@ public class CallBuilder {
             this.arguments.arg(this.streetNameParams.nth(number), streetName);
         }
 
+        /**
+         * Sets the code of the first street.
+         *
+         * @param streetCode street code
+         * @return this builder
+         */
         public Builder streetCodeOne(String streetCode) {
             addStreetCode(streetCode, 1);
             return this;
         }
 
+        /**
+         * Sets the code of the second street.
+         *
+         * @param streetCode street code
+         * @return this builder
+         */
         public Builder streetCodeTwo(String streetCode) {
             addStreetCode(streetCode, 2);
             return this;
         }
 
+        /**
+         * Sets the code of the third street.
+         *
+         * @param streetCode street code
+         * @return this builder
+         */
         public Builder streetCodeThree(String streetCode) {
             addStreetCode(streetCode, 3);
             return this;
@@ -212,7 +360,15 @@ public class CallBuilder {
         }
     }
 
+    /**
+     * Builder for address calls.
+     */
     public static class Address extends Builder {
+        /**
+         * Creates a builder initialized with the given function's required arguments.
+         *
+         * @param function the Geosupport function to be called
+         */
         public Address(Function function) {
             super(function);
         }
@@ -252,6 +408,21 @@ public class CallBuilder {
         }
     }
 
+    /**
+     * Creates a builder of the given type by calling its constructor that takes a
+     * {@link Function}.
+     *
+     * @param <T>      the builder type
+     * @param function the Geosupport function to be called
+     * @param callType the builder class to instantiate
+     * @return a new builder
+     * @throws NoSuchMethodException     if the class has no public constructor
+     *                                   taking a {@link Function}
+     * @throws InvocationTargetException if the constructor throws an exception
+     * @throws IllegalAccessException    if the constructor is not accessible
+     * @throws IllegalArgumentException  if the constructor arguments are invalid
+     * @throws InstantiationException    if the class is abstract
+     */
     public static <T extends Builder> T newInstance(Function function, Class<T> callType) throws NoSuchMethodException,
             InvocationTargetException, IllegalAccessException, IllegalArgumentException, InstantiationException {
         Constructor<T> ctor = callType.getConstructor(Function.class);

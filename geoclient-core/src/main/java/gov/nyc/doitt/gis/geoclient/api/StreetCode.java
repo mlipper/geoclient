@@ -71,6 +71,7 @@ public class StreetCode extends CodeNamedValue {
      * @param code          street code
      * @param name          street name (may be null)
      * @param caseSensitive whether the street name is considered case sensitive
+     * @param streetCodeType ignored; the type is always determined from the code
      *
      * @throws NullPointerException       if the given code is null
      *
@@ -82,10 +83,21 @@ public class StreetCode extends CodeNamedValue {
         this.streetCodeType = StreetCodeType.fromCode(code);
     }
 
+    /**
+     * Indicates whether this street code has a leading borough code character.
+     *
+     * @return <code>true</code> if the code type includes a borough
+     */
     public boolean hasBorough() {
         return this.streetCodeType.hasBorough();
     }
 
+    /**
+     * Returns the borough code, which is the first character of the street code.
+     *
+     * @return the borough code or <code>null</code> if this street code does not
+     *         include a borough
+     */
     public String getBoroughCode() {
         if (hasBorough()) {
             return Boroughs.fromCode(getCode().substring(0, 1)).getCode();
@@ -93,10 +105,22 @@ public class StreetCode extends CodeNamedValue {
         return null;
     }
 
+    /**
+     * Returns the borough code as an integer.
+     *
+     * @return the borough code or {@link Boroughs#UNPARSABLE_BOROUGH_CODE_SENTINEL_VALUE}
+     *         if this street code does not include a borough
+     */
     public int getBoroughCodeAsInt() {
         return Boroughs.parseInt(getBoroughCode());
     }
 
+    /**
+     * Returns the street code with the leading borough code character removed.
+     *
+     * @return the street code without a borough or the unchanged code if it does
+     *         not include a borough
+     */
     public String getStreetCodeWithoutBorough() {
         if (hasBorough()) {
             return getCode().substring(1);
@@ -104,6 +128,11 @@ public class StreetCode extends CodeNamedValue {
         return getCode();
     }
 
+    /**
+     * Returns the type determined from the street code.
+     *
+     * @return the street code type
+     */
     public StreetCodeType getStreetCodeType() {
         return this.streetCodeType;
     }

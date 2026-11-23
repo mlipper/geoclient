@@ -15,8 +15,17 @@
  */
 package gov.nyc.doitt.gis.geoclient.api;
 
+/**
+ * Empty class with no state or behavior. See {@link GeosupportResponse} for the
+ * type used to represent Geoclient responses.
+ *
+ * @author mlipper
+ */
 public class Response {
 
+    /**
+     * Creates an empty response.
+     */
     public Response() {
     }
 

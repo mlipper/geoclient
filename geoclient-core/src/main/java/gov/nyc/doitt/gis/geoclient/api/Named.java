@@ -15,6 +15,17 @@
  */
 package gov.nyc.doitt.gis.geoclient.api;
 
+/**
+ * Implemented by objects identified by a name.
+ *
+ * @author mlipper
+ */
 public interface Named {
+
+    /**
+     * Returns the name.
+     *
+     * @return the name
+     */
     String getName();
 }

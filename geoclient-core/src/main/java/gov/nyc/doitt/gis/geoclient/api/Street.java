@@ -15,12 +15,29 @@
  */
 package gov.nyc.doitt.gis.geoclient.api;
 
+/**
+ * A street identified by a Geosupport street code, a name, or both. Names and
+ * codes are compared without regard to case.
+ *
+ * @author mlipper
+ */
 public class Street extends CodeNamedValue {
 
+    /**
+     * Creates a street with both a code and a name.
+     *
+     * @param code street code
+     * @param name street name
+     */
     public Street(String code, String name) {
         super(code, name, false);
     }
 
+    /**
+     * Creates a street identified only by name.
+     *
+     * @param name street name
+     */
     public Street(String name) {
         super(null, name, false);
     }

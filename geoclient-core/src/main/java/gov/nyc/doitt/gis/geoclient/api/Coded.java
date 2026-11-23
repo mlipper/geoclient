@@ -15,6 +15,17 @@
  */
 package gov.nyc.doitt.gis.geoclient.api;
 
+/**
+ * Implemented by objects identified by a code.
+ *
+ * @author mlipper
+ */
 public interface Coded {
+
+    /**
+     * Returns the code.
+     *
+     * @return the code
+     */
     String getCode();
 }

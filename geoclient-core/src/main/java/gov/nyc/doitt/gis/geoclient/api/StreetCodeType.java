@@ -27,7 +27,20 @@ import java.util.regex.Pattern;
  */
 public enum StreetCodeType {
 
-    B5SC(1 + 5), B7SC(1 + 7), B10SC(1 + 10), _5SC(5), _7SC(7), _10SC(10), UNRECOGNIZED(-1);
+    /** Five digit street code preceded by a borough code. */
+    B5SC(1 + 5),
+    /** Seven digit street code preceded by a borough code. */
+    B7SC(1 + 7),
+    /** Ten digit street code preceded by a borough code. */
+    B10SC(1 + 10),
+    /** Five digit street code without a borough code. */
+    _5SC(5),
+    /** Seven digit street code without a borough code. */
+    _7SC(7),
+    /** Ten digit street code without a borough code. */
+    _10SC(10),
+    /** A code that does not match any other type. */
+    UNRECOGNIZED(-1);
 
     private final int length;
     private final Pattern pattern;
@@ -53,18 +66,45 @@ public enum StreetCodeType {
         }
     }
 
+    /**
+     * Returns the total number of characters in a code of this type, including any
+     * leading borough code character.
+     *
+     * @return the code length or <code>-1</code> for {@link #UNRECOGNIZED}
+     */
     public int length() {
         return this.length;
     }
 
+    /**
+     * Indicates whether codes of this type start with a borough code character.
+     *
+     * @return <code>true</code> for {@link #B5SC}, {@link #B7SC} and {@link #B10SC}
+     */
     public boolean hasBorough() {
         return this.equals(B5SC) || this.equals(B7SC) || this.equals(B10SC);
     }
 
+    /**
+     * Determines whether the given street code has the format of this type.
+     *
+     * @param streetCode the street code to test
+     * @return <code>true</code> if the code matches; always <code>false</code> for
+     *         {@link #UNRECOGNIZED}
+     */
     public boolean isValid(String streetCode) {
         return this.pattern != null && this.pattern.matcher(streetCode).matches();
     }
 
+    /**
+     * Determines whether the given street code is valid as a code without a
+     * borough.
+     *
+     * @param streetCode the street code to test
+     * @return <code>true</code> if the code is a valid {@link #_5SC}, {@link #_7SC}
+     *         or {@link #_10SC}; <code>false</code> otherwise, including for
+     *         <code>null</code>
+     */
     public static boolean isValidNoBorough(String streetCode) {
         if (streetCode == null) {
             return false;
@@ -72,6 +112,15 @@ public enum StreetCodeType {
         return _5SC.isValid(streetCode) || _7SC.isValid(streetCode) || _10SC.isValid(streetCode);
     }
 
+    /**
+     * Determines whether the given street code is valid as a code preceded by a
+     * borough.
+     *
+     * @param streetCode the street code to test
+     * @return <code>true</code> if the code is a valid {@link #B5SC}, {@link #B7SC}
+     *         or {@link #B10SC}; <code>false</code> otherwise, including for
+     *         <code>null</code>
+     */
     public static boolean isValidWithBorough(String streetCode) {
         if (streetCode == null) {
             return false;
@@ -80,6 +129,13 @@ public enum StreetCodeType {
         return B5SC.isValid(streetCode) || B7SC.isValid(streetCode) || B10SC.isValid(streetCode);
     }
 
+    /**
+     * Determines the type of the given street code.
+     *
+     * @param streetCode the street code
+     * @return the matching type or {@link #UNRECOGNIZED} if none match
+     * @throws NullPointerException if the street code is null
+     */
     public static StreetCodeType fromCode(String streetCode) throws NullPointerException {
         if (streetCode == null) {
             throw new NullPointerException("street code argument cannot be null");
