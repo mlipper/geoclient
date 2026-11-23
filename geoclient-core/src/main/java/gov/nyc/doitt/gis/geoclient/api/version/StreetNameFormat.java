@@ -15,9 +15,21 @@
  */
 package gov.nyc.doitt.gis.geoclient.api.version;
 
+/**
+ * Street name normalization formats supported by Geosupport.
+ *
+ * @author Matthew Lipper
+ */
 public enum StreetNameFormat {
 
-    SORT("S"), COMPACT("C");
+    /**
+     * Sort format ({@code S}).
+     */
+    SORT("S"),
+    /**
+     * Compact format ({@code C}).
+     */
+    COMPACT("C");
 
     private final String elementName;
 
@@ -25,6 +37,11 @@ public enum StreetNameFormat {
         this.elementName = elementName;
     }
 
+    /**
+     * Returns the Geosupport code for this format.
+     *
+     * @return the format code
+     */
     public String elementName() {
         return this.elementName;
     }

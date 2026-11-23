@@ -50,10 +50,20 @@ public class FieldSet {
         this.fieldNames = new HashSet<>(Arrays.asList(fieldNames));
     }
 
+    /**
+     * Returns the function identifier.
+     *
+     * @return the function identifier
+     */
     public String getFunctionId() {
         return functionId;
     }
 
+    /**
+     * Returns the names of the fields in this set.
+     *
+     * @return the field names
+     */
     public Set<String> getFieldNames() {
         return fieldNames;
     }

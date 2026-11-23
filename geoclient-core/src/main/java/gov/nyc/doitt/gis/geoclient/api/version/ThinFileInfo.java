@@ -31,10 +31,23 @@ public class ThinFileInfo extends BaseFileInfo {
     private List<String> recordTypes;
     private List<String> fillerFields;
 
+    /**
+     * Creates an empty instance.
+     */
     public ThinFileInfo() {
         super();
     }
 
+    /**
+     * Creates an instance with the given values.
+     *
+     * @param recordTypes the record types
+     * @param tag the file tag
+     * @param date the file date in {@code yyMMdd} format
+     * @param release the file release
+     * @param recordCount the number of records in the file
+     * @param fillerFields the filler fields
+     */
     public ThinFileInfo(List<String> recordTypes, String tag, String date, String release, String recordCount,
             List<String> fillerFields) {
         super(tag, date, release, recordCount);
@@ -42,18 +55,38 @@ public class ThinFileInfo extends BaseFileInfo {
         this.fillerFields = fillerFields;
     }
 
+    /**
+     * Returns the record types.
+     *
+     * @return the record types
+     */
     public List<String> getRecordTypes() {
         return recordTypes;
     }
 
+    /**
+     * Sets the record types.
+     *
+     * @param recordTypes the record types
+     */
     public void setRecordTypes(List<String> recordTypes) {
         this.recordTypes = recordTypes;
     }
 
+    /**
+     * Returns the filler fields.
+     *
+     * @return the filler fields
+     */
     public List<String> getFillerFields() {
         return fillerFields;
     }
 
+    /**
+     * Sets the filler fields.
+     *
+     * @param fillerFields the filler fields
+     */
     public void setFillerFields(List<String> fillerFields) {
         this.fillerFields = fillerFields;
     }

@@ -15,23 +15,52 @@
  */
 package gov.nyc.doitt.gis.geoclient.api.version;
 
+/**
+ * Information about a single Geosupport file as returned by Geosupport's HR
+ * function.
+ *
+ * @author mlipper
+ * @since 1.00
+ */
 public class FileInfo extends BaseFileInfo {
 
     private String recordType;
 
+    /**
+     * Creates an empty instance.
+     */
     public FileInfo() {
         super();
     }
 
+    /**
+     * Creates an instance with the given values.
+     *
+     * @param recordType the record type
+     * @param tag the file tag
+     * @param date the file date in {@code yyMMdd} format
+     * @param release the file release
+     * @param recordCount the number of records in the file
+     */
     public FileInfo(String recordType, String tag, String date, String release, String recordCount) {
         super(tag, date, release, recordCount);
         this.recordType = recordType;
     }
 
+    /**
+     * Returns the record type.
+     *
+     * @return the record type
+     */
     public String getRecordType() {
         return recordType;
     }
 
+    /**
+     * Sets the record type.
+     *
+     * @param recordType the record type
+     */
     public void setRecordType(String recordType) {
         this.recordType = recordType;
     }

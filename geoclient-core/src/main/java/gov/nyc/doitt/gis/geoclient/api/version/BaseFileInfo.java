@@ -33,14 +33,37 @@ class BaseFileInfo {
     private static final SimpleDateFormat STRING_TO_DATE = new SimpleDateFormat("yyMMdd");
     private static final SimpleDateFormat DATE_TO_STRING = new SimpleDateFormat("yyyy-MM-dd");
 
+    /**
+     * The file tag.
+     */
     protected String tag;
+    /**
+     * The file date in {@code yyMMdd} format.
+     */
     protected String date;
+    /**
+     * The file release.
+     */
     protected String release;
+    /**
+     * The number of records in the file.
+     */
     protected String recordCount;
 
+    /**
+     * Creates an empty instance.
+     */
     public BaseFileInfo() {
     }
 
+    /**
+     * Creates an instance with the given values.
+     *
+     * @param tag the file tag
+     * @param date the file date in {@code yyMMdd} format
+     * @param release the file release
+     * @param recordCount the number of records in the file
+     */
     public BaseFileInfo(String tag, String date, String release, String recordCount) {
         super();
         this.tag = tag;
@@ -49,6 +72,11 @@ class BaseFileInfo {
         this.recordCount = recordCount;
     }
 
+    /**
+     * Returns the file date formatted as {@code yyyy-MM-dd}.
+     *
+     * @return the formatted date, or the unmodified date if it cannot be parsed
+     */
     public String getFormattedDate() {
         return applyFormat(this.date);
     }
@@ -62,34 +90,74 @@ class BaseFileInfo {
         }
     }
 
+    /**
+     * Returns the file date.
+     *
+     * @return the date in {@code yyMMdd} format
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     * Sets the file date.
+     *
+     * @param date the date in {@code yyMMdd} format
+     */
     public void setDate(String date) {
         this.date = date;
     }
 
+    /**
+     * Returns the file tag.
+     *
+     * @return the tag
+     */
     public String getTag() {
         return tag;
     }
 
+    /**
+     * Sets the file tag.
+     *
+     * @param tag the tag
+     */
     public void setTag(String tag) {
         this.tag = tag;
     }
 
+    /**
+     * Returns the file release.
+     *
+     * @return the release
+     */
     public String getRelease() {
         return release;
     }
 
+    /**
+     * Sets the file release.
+     *
+     * @param release the release
+     */
     public void setRelease(String release) {
         this.release = release;
     }
 
+    /**
+     * Returns the number of records in the file.
+     *
+     * @return the record count
+     */
     public String getRecordCount() {
         return recordCount;
     }
 
+    /**
+     * Sets the number of records in the file.
+     *
+     * @param recordCount the record count
+     */
     public void setRecordCount(String recordCount) {
         this.recordCount = recordCount;
     }

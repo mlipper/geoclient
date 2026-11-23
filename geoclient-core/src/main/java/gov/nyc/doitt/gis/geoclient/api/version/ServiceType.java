@@ -15,19 +15,61 @@
  */
 package gov.nyc.doitt.gis.geoclient.api.version;
 
+/**
+ * Types of Geoclient service responses. Each type names the element wrapping
+ * the response content.
+ *
+ * @author Matthew Lipper
+ */
 public enum ServiceType {
 
+    /**
+     * Address response.
+     */
     ADDRESS("address"),
+    /**
+     * Address point response.
+     */
     ADDRESSPOINT("addresspoint"),
+    /**
+     * Borough, block and lot response.
+     */
     BBL("bbl"),
+    /**
+     * Building identification number response.
+     */
     BIN("bin"),
+    /**
+     * Blockface response.
+     */
     BLOCKFACE("blockface"),
+    /**
+     * Documentation response.
+     */
     DOC("doc"),
+    /**
+     * Intersection response.
+     */
     INTERSECTION("intersection"),
+    /**
+     * Street name normalization response.
+     */
     NORMALIZE("normalize"),
+    /**
+     * Place response.
+     */
     PLACE("place"),
+    /**
+     * Street code response.
+     */
     STREETCODE("streetcode"),
+    /**
+     * Street code response for the D function (5-digit street codes).
+     */
     STREETCODE_B5SC("response"), // Special case for D* streetcode response in StreetCodeController
+    /**
+     * Unknown response type.
+     */
     UNKNOWN("unknown");
     //VERSION("version"), // Currently unused
     //SEARCH("service");  // Currently unused
@@ -38,6 +80,11 @@ public enum ServiceType {
         this.elementName = elementName;
     }
 
+    /**
+     * Returns the name of the element wrapping the response content.
+     *
+     * @return the element name
+     */
     public String elementName() {
         return this.elementName;
     }
