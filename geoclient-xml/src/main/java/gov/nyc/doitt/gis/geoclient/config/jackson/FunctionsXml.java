@@ -20,16 +20,29 @@ import java.util.List;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for the {@code <functions>} element, a list of {@link FunctionXml}s.
+ */
 public class FunctionsXml {
 
     @JacksonXmlProperty(localName = "function")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<FunctionXml> functions;
 
+    /**
+     * Returns the functions.
+     *
+     * @return the functions
+     */
     public List<FunctionXml> getFunctions() {
         return functions;
     }
 
+    /**
+     * Sets the functions.
+     *
+     * @param functions the functions
+     */
     public void setFunctions(List<FunctionXml> functions) {
         this.functions = functions;
     }

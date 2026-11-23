@@ -20,6 +20,10 @@ import java.util.List;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for an {@code <outputFilters>} element, which refers to or contains
+ * {@link FilterXml}s.
+ */
 public class OutputFiltersXml {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -29,18 +33,38 @@ public class OutputFiltersXml {
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<FilterXml> filters;
 
+    /**
+     * Returns the identifier of the referenced element.
+     *
+     * @return the identifier of the referenced element
+     */
     public String getReference() {
         return reference;
     }
 
+    /**
+     * Sets the identifier of the referenced element.
+     *
+     * @param reference the identifier of the referenced element
+     */
     public void setReference(String reference) {
         this.reference = reference;
     }
 
+    /**
+     * Returns the filters.
+     *
+     * @return the filters
+     */
     public List<FilterXml> getFilters() {
         return filters;
     }
 
+    /**
+     * Sets the filters.
+     *
+     * @param filters the filters
+     */
     public void setFilters(List<FilterXml> filters) {
         this.filters = filters;
     }

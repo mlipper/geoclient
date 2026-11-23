@@ -20,6 +20,9 @@ import java.util.List;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for the top-level {@code <filters>} element, a list of {@link FilterXml}s.
+ */
 public class FiltersXml {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -29,18 +32,38 @@ public class FiltersXml {
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<FilterXml> filters;
 
+    /**
+     * Returns the identifier.
+     *
+     * @return the identifier
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the identifier.
+     *
+     * @param id the identifier
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Returns the filters.
+     *
+     * @return the filters
+     */
     public List<FilterXml> getFilters() {
         return filters;
     }
 
+    /**
+     * Sets the filters.
+     *
+     * @param filters the filters
+     */
     public void setFilters(List<FilterXml> filters) {
         this.filters = filters;
     }

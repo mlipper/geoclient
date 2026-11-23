@@ -21,26 +21,56 @@ import java.util.List;
 
 import tools.jackson.dataformat.xml.XmlMapper;
 
+/**
+ * Reads a {@code geoclient.xml} configuration file into {@link GeoclientXml}.
+ */
 public class GeoclientXmlReader {
 
     private GeoclientXml geoclientXml;
 
+    /**
+     * Reads the configuration file from the classpath.
+     *
+     * @param configFile the classpath resource name of the configuration file
+     * @throws IOException if the file cannot be read
+     */
     public GeoclientXmlReader(String configFile) throws IOException {
         this.geoclientXml = readGeoclientXml(new XmlMapper(), configFile);
     }
 
+    /**
+     * Reads the configuration from the given stream.
+     *
+     * @param inputStream the stream containing the configuration XML
+     * @throws IOException if the stream cannot be read
+     */
     public GeoclientXmlReader(InputStream inputStream) throws IOException {
         this.geoclientXml = readGeoclientXml(new XmlMapper(), inputStream);
     }
 
+    /**
+     * Returns the parsed configuration.
+     *
+     * @return the root configuration object
+     */
     public GeoclientXml getGeoclientXml() {
         return geoclientXml;
     }
 
+    /**
+     * Returns the functions.
+     *
+     * @return the functions
+     */
     public List<FunctionXml> getFunctions() {
         return geoclientXml.getFunctions().getFunctions();
     }
 
+    /**
+     * Returns the work areas.
+     *
+     * @return the work areas
+     */
     public List<WorkAreaXml> getWorkAreas() {
         return geoclientXml.getWorkAreas().getWorkAreas();
     }

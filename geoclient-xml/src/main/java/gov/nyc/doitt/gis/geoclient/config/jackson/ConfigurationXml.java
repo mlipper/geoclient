@@ -22,20 +22,38 @@ import java.util.stream.Collectors;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for the {@code <configuration>} element of a function, holding its required arguments.
+ */
 public class ConfigurationXml {
 
     @JacksonXmlProperty(localName = "requiredArgument")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<RequiredArgumentXml> requiredArguments;
 
+    /**
+     * Returns the required arguments.
+     *
+     * @return the required arguments
+     */
     public List<RequiredArgumentXml> getRequiredArguments() {
         return requiredArguments;
     }
 
+    /**
+     * Sets the required arguments.
+     *
+     * @param requiredArguments the required arguments
+     */
     public void setRequiredArguments(List<RequiredArgumentXml> requiredArguments) {
         this.requiredArguments = requiredArguments;
     }
 
+    /**
+     * Converts the required arguments to a map.
+     *
+     * @return the argument values keyed by argument name
+     */
     public Map<String, Object> toMap() {
         return requiredArguments.stream().collect(
             Collectors.toMap(RequiredArgumentXml::getName, RequiredArgumentXml::getValue));

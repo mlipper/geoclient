@@ -17,15 +17,29 @@ package gov.nyc.doitt.gis.geoclient.config.jackson;
 
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for a {@code <workAreaOne>} or {@code <workAreaTwo>} element which refers to a
+ * {@link WorkAreaXml} by identifier.
+ */
 public class WorkAreaReferenceXml {
 
     @JacksonXmlProperty(isAttribute = true)
     private String reference;
 
+    /**
+     * Returns the identifier of the referenced element.
+     *
+     * @return the identifier of the referenced element
+     */
     public String getReference() {
         return reference;
     }
 
+    /**
+     * Sets the identifier of the referenced element.
+     *
+     * @param reference the identifier of the referenced element
+     */
     public void setReference(String reference) {
         this.reference = reference;
     }

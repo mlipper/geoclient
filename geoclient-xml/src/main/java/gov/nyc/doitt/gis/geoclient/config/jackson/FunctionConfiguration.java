@@ -17,6 +17,10 @@ package gov.nyc.doitt.gis.geoclient.config.jackson;
 
 import java.util.Map;
 
+/**
+ * Resolved configuration of a Geosupport function: its required arguments and the
+ * {@link WorkAreaXml}s it uses.
+ */
 public class FunctionConfiguration {
 
     private final String id;
@@ -24,6 +28,14 @@ public class FunctionConfiguration {
     private final WorkAreaXml workAreaOne;
     private final WorkAreaXml workAreaTwo;
 
+    /**
+     * Creates a configuration for a function using two work areas.
+     *
+     * @param id the function identifier
+     * @param configuration the function's configuration, converted to a map of required arguments
+     * @param workAreaOne the first work area
+     * @param workAreaTwo the second work area, or {@code null}
+     */
     public FunctionConfiguration(String id, ConfigurationXml configuration, WorkAreaXml workAreaOne,
             WorkAreaXml workAreaTwo) {
         this.id = id;
@@ -32,14 +44,31 @@ public class FunctionConfiguration {
         this.workAreaTwo = workAreaTwo;
     }
 
+    /**
+     * Creates a configuration for a function using a single work area.
+     *
+     * @param id the function identifier
+     * @param configuration the function's configuration, converted to a map of required arguments
+     * @param workAreaOne the work area
+     */
     public FunctionConfiguration(String id, ConfigurationXml configuration, WorkAreaXml workAreaOne) {
         this(id, configuration, workAreaOne, null);
     }
 
+    /**
+     * Indicates whether the function uses two work areas.
+     *
+     * @return {@code true} if a second work area is configured
+     */
     public boolean isTwoWorkAreas() {
         return workAreaTwo != null;
     }
 
+    /**
+     * Returns the identifier.
+     *
+     * @return the identifier
+     */
     public String getId() {
         return id;
     }
@@ -48,10 +77,20 @@ public class FunctionConfiguration {
         return configuration;
     }
 
+    /**
+     * Returns the first work area.
+     *
+     * @return the first work area
+     */
     public WorkAreaXml getWorkAreaOne() {
         return workAreaOne;
     }
 
+    /**
+     * Returns the second work area.
+     *
+     * @return the second work area
+     */
     public WorkAreaXml getWorkAreaTwo() {
         return workAreaTwo;
     }

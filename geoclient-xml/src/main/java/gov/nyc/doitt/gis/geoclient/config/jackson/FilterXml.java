@@ -17,6 +17,9 @@ package gov.nyc.doitt.gis.geoclient.config.jackson;
 
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for a {@code <filter>} element.
+ */
 public class FilterXml {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -25,18 +28,38 @@ public class FilterXml {
     @JacksonXmlProperty(isAttribute = true)
     private String pattern;
 
+    /**
+     * Returns the identifier.
+     *
+     * @return the identifier
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the identifier.
+     *
+     * @param id the identifier
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Returns the filter pattern.
+     *
+     * @return the filter pattern
+     */
     public String getPattern() {
         return pattern;
     }
 
+    /**
+     * Sets the filter pattern.
+     *
+     * @param pattern the filter pattern
+     */
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }

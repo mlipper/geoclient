@@ -20,16 +20,29 @@ import java.util.List;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for the {@code <workAreas>} element, a list of {@link WorkAreaXml}s.
+ */
 public class WorkAreasXml {
 
     @JacksonXmlProperty(localName = "workArea")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<WorkAreaXml> workAreas;
 
+    /**
+     * Returns the work areas.
+     *
+     * @return the work areas
+     */
     public List<WorkAreaXml> getWorkAreas() {
         return workAreas;
     }
 
+    /**
+     * Sets the work areas.
+     *
+     * @param workAreas the work areas
+     */
     public void setWorkAreas(List<WorkAreaXml> workAreas) {
         this.workAreas = workAreas;
     }

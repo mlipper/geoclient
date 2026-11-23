@@ -17,6 +17,9 @@ package gov.nyc.doitt.gis.geoclient.config.jackson;
 
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for a {@code <function>} element.
+ */
 public class FunctionXml {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -31,38 +34,83 @@ public class FunctionXml {
     @JacksonXmlProperty(localName = "configuration")
     private ConfigurationXml configuration;
 
+    /**
+     * Indicates whether the function uses two work areas.
+     *
+     * @return {@code true} if both work area references are present
+     */
     public boolean isTwoWorkAreas() {
         return workAreaOne != null && workAreaTwo != null;
     }
 
+    /**
+     * Returns the identifier.
+     *
+     * @return the identifier
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the identifier.
+     *
+     * @param id the identifier
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Returns the first work area.
+     *
+     * @return the first work area
+     */
     public WorkAreaReferenceXml getWorkAreaOne() {
         return workAreaOne;
     }
 
+    /**
+     * Sets the first work area.
+     *
+     * @param workAreaOne the first work area
+     */
     public void setWorkAreaOne(WorkAreaReferenceXml workAreaOne) {
         this.workAreaOne = workAreaOne;
     }
 
+    /**
+     * Returns the second work area.
+     *
+     * @return the second work area
+     */
     public WorkAreaReferenceXml getWorkAreaTwo() {
         return workAreaTwo;
     }
 
+    /**
+     * Sets the second work area.
+     *
+     * @param workAreaTwo the second work area
+     */
     public void setWorkAreaTwo(WorkAreaReferenceXml workAreaTwo) {
         this.workAreaTwo = workAreaTwo;
     }
 
+    /**
+     * Returns the configuration.
+     *
+     * @return the configuration
+     */
     public ConfigurationXml getConfiguration() {
         return configuration;
     }
 
+    /**
+     * Sets the configuration.
+     *
+     * @param configuration the configuration
+     */
     public void setConfiguration(ConfigurationXml configuration) {
         this.configuration = configuration;
     }

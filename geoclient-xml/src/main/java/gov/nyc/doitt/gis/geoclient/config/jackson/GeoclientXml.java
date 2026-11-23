@@ -23,6 +23,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for the root {@code <geoclient>} element of the Geoclient XML configuration
+ * file.
+ */
 @JsonRootName("geoclient")
 public class GeoclientXml {
 
@@ -35,6 +39,13 @@ public class GeoclientXml {
     @JacksonXmlProperty(localName = "functions")
     private FunctionsXml functions;
 
+    /**
+     * Resolves the work area references of every function and returns the resulting
+     * configurations keyed by function identifier.
+     *
+     * @return the function configurations keyed by function identifier
+     * @throws IllegalArgumentException if a referenced work area is not found
+     */
     public Map<String, FunctionConfiguration> getFunctionConfigurations() {
         Map<String, FunctionConfiguration> result = new HashMap<>();
         for (FunctionXml function : functions.getFunctions()) {
@@ -50,6 +61,13 @@ public class GeoclientXml {
         return result;
     }
 
+    /**
+     * Returns the filters with the given identifier.
+     *
+     * @param reference the identifier of the filters
+     * @return the matching filters
+     * @throws IllegalArgumentException if the filters do not have the given identifier
+     */
     public List<FilterXml> getFiltersForReference(String reference) {
         FiltersXml filtersXml = getFilters();
         if (filtersXml.getId().equals(reference)) {
@@ -58,26 +76,56 @@ public class GeoclientXml {
         throw new IllegalArgumentException("No filters found for reference '" + reference + "'");
     }
 
+    /**
+     * Returns the filters.
+     *
+     * @return the filters
+     */
     public FiltersXml getFilters() {
         return filters;
     }
 
+    /**
+     * Sets the filters.
+     *
+     * @param filters the filters
+     */
     public void setFilters(FiltersXml filters) {
         this.filters = filters;
     }
 
+    /**
+     * Returns the work areas.
+     *
+     * @return the work areas
+     */
     public WorkAreasXml getWorkAreas() {
         return workAreas;
     }
 
+    /**
+     * Sets the work areas.
+     *
+     * @param workAreas the work areas
+     */
     public void setWorkAreas(WorkAreasXml workAreas) {
         this.workAreas = workAreas;
     }
 
+    /**
+     * Returns the functions.
+     *
+     * @return the functions
+     */
     public FunctionsXml getFunctions() {
         return functions;
     }
 
+    /**
+     * Sets the functions.
+     *
+     * @param functions the functions
+     */
     public void setFunctions(FunctionsXml functions) {
         this.functions = functions;
     }

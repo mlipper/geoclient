@@ -20,6 +20,9 @@ import java.util.List;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for a {@code <workArea>} element.
+ */
 public class WorkAreaXml {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -39,42 +42,92 @@ public class WorkAreaXml {
     @JacksonXmlProperty(localName = "field")
     private List<FieldXml> fields;
 
+    /**
+     * Returns the identifier.
+     *
+     * @return the identifier
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the identifier.
+     *
+     * @param id the identifier
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Indicates whether the work area is work area one.
+     *
+     * @return {@code true} if the work area is work area one
+     */
     public boolean isIsWA1() {
         return isWA1;
     }
 
+    /**
+     * Sets whether the work area is work area one.
+     *
+     * @param isWA1 whether the work area is work area one
+     */
     public void setIsWA1(boolean isWA1) {
         this.isWA1 = isWA1;
     }
 
+    /**
+     * Returns the length.
+     *
+     * @return the length
+     */
     public int getLength() {
         return length;
     }
 
+    /**
+     * Sets the length.
+     *
+     * @param length the length
+     */
     public void setLength(int length) {
         this.length = length;
     }
 
+    /**
+     * Returns the output filters.
+     *
+     * @return the output filters
+     */
     public OutputFiltersXml getOutputFilters() {
         return outputFilters;
     }
 
+    /**
+     * Sets the output filters.
+     *
+     * @param outputFilters the output filters
+     */
     public void setOutputFilters(OutputFiltersXml outputFilters) {
         this.outputFilters = outputFilters;
     }
 
+    /**
+     * Returns the fields.
+     *
+     * @return the fields
+     */
     public List<FieldXml> getFields() {
         return fields;
     }
 
+    /**
+     * Sets the fields.
+     *
+     * @param fields the fields
+     */
     public void setFields(List<FieldXml> fields) {
         this.fields = fields;
     }

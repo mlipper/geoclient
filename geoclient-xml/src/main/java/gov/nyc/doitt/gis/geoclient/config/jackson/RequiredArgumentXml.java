@@ -17,6 +17,9 @@ package gov.nyc.doitt.gis.geoclient.config.jackson;
 
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Jackson binding for a {@code <requiredArgument>} element.
+ */
 public class RequiredArgumentXml {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -25,18 +28,38 @@ public class RequiredArgumentXml {
     @JacksonXmlProperty(isAttribute = true)
     private String value;
 
+    /**
+     * Returns the name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the value.
+     *
+     * @return the value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Sets the value.
+     *
+     * @param value the value
+     */
     public void setValue(String value) {
         this.value = value;
     }
