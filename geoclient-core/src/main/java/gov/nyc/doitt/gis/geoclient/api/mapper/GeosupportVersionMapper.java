@@ -27,6 +27,13 @@ import gov.nyc.doitt.gis.geoclient.api.version.FileInfo;
 import gov.nyc.doitt.gis.geoclient.api.version.GeosupportVersion;
 import gov.nyc.doitt.gis.geoclient.api.version.ThinFileInfo;
 
+/**
+ * Maps the parameters returned by Geosupport function {@code HR} to a
+ * {@link GeosupportVersion}. Mapping from a {@link GeosupportVersion} back to
+ * parameters is not supported.
+ *
+ * @author Matthew Lipper
+ */
 public class GeosupportVersionMapper extends AbstractParameterMapper<GeosupportVersion> {
 
     static final String[] FILE_INFO_OBJ_PROPERTY_NAMES = new String[] { "Tag", "Date", "RecordType", "RecordCount" };
@@ -74,6 +81,12 @@ public class GeosupportVersionMapper extends AbstractParameterMapper<GeosupportV
         throw new MappingException("Method toParameters not supported by this Mapper.");
     }
 
+    /**
+     * Extracts the {@code dsName1} through {@code dsName26} values.
+     *
+     * @param source the parameter names and values
+     * @return the data set names, with {@code null} for missing values
+     */
     protected List<String> toDsNames(Map<String, Object> source) {
         List<String> dsNames = new ArrayList<>();
         // 1-based loop
@@ -83,6 +96,12 @@ public class GeosupportVersionMapper extends AbstractParameterMapper<GeosupportV
         return dsNames;
     }
 
+    /**
+     * Extracts the nine numbered {@code geoFile} entries.
+     *
+     * @param source the parameter names and values
+     * @return the file information for each geo file
+     */
     protected List<FileInfo> toGeoFileInfo(Map<String, Object> source) {
         List<FileInfo> geoFileInfoList = new ArrayList<>();
         // 1-based loop
@@ -92,6 +111,12 @@ public class GeosupportVersionMapper extends AbstractParameterMapper<GeosupportV
         return geoFileInfoList;
     }
 
+    /**
+     * Extracts the thin file information, including its record types.
+     *
+     * @param source the parameter names and values
+     * @return the thin file information
+     */
     protected ThinFileInfo toThinFileInfo(Map<String, Object> source) {
         List<String> recordTypes = new ArrayList<>();
         // 1-based loop
@@ -108,10 +133,27 @@ public class GeosupportVersionMapper extends AbstractParameterMapper<GeosupportV
         return new ThinFileInfo(recordTypes, tag, date, release, recordCount, null);
     }
 
+    /**
+     * Extracts file information for the given prefix with no suffix.
+     *
+     * @param source the parameter names and values
+     * @param prefix the file name prefix, e.g. {@code stat1A}
+     * @return the file information
+     */
     protected FileInfo toFileInfo(Map<String, Object> source, String prefix) {
         return toFileInfo(source, prefix, "");
     }
 
+    /**
+     * Extracts file information from the parameters named
+     * {@code <prefix>FileRecordType<suffix>}, {@code <prefix>FileTag<suffix>},
+     * and so on.
+     *
+     * @param source the parameter names and values
+     * @param prefix the file name prefix, e.g. {@code geo}
+     * @param suffix the file name suffix, e.g. a file number, or empty
+     * @return the file information
+     */
     protected FileInfo toFileInfo(Map<String, Object> source, String prefix, String suffix) {
         String recordType = get(String.format("%sFileRecordType%s", prefix, suffix), source);
         String tag = get(String.format("%sFileTag%s", prefix, suffix), source);

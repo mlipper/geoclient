@@ -51,6 +51,15 @@ public abstract class AbstractParameterMapper<T> implements Mapper<T> {
     @Override
     public abstract Map<String, Object> toParameters(T source, Map<String, Object> destination) throws MappingException;
 
+    /**
+     * Creates a new instance of the given class using its first declared
+     * constructor that declares no exceptions, even if that constructor is not
+     * accessible.
+     *
+     * @param clazz the class to instantiate
+     * @return a new instance
+     * @throws MappingException if the instance cannot be created
+     */
     @SuppressWarnings("unchecked")
     protected T newInstance(Class<T> clazz) throws MappingException {
         try {

@@ -15,18 +15,44 @@
  */
 package gov.nyc.doitt.gis.geoclient.api.mapper;
 
+/**
+ * Thrown when mapping between parameters and objects fails.
+ *
+ * @author Matthew Lipper
+ * @see Mapper
+ */
 public class MappingException extends RuntimeException {
 
     private static final long serialVersionUID = -8294913337317033662L;
 
+    /**
+     * Creates an exception with the given message.
+     *
+     * @param message the detail message
+     */
     public MappingException(String message) {
         super(message);
     }
 
+    /**
+     * Creates an exception with the given message and cause.
+     *
+     * @param message the detail message
+     * @param cause the underlying cause
+     */
     public MappingException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Creates an exception with full control over suppression and stack trace
+     * behavior.
+     *
+     * @param message the detail message
+     * @param cause the underlying cause
+     * @param enableSuppression whether suppression is enabled
+     * @param writableStackTrace whether the stack trace is writable
+     */
     public MappingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
