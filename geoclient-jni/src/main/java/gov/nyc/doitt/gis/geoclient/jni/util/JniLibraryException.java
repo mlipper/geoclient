@@ -25,6 +25,12 @@ public class JniLibraryException extends RuntimeException {
 
     private static final long serialVersionUID = 2391394421092219469L;
 
+    /**
+     * Creates an exception with the given message and cause.
+     *
+     * @param message description of the problem
+     * @param cause   the underlying cause
+     */
     public JniLibraryException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -37,6 +37,12 @@ public class NativeLibraryLoader {
 
     private final String baseLibraryName;
 
+    /**
+     * Creates a loader for the given library.
+     *
+     * @param baseLibraryName platform-independent library name, i.e., without any
+     *                        prefix or file extension
+     */
     public NativeLibraryLoader(String baseLibraryName) {
         super();
         this.baseLibraryName = baseLibraryName;
@@ -59,6 +65,12 @@ public class NativeLibraryLoader {
         logger.info("Successfully loaded {} from file {}", baseLibraryName, libFile.getCanonicalPath());
     }
 
+    /**
+     * Describes the library to load using the base library name, the current
+     * {@link Platform} and the version from {@link JniContext}.
+     *
+     * @return the {@link JniLibrary} to be located and loaded
+     */
     protected JniLibrary getJniLibrary() {
         return JniLibrary.builder().name(this.baseLibraryName).platform(new Platform()).version(
             JniContext.getGeoclientJniVersion()).build();

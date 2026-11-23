@@ -110,30 +110,69 @@ public class JniLibrary {
         this.version = version;
     }
 
+    /**
+     * Creates a new {@link Builder}.
+     *
+     * @return a new builder
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Returns the platform this library is built for.
+     *
+     * @return the platform
+     */
     public Platform getPlatform() {
         return this.platform;
     }
 
+    /**
+     * Returns the name of the platform-specific directory containing the library,
+     * i.e., the platform name with underscores replaced by hyphens (e.g.,
+     * <code>linux-x64</code>).
+     *
+     * @return the platform directory name
+     */
     public String getPlatformDirName() {
         return this.platform.getName().replace("_", "-");
     }
 
+    /**
+     * Returns the platform-specific shared library file name (e.g.,
+     * <code>libgeoclientjni.so</code>).
+     *
+     * @return the library file name
+     */
     public String getLibraryFileName() {
         return this.platform.getSharedLibraryFileName(this.name);
     }
 
+    /**
+     * Returns the resource name of the library relative to this library's package
+     * path, in the form <code>&lt;platformDirName&gt;/&lt;libraryFileName&gt;</code>.
+     *
+     * @return the relative resource name
+     */
     public String getResourceName() {
         return String.format("%s/%s", getPlatformDirName(), getLibraryFileName());
     }
 
+    /**
+     * Returns the platform-independent base name of the library.
+     *
+     * @return the library name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Returns the version of the library.
+     *
+     * @return the library version
+     */
     public String getVersion() {
         return this.version;
     }

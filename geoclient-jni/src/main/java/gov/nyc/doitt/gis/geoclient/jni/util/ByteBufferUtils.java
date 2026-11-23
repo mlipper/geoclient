@@ -41,14 +41,37 @@ public class ByteBufferUtils {
     private static final int GEOSUPPORT_RC_LENGTH = 2;
     private static final int GEOSUPPORT_RC_START = 716;
 
+    /**
+     * Decodes the remaining bytes of the given buffer as UTF-8. Consumes the
+     * buffer, i.e., advances its position.
+     *
+     * @param buffer the buffer to decode
+     * @return the decoded string
+     * @throws CharacterCodingException if the bytes are not valid UTF-8
+     */
     public static String decode(ByteBuffer buffer) throws CharacterCodingException {
         return DECODER.decode(buffer).toString();
     }
 
+    /**
+     * Converts the given bytes to a string using the platform's default charset.
+     *
+     * @param buffer the bytes to convert
+     * @return the resulting string
+     */
     public static String decode(byte[] buffer) {
         return new String(buffer);
     }
 
+    /**
+     * Encodes the given characters as UTF-8 into the given buffer.
+     *
+     * @param charBuffer the characters to encode
+     * @param buffer     the destination buffer
+     * @throws CharacterCodingException if encoding fails, e.g., due to
+     *                                  unmappable characters or insufficient
+     *                                  space in the destination buffer
+     */
     public void encode(CharBuffer charBuffer, ByteBuffer buffer) throws CharacterCodingException {
         CoderResult result = ENCODER.encode(charBuffer, buffer, true);
         if (result.isError()) {
@@ -56,10 +79,28 @@ public class ByteBufferUtils {
         }
     }
 
+    /**
+     * Extracts the two character Geosupport return code from the contents of Work
+     * Area 1.
+     *
+     * @param workAreaOneResult the string contents of Work Area 1 after calling
+     *                          Geosupport
+     * @return the Geosupport return code
+     * @throws StringIndexOutOfBoundsException if the argument is too short to
+     *                                         contain a return code
+     */
     public static String getReturnCode(String workAreaOneResult) {
         return workAreaOneResult.substring(GEOSUPPORT_RC_START, GEOSUPPORT_RC_START + GEOSUPPORT_RC_LENGTH);
     }
 
+    /**
+     * Determines whether the given Geosupport return code indicates success.
+     *
+     * @param returnCode a Geosupport return code
+     * @return <code>true</code> if the code is <code>00</code> (success) or
+     *         <code>01</code> (success with warning); <code>false</code> for any
+     *         other value, including <code>null</code> or empty
+     */
     public static boolean isSuccess(String returnCode) {
         if (isNotNullOrEmpty(returnCode)) {
             return GEOSUPPORT_RC_SUCCESS.equals(returnCode) || GEOSUPPORT_RC_SUCCESS_WITH_WARN.equals(returnCode);
@@ -67,6 +108,14 @@ public class ByteBufferUtils {
         return false;
     }
 
+    /**
+     * Decodes the remaining bytes of the given buffer as UTF-8 without changing
+     * the buffer's position.
+     *
+     * @param buffer the buffer to read
+     * @return the decoded string
+     * @throws CharacterCodingException if the bytes are not valid UTF-8
+     */
     public static String readString(ByteBuffer buffer) throws CharacterCodingException {
         int position = buffer.position();
         CharBuffer charBuffer = DECODER.decode(buffer);

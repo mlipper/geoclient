@@ -71,14 +71,33 @@ public class NativeLibraryLocator {
 
     private final String extractDir;
 
+    /**
+     * Creates a locator that extracts the native library to the given directory.
+     *
+     * @param extractDir the directory to which the library is extracted; if
+     *                   <code>null</code>, a temporary directory is used
+     */
     public NativeLibraryLocator(String extractDir) {
         this.extractDir = extractDir;
     }
 
+    /**
+     * Creates a locator that extracts the native library to a temporary directory.
+     */
     public NativeLibraryLocator() {
         this(null);
     }
 
+    /**
+     * Locates the given library, extracting it from the classpath if necessary.
+     * Uses the configured extract directory if there is one, otherwise a temporary
+     * directory. As a last resort, searches the local Gradle build directory.
+     *
+     * @param jniLibrary describes the library to locate
+     * @return the library file or <code>null</code> if it could not be found in the
+     *         build directory fallback
+     * @throws IOException if an I/O error occurs while extracting the library
+     */
     public File find(JniLibrary jniLibrary) throws IOException {
 
         if (this.extractDir != null) {
@@ -98,6 +117,17 @@ public class NativeLibraryLocator {
         return loadFromDirectory(jniLibrary, buildFile);
     }
 
+    /**
+     * Extracts the library resource from the classpath to
+     * <code>&lt;destinationDir&gt;/&lt;version&gt;/&lt;resourceName&gt;</code>. A
+     * file lock prevents concurrent extraction, and an existing extracted file is
+     * reused.
+     *
+     * @param jniLibrary     describes the library to extract
+     * @param destinationDir the base directory for extraction
+     * @return the extracted library file
+     * @throws IOException if an I/O error occurs
+     */
     protected File extractToDirectory(JniLibrary jniLibrary, String destinationDir) throws IOException {
         String resourceName = getResourceName(jniLibrary);
         logger.debug("Target shared library file parent directory is {}", destinationDir);
@@ -146,6 +176,15 @@ public class NativeLibraryLocator {
         return libFile;
     }
 
+    /**
+     * Copies the library resource from the classpath to a newly created temporary
+     * directory. The copy is marked for deletion when the JVM exits.
+     *
+     * @param jniLibrary describes the library to extract
+     * @return the extracted library file or <code>null</code> if the resource
+     *         cannot be found on the classpath
+     * @throws IOException if an I/O error occurs
+     */
     protected File extractToDefaultTempDirectory(JniLibrary jniLibrary) throws IOException {
         String resourceName = getResourceName(jniLibrary);
         // Default to using runtime JVM temporary file directory
@@ -166,10 +205,23 @@ public class NativeLibraryLocator {
         return null;
     }
 
+    /**
+     * Returns the full classpath resource name of the given library, i.e., prefixed
+     * with {@link JniContext#getJavaPackagePath()}.
+     *
+     * @param jniLibrary describes the library
+     * @return the classpath resource name
+     */
     protected String getResourceName(JniLibrary jniLibrary) {
         return String.format("%s/%s", JniContext.getJavaPackagePath(), jniLibrary.getResourceName());
     }
 
+    /**
+     * Resolves a resource name using this class's {@link ClassLoader}.
+     *
+     * @param resourceName the full classpath resource name
+     * @return the resource URL or <code>null</code> if not found
+     */
     protected URL resolveClassLoaderUrlResource(String resourceName) {
         Class<?> clazz = this.getClass();
         ClassLoader classLoader = clazz.getClassLoader();
@@ -184,6 +236,13 @@ public class NativeLibraryLocator {
         return resource;
     }
 
+    /**
+     * Looks for the library's platform-specific file in the given directory.
+     *
+     * @param jniLibrary describes the library
+     * @param parentDir  the directory to search
+     * @return the library file or <code>null</code> if it does not exist
+     */
     protected File loadFromDirectory(JniLibrary jniLibrary, File parentDir) {
         String libFileName = jniLibrary.getLibraryFileName();
         logger.debug("Attempting to load file {} from directory {}...", libFileName, parentDir);

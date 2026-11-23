@@ -28,8 +28,23 @@ public class JniContext {
 
     static final Logger logger = LoggerFactory.getLogger(JniContext.class);
 
+    /**
+     * Version used to namespace the extracted native library when the
+     * <code>gc.jni.version</code> system property is not set.
+     */
     public static final String DEFAULT_GC_JNI_VERSION = "geoclient-jni-2";
+
+    /**
+     * Name of the Java system property that specifies the directory to which the
+     * native library is extracted.
+     */
     public static final String GC_JNI_EXTRACT_DIR_PROPERTY = "gc.jni.extract.dir";
+
+    /**
+     * Name of the environment variable that specifies the directory to which the
+     * native library is extracted. Used only if the corresponding system property
+     * is not set.
+     */
     public static final String GC_JNI_EXTRACT_DIR_ENV_VAR = "GC_JNI_EXTRACT_DIR";
     private static final String GC_SHAREDLIB_BASENAME = "geoclientjni";
     private static final String GC_PACKAGE_PATH = JniContext.class.getPackage().getName().replaceAll("\\.", "\\/");
@@ -97,18 +112,42 @@ public class JniContext {
         return javaIoTmpDir;
     }
 
+    /**
+     * Returns the value of the <code>gc.jni.version</code> system property.
+     *
+     * @return the property value or {@link #DEFAULT_GC_JNI_VERSION} if not set
+     */
     public static String getGeoclientJniVersion() {
         return JniContext.getSystemProperty(SystemProperty.GC_JNI_VERSION, DEFAULT_GC_JNI_VERSION);
     }
 
+    /**
+     * Returns the value of the <code>java.io.tmpdir</code> system property.
+     *
+     * @return the JVM temporary directory path or <code>null</code> if not set
+     */
     public static String getJvmTempDir() {
         return JniContext.getSystemProperty(SystemProperty.JAVA_IO_TMPDIR, null);
     }
 
+    /**
+     * Returns the value of the <code>java.library.path</code> system property.
+     *
+     * @return the JVM native library search path or <code>null</code> if not set
+     */
     public static String getJvmLibraryPath() {
         return JniContext.getSystemProperty(SystemProperty.JAVA_LIBRARY_PATH, null);
     }
 
+    /**
+     * Resolves the directory to which the native library is extracted. In order of
+     * precedence, uses the {@value #GC_JNI_EXTRACT_DIR_PROPERTY} system property,
+     * the {@value #GC_JNI_EXTRACT_DIR_ENV_VAR} environment variable and
+     * finally the JVM temporary directory.
+     *
+     * @return the resolved extract directory path or <code>null</code> if none of
+     *         the sources is set
+     */
     public static String getNativeExtractDir() {
         String extractDirSystemProperty = JniContext.getSystemProperty(SystemProperty.GC_JNI_EXTRACT_DIR, null);
         String extractDirEnvironmentVariable = JniContext.getEnvironmentVariable(GC_JNI_EXTRACT_DIR_ENV_VAR, null);
@@ -119,10 +158,23 @@ public class JniContext {
         return extractDir;
     }
 
+    /**
+     * Returns the platform-independent base name of the Geoclient JNI shared
+     * library, i.e., without any prefix or file extension.
+     *
+     * @return the shared library base name
+     */
     public static String getSharedLibraryBaseName() {
         return GC_SHAREDLIB_BASENAME;
     }
 
+    /**
+     * Returns this package's name in resource path form (i.e., using
+     * <code>/</code> separators), used to locate the bundled native library on the
+     * classpath.
+     *
+     * @return the package path
+     */
     public static String getJavaPackagePath() {
         return GC_PACKAGE_PATH;
     }
