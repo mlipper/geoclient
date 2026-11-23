@@ -117,3 +117,4 @@ The repo ships a `.devcontainer/devcontainer.json` targeting **linux/amd64** onl
 4. Update the `geoclient-parser` project to recognize apartment/suite/floor information in single-field search queries. This will improve the accuracy of single-field searches by discarding this information when not needed for calling Geosupport functions and ensuring that the correct Geosupport function is invoked based on the relevant address components.
 5. Clean up `ByteBufferUtils` in `geoclient-jni`: remove unused methods (e.g., `encode` and `decode(byte[])` have no callers) and/or make the `encode` instance method `static` like the rest of the class.
 6. Verify that the gov.nyc.doitt.gis.geoclient.api.Response class is not used directly or via reflection and can be safely removed if it is no longer needed.
+7. Remove methods for getting subproject versions from the gov.nyc.doitt.gis.geoclient.api.version.Version class since the subprojects are no longer tracked individually.
