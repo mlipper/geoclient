@@ -29,6 +29,9 @@ public class JniLibrary {
 
     private final String version;
 
+    /**
+     * Builder class for creating a JniLibrary using a fluid-style construction.
+     */
     public static class Builder {
 
         private String name;
@@ -37,26 +40,51 @@ public class JniLibrary {
 
         private String version;
 
+        /**
+         * Builder for setting the platform.
+         * @param platform the platform to set
+         * @return the builder instance
+         */
         public Builder platform(Platform platform) {
             this.platform = platform;
             return this;
         }
 
+        /**
+         * Builder for setting the platform using operating system and architecture.
+         * @param operatingSystem the operating system to set
+         * @param architecture the architecture to set
+         * @return the builder instance
+         */
         public Builder platform(String operatingSystem, String architecture) {
             this.platform = new Platform(operatingSystem, architecture);
             return this;
         }
 
+        /**
+         * Builder for setting the name of the library.
+         * @param name the name to set
+         * @return the builder instance
+         */
         public Builder name(String name) {
             this.name = name;
             return this;
         }
 
+        /**
+         * Builder for setting the version of the library.
+         * @param version the version to set
+         * @return the builder instance
+         */
         public Builder version(String version) {
             this.version = version;
             return this;
         }
 
+        /**
+         * Builder for constructing the JniLibrary instance.
+         * @return the constructed JniLibrary instance
+         */
         public JniLibrary build() {
             if (this.name == null) {
                 throw new IllegalStateException("Name cannot be null");
