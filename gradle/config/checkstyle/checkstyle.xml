@@ -9,6 +9,15 @@
 			<property name="allowMissingParamTags" value="true" />
 			<property name="allowMissingReturnTag" value="true" />
 		</module>
+		<module name="MissingJavadocType">
+			<property name="scope" value="protected" />
+		</module>
+		<module name="MissingJavadocMethod">
+			<property name="scope" value="protected" />
+		</module>
+		<module name="JavadocVariable">
+			<property name="accessModifiers" value="public, protected" />
+		</module>
 		<module name="AtclauseOrder">
 			<property name="tagOrder" value="@param, @return, @throws, @exception, @since, @see" />
 		</module>
