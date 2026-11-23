@@ -30,6 +30,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 @JsonRootName("geoclient")
 public class GeoclientXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public GeoclientXml() {
+    }
+
     @JacksonXmlProperty(localName = "filters")
     private FiltersXml filters;
 

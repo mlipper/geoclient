@@ -22,6 +22,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class FunctionXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public FunctionXml() {
+    }
+
     @JacksonXmlProperty(isAttribute = true)
     private String id;
 

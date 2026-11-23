@@ -73,6 +73,11 @@ public class FunctionConfiguration {
         return id;
     }
 
+    /**
+     * Returns the function's required arguments.
+     *
+     * @return the required arguments keyed by argument name
+     */
     public Map<String, Object> getConfiguration() {
         return configuration;
     }

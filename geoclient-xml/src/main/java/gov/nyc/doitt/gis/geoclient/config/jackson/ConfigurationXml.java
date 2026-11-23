@@ -27,6 +27,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class ConfigurationXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public ConfigurationXml() {
+    }
+
     @JacksonXmlProperty(localName = "requiredArgument")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<RequiredArgumentXml> requiredArguments;

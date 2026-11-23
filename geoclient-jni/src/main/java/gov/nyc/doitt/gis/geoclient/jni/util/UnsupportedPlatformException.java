@@ -38,8 +38,11 @@ public class UnsupportedPlatformException extends RuntimeException {
         this(String.format("Unsupported JNI platform: OS='%s' ARCH='%s'", operatingSystem, architecture));
     }
 
-    /*
-     * @see RuntimeException(String message)
+    /**
+     * Creates an exception with the given detail message.
+     *
+     * @param message the detail message
+     * @see RuntimeException#RuntimeException(String)
      */
     public UnsupportedPlatformException(String message) {
         super(message);

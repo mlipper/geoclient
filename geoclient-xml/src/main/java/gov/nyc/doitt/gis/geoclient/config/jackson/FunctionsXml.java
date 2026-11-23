@@ -25,6 +25,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class FunctionsXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public FunctionsXml() {
+    }
+
     @JacksonXmlProperty(localName = "function")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<FunctionXml> functions;

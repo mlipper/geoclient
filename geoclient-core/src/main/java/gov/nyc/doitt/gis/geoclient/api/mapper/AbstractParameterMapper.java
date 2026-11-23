@@ -33,6 +33,12 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractParameterMapper<T> implements Mapper<T> {
 
+    /**
+     * Creates a new instance.
+     */
+    public AbstractParameterMapper() {
+    }
+
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractParameterMapper.class);
 
     @Override

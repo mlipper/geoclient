@@ -25,6 +25,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class WorkAreasXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public WorkAreasXml() {
+    }
+
     @JacksonXmlProperty(localName = "workArea")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<WorkAreaXml> workAreas;

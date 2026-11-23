@@ -26,6 +26,12 @@ import org.slf4j.LoggerFactory;
  */
 public class JniContext {
 
+    /**
+     * Creates a new instance.
+     */
+    public JniContext() {
+    }
+
     static final Logger logger = LoggerFactory.getLogger(JniContext.class);
 
     /**

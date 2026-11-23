@@ -17,11 +17,22 @@ package gov.nyc.doitt.gis.geoclient.util;
 
 import java.util.Optional;
 
+/**
+ * String conversion utilities.
+ *
+ * @author mlipper
+ */
 public class StringUtils {
 
     private StringUtils() {
     }
 
+    /**
+     * Converts the given object to an {@link Optional} string.
+     *
+     * @param obj the object to convert, may be {@code null}
+     * @return the object's string value, or an empty {@link Optional} if the object is {@code null}
+     */
     public static Optional<String> optionalStringValue(Object obj) {
         if (obj != null) {
             return Optional.of(obj.toString());
@@ -29,6 +40,12 @@ public class StringUtils {
         return Optional.empty();
     }
 
+    /**
+     * Converts the given object to a string.
+     *
+     * @param obj the object to convert, may be {@code null}
+     * @return the object's string value, or {@code null} if the object is {@code null}
+     */
     public static String stringOrNullValueOf(Object obj) {
         if (obj != null) {
             return obj.toString();

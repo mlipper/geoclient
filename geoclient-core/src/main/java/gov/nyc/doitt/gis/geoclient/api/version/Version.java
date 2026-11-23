@@ -22,6 +22,12 @@ package gov.nyc.doitt.gis.geoclient.api.version;
  * @author Matthew Lipper
  */
 public class Version {
+
+    /**
+     * Creates a new instance.
+     */
+    public Version() {
+    }
     private String geoclientJniVersion;
     private String geoclientVersion;
     private String geoclientParserVersion;

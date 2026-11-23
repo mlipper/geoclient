@@ -33,6 +33,12 @@ import java.nio.charset.CoderResult;
  */
 public class ByteBufferUtils {
 
+    /**
+     * Creates a new instance.
+     */
+    public ByteBufferUtils() {
+    }
+
     private static final Charset CHARSET = Charset.forName("UTF-8");
     private static final CharsetEncoder ENCODER = CHARSET.newEncoder();
     private static final CharsetDecoder DECODER = CHARSET.newDecoder();

@@ -48,6 +48,12 @@ import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
  */
 public class XmlConfigurationLoader {
 
+    /**
+     * Creates a new instance.
+     */
+    public XmlConfigurationLoader() {
+    }
+
     private static final Logger log = LoggerFactory.getLogger(XmlConfigurationLoader.class);
 
     private Geoclient geoclient;

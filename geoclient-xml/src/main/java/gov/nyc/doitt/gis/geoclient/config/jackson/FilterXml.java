@@ -22,6 +22,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class FilterXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public FilterXml() {
+    }
+
     @JacksonXmlProperty(isAttribute = true)
     private String id;
 

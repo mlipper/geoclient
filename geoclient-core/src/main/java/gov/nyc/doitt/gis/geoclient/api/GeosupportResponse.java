@@ -33,6 +33,8 @@ public class GeosupportResponse extends HashMap<String, Object> {
 
     /**
      * Constructs a new GeosupportResponse with the same mappings as the specified map.
+     *
+     * @param m the map whose mappings are copied
      */
     public GeosupportResponse(Map<? extends String, ? extends Object> m) {
         super(m);
@@ -46,6 +48,8 @@ public class GeosupportResponse extends HashMap<String, Object> {
 
     /**
      * Constructs a new GeosupportResponse with the specified initial capacity.
+     *
+     * @param initialCapacity the initial capacity
      */
     public GeosupportResponse(int initialCapacity) {
         super(initialCapacity);
@@ -53,6 +57,9 @@ public class GeosupportResponse extends HashMap<String, Object> {
 
     /**
      * Constructs a new GeosupportResponse with the specified initial capacity and load factor.
+     *
+     * @param initialCapacity the initial capacity
+     * @param loadFactor the load factor
      */
     public GeosupportResponse(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);

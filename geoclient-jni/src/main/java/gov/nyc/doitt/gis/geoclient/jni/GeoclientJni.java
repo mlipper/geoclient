@@ -31,6 +31,12 @@ import org.slf4j.LoggerFactory;
 //@formatter:off
 public class GeoclientJni implements Geoclient {
 
+    /**
+     * Creates a new instance.
+     */
+    public GeoclientJni() {
+    }
+
     final static Logger logger = LoggerFactory.getLogger(GeoclientJni.class);
 
     private enum BufferType {

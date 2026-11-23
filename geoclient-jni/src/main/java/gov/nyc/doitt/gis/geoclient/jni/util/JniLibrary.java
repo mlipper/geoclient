@@ -34,6 +34,12 @@ public class JniLibrary {
      */
     public static class Builder {
 
+        /**
+         * Creates a new instance.
+         */
+        public Builder() {
+        }
+
         private String name;
 
         private Platform platform;

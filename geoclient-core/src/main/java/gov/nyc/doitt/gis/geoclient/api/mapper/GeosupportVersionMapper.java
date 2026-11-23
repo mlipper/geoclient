@@ -36,6 +36,12 @@ import gov.nyc.doitt.gis.geoclient.api.version.ThinFileInfo;
  */
 public class GeosupportVersionMapper extends AbstractParameterMapper<GeosupportVersion> {
 
+    /**
+     * Creates a new instance.
+     */
+    public GeosupportVersionMapper() {
+    }
+
     static final String[] FILE_INFO_OBJ_PROPERTY_NAMES = new String[] { "Tag", "Date", "RecordType", "RecordCount" };
     static final String[] SIMPLE_FIELD_NAMES = new String[] { "geofilesDirectory" };
     static final String[] SCALAR_FILE_FIELD_PREFIXES = new String[] { "ap", "apequiv", "auxseg", "grid1R", "sneq",

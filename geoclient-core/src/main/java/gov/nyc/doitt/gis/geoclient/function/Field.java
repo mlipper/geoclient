@@ -345,6 +345,12 @@ public class Field implements Comparable<Field> {
      */
     public static class StartLengthComparator implements Comparator<Field> {
 
+        /**
+         * Creates a new instance.
+         */
+        public StartLengthComparator() {
+        }
+
         @Override
         public int compare(Field o1, Field o2) {
             int startComparison = o1.start.compareTo(o2.start);
@@ -361,6 +367,12 @@ public class Field implements Comparable<Field> {
      * Comparator that compares fields based on their name, start, and length.
      */
     public static class NameStartLengthComparator implements Comparator<Field> {
+
+        /**
+         * Creates a new instance.
+         */
+        public NameStartLengthComparator() {
+        }
 
         @Override
         public int compare(Field o1, Field o2) {

@@ -26,6 +26,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class OutputFiltersXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public OutputFiltersXml() {
+    }
+
     @JacksonXmlProperty(isAttribute = true)
     private String reference;
 

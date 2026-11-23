@@ -15,14 +15,35 @@
  */
 package gov.nyc.doitt.gis.geoclient.util;
 
+/**
+ * Operating system utilities.
+ *
+ * @author mlipper
+ */
 public class OperatingSystemUtils {
+
+    /**
+     * Creates a new instance.
+     */
+    public OperatingSystemUtils() {
+    }
 
     private static final String osName = System.getProperty("os.name");
 
+    /**
+     * Indicates whether the current operating system is Windows.
+     *
+     * @return {@code true} if the {@code os.name} system property contains "Windows"
+     */
     public static boolean isWindows() {
         return osName.contains("Windows");
     }
 
+    /**
+     * Returns the operating system name.
+     *
+     * @return the value of the {@code os.name} system property
+     */
     public static String uname() {
         return osName;
     }

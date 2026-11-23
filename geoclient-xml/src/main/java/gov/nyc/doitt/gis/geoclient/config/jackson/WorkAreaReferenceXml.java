@@ -23,6 +23,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class WorkAreaReferenceXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public WorkAreaReferenceXml() {
+    }
+
     @JacksonXmlProperty(isAttribute = true)
     private String reference;
 

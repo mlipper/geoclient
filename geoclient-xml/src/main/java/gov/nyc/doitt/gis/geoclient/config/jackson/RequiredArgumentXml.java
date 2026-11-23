@@ -22,6 +22,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class RequiredArgumentXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public RequiredArgumentXml() {
+    }
+
     @JacksonXmlProperty(isAttribute = true)
     private String name;
 

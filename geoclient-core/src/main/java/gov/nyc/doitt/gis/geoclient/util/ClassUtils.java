@@ -15,10 +15,26 @@
  */
 package gov.nyc.doitt.gis.geoclient.util;
 
+/**
+ * Class loading utilities.
+ *
+ * @author mlipper
+ */
 public class ClassUtils {
 
-    /*
-     * Copied from org.springframework.util.ClassUtils#getDefaultClassLoader
+    /**
+     * Creates a new instance.
+     */
+    public ClassUtils() {
+    }
+
+    /**
+     * Returns the default class loader: the thread context class loader if
+     * available, otherwise the class loader of this class.
+     * <p>
+     * Copied from {@code org.springframework.util.ClassUtils#getDefaultClassLoader}.
+     *
+     * @return the default class loader
      */
     public static ClassLoader getDefaultClassLoader() {
         ClassLoader cl = null;

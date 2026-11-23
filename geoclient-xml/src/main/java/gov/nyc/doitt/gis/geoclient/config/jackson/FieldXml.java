@@ -23,6 +23,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public class FieldXml {
 
     /**
+     * Creates a new instance.
+     */
+    public FieldXml() {
+    }
+
+    /**
      * Field type of composite fields, which are made up of other fields.
      */
     public static final String TYPE_COMPOSITE = "COMP";

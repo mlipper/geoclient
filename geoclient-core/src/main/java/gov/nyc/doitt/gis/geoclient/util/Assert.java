@@ -25,6 +25,13 @@ import java.util.Collection;
  *
  */
 public abstract class Assert {
+
+    /**
+     * Creates a new instance.
+     */
+    public Assert() {
+    }
+
     /**
      * Assert that an object is not <code>null</code> .
      * <pre class="code">Assert.notNull(clazz, "The class must not be null");</pre>

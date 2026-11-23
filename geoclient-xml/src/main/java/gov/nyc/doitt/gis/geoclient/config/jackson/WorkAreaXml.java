@@ -25,6 +25,12 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class WorkAreaXml {
 
+    /**
+     * Creates a new instance.
+     */
+    public WorkAreaXml() {
+    }
+
     @JacksonXmlProperty(isAttribute = true)
     private String id;
 

@@ -30,6 +30,12 @@ import gov.nyc.doitt.gis.geoclient.function.Function;
  */
 public class CallBuilder {
 
+    /**
+     * Creates a new instance.
+     */
+    public CallBuilder() {
+    }
+
     private static class NumberedParamNames {
         private Map<Integer, String> mapping;
 
@@ -66,11 +72,15 @@ public class CallBuilder {
      * arguments for the first, second and third streets or boroughs, respectively.
      */
     protected static abstract class Builder {
+        /** The arguments accumulated by this builder. */
         protected final Arguments arguments = new Arguments();
+        /** Names of the first, second and third borough code parameters. */
         protected final NumberedParamNames boroughCodeParams = new NumberedParamNames(InputParam.BOROUGH_CODE,
             InputParam.BOROUGH_CODE2, InputParam.BOROUGH_CODE3);
+        /** Names of the first, second and third street code parameters. */
         protected final NumberedParamNames streetCodeParams = new NumberedParamNames(InputParam.STREET_CODE,
             InputParam.STREET_CODE2, InputParam.STREET_CODE3);
+        /** Names of the first, second and third street name parameters. */
         protected final NumberedParamNames streetNameParams = new NumberedParamNames(InputParam.STREET_NAME,
             InputParam.STREET_NAME2, InputParam.STREET_NAME3);
 
