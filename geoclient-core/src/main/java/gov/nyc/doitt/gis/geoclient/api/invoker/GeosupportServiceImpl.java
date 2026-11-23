@@ -125,6 +125,12 @@ public class GeosupportServiceImpl implements GeosupportService {
 
     private GeosupportServiceContext serviceConfiguration;
 
+    /**
+     * Creates a service backed by the given context.
+     *
+     * @param serviceConfiguration supplies the Geosupport functions, lat/long
+     *        converter and version factory used by this service
+     */
     public GeosupportServiceImpl(GeosupportServiceContext serviceConfiguration) {
         super();
         this.serviceConfiguration = serviceConfiguration;

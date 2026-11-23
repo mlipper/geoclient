@@ -42,6 +42,13 @@ public class DoubleFieldSetConverter implements FieldSetConverter {
 
     private Map<String, FieldSet> fieldSets;
 
+    /**
+     * Creates a converter for the given field sets, indexed by function
+     * identifier.
+     *
+     * @param fieldSets the field sets describing which fields of which functions
+     *        are converted; must not be null
+     */
     public DoubleFieldSetConverter(List<FieldSet> fieldSets) {
         this.fieldSets = new HashMap<>();
         for (FieldSet fieldSet : fieldSets) {
@@ -67,6 +74,15 @@ public class DoubleFieldSetConverter implements FieldSetConverter {
         }
     }
 
+    /**
+     * Replaces the values of the named fields found in the given arguments with
+     * their {@link Double} equivalents. Names not present in the arguments or
+     * with {@code null} values are skipped.
+     *
+     * @param arguments field name (key) and value pairs to be modified in place
+     * @param fieldNames names of the fields to convert
+     * @throws NumberFormatException if a value cannot be parsed as a double
+     */
     protected void convert(Map<String, Object> arguments, Set<String> fieldNames) {
         for (String name : fieldNames) {
             LOGGER.debug("Checking for field name {}...", name);

@@ -65,46 +65,101 @@ public interface GeosupportServiceContext {
     // Convenience aliases. Implementers should not normally override.
     // ------------------------------------------------------------------
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FAP)}.
+     *
+     * @return the Geosupport function {@code AP}
+     */
     default Function functionAP() {
         return geosupportFunction(Function.FAP);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.F1B)}.
+     *
+     * @return the Geosupport function {@code 1B}
+     */
     default Function function1B() {
         return geosupportFunction(Function.F1B);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.F2W)}.
+     *
+     * @return the Geosupport function {@code 2W}
+     */
     default Function function2W() {
         return geosupportFunction(Function.F2W);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.F3)}.
+     *
+     * @return the Geosupport function {@code 3}
+     */
     default Function function3() {
         return geosupportFunction(Function.F3);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FBL)}.
+     *
+     * @return the Geosupport function {@code BL}
+     */
     default Function functionBL() {
         return geosupportFunction(Function.FBL);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FBN)}.
+     *
+     * @return the Geosupport function {@code BN}
+     */
     default Function functionBN() {
         return geosupportFunction(Function.FBN);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FHR)}.
+     *
+     * @return the Geosupport function {@code HR}
+     */
     default Function functionHR() {
         return geosupportFunction(Function.FHR);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FN)}.
+     *
+     * @return the Geosupport function {@code N}
+     */
     default Function functionN() {
         return geosupportFunction(Function.FN);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FD)}.
+     *
+     * @return the Geosupport function {@code D}
+     */
     default Function functionD() {
         return geosupportFunction(Function.FD);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FDG)}.
+     *
+     * @return the Geosupport function {@code DG}
+     */
     default Function functionDG() {
         return geosupportFunction(Function.FDG);
     }
 
+    /**
+     * Convenience alias for {@code geosupportFunction(Function.FDN)}.
+     *
+     * @return the Geosupport function {@code DN}
+     */
     default Function functionDN() {
         return geosupportFunction(Function.FDN);
     }
