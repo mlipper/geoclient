@@ -114,5 +114,5 @@ The repo ships a `.devcontainer/devcontainer.json` targeting **linux/amd64** onl
 1. Refactor single-field search handling (except for web or Spring aware classes) into a separate standalone module that can be used in other types of applications. E.g., from `geoclient-cli`.
 2. Begin using the `testcontainers` library for integration tests to allow for development without requiring DevContainers on macOS which is not currently supported by the native Geosupport libraries.
 3. Create API documentation (Javadoc) for all public and protected classes and methods.
-4. Create metadata to begin using GitHub Actions for CI/CD.
-5. Update the `geoclient-parser` project to recognize apartment/suite/floor information in single-field search queries. This will improve the accuracy of single-field searches by discarding this information when not needed for calling Geosupport functions and ensuring that the correct Geosupport function is invoked based on the relevant address components.
+4. Update the `geoclient-parser` project to recognize apartment/suite/floor information in single-field search queries. This will improve the accuracy of single-field searches by discarding this information when not needed for calling Geosupport functions and ensuring that the correct Geosupport function is invoked based on the relevant address components.
+5. Clean up `ByteBufferUtils` in `geoclient-jni`: remove unused methods (e.g., `encode` and `decode(byte[])` have no callers) and/or make the `encode` instance method `static` like the rest of the class.
