@@ -34,6 +34,9 @@ import gov.nyc.doitt.gis.geoclient.jni.Geoclient;
  */
 public class GeosupportConfig {
 
+    /**
+     * Name of the default configuration file, loaded from the classpath.
+     */
     public static final String DEFAULT_CONFIG_FILE = "geoclient.xml";
 
     private static final Logger log = LoggerFactory.getLogger(GeosupportConfig.class);
